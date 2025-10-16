@@ -1,6 +1,12 @@
 <header class="site">
   <div class="container header-inner">
-    <a class="brand" href="{{ "/" | relative_url }}">📝 {{ site.title }}</a>
+    <a class="brand" href="{{ "/" | relative_url }}">
+      <span class="typing-wrap">
+        <span aria-label="owner name" data-typing="name"></span>
+        <span class="caret" aria-hidden="true"></span>
+      </span>
+      <span class="muted" style="margin-left:.5rem;">— <span data-typing="subtitle">cybersecurity</span></span>
+    </a>
     <nav>
       <a href="{{ "/" | relative_url }}">Inicio</a>
       <a href="{{ "/about/" | relative_url }}">Sobre mí</a>
