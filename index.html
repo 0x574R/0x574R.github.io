@@ -20,6 +20,7 @@ title: "Inicio"
 <div class="cards">
 {%- for post in paginator.posts -%}
   <a class="card" href="{{ post.url | relative_url }}">
+    <div class="eyebrow">post</div>
     <h2 class="title">{{ post.title }}</h2>
     <div class="meta">
       <time>{{ post.date | date: "%d %b %Y" }}</time>

@@ -82,3 +82,42 @@ if(!window.__CYBER_INIT__){
     });
   })();
 }
+
+/* v7 code toolbar */
+(function(){
+  const mapLang = (raw) => {
+    if(!raw) return 'code';
+    const l = raw.toLowerCase();
+    if(['sh','bash','shell','zsh'].includes(l)) return 'bash';
+    if(['py','python'].includes(l)) return 'python';
+    if(['js','javascript','node'].includes(l)) return 'js';
+    if(['c','cpp','c++'].includes(l)) return l;
+    if(['asm','assembly','nasm'].includes(l)) return 'asm';
+    if(['ps1','powershell'].includes(l)) return 'ps';
+    return l;
+  };
+  const blocks = document.querySelectorAll('figure.highlight, pre.highlight');
+  blocks.forEach(block => {
+    const pre = block.querySelector('pre') || block;
+    const code = pre.querySelector('code') || pre;
+    const wrapper = block;
+    wrapper.classList.add('code-toolbar');
+    const lang = mapLang(code.getAttribute('data-lang') || (code.className.match(/language-([a-z0-9\+\-]+)/i)||[])[1] || '');
+    if(lang){ wrapper.classList.add('has-badge'); }
+    // avoid duplicates
+    if(!wrapper.querySelector('.copy-btn')){
+      const btn = document.createElement('button');
+      btn.className='copy-btn'; btn.type='button'; btn.textContent='Copiar';
+      btn.addEventListener('click', async ()=>{
+        try{ await navigator.clipboard.writeText(code.innerText); btn.textContent='Copiado ✓'; setTimeout(()=>btn.textContent='Copiar', 1200); }
+        catch(e){ btn.textContent='Error'; setTimeout(()=>btn.textContent='Copiar', 1200); }
+      });
+      wrapper.appendChild(btn);
+    }
+    if(lang && !wrapper.querySelector('.lang-badge')){
+      const badge = document.createElement('span');
+      badge.className='lang-badge'; badge.textContent=lang;
+      wrapper.appendChild(badge);
+    }
+  });
+})();

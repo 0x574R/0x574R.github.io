@@ -162,3 +162,94 @@ kbd{ border:1px solid var(--border); padding:.15rem .35rem; border-radius:6px; b
 /* Hero sobrio */
 .hero{ background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.10)); border-radius: 12px; }
 
+
+
+/* ===================== v7 overrides ===================== */
+/* Más ancho útil y lectura aún más cómoda */
+:root{
+  --container-max: 1560px;
+  --content-max: 128ch;
+  --radius-lg: 16px;
+  --radius-md: 12px;
+}
+
+/* Títulos con estética más marcada */
+.page-title{
+  font-size: clamp(2.2rem, 2.2rem + 0.8vw, 3rem);
+  line-height: 1.1;
+  margin: .2rem 0 .6rem 0;
+  letter-spacing: .2px;
+  position: relative;
+}
+.page-title::after{
+  content:"";
+  display:block;
+  width: 72px; height: 3px;
+  margin-top:.6rem;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  border-radius: 2px;
+  opacity:.9;
+}
+
+/* Cards del index más modernas */
+.cards{ --card-min: 340px; grid-template-columns: repeat(auto-fill, minmax(var(--card-min), 1fr)); gap: 1.2rem; }
+.card{
+  padding: 1.15rem 1.2rem;
+  border-radius: var(--radius-lg);
+  transition: transform .16s ease, box-shadow .16s ease, border-color .2s ease;
+}
+.card:hover{ transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0,0,0,.28); }
+.card .eyebrow{
+  display:inline-block; margin-bottom:.35rem;
+  font-size:.8rem; color:var(--muted);
+  border:1px solid var(--border); border-radius:999px; padding:.15rem .5rem;
+  background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.16));
+}
+.card .title{ font-weight:700; font-size:1.25rem; margin:.1rem 0 .3rem 0; }
+.card .meta{ display:flex; gap:.5rem .6rem; flex-wrap:wrap; align-items:center; }
+.card .desc{ color:var(--muted); margin:.5rem 0 0 0; }
+.card .tag{ margin-left:.35rem; padding:.12rem .5rem; border-radius:999px; border:1px solid var(--border); color:var(--muted); font-size:.85rem; }
+
+/* Hero sutilmente más grande y mejor espaciado */
+.hero{ padding: 2.2rem; border-radius: var(--radius-lg); }
+.hero h1{ font-size: clamp(2.1rem, 1.8rem + 1.1vw, 2.8rem); letter-spacing:.15px; }
+.hero p{ max-width: 90ch; }
+
+/* Post layout: mejor ritmo y TOC */
+.post{ padding: 2.1rem; }
+.post .meta .chip{ border-radius:999px; }
+.toc{ border-radius: var(--radius-md); }
+
+/* ====== Bloques de código ====== */
+/* Más padding alrededor para que los botones no choquen y badge no se solape */
+figure.highlight, pre.highlight{ position:relative; margin: 1rem 0; }
+.code-toolbar{ position:relative; }
+/* Aumenta altura superior y añade padding a la izquierda cuando hay badge */
+.code-toolbar pre, .code-toolbar{ padding-top: 3.35rem !important; }
+.code-toolbar.has-badge pre, .code-toolbar.has-badge{ padding-left: 3.4rem !important; }
+/* Badge y botón con z-index y sin invadir selección del texto */
+.code-toolbar .lang-badge{
+  position:absolute; top:12px; left:12px; z-index:3;
+  border:1px solid var(--border); border-radius:999px;
+  padding:.2rem .6rem; font-size:.75rem; line-height:1; color:var(--muted);
+  background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.25));
+  pointer-events:none;
+}
+.code-toolbar .copy-btn{
+  position:absolute; top:12px; right:12px; z-index:3;
+  border:1px solid var(--border); border-radius:10px;
+  padding:.38rem .7rem; font-size:.85rem; line-height:1;
+  background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.25));
+  color:#fff;
+  cursor:pointer;
+}
+.code-toolbar .copy-btn:hover{ filter: brightness(1.06); }
+.code-toolbar .copy-btn:focus{ outline:2px solid var(--accent); outline-offset:1px; }
+
+/* Pre y code con padding cómodo */
+.highlight, pre.highlight{ padding: 1.35rem 1.35rem 1.45rem 1.35rem !important; border-radius: 12px; }
+pre code{ line-height: 1.65; tab-size: 4; }
+
+/* Cabecera más equilibrada */
+header.site .brand{ font-weight: 800; }
+
