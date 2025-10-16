@@ -166,3 +166,81 @@ code:not(pre code){background: var(--code-bg); border:1px solid var(--border); p
 @media (prefers-reduced-motion: reduce){
   * { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
 }
+
+
+/* ==== Layout widening & typography improvements ==== */
+:root{
+  --container-max: 1200px;
+  --content-max: 100ch; /* wider text column for posts */
+  --radius-lg: 16px;
+}
+.container{max-width:var(--container-max) !important}
+
+.post{padding:1.75rem}
+.post h1{font-size:2.2rem;letter-spacing:.2px}
+.post .meta{display:flex;flex-wrap:wrap;gap:.5rem 1rem;align-items:center}
+.post .meta .chip{display:inline-flex;align-items:center;gap:.4rem;padding:.2rem .6rem;border:1px solid var(--border);border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(0,0,0,.22));font-size:.9rem;color:var(--muted)}
+
+.post-grid{
+  display:grid;grid-template-columns: 1fr;gap:1.25rem;
+}
+@media (min-width: 1024px){
+  .post-grid{grid-template-columns: minmax(0,1fr) 320px}
+}
+.post-body{max-width:var(--content-max)}
+
+/* Sticky TOC */
+.toc{
+  position:sticky; top:84px;
+  background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.18));
+  border:1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding:1rem;
+  height:max-content;
+}
+.toc h3{margin:.2rem 0 0.5rem 0; font-size:1rem; color:var(--muted)}
+.toc ul{list-style:none;padding:0;margin:0;display:grid;gap:.25rem}
+.toc a{color:var(--muted)}
+.toc a:hover{color:var(--text)}
+
+/* Code toolbar (copy button + language badge) */
+.code-toolbar{position:relative}
+.code-toolbar .copy-btn{
+  position:absolute; top:10px; right:10px; z-index:2;
+  border:1px solid var(--border); border-radius:10px; padding:.2rem .5rem; font-size:.85rem;
+  background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.25));
+  cursor:pointer;
+}
+.code-toolbar .copy-btn:hover{box-shadow:var(--glow)}
+.code-toolbar .lang-badge{
+  position:absolute; top:10px; left:10px; z-index:2;
+  border:1px solid var(--border); border-radius:999px; padding:.1rem .5rem; font-size:.75rem; color:var(--muted);
+  background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.25));
+}
+
+/* Tag chips on cards */
+.card .tag{display:inline-block;margin-left:.35rem;padding:.1rem .5rem;border:1px solid var(--border);border-radius:999px;color:var(--muted);font-size:.85rem}
+
+/* ==== Cyber hero on home ==== */
+.hero{
+  margin: .5rem 0 1.2rem 0;
+  padding: 2rem;
+  border:1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(800px 400px at 10% -10%, rgba(0,229,255,.07), transparent 55%),
+    radial-gradient(800px 500px at 110% 10%, rgba(0,255,156,.06), transparent 55%),
+    linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.22));
+  box-shadow: var(--glow), 0 10px 30px rgba(0,0,0,.35);
+}
+.hero h1{margin:0 0 .4rem 0; font-size:2.2rem}
+.hero p{margin:.25rem 0 0 0; color:var(--muted)}
+.hero .bar{margin-top:1rem; display:flex; gap:.6rem; flex-wrap:wrap}
+.hero .pill{
+  border:1px solid var(--border); border-radius:999px; padding:.35rem .7rem;
+  background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.25));
+}
+
+/* Cards refinement */
+.card{border-radius:18px}
+.card .title{letter-spacing:.15px}

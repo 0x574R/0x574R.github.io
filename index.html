@@ -3,11 +3,19 @@ layout: default
 title: "Inicio"
 ---
 
-<h1 style="margin:0 0 1rem 0;">Últimos artículos</h1>
+<section class="hero">
+  <h1>Notas y pruebas de <span class="muted">ciberseguridad</span></h1>
+  <p>Artículos técnicos, *how-tos*, PoCs y *low-level hacking*. Tipos, memoria, sockets, reverse shells, ELF, etc.</p>
+  <div class="bar">
+    <span class="pill">#linux</span>
+    <span class="pill">#assembly</span>
+    <span class="pill">#reverse-shell</span>
+    <span class="pill">#exploit-dev</span>
+    <span class="pill">#offensive-security</span>
+  </div>
+</section>
 
-{%- if paginator.page == 1 -%}
-<p class="muted">Notas y artículos. El feed está en <a href="{{ "/feed.xml" | relative_url }}">/feed.xml</a>.</p>
-{%- endif -%}
+<h2 style="margin:.5rem 0 1rem 0;">Últimos artículos</h2>
 
 <div class="cards">
 {%- for post in paginator.posts -%}
@@ -16,11 +24,11 @@ title: "Inicio"
     <div class="meta">
       <time>{{ post.date | date: "%d %b %Y" }}</time>
       {%- if post.tags -%}
-        • {%- for t in post.tags -%}<span class="tag">{{ t }}</span>{% endfor -%}
+        {%- for t in post.tags -%}<span class="tag">{{ t }}</span>{% endfor -%}
       {%- endif -%}
     </div>
     {%- if post.excerpt -%}
-      <p class="desc">{{ post.excerpt | strip_html | strip_newlines | truncate: 160, "…" }}</p>
+      <p class="desc">{{ post.excerpt | strip_html | strip_newlines | truncate: 180, "…" }}</p>
     {%- endif -%}
   </a>
 {%- endfor -%}

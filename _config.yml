@@ -1,6 +1,6 @@
-title: "Mi Blog con Jekyll"
+title: "Cyber Lab Blog"
 description: "Blog Markdown desplegado automáticamente con GitHub Pages (Actions)."
-url: "https://tu-usuario.github.io/tu-repo" # <-- cambia esto en GitHub
+url: "https://example.github.io/cyber-blog"
 permalink: /:slug/
 markdown: kramdown
 highlighter: rouge
@@ -22,3 +22,4 @@ exclude:
   - README.md
   - "*.zip"
   - "node_modules"
+brand: "CYBER·LAB"
