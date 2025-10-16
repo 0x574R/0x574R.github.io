@@ -85,3 +85,80 @@ figure.highlight, pre.highlight{position:relative}
 .hero .pill{border:1px solid var(--border);border-radius:999px;padding:.35rem .7rem;background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.18))}
 
 .muted{color:var(--muted)}
+
+
+/* ===================== v6 overrides (calmer + wider + monospace) ===================== */
+:root{
+  --bg:#0f1117;
+  --card:#151a22;
+  --text:#e6edf3;
+  --muted:#9aa4b2;
+  --accent:#58a6ff;
+  --accent-2:#a6d189;
+  --border:#2d333b;
+  --code-bg:#0b0f14;
+  --container-max: 1440px;   /* más ancho */
+  --content-max: 120ch;      /* columna de lectura más amplia */
+  --radius-lg: 14px;
+}
+
+/* Tipografía: TODO monospace */
+html, body, .post, .card, .hero, header.site, nav, footer,
+h1,h2,h3,h4,h5,h6, p, a, li, code, pre, blockquote, table, input, button, textarea {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+  letter-spacing: .1px;
+}
+
+/* Ritmo vertical más cómodo */
+.post-body p, .post-body ul, .post-body ol, .post-body pre, .post-body blockquote, .post-body table { margin: 1.1rem 0; }
+.post-body img { max-width:100%; border-radius: 10px; display:block; margin: 0.75rem auto; }
+.post-body hr { border:0; border-top:1px solid var(--border); margin:2rem 0; opacity:.8 }
+blockquote { border-left:3px solid var(--border); padding:.6rem 1rem; color:var(--muted); background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.08)); border-radius:10px; }
+
+/* Contenedor y posts más anchos */
+.container{ max-width: var(--container-max) !important; }
+.post-body{ max-width: var(--content-max) !important; }
+.cards{ grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.1rem; }
+
+/* Header sutil */
+.brand{ font-weight: 700; }
+.brand .caret{ background: var(--accent); opacity:.9; }
+
+/* Código: más padding interno y barra superior sin solaparse */
+figure.highlight, pre.highlight{ position:relative; margin: 1rem 0; }
+.code-toolbar{ position:relative; }
+.code-toolbar pre, .code-toolbar{ padding-top: 3.25rem !important; } /* barra superior más alta */
+.highlight, pre.highlight{ background: var(--code-bg); border:1px solid var(--border); border-radius: 12px; padding: 1.25rem 1.25rem 1.35rem 1.25rem !important; }
+pre code{ line-height: 1.6; tab-size: 4; }
+
+/* Botón copiar y badge de lenguaje: alto contraste y sin invadir el contenido */
+.code-toolbar .copy-btn{
+  position:absolute; top:12px; right:12px; z-index:2;
+  border:1px solid var(--border); border-radius:10px;
+  padding:.35rem .65rem; font-size:.85rem; line-height:1;
+  background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.25));
+  color: #fff;  /* texto blanco para contraste */
+  cursor:pointer;
+}
+.code-toolbar .copy-btn:hover{ filter: brightness(1.05); }
+.code-toolbar .copy-btn:focus{ outline:2px solid var(--accent); outline-offset:1px; }
+
+.code-toolbar .lang-badge{
+  position:absolute; top:12px; left:12px; z-index:2;
+  border:1px solid var(--border); border-radius:999px;
+  padding:.2rem .55rem; font-size:.75rem; line-height:1; color:var(--muted);
+  background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.25));
+}
+
+/* Accesibilidad: selección y focus */
+::selection{ background:#264e78; color:#fff; }
+a:focus, button:focus { outline: 2px solid var(--accent); outline-offset:2px; }
+
+/* Tablas y elementos misceláneos */
+table{ width:100%; border-collapse: collapse; overflow:auto; display:block; }
+th, td{ border:1px solid var(--border); padding:.55rem .7rem; text-align:left; }
+kbd{ border:1px solid var(--border); padding:.15rem .35rem; border-radius:6px; background: #11151b; }
+
+/* Hero sobrio */
+.hero{ background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.10)); border-radius: 12px; }
+
