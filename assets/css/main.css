@@ -1,0 +1,37 @@
+*{box-sizing:border-box}
+:root{
+  --bg:#0e0f12;
+  --card:#151820;
+  --text:#eaeef2;
+  --muted:#aab2bf;
+  --brand:#6ea8fe;
+  --border:#2a2f3a;
+  --code-bg:#0b0d12;
+}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;line-height:1.7}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline}
+.container{max-width:900px;margin:0 auto;padding:1.25rem}
+header.site{border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(14,15,18,.8);backdrop-filter:blur(6px);z-index:10}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:.75rem}
+.brand{display:flex;gap:.6rem;align-items:center;color:var(--text);font-weight:600}
+nav a{margin-left:1rem;color:var(--muted)}
+nav a:hover{color:var(--text)}
+footer.site{border-top:1px solid var(--border);margin-top:3rem;color:var(--muted)}
+.post{background:var(--card);padding:1.25rem;border:1px solid var(--border);border-radius:16px;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+.post h1{margin:.2rem 0 0 0;font-size:2rem}
+.post .meta{color:var(--muted);margin:.25rem 0 1rem 0}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem}
+.card{display:block;background:var(--card);padding:1rem;border:1px solid var(--border);border-radius:14px;transition:transform .12s ease, box-shadow .12s ease}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.28)}
+.card h2{margin:.3rem 0 .25rem 0;font-size:1.2rem}
+.card .meta{color:var(--muted);font-size:.95rem}
+code, pre, kbd, samp{font-family:"Fira Code",Consolas,"SFMono-Regular",Menlo,Monaco,monospace;font-size:.95em}
+pre{background:var(--code-bg);border:1px solid var(--border);padding:1rem;border-radius:12px;overflow:auto}
+pre code{display:block;white-space:pre}
+code:not(pre code){background:var(--code-bg);border:1px solid var(--border);padding:.1rem .35rem;border-radius:6px}
+.list{display:grid;gap:1rem}
+.list .item{display:block;background:var(--card);padding:1rem;border:1px solid var(--border);border-radius:12px}
+.list .item .title{font-weight:600}
+.list .item .desc{color:var(--muted);margin-top:.25rem}
+.muted{color:var(--muted)}

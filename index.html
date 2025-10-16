@@ -1,0 +1,39 @@
+---
+layout: default
+title: "Inicio"
+---
+
+<h1 style="margin:0 0 1rem 0;">Últimos artículos</h1>
+
+{%- if paginator.page == 1 -%}
+<p class="muted">Notas y artículos. El feed está en <a href="{{ "/feed.xml" | relative_url }}">/feed.xml</a>.</p>
+{%- endif -%}
+
+<div class="cards">
+{%- for post in paginator.posts -%}
+  <a class="card" href="{{ post.url | relative_url }}">
+    <h2 class="title">{{ post.title }}</h2>
+    <div class="meta">
+      <time>{{ post.date | date: "%d %b %Y" }}</time>
+      {%- if post.tags -%}
+        • {%- for t in post.tags -%}<span class="tag">{{ t }}</span>{% endfor -%}
+      {%- endif -%}
+    </div>
+    {%- if post.excerpt -%}
+      <p class="desc">{{ post.excerpt | strip_html | strip_newlines | truncate: 160, "…" }}</p>
+    {%- endif -%}
+  </a>
+{%- endfor -%}
+</div>
+
+{%- if paginator.total_pages > 1 -%}
+<p style="margin-top:1rem;">
+  {%- if paginator.previous_page -%}
+    <a href="{{ paginator.previous_page_path | relative_url }}">&larr; Anteriores</a>
+  {%- endif -%}
+  <span class="muted">Página {{ paginator.page }} de {{ paginator.total_pages }}</span>
+  {%- if paginator.next_page -%}
+    <a style="float:right" href="{{ paginator.next_page_path | relative_url }}">Más recientes &rarr;</a>
+  {%- endif -%}
+</p>
+{%- endif -%}

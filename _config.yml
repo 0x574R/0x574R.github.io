@@ -1,0 +1,24 @@
+title: "Mi Blog con Jekyll"
+description: "Blog Markdown desplegado automáticamente con GitHub Pages (Actions)."
+url: "https://tu-usuario.github.io/tu-repo" # <-- cambia esto en GitHub
+permalink: /:slug/
+markdown: kramdown
+highlighter: rouge
+timezone: Europe/Madrid
+excerpt_separator: "<!--more-->"
+
+# Plugins permitidos por GitHub Pages
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-paginate
+
+paginate: 10
+paginate_path: "/page:num/"
+
+# Archivos/carpetas a excluir de la build
+exclude:
+  - README.md
+  - "*.zip"
+  - "node_modules"
