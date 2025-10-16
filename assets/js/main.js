@@ -268,3 +268,73 @@ if(!window.__CYBER_V9__){
     if(block.querySelector('.lang-badge')) block.classList.add('has-badge');
   });
 }
+
+
+/* v10 hero: attacker ↔ target connection simulation (non-instructional) */
+(function(){
+  const atk = document.getElementById('term-attacker');
+  const tgt = document.getElementById('term-target');
+  if(!atk || !tgt) return;
+
+  function el(html){ const d=document.createElement('div'); d.innerHTML=html.trim(); return d.firstChild; }
+  function line(prompt, role, cmd=''){
+    return el(`<div class="line"><span class="prompt">${prompt}</span><span class="role"> ${role}</span> <span class="cmd">${cmd}</span><span class="cursor"></span></div>`);
+  }
+  const sleep = (ms)=>new Promise(r=>setTimeout(r,ms));
+  async function typeInto(node, txt, speed=[18,28]){
+    const [a,b]=speed; for(const ch of txt){ node.textContent+=ch; await sleep(a+Math.random()*(b-a)); }
+  }
+
+  // Build initial lines
+  const aL = [
+    line("┌──(", "attacker@lab", ")-[/sessions]"),
+    line("└─$", "", " nc -lvnp 9001"),
+  ];
+  const tL = [
+    line("┌──(", "target", ")-[/tmp]"),
+    line("└─$", "", " // outbound connection ..."),
+  ];
+  aL.forEach(n=>atk.appendChild(n));
+  tL.forEach(n=>tgt.appendChild(n));
+
+  (async()=>{
+    await sleep(400);
+    // Attacker "listening"
+    let cmd = aL[1].querySelector('.cmd');
+    cmd.textContent = " "; await typeInto(cmd, "nc -lvnp 9001");
+    await sleep(800);
+
+    // Target "connects" (no explicit payload shown)
+    cmd = tL[1].querySelector('.cmd');
+    cmd.textContent = " "; await typeInto(cmd, "connecting to 10.10.10.2:9001 ...");
+    await sleep(900);
+
+    // Attacker shows connection established
+    atk.appendChild(el('<div class="line">listening on [any] 9001 ...</div>'));
+    await sleep(250);
+    atk.appendChild(el('<div class="line">connect from 10.10.10.10 to 10.10.10.2:9001</div>'));
+    await sleep(600);
+    atk.appendChild(el('<div class="line">$ whoami</div>'));
+    await sleep(450);
+    atk.appendChild(el('<div class="line">www-data</div>'));
+    await sleep(350);
+    atk.appendChild(el('<div class="line">$ hostname</div>'));
+    await sleep(450);
+    atk.appendChild(el('<div class="line">target</div>'));
+  })();
+})();
+
+// Prefer GitHub owner for typing brand if available
+(function(){
+  if(!window.__CYBER_V10_BRAND__){
+    window.__CYBER_V10_BRAND__ = true;
+    const name = (window.GITHUB_NAME || window.BRAND_NAME || document.querySelector("meta[name='application-name']")?.content || 'CYBER·LAB').trim();
+    const brandNameEl = document.querySelector('[data-typing="name"]');
+    if(brandNameEl){
+      // reuse human-like typing from v9 if present; else simple set
+      const old = brandNameEl.textContent;
+      if(typeof window.typeHuman === 'function'){ window.typeHuman(brandNameEl, name); }
+      else { brandNameEl.textContent = name; }
+    }
+  }
+})();
