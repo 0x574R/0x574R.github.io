@@ -162,3 +162,109 @@ if(!window.__CYBER_INIT__){
     if(block.querySelector('.lang-badge')) block.classList.add('has-badge');
   });
 })();
+
+
+/* v9 animations: human typing, terminal hero, scroll reveal, copy feedback */
+if(!window.__CYBER_V9__){
+  window.__CYBER_V9__ = true;
+
+  // Human-like typing with variable latency and tiny glitches
+  (function(){
+    const brandNameEl = document.querySelector('[data-typing="name"]');
+    const subtitleEl = document.querySelector('[data-typing="subtitle"]');
+    const BRAND = (window.BRAND_NAME || document.querySelector('meta[name="application-name"]')?.content || 'CYBER·LAB').trim();
+    function sleep(ms){ return new Promise(r=>setTimeout(r, ms)); }
+    async function typeHuman(el, text){
+      el.textContent = '';
+      for(const ch of text){
+        // occasional micro-glitch
+        if(Math.random()<0.02){
+          el.textContent += String.fromCharCode(33 + Math.floor(Math.random()*40));
+          await sleep(20);
+          el.textContent = el.textContent.slice(0,-1);
+        }
+        el.textContent += ch;
+        const jitter = 25 + Math.random()*45;
+        await sleep(jitter);
+      }
+    }
+    async function erase(el){
+      while(el.textContent.length){
+        el.textContent = el.textContent.slice(0,-1);
+        await sleep(12 + Math.random()*20);
+      }
+    }
+    (async ()=>{
+      if(brandNameEl) await typeHuman(brandNameEl, BRAND);
+      if(subtitleEl){
+        const phrases = ["cybersecurity","pentesting","exploit dev","reverse shells","linux internals","assembly x86‑64"];
+        let i=0;
+        while(true){
+          await erase(subtitleEl);
+          await typeHuman(subtitleEl, phrases[i++ % phrases.length]);
+          await sleep(1400 + Math.random()*600);
+        }
+      }
+    })();
+  })();
+
+  // Terminal hero typing
+  (function(){
+    const host = document.getElementById('hero-term');
+    if(!host) return;
+    const lines = [
+      {p:'┌──(cyber@lab)-[/targets]', c:''},
+      {p:'└─$ ', c:'nmap -sC -sV 10.10.10.10'},
+      {p:'└─$ ', c:'feroxbuster -u http://10.10.10.10'},
+      {p:'└─$ ', c:'nc -lvnp 9001'},
+    ];
+    const frag = document.createDocumentFragment();
+    lines.forEach(l=>{
+      const div = document.createElement('div');
+      div.className='line';
+      div.innerHTML = `<span class="prompt">${l.p}</span><span class="path"></span><span class="cmd"></span><span class="cursor"></span>`;
+      frag.appendChild(div);
+    });
+    host.appendChild(frag);
+    const sleep = (ms)=>new Promise(r=>setTimeout(r,ms));
+    (async()=>{
+      const nodes = host.querySelectorAll('.line');
+      for(let i=0;i<nodes.length;i++){
+        const line = nodes[i];
+        const cmdEl = line.querySelector('.cmd');
+        const cmd = lines[i].c;
+        if(!cmd){ continue; }
+        for(const ch of cmd){
+          cmdEl.textContent += ch;
+          await sleep(18 + Math.random()*28);
+        }
+        await sleep(500);
+      }
+    })();
+  })();
+
+  // Scroll reveal for cards and post body chunks
+  (function(){
+    const io = new IntersectionObserver((els)=>{
+      els.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('is-in'); io.unobserve(e.target); } });
+    },{threshold:.08});
+    document.querySelectorAll('.card, .post .post-body > *').forEach(el=>{
+      el.classList.add('reveal'); io.observe(el);
+    });
+  })();
+
+  // Copy feedback visual
+  (function(){
+    document.querySelectorAll('.copy-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        btn.classList.add('copied');
+        setTimeout(()=>btn.classList.remove('copied'), 900);
+      });
+    });
+  })();
+
+  // Defensive: ensure has-badge when a language badge exists
+  document.querySelectorAll('figure.highlight, pre.highlight').forEach(block => {
+    if(block.querySelector('.lang-badge')) block.classList.add('has-badge');
+  });
+}
