@@ -121,3 +121,44 @@ if(!window.__CYBER_INIT__){
     }
   });
 })();
+
+
+/* v8 enhancements: smooth TOC scroll, heading anchors, stronger has-badge padding */
+(function(){
+  // Build anchors for h2/h3 inside post-body
+  const body = document.querySelector('.post .post-body') || document.querySelector('.post');
+  if(body){
+    const heads = body.querySelectorAll('h2, h3');
+    heads.forEach(h => {
+      if(!h.id){
+        h.id = h.textContent.trim().toLowerCase().replace(/\s+/g,'-').replace(/[^\w\-]+/g,'');
+      }
+      if(!h.querySelector('.anchor')){
+        const a = document.createElement('a');
+        a.className = 'anchor';
+        a.href = '#' + h.id;
+        a.textContent = '#';
+        h.appendChild(a);
+      }
+    });
+  }
+
+  // Smooth scroll with header offset for TOC and heading anchors
+  function scrollWithOffset(e, target){
+    e.preventDefault();
+    const el = document.querySelector(target);
+    if(!el) return;
+    const header = document.querySelector('header.site');
+    const offset = (header?.offsetHeight || 70) + 12;
+    const top = el.getBoundingClientRect().top + window.pageYOffset - offset;
+    window.scrollTo({ top, behavior: 'smooth' });
+  }
+  document.querySelectorAll('.toc a, .post .post-body .anchor').forEach(a => {
+    a.addEventListener('click', e => scrollWithOffset(e, a.getAttribute('href')));
+  });
+
+  // Ensure code-toolbar left padding when badge exists (defensive)
+  document.querySelectorAll('figure.highlight, pre.highlight').forEach(block => {
+    if(block.querySelector('.lang-badge')) block.classList.add('has-badge');
+  });
+})();

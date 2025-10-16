@@ -253,3 +253,121 @@ pre code{ line-height: 1.65; tab-size: 4; }
 /* Cabecera más equilibrada */
 header.site .brand{ font-weight: 800; }
 
+
+
+/* ===================== v8 overrides ===================== */
+/* Nueva paleta (indigo/cyan sobrio) y anchos */
+:root{
+  --bg:#0d1017;
+  --card:#111523;
+  --text:#e2e8f0;
+  --muted:#99a3b3;
+  --accent:#8b5cf6;   /* indigo */
+  --accent-2:#22d3ee; /* cyan */
+  --border:#2a3140;
+  --code-bg:#0b0f16;
+
+  --container-max: 1680px;  /* aún más ancho */
+  --content-max: 136ch;     /* columna de lectura más amplia */
+  --radius-lg: 16px;
+  --radius-md: 12px;
+}
+
+/* Header / brand más trabajado */
+header.site{border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(13,16,23,.85);backdrop-filter:blur(6px);z-index:10}
+.brand{display:flex;align-items:center;gap:.7rem;color:var(--text)}
+.brand .brand-word{font-weight:800;letter-spacing:.6px}
+.brand .caret{width:10px;height:1.2rem;background:linear-gradient(180deg,var(--accent),var(--accent-2));border-radius:2px;display:inline-block;animation:blink .9s steps(1) infinite}
+@keyframes blink{50%{opacity:.22}}
+.brand-sub{color:var(--muted)}
+
+/* Título de página más elegante */
+.page-title{
+  font-size: clamp(2.25rem, 2rem + 1.2vw, 3.1rem);
+  line-height: 1.07;
+  margin: .15rem 0 .7rem 0;
+  letter-spacing: .2px;
+  position: relative;
+}
+.page-title::after{
+  content:"";
+  display:block; height:3px; width: 96px;
+  margin-top:.65rem;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  border-radius:2px; opacity:.9;
+}
+
+/* Cards del index mejor presentadas */
+.cards{ --card-min: 360px; grid-template-columns: repeat(auto-fill, minmax(var(--card-min), 1fr)); gap: 1.25rem; }
+.card{
+  padding: 1.2rem 1.25rem; border-radius: var(--radius-lg);
+  background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.16));
+  border:1px solid var(--border);
+  transition: transform .16s ease, box-shadow .16s ease, border-color .2s ease;
+}
+.card:hover{ transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0,0,0,.28); border-color: rgba(138,180,248,.25); }
+.card .eyebrow{
+  display:inline-block; margin-bottom:.35rem; font-size:.78rem; color:var(--muted);
+  border:1px solid var(--border); border-radius:999px; padding:.15rem .55rem;
+  background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.14));
+}
+.card .title{ font-weight:750; font-size:1.28rem; margin:.12rem 0 .35rem 0; letter-spacing:.15px }
+.card .meta{ display:flex; gap:.5rem .6rem; flex-wrap:wrap; align-items:center; }
+.card .desc{ color:var(--muted); margin:.5rem 0 0 0; }
+.card .tag{ margin-left:.35rem; padding:.12rem .5rem; border-radius:999px; border:1px solid var(--border); color:var(--muted); font-size:.85rem; }
+
+/* Post layout: mejor ritmo, enlaces con subrayado sutil y anchors en headings */
+.post{ padding: 2.25rem; background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.14)); border:1px solid var(--border); border-radius: var(--radius-lg); }
+.post a{ text-decoration:none; border-bottom:1px dotted rgba(138,180,248,.35); }
+.post a:hover{ border-bottom-color: rgba(34,211,238,.6); }
+.post-body h2, .post-body h3{
+  margin-top: 1.6rem; margin-bottom:.6rem;
+  letter-spacing:.2px;
+  position:relative;
+}
+.post-body h2{ font-size:1.6rem }
+.post-body h3{ font-size:1.25rem; color: var(--text) }
+.post-body h2 .anchor, .post-body h3 .anchor{
+  opacity:0; transition:opacity .12s ease; position:absolute; left:-1.2rem; top:50%; transform:translateY(-50%);
+  font-size:.9rem; color:var(--muted);
+}
+.post-body h2:hover .anchor, .post-body h3:hover .anchor{ opacity:.9 }
+
+/* TOC y chips */
+.toc{ border-radius: var(--radius-md); background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.1)); }
+.post .meta .chip{ background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.14)); border-radius:999px }
+
+/* ====== Bloques de código ====== */
+/* Más espacio superior e izquierdo (cuando hay badge), sin solapamientos */
+figure.highlight, pre.highlight{ position:relative; margin: 1rem 0; }
+.code-toolbar{ position:relative; }
+.code-toolbar pre, .code-toolbar{ padding-top: 3.5rem !important; } /* barra superior */
+.code-toolbar.has-badge pre, .code-toolbar.has-badge{ padding-left: 4.6rem !important; } /* espacio para el badge */
+.code-toolbar .lang-badge{
+  position:absolute; top:12px; left:12px; z-index:3;
+  border:1px solid var(--border); border-radius:999px;
+  padding:.24rem .6rem; font-size:.75rem; line-height:1; color:var(--muted);
+  background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.25));
+  pointer-events:none; user-select:none;
+}
+.code-toolbar .copy-btn{
+  position:absolute; top:12px; right:12px; z-index:3;
+  border:1px solid var(--border); border-radius:10px;
+  padding:.42rem .75rem; font-size:.85rem; line-height:1;
+  background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.25));
+  color:#fff; cursor:pointer;
+}
+.code-toolbar .copy-btn:hover{ filter:brightness(1.06) }
+.code-toolbar .copy-btn:focus{ outline:2px solid var(--accent); outline-offset:1px }
+
+/* Pre más cómodo */
+.highlight, pre.highlight{ background: var(--code-bg); border:1px solid var(--border); border-radius: 12px; padding: 1.45rem 1.45rem 1.55rem 1.45rem !important; }
+pre code{ line-height:1.68; tab-size: 4; }
+
+/* Animación suave en el subrayado del título de página */
+@keyframes sweep {
+  0% { transform-origin:left; transform: scaleX(.2); opacity:.4 }
+  100% { transform-origin:left; transform: scaleX(1); opacity:.95 }
+}
+.page-title::after{ animation: sweep .6s ease both; }
+
