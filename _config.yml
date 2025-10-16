@@ -1,13 +1,13 @@
 title: "Cyber Lab Blog"
-description: "Blog Markdown desplegado automáticamente con GitHub Pages (Actions)."
-url: "https://example.github.io/cyber-blog"
+description: "Blog de ciberseguridad desplegado automáticamente con GitHub Pages (Actions)."
+brand: "CYBER·LAB"
+url: "https://example.github.io/cyber-blog"  # cámbialo en GitHub
 permalink: /:slug/
 markdown: kramdown
 highlighter: rouge
 timezone: Europe/Madrid
 excerpt_separator: "<!--more-->"
 
-# Plugins permitidos por GitHub Pages
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
@@ -17,9 +17,6 @@ plugins:
 paginate: 10
 paginate_path: "/page:num/"
 
-# Archivos/carpetas a excluir de la build
 exclude:
   - README.md
   - "*.zip"
-  - "node_modules"
-brand: "CYBER·LAB"

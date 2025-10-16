@@ -7,16 +7,16 @@
   <meta name="application-name" content="{{ site.brand | default: site.title }}">
   <meta name="description" content="{{ page.excerpt | strip_html | strip_newlines | truncate: 160, '…' | default: site.description }}">
   <link rel="stylesheet" href="{{ "/assets/css/main.css" | relative_url }}">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='8' fill='%236ea8fe'/></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='8' fill='%2358a6ff'/></svg>">
   {%- seo -%}
-    <script>window.BRAND_NAME = "{{ site.brand | default: site.title | xml_escape }}";</script>
 </head>
-<body class="scanline" class="scanline">
+<body>
   {% include header.html %}
   <main class="container">
     {{ content }}
   </main>
   {% include footer.html %}
+  <script>window.BRAND_NAME = "{{ site.brand | default: site.title | xml_escape }}";</script>
   <script src="{{ "/assets/js/main.js" | relative_url }}"></script>
 </body>
 </html>
