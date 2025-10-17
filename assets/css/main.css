@@ -252,3 +252,33 @@ pre[class*="language-"], code[class*="language-"]{ background: transparent !impo
 .reveal.is-in{ opacity:1; transform:none }
 .tilt-in{ will-change: transform; transform: perspective(800px) rotateX(2deg) translateY(6px); transition: transform .4s ease, box-shadow .4s ease }
 .tilt-in.is-in{ transform: none }
+
+
+/* ToC */
+.toc{ position:sticky; top:90px; height:max-content; border:1px solid var(--border); border-radius:14px; padding:1rem; background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.18)) }
+.toc h3{ margin:0 0 .75rem; font-size:1rem }
+.toc ul{ list-style:none; padding:0; margin:0; display:grid; gap:.4rem }
+.toc a{ color:var(--muted) } .toc a:hover{ color:var(--text); text-decoration:none }
+.toc .toc-h2{ font-weight:700 } .toc .toc-h3{ margin-left:.5rem; opacity:.9 }
+
+/* Reveal */
+@keyframes fadeUp{ from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none} }
+.reveal{ opacity:0; transform:translateY(8px); transition: opacity .4s ease, transform .4s ease }
+.reveal.is-in{ opacity:1; transform:none }
+.tilt-in{ transform: perspective(800px) rotateX(2deg) translateY(6px); transition: transform .4s ease, box-shadow .4s ease }
+.tilt-in.is-in{ transform:none }
+
+/* Terminals */
+.hero-term{ border:1px solid var(--border); border-radius:12px; padding:1rem }
+.hero-term .line{ margin:0; white-space:pre-wrap }
+.hero-term .cursor{ display:inline-block; width:8px; height:1.1em; vertical-align:bottom; background:#e6edf3; animation: blink 1s steps(1) infinite; margin-left:2px }
+@keyframes blink{ 50%{ opacity:0 } }
+.hero-term.attacker .prompt.red{ color:#ff6b6b }
+.hero-term.victim  .prompt.green{ color:#41d692 }
+.hero-term.attacker .term-text{ color:#bfe6ff }
+.hero-term.victim  .term-text{ color:#b8f8c6 }
+
+/* Code backgrounds */
+pre[class*="language-"], code[class*="language-"], .highlight, .post-body pre, .post-body code {
+  background: transparent !important; box-shadow:none !important;
+}
