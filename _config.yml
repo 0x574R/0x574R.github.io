@@ -1,6 +1,5 @@
 title: "Cyber Blog"
 description: "Blog de ciberseguridad desplegado automáticamente con GitHub Pages (Actions)."
-brand: "CYBER·LAB"
 url: "https://example.github.io/cyber-blog"
 permalink: /:slug/
 markdown: kramdown
