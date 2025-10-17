@@ -178,3 +178,27 @@ header.site{ --header-h: 64px }
 .post-body pre, .highlight{ background: transparent !important; box-shadow: none !important; }
 .post-body pre{ border:1px solid var(--border); border-radius:14px; padding:1rem; }
 .highlight pre{ background: transparent !important; }
+
+/* === Global monospace === */
+:root{ --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace }
+html, body, *:not(svg):not(path){ font-family: var(--font-mono) !important; letter-spacing: 0 }
+
+/* Keep header height, scale logo visually */
+header.site{ --header-h: 64px }
+.header-inner{ min-height: var(--header-h) }
+.brand .logo{ height:40px; transform: scale(1.9); transform-origin:left center }
+
+/* === Remove ANY background from code areas (Rouge/Markdown) === */
+.highlight, .rouge-table, .rouge-table td, .rouge-table pre, pre.highlight, .highlight pre, .highlight code, .post-body pre, .post-body code{
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.post-body code{ border:0 !important; padding:0 !important }
+.post-body pre{ border:1px solid var(--border); border-radius:14px; padding:1rem }
+.highlight{ border:1px solid var(--border); border-radius:14px }
+
+/* Terminal hero visuals */
+.hero-term{ border:1px solid var(--border); border-radius:12px; padding:1rem }
+.hero-term .line{ margin:0; white-space:pre-wrap }
+.hero-term .cursor{ display:inline-block; width:8px; height:1.1em; vertical-align:bottom; background:#e6edf3; animation: blink 1s steps(1) infinite; margin-left:2px }
+@keyframes blink{ 50%{ opacity:0 } }

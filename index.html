@@ -14,16 +14,17 @@ title: "Inicio"
     <span class="pill">offensive-security</span>
   </div>
 
+  
   <div class="term-grid reveal">
     <div class="hero-term" id="attacker">
-      <div class="line"><span class="prompt">attacker@razor$</span> <span data-ty="a"></span><span class="cursor"></span></div>
+      <pre class="line"><code data-ty="a"></code><span class="cursor"></span></pre>
     </div>
     <div class="hero-term" id="target">
-      <div class="line"><span class="role">victim@host$</span> <span data-ty="b"></span><span class="cursor"></span></div>
+      <pre class="line"><code data-ty="b"></code><span class="cursor"></span></pre>
     </div>
   </div>
-
 </section>
+
 
 <section class="grid">
 {%- assign posts = paginator.posts | default: site.posts -%}
@@ -40,16 +41,17 @@ title: "Inicio"
   </a>
 {%- endfor -%}
 
+  
   <div class="term-grid reveal">
     <div class="hero-term" id="attacker">
-      <div class="line"><span class="prompt">attacker@razor$</span> <span data-ty="a"></span><span class="cursor"></span></div>
+      <pre class="line"><code data-ty="a"></code><span class="cursor"></span></pre>
     </div>
     <div class="hero-term" id="target">
-      <div class="line"><span class="role">victim@host$</span> <span data-ty="b"></span><span class="cursor"></span></div>
+      <pre class="line"><code data-ty="b"></code><span class="cursor"></span></pre>
     </div>
   </div>
-
 </section>
+
 
 {%- if paginator.total_pages > 1 -%}
 <p style="margin-top:1rem;">
