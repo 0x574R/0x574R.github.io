@@ -229,3 +229,26 @@ pre[class*="language-"], code[class*="language-"], .highlight, .post-body pre, .
   background: transparent !important;
   box-shadow: none !important;
 }
+
+
+/* ===== Razor Prism (NASM-focused) ===== */
+pre[class*="language-"], code[class*="language-"]{ background: transparent !important; text-shadow:none !important; }
+.language-nasm .token.comment { color:#7f848e }
+.language-nasm .token.keyword { color:#ff5c5c; font-weight:700 }   /* mnemonics, directives */
+.language-nasm .token.register { color:#7aa2f7 }                   /* rax, rdi, etc. */
+.language-nasm .token.number { color:#e5c07b }
+.language-nasm .token.string { color:#98c379 }
+.language-nasm .token.operator, .language-nasm .token.punctuation { color:#cbd5e1 }
+.language-nasm .token.label, .language-nasm .token.symbol { color:#d19a66 }
+.language-nasm .token.constant { color:#bd93f9 }
+.language-nasm .token.variable { color:#e6edf3 }
+
+/* Subtle underline for code labels */
+.language-nasm .token.label { text-decoration: underline dotted rgba(255,255,255,.25) }
+
+/* ===== Animations ===== */
+@keyframes fadeUp { from{opacity:0; transform: translateY(8px)} to{opacity:1; transform:none} }
+.reveal{ opacity:0; transform: translateY(8px); transition: opacity .4s ease, transform .4s ease }
+.reveal.is-in{ opacity:1; transform:none }
+.tilt-in{ will-change: transform; transform: perspective(800px) rotateX(2deg) translateY(6px); transition: transform .4s ease, box-shadow .4s ease }
+.tilt-in.is-in{ transform: none }

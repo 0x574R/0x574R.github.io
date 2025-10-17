@@ -13,17 +13,21 @@ title: "Inicio"
     <span class="pill">exploit-dev</span>
     <span class="pill">offensive-security</span>
   </div>
-    <div class="hero-term victim" id="victim">
+
+  <div class="term-grid">
+    <div class="hero-term victim">
       <pre class="line"><span class="prompt green">victim@host$ </span><span class="term-text" data-ty="b"></span><span class="cursor"></span></pre>
+    </div>
+    <div class="hero-term attacker">
+      <pre class="line"><span class="prompt red">attacker@razor$ </span><span class="term-text" data-ty="a"></span><span class="cursor"></span></pre>
     </div>
   </div>
 </section>
 
-
 <section class="grid">
 {%- assign posts = paginator.posts | default: site.posts -%}
 {%- for post in posts -%}
-  <a class="card reveal" href="{{ post.url | relative_url }}">
+  <a class="card reveal tilt-in" href="{{ post.url | relative_url }}">
     <div class="eyebrow">
       <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%d %b %Y" }}</time>
       {%- if post.tags and post.tags.size > 0 -%}
@@ -34,20 +38,7 @@ title: "Inicio"
     <p class="desc">{{ post.excerpt | strip_html | strip_newlines | truncate: 160 }}</p>
   </a>
 {%- endfor -%}
-
-  
-  
-    <div class="hero-term" id="target">
-      <pre class="line"><code data-ty="b"></code><span class="cursor"></span></pre>
-    </div>
-  </div>
-    <div class="hero-term victim" id="target">
-      <pre class="line"><span class="prompt green">victim@host$ </span><span class="term-text" data-ty="b"></span><span class="cursor"></span></pre>
-    </div>
-  </div>
-
 </section>
-
 
 {%- if paginator.total_pages > 1 -%}
 <p style="margin-top:1rem;">

