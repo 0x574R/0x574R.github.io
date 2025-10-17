@@ -168,9 +168,9 @@ h1,h2,h3,h4,h5,h6,button,input,textarea,select{ font-family: inherit }
 code,kbd,samp,pre{ font-family: inherit }
 
 /* Keep header height, visually scale logo without affecting layout */
-header.site{ --header-h: 56px }
-.brand .logo{ height:40px; transform: scale(2.3); transform-origin:left center; }
-@media (min-width: 1000px){ .brand .logo{ height:40px; transform: scale(2.6) } }
+header.site{ --header-h: 54px }
+.brand .logo{ height:40px; transform: scale(2.4); transform-origin:left center; }
+@media (min-width: 1000px){ .brand .logo{ height:40px; transform: scale(2.4) } }
 
 /* No background shading behind code blocks */
 .post-body pre, .highlight{ background: transparent !important; box-shadow: none !important; }
@@ -182,7 +182,7 @@ header.site{ --header-h: 56px }
 html, body, *:not(svg):not(path){ font-family: var(--font-mono) !important; letter-spacing: 0 }
 
 /* Keep header height, scale logo visually */
-header.site{ --header-h: 56px }
+header.site{ --header-h: 54px }
 
 /* === Remove ANY background from code areas (Rouge/Markdown) === */
 .highlight, .rouge-table, .rouge-table td, .rouge-table pre, pre.highlight, .highlight pre, .highlight code, .post-body pre, .post-body code{
@@ -217,3 +217,15 @@ pre[class*="language-"], code[class*="language-"]{ background: transparent !impo
 .hero-term.victim .prompt.green{ color:#41d692 }
 .hero-term.attacker .term-text{ color:#bfe6ff }
 .hero-term.victim  .term-text{ color:#b8f8c6 }
+
+/* Terminal colorization */
+.hero-term.attacker .prompt.red{ color:#ff6b6b }
+.hero-term.victim  .prompt.green{ color:#41d692 }
+.hero-term.attacker .term-text{ color:#bfe6ff }
+.hero-term.victim  .term-text{ color:#b8f8c6 }
+
+/* Ensure transparent code backgrounds */
+pre[class*="language-"], code[class*="language-"], .highlight, .post-body pre, .post-body code {
+  background: transparent !important;
+  box-shadow: none !important;
+}
