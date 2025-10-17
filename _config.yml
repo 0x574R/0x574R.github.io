@@ -1,6 +1,6 @@
-title: "Cyber Lab Blog"
+title: "RAZOR — Blog"
 description: "Blog de ciberseguridad desplegado automáticamente con GitHub Pages (Actions)."
-brand: "CYBER·LAB"
+brand: "RAZOR"
 url: "https://example.github.io/cyber-blog"  # cámbialo en GitHub
 permalink: /:slug/
 markdown: kramdown
