@@ -103,3 +103,62 @@ kbd{ background:var(--card-2); border:1px solid var(--border); padding:.06rem .3
 /* Reveal */
 .reveal{ opacity:0; transform: translateY(6px); transition: opacity .35s ease, transform .35s ease }
 .reveal.is-in{ opacity:1; transform:none }
+
+
+
+/* Brand logo only */
+.brand .logo{ height:56px; display:block; }
+@media (min-width: 1000px){ .brand .logo{ height:68px } }
+
+/* Fancy underline on nav */
+header nav a{ position:relative; overflow:hidden }
+header nav a::after{
+  content:""; position:absolute; left:10%; bottom:8px; width:0; height:2px; background:var(--accent);
+  transition: width .25s ease; border-radius:2px;
+}
+header nav a:hover::after{ width:80% }
+
+/* Card sheen on hover */
+.card{ position:relative }
+.card::before{
+  content:""; position:absolute; inset:-1px; pointer-events:none; border-radius:inherit;
+  background: radial-gradient(600px 200px at -10% -10%, rgba(255,77,79,.14), transparent 40%);
+  opacity:.0; transition: opacity .25s ease;
+}
+.card:hover::before{ opacity:1 }
+
+/* Rouge syntax highlighting (One Dark-ish with red accent) */
+.highlight{ background: var(--code-bg); border:1px solid var(--border); border-radius:14px; overflow:auto; box-shadow: inset 0 0 0 1px rgba(255,255,255,.02) }
+.highlight pre{ margin:0; padding:1rem 1.2rem; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size:.95rem; line-height:1.5 }
+.highlight .hll{ background-color:#2c313c }
+.highlight .c{ color:#7f848e } /* Comment */
+.highlight .err{ color:#f28b82 } /* Error */
+.highlight .k{ color:#c678dd } /* Keyword */
+.highlight .l{ color:#e5c07b } /* Literal */
+.highlight .n{ color:#e6edf3 } /* Name */
+.highlight .o{ color:#56b6c2 } /* Operator */
+.highlight .p{ color:#e6edf3 } /* Punctuation */
+.highlight .cm{ color:#7f848e } .highlight .cp{ color:#7f848e } .highlight .c1{ color:#7f848e } .highlight .cs{ color:#7f848e }
+.highlight .gd{ color:#f28b82 } .highlight .ge{ font-style: italic } .highlight .gr{ color:#e06c75 } .highlight .gh{ color:#61afef }
+.highlight .gi{ color:#98c379 } .highlight .go{ color:#abb2bf } .highlight .gp{ color:#61afef } .highlight .gs{ font-weight: bold } .highlight .gu{ color:#61afef }
+.highlight .kc{ color:#c678dd } .highlight .kd{ color:#c678dd } .highlight .kn{ color:#c678dd } .highlight .kp{ color:#c678dd } .highlight .kr{ color:#c678dd } .highlight .kt{ color:#c678dd }
+.highlight .ld{ color:#e5c07b } .highlight .m{ color:#e5c07b } .highlight .s{ color:#98c379 } .highlight .na{ color:#e6edf3 } .highlight .nb{ color:#61afef } .highlight .nc{ color:#e6edf3 }
+.highlight .no{ color:#d19a66 } .highlight .nd{ color:#61afef } .highlight .ni{ color:#e06c75 } .highlight .ne{ color:#e06c75 } .highlight .nf{ color:#61afef }
+.highlight .nl{ color:#e6edf3 } .highlight .nn{ color:#e6edf3 } .highlight .nx{ color:#e6edf3 } .highlight .py{ color:#e6edf3 } .highlight .nt{ color:#e06c75 }
+.highlight .nv{ color:#e6edf3 } .highlight .ow{ color:#56b6c2 } .highlight .w{ color:#abb2bf }
+.highlight .sc{ color:#98c379 } .highlight .sd{ color:#98c379 } .highlight .si{ color:#98c379 } .highlight .sr{ color:#98c379 } .highlight .ss{ color:#98c379 }
+.highlight .bp{ color:#61afef } .highlight .vc{ color:#e6edf3 } .highlight .vg{ color:#e6edf3 } .highlight .vi{ color:#e6edf3 }
+.highlight .il{ color:#e5c07b }
+
+/* Inline code remains with red accent */
+.post-body code{ background: rgba(190,15,46,.12); border:1px solid rgba(190,15,46,.22) }
+
+/* Terminal hero grid (attacker ↔ target) restored */
+.term-grid{ display:grid; grid-template-columns: 1fr; gap:1rem; margin-top:1rem }
+@media (min-width: 900px){ .term-grid{ grid-template-columns: 1fr 1fr } }
+.hero-term{ border:1px solid var(--border); border-radius:12px; background:var(--code-bg); padding:1rem; box-shadow: inset 0 0 0 1px rgba(255,255,255,.02) }
+.hero-term .line{ white-space:pre; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace }
+.hero-term .prompt{ color:#ff6b6b }    /* attacker prompt in red */
+.hero-term .role{ color:#41d692 }      /* victim prompt in green */
+.hero-term .cursor{ display:inline-block; width:8px; height:1.05em; vertical-align:bottom; background:#e6edf3; animation: blink 1s steps(1) infinite; margin-left:2px }
+@keyframes blink{ 50%{ opacity:0 } }

@@ -13,6 +13,16 @@ title: "Inicio"
     <span class="pill">exploit-dev</span>
     <span class="pill">offensive-security</span>
   </div>
+
+  <div class="term-grid reveal">
+    <div class="hero-term" id="attacker">
+      <div class="line"><span class="prompt">attacker@razor$</span> <span data-ty="a"></span><span class="cursor"></span></div>
+    </div>
+    <div class="hero-term" id="target">
+      <div class="line"><span class="role">victim@host$</span> <span data-ty="b"></span><span class="cursor"></span></div>
+    </div>
+  </div>
+
 </section>
 
 <section class="grid">
@@ -29,6 +39,16 @@ title: "Inicio"
     <p class="desc">{{ post.excerpt | strip_html | strip_newlines | truncate: 160 }}</p>
   </a>
 {%- endfor -%}
+
+  <div class="term-grid reveal">
+    <div class="hero-term" id="attacker">
+      <div class="line"><span class="prompt">attacker@razor$</span> <span data-ty="a"></span><span class="cursor"></span></div>
+    </div>
+    <div class="hero-term" id="target">
+      <div class="line"><span class="role">victim@host$</span> <span data-ty="b"></span><span class="cursor"></span></div>
+    </div>
+  </div>
+
 </section>
 
 {%- if paginator.total_pages > 1 -%}
