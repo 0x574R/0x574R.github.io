@@ -1,23 +1,15 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% if page.title %}{{ page.title }} · {% endif %}{{ site.github.owner_name | default: site.title }}</title>
-  <meta name="application-name" content="{{ site.brand | default: site.title }}">
-  <meta name="description" content="{{ page.excerpt | strip_html | strip_newlines | truncate: 160, '…' | default: site.description }}">
-  <link rel="stylesheet" href="{{ "/assets/css/main.css" | relative_url }}">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='8' fill='%2358a6ff'/></svg>">
-  {%- seo -%}
-</head>
-<body>
-  {% include header.html %}
-  <main class="container">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{{ page.title }}</title>
+    <link rel="stylesheet" href="/assets/css/main.css">
+  </head>
+  <body>
+    {% include header.html %}
     {{ content }}
-  </main>
-  {% include footer.html %}
-  <script>window.BRAND_NAME = "{{ site.brand | default: site.title | xml_escape }}";</script>
-  <script src="{{ "/assets/js/main.js" | relative_url }}"></script>
-  <script>window.GITHUB_NAME = "{{ site.github.owner_name | default: site.title | xml_escape }}";</script>
-</body>
+    {% include footer.html %}
+  </body>
 </html>

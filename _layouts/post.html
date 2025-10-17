@@ -1,26 +1,12 @@
+
 ---
 layout: default
 ---
-<article class="post">
-  <div class="post-grid">
-    <div class="post-main">
-      <h1 class="page-title">{{ page.title }}</h1>
-      <div class="meta">
-        <span class="chip"><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%d %b %Y" }}</time></span>
-        <span class="chip">⏱️ <span data-reading-time>·</span></span>
-        {%- if page.tags and page.tags.size > 0 -%}
-          <span class="chip">
-            {%- for t in page.tags -%}<span class="tag">{{ t }}</span>{%- endfor -%}
-          </span>
-        {%- endif -%}
-      </div>
-      <div class="post-body">
-        {{ content }}
-      </div>
-    </div>
-    <aside class="toc">
-      <h3>Contenido</h3>
-      <ul></ul>
-    </aside>
-  </div>
-</article>
+
+<div class="container">
+  <h1>{{ page.title }}</h1>
+  <p><small>{{ page.date | date: "%Y-%m-%d" }}</small></p>
+  <article>
+    {{ content }}
+  </article>
+</div>
