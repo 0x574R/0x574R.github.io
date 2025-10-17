@@ -144,3 +144,27 @@
   const cards = Array.from(document.querySelectorAll('.grid .card'));
   cards.forEach((el,i)=>{ el.classList.add('reveal'); el.style.transitionDelay = (i*60)+'ms'; });
 })();
+
+
+// Post utilities: reading time + dynamic ToC
+(function(){
+  const container = document.querySelector('.post .post-body');
+  if(!container) return;
+  const words = container.textContent.trim().split(/\s+/).length;
+  const rt = document.querySelector('[data-reading-time]');
+  if(rt){ rt.textContent = Math.max(1, Math.round(words/220)) + ' min'; }
+  const tocRoot = document.querySelector('.toc ul');
+  if(!tocRoot) return;
+  tocRoot.innerHTML = '';
+  const headers = container.querySelectorAll('h2, h3');
+  headers.forEach((h, i)=>{
+    if(!h.id) h.id = 'sec-' + (i+1);
+    const li = document.createElement('li');
+    li.className = 'toc-' + h.tagName.toLowerCase();
+    const a = document.createElement('a');
+    a.href = '#' + h.id;
+    a.textContent = h.textContent;
+    li.appendChild(a);
+    tocRoot.appendChild(li);
+  });
+})();
