@@ -4,19 +4,13 @@ title: "Inicio"
 ---
 
 <section class="hero">
-  <h1>Notas y pruebas de <span class="muted">ciberseguridad</span></h1>
-  <p>Artículos técnicos, *how-tos*, PoCs y *low-level hacking*. Tipos, memoria, sockets, reverse shells, ELF, etc.</p>
-  <div class="bar">
-    <span class="pill">#linux</span>
-    <span class="pill">#assembly</span>
-    <span class="pill">#reverse-shell</span>
-    <span class="pill">#exploit-dev</span>
-    <span class="pill">#offensive-security</span>
+  <h1 class="page-title">Notas y pruebas de ciberseguridad</h1>
+  <p class="muted">Artículos técnicos, how‑tos, PoCs y low‑level hacking. Assembly, Linux internals, reverse shells, exploit dev, etc.</p>
+
+  <div class="term-grid" style="margin-top:1rem;">
+    <div class="hero-term" id="term-attacker" aria-label="Attacker terminal"></div>
+    <div class="hero-term" id="term-target" aria-label="Target terminal"></div>
   </div>
-  <div class="term-grid">
-  <div class="hero-term" id="term-attacker" aria-label="Attacker terminal"></div>
-  <div class="hero-term" id="term-target" aria-label="Target terminal"></div>
-</div>
 </section>
 
 <h2 style="margin:.5rem 0 1rem 0;">Últimos artículos</h2>
@@ -38,15 +32,3 @@ title: "Inicio"
   </a>
 {%- endfor -%}
 </div>
-
-{%- if paginator.total_pages > 1 -%}
-<p style="margin-top:1rem;">
-  {%- if paginator.previous_page -%}
-    <a href="{{ paginator.previous_page_path | relative_url }}">&larr; Anteriores</a>
-  {%- endif -%}
-  <span class="muted">Página {{ paginator.page }} de {{ paginator.total_pages }}</span>
-  {%- if paginator.next_page -%}
-    <a style="float:right" href="{{ paginator.next_page_path | relative_url }}">Más recientes &rarr;</a>
-  {%- endif -%}
-</p>
-{%- endif -%}
