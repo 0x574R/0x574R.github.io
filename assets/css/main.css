@@ -162,3 +162,19 @@ header nav a:hover::after{ width:80% }
 .hero-term .role{ color:#41d692 }      /* victim prompt in green */
 .hero-term .cursor{ display:inline-block; width:8px; height:1.05em; vertical-align:bottom; background:#e6edf3; animation: blink 1s steps(1) infinite; margin-left:2px }
 @keyframes blink{ 50%{ opacity:0 } }
+
+/* Monospace across all elements */
+h1,h2,h3,h4,h5,h6,button,input,textarea,select{ font-family: inherit }
+code,kbd,samp,pre{ font-family: inherit }
+
+/* Keep header height, visually scale logo without affecting layout */
+header.site{ --header-h: 64px }
+.header-inner{ min-height: var(--header-h) }
+.brand{ position:relative; overflow:visible }
+.brand .logo{ height:40px; transform: scale(1.55); transform-origin:left center; }
+@media (min-width: 1000px){ .brand .logo{ height:40px; transform: scale(1.9) } }
+
+/* No background shading behind code blocks */
+.post-body pre, .highlight{ background: transparent !important; box-shadow: none !important; }
+.post-body pre{ border:1px solid var(--border); border-radius:14px; padding:1rem; }
+.highlight pre{ background: transparent !important; }

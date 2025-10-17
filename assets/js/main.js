@@ -31,11 +31,13 @@
 })();
 
 
-// Hero terminal typing animation (attacker red, victim green)
+
+// Robust terminal typing animation
 (function(){
   const A = document.querySelector('[data-ty="a"]');
   const B = document.querySelector('[data-ty="b"]');
   if(!A || !B) return;
+
   const seqA = [
     "ncat -lvnp 4444",
     "listening on [any] 4444 ...",
@@ -46,12 +48,37 @@
     "whoami",
     "www-data"
   ];
-  function type(el, str, delay=40){ return new Promise(res=>{ let i=0; const t=setInterval(()=>{ el.textContent += (str[i++]||''); if(i>str.length){ clearInterval(t); res(); } }, delay); }); }
-  async function run(){
-    A.textContent = ""; B.textContent = "";
-    for (const s of seqA){ await type(A, s + "\\n"); }
-    for (const s of seqB){ await type(B, s + "\\n"); }
+
+  function typeLine(el, text, charDelay){
+    return new Promise(resolve=>{
+      let i=0;
+      function tick(){
+        el.textContent += text[i++];
+        if(i <= text.length){ setTimeout(tick, charDelay); }
+        else{ el.textContent += "\n"; resolve(); }
+      }
+      tick();
+    });
   }
-  // run once after slight delay for reveal
-  setTimeout(run, 400);
+
+  async function runOnce(){
+    A.textContent = ""; B.textContent = "";
+    for (let i=0;i<Math.max(seqA.length, seqB.length);i++){
+      if(seqA[i]) await typeLine(A, seqA[i], 32);
+      if(seqB[i]) await typeLine(B, seqB[i], 32);
+    }
+  }
+
+  const grid = document.querySelector('.term-grid');
+  if(!grid){ runOnce(); return; }
+  let played = false;
+  const io = new IntersectionObserver((entries)=>{
+    for(const e of entries){
+      if(e.isIntersecting && !played){
+        played = true;
+        runOnce();
+      }
+    }
+  }, {threshold:.2});
+  io.observe(grid);
 })();
