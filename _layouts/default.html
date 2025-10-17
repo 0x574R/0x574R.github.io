@@ -9,6 +9,14 @@
   <link rel="stylesheet" href="{{ "/assets/css/main.css" | relative_url }}">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='8' fill='%23be0f2e'/></svg>">
   {%- seo -%}
+
+  <!-- Prism.js for enhanced syntax highlighting -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-okaidia.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-core.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs/plugins/autoloader/prism-autoloader.min.js" defer></script>
+  <script>window.Prism=window.Prism||{};Prism.manual=false;Prism.plugins=Prism.plugins||{};
+  Prism.plugins.autoloader=Prism.plugins.autoloader||{};Prism.plugins.autoloader.languages_path='https://cdn.jsdelivr.net/npm/prismjs/components/';</script>
+
 </head>
 <body>
   {% include header.html %}

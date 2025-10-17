@@ -86,3 +86,11 @@
   }, {threshold:.15});
   io.observe(grid);
 })();
+
+
+// Stagger reveal for cards
+(function(){
+  const cards = Array.from(document.querySelectorAll('.grid .card'));
+  if(!cards.length) return;
+  cards.forEach((el,i)=>{ el.classList.add('reveal'); el.style.transitionDelay = (i*70)+'ms'; });
+})();

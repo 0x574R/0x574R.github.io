@@ -171,8 +171,8 @@ code,kbd,samp,pre{ font-family: inherit }
 header.site{ --header-h: 64px }
 .header-inner{ min-height: var(--header-h) }
 .brand{ position:relative; overflow:visible }
-.brand .logo{ height:40px; transform: scale(1.55); transform-origin:left center; }
-@media (min-width: 1000px){ .brand .logo{ height:40px; transform: scale(1.9) } }
+.brand .logo{ height:40px; transform: scale(2.3); transform-origin:left center; }
+@media (min-width: 1000px){ .brand .logo{ height:40px; transform: scale(2.6) } }
 
 /* No background shading behind code blocks */
 .post-body pre, .highlight{ background: transparent !important; box-shadow: none !important; }
@@ -186,7 +186,7 @@ html, body, *:not(svg):not(path){ font-family: var(--font-mono) !important; lett
 /* Keep header height, scale logo visually */
 header.site{ --header-h: 64px }
 .header-inner{ min-height: var(--header-h) }
-.brand .logo{ height:40px; transform: scale(1.9); transform-origin:left center }
+.brand .logo{ height:40px; transform: scale(2.6); transform-origin:left center }
 
 /* === Remove ANY background from code areas (Rouge/Markdown) === */
 .highlight, .rouge-table, .rouge-table td, .rouge-table pre, pre.highlight, .highlight pre, .highlight code, .post-body pre, .post-body code{
@@ -202,3 +202,16 @@ header.site{ --header-h: 64px }
 .hero-term .line{ margin:0; white-space:pre-wrap }
 .hero-term .cursor{ display:inline-block; width:8px; height:1.1em; vertical-align:bottom; background:#e6edf3; animation: blink 1s steps(1) infinite; margin-left:2px }
 @keyframes blink{ 50%{ opacity:0 } }
+
+
+/* Prism overrides - transparent bg + Razor palette */
+pre[class*="language-"], code[class*="language-"]{ background: transparent !important; text-shadow:none !important }
+.token.comment,.token.prolog,.token.doctype,.token.cdata{ color:#7f848e }
+.token.punctuation{ color:#e6edf3 }
+.token.property,.token.tag,.token.constant,.token.symbol,.token.deleted{ color:#ff6b6b }
+.token.boolean,.token.number{ color:#e5c07b }
+.token.selector,.token.attr-name,.token.string,.token.char,.token.builtin,.token.inserted{ color:#98c379 }
+.token.operator,.token.entity,.token.url{ color:#56b6c2 }
+.token.atrule,.token.attr-value,.token.keyword{ color:#c678dd }
+.token.function,.token.class-name{ color:#61afef }
+.token.regex,.token.important,.token.variable{ color:#d19a66 }
