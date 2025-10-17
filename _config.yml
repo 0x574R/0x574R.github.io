@@ -1,6 +1,7 @@
-title: "Cyber Blog"
+title: "Cyber Lab Blog"
 description: "Blog de ciberseguridad desplegado automáticamente con GitHub Pages (Actions)."
-url: "https://example.github.io/cyber-blog"
+brand: "CYBER·LAB"
+url: "https://example.github.io/cyber-blog"  # cámbialo en GitHub
 permalink: /:slug/
 markdown: kramdown
 highlighter: rouge
@@ -13,5 +14,9 @@ plugins:
   - jekyll-sitemap
   - jekyll-paginate
 
-paginate: 9
+paginate: 10
 paginate_path: "/page:num/"
+
+exclude:
+  - README.md
+  - "*.zip"
