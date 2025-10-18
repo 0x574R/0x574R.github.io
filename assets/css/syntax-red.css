@@ -1,0 +1,13 @@
+
+/* Red Rouge palette (scoped overrides, last to load) */
+.highlight{ background:#100b11 !important; color:#f8edf0 !important }
+.highlight pre, pre.highlight{ background:transparent !important; color:inherit !important }
+.highlight .c, .highlight .cm, .highlight .c1{ color:#8d6b79 !important }  /* comments */
+.highlight .k, .highlight .kc, .highlight .kd, .highlight .kr{ color:#ff5a76 !important; font-weight:600 !important } /* keywords */
+.highlight .kt, .highlight .nc, .highlight .no{ color:#ff7f95 !important } /* types/symbols */
+.highlight .mi, .highlight .m{ color:#ff9fb1 !important }                  /* numbers */
+.highlight .s, .highlight .sb, .highlight .sc, .highlight .s1{ color:#ffd1da !important } /* strings */
+.highlight .na, .highlight .nf{ color:#ffa0b3 !important }                 /* names/funcs */
+.highlight .o, .highlight .p{ color:#f4b5c1 !important }                   /* operators/punct */
+.highlight .err{ background:#5a0013 !important; color:#fff !important }
+code.language-asm, code[class*="language-asm"], code[class*="asm"], code.language-nasm{ color:#f8edf0 !important }

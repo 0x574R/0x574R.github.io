@@ -6,7 +6,7 @@
   <title>{% if page.title %}{{ page.title }} · {% endif %}{{ site.github.owner_name | default: site.title }}</title>
   <meta name="application-name" content="{{ site.brand | default: site.title }}">
   <meta name="description" content="{{ page.excerpt | strip_html | strip_newlines | truncate: 160, '…' | default: site.description }}">
-  <link rel="stylesheet" href="{{ "/assets/css/main.css" | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/main.css?v=20251018' | relative_url }}">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='8' fill='%23be0f2e'/></svg>">
   {%- seo -%}
 
@@ -17,6 +17,7 @@
   <script>window.Prism=window.Prism||{};Prism.manual=false;Prism.plugins=Prism.plugins||{};
   Prism.plugins.autoloader=Prism.plugins.autoloader||{};Prism.plugins.autoloader.languages_path='https://cdn.jsdelivr.net/npm/prismjs/components/';</script>
 
+  <link rel="stylesheet" href="{{ '/assets/css/syntax-red.css?v=20251018' | relative_url }}">
 </head>
 <body>
   {% include header.html %}
@@ -24,6 +25,6 @@
     {{ content }}
   </main>
   {% include footer.html %}
-  <script src="{{ "/assets/js/main.js" | relative_url }}"></script>
+  <script src="{{ '/assets/js/main.js?v=20251018' | relative_url }}"></script>
 </body>
 </html>
