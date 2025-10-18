@@ -6,7 +6,7 @@
   <title>{% if page.title %}{{ page.title }} · {% endif %}{{ site.github.owner_name | default: site.title }}</title>
   <meta name="application-name" content="{{ site.brand | default: site.title }}">
   <meta name="description" content="{{ page.excerpt | strip_html | strip_newlines | truncate: 160, '…' | default: site.description }}">
-  <link rel="stylesheet" href="{{ "/assets/css/main.css" | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/main.css?v=matrix-2' | relative_url }}">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='8' fill='%23be0f2e'/></svg>">
   {%- seo -%}
 
@@ -19,6 +19,7 @@
 
 </head>
 <body>
+  <canvas id="matrix-universe" aria-hidden="true"></canvas>
   {% include header.html %}
   <main class="container">
     {{ content }}

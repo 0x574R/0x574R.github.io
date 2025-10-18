@@ -283,26 +283,25 @@ pre[class*="language-"], code[class*="language-"], .highlight, .post-body pre, .
   background: transparent !important; box-shadow:none !important;
 }
 
-/* === Hero visible + Matrix background === */
-.hero{
-  position: relative;
-  overflow: hidden;
-  border-radius: 12px;
-  background: radial-gradient(1200px 400px at 10% -10%, rgba(255, 58, 90, .06), transparent),
-              radial-gradient(1000px 500px at 100% 0%, rgba(255,255,255,.04), transparent);
-  min-height: 260px;
-  margin: 1.25rem 0 2rem;
-}
-.hero::after{ content:""; position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,.15), transparent 60%, rgba(0,0,0,.25)); pointer-events:none; }
-#matrix-bg{ position:absolute; inset:0; width:100%; height:100%; opacity:.18; }
 
-.term-grid{ position: relative; display:grid; grid-template-columns: 1fr 1fr; gap:1rem; padding: 1.1rem; }
-@media (max-width: 880px){ .term-grid{ grid-template-columns: 1fr; } }
+/* === Global Matrix background (fixed) === */
+#matrix-universe{ position:fixed; inset:0; width:100vw; height:100vh; z-index:0; pointer-events:none }
+/* Raise app layers above background */
+header.site, main, footer{ position:relative; z-index:1 }
+/* Make sure bg doesn't bleed through structured surfaces */
+header.site{ background:#0f0f11 }
+footer{ background:#0e0d10 }
+.grid .card, .term, .post .post-body .highlight, .post .toc, .hero{ background-clip: padding-box }
+/* Simulate transparent logo if original has dark bg */
+.brand-logo{ mix-blend-mode: screen; }
 
-.term{ background:#121015; border:1px solid #251721; border-radius:10px; padding:.75rem 1rem; color:var(--text); }
-.hero-term .prompt{ display:block; font-weight:600; color:#7fffd4; margin-bottom:.35rem; }
-.hero-term .prompt.attacker{ color:#f0f6ff; }
-.hero-term pre{ margin:0; font: 14px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color:#cfd5ff; white-space: pre-wrap; }
-.hero-term pre .secondary{ color:#9ea3b0; }
-
-.hero, .post .post-body h2, .post .post-body h3{ scroll-margin-top: 72px; }
+/* Red-ish highlight palette for asm */
+.highlight{ background:#0f0d12; color:#f7e9ee }
+.highlight .c{ color:#8d6b79 } /* comments */
+.highlight .k, .highlight .kc, .highlight .kd, .highlight .kr{ color:#ff5a76; font-weight:600 }
+.highlight .kt, .highlight .nc, .highlight .no{ color:#ff7f95 }
+.highlight .mi, .highlight .m{ color:#ff9fb1 }
+.highlight .s, .highlight .sb, .highlight .sc{ color:#ffd1da }
+.highlight .na, .highlight .nf{ color:#ffa0b3 }
+.highlight .o, .highlight .p{ color:#f4b5c1 }
+.highlight .err{ background:#5a0013; color:#fff }
