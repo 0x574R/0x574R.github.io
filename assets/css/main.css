@@ -306,10 +306,3 @@ pre[class*="language-"], code[class*="language-"], .highlight, .post-body pre, .
 .hero-term pre .secondary{ color:#9ea3b0; }
 
 .hero, .post .post-body h2, .post .post-body h3{ scroll-margin-top: 72px; }
-
-/* Matrix gutters only */
-.hero{ position:relative; overflow:hidden; min-height:240px; margin:1.25rem 0 2rem; border-radius:12px; }
-.matrix-gutter{ position:absolute; top:0; bottom:0; width:120px; opacity:.22; pointer-events:none }
-.matrix-gutter.left{ left:-64px } .matrix-gutter.right{ right:-64px }
-@media (max-width:1000px){ .matrix-gutter{ width:80px; opacity:.18 } .matrix-gutter.left{ left:-40px } .matrix-gutter.right{ right:-40px } }
-.grid .card, .post .post-body, header.site, footer{ position:relative; z-index:1; background-clip:padding-box }
