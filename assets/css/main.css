@@ -345,3 +345,39 @@ header .header-inner{ display:flex; align-items:center; justify-content:space-be
 
 
 .post .post-body h2, .post .post-body h3, .hero{ scroll-margin-top: 56px }
+
+/* Larger visual logo without changing header height */
+.logo-wrap{ position: relative; display:inline-flex; align-items:center; height: 0; }
+.brand .logo{ height:26px; display:block }
+.logo--scale{ transform: scale(1.6) translateY(-2px); transform-origin: left center; will-change: transform; }
+@media (max-width: 640px){ .logo--scale{ transform: scale(1.45) translateY(-1px) } }
+
+/* Sheen effect on logo (hover) */
+.logo-wrap::after{
+  content:""; position:absolute; top:-4px; bottom:-4px; left:-35%;
+  width:32%; transform: skewX(-20deg);
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.35), rgba(255,255,255,0));
+  opacity:0; pointer-events:none;
+}
+.logo-wrap:hover::after{ opacity:1; left:130%; transition: left .7s ease; }
+
+/* Nav link underline animation */
+header nav a{
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 2px;
+  transition: background-size .2s ease;
+}
+header nav a:hover{ background-size: 100% 2px; }
+
+/* Cards micro-interaction */
+.grid .card{ transition: transform .18s ease, box-shadow .18s ease; }
+.grid .card:hover{ transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,.3); }
+
+/* Terminal caret blink */
+.hero-term .cursor::after{
+  content:""; display:inline-block; width:8px; height:1.05em; margin-left:2px;
+  background: currentColor; vertical-align:-2px; animation: caretBlink 1s steps(2,end) infinite;
+}
+@keyframes caretBlink{ 0%,49%{opacity:1} 50%,100%{opacity:0} }
