@@ -1,9 +1,8 @@
----date: 2025-10-16 11:00:00 +0200
+---
+date: 2025-10-16 11:00:00 +0200
 tags: [post, reverse-shell, hacking, linux, asm]
 excerpt: "Implementación mínima de una reverse shell TCP x86-64 en Linux usando solo syscalls (socket, connect, dup2, execve), con pasos de compilación y uso."
----
-
----
+------
 date: 2025-10-16 10:00:00 +0200
 categories: [assembly, security, low-level]
 ---

@@ -1,8 +1,6 @@
 ---
 tags: [meta, inicio]
----
-
-Bienvenido/a. Este blog usa **Jekyll + GitHub Pages** con una paleta unificada (cyan + mint) y animaciones suaves.
+---Bienvenido/a. Este blog usa **Jekyll + GitHub Pages** con una paleta unificada (cyan + mint) y animaciones suaves.
 
 <!--more-->
 

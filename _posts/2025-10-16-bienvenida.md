@@ -1,9 +1,7 @@
 ---
 date: 2025-10-16 23:14:04 
 tags: [post, meta]
----
-
-Bienvenido/a. Este blog usa **Jekyll + GitHub Pages** con un diseño oscuro sobrio y **highlighting** para código.
+---Bienvenido/a. Este blog usa **Jekyll + GitHub Pages** con un diseño oscuro sobrio y **highlighting** para código.
 
 <!--more-->
 
