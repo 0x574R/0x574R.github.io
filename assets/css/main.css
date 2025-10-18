@@ -101,8 +101,8 @@ hr{ border:0; border-top:1px solid var(--border); margin:2rem 0 }
 kbd{ background:var(--card-2); border:1px solid var(--border); padding:.06rem .35rem; border-radius:6px }
 
 /* Reveal */
-.reveal{opacity:0.01; transform:translate3d(0,4px,0); will-change:transform,opacity; backface-visibility:hidden; transition:opacity .16s cubic-bezier(.2,.8,.2,1), transform .16s cubic-bezier(.2,.8,.2,1)}
-.reveal.is-in{ opacity:1; transform:none }
+.reveal{ /* disabled legacy reveal */ }
+
 
 
 
@@ -248,8 +248,8 @@ pre[class*="language-"], code[class*="language-"]{ background: transparent !impo
 
 /* ===== Animations ===== */
 @keyframes fadeUp { from{opacity:0; transform: translateY(8px)} to{opacity:1; transform:none} }
-.reveal{opacity:0.01; transform:translate3d(0,4px,0); will-change:transform,opacity; backface-visibility:hidden; transition:opacity .16s cubic-bezier(.2,.8,.2,1), transform .16s cubic-bezier(.2,.8,.2,1)}
-.reveal.is-in{ opacity:1; transform:none }
+.reveal{ /* disabled legacy reveal */ }
+
 .tilt-in{ will-change: transform; transform: perspective(800px) rotateX(2deg) translateY(6px); transition: transform .4s ease, box-shadow .4s ease }
 .tilt-in.is-in{ transform: none }
 
@@ -263,8 +263,8 @@ pre[class*="language-"], code[class*="language-"]{ background: transparent !impo
 
 /* Reveal */
 @keyframes fadeUp{ from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none} }
-.reveal{opacity:0.01; transform:translate3d(0,4px,0); will-change:transform,opacity; backface-visibility:hidden; transition:opacity .16s cubic-bezier(.2,.8,.2,1), transform .16s cubic-bezier(.2,.8,.2,1)}
-.reveal.is-in{ opacity:1; transform:none }
+.reveal{ /* disabled legacy reveal */ }
+
 .tilt-in{ transform: perspective(800px) rotateX(2deg) translateY(6px); transition: transform .4s ease, box-shadow .4s ease }
 .tilt-in.is-in{ transform:none }
 
@@ -304,12 +304,12 @@ code[class*="language-asm"], code[class*="language-nasm"]{
 
 
 /* Reveal base */
-.reveal{opacity:0.01; transform:translate3d(0,4px,0); will-change:transform,opacity; backface-visibility:hidden; transition:opacity .16s cubic-bezier(.2,.8,.2,1), transform .16s cubic-bezier(.2,.8,.2,1)}
-.reveal.is-in{ opacity:1; transform:none; }
+.reveal{ /* disabled legacy reveal */ }
+
 
 .site .logo{height:64px; display:block}
 
-@media (prefers-reduced-motion: reduce){ .reveal{opacity:0.01; transform:translate3d(0,4px,0); will-change:transform,opacity; backface-visibility:hidden; transition:opacity .16s cubic-bezier(.2,.8,.2,1), transform .16s cubic-bezier(.2,.8,.2,1)} }
+@media (prefers-reduced-motion: reduce){ .reveal{ /* disabled legacy reveal */ } }
 
 
 /* Header compact mode */
@@ -325,4 +325,21 @@ header.site{ padding: 2px 0; }
 header .header-inner{ min-height: unset; }
 .site .logo{ height: 46px; display:block; object-fit: contain; image-rendering: -webkit-optimize-contrast; }
 .site nav a{ font-size: .92rem; padding: .18rem .50rem; line-height: 1.1; }
+
+
+
+/* === New lightweight animation (from scratch) === */
+@keyframes fx-rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+.fx-enter {
+  opacity: 0;
+  animation: fx-rise .20s ease forwards;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+@media (prefers-reduced-motion: reduce){
+  .fx-enter{ animation: none; opacity: 1; }
+}
 
