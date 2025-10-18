@@ -308,17 +308,8 @@ pre[class*="language-"], code[class*="language-"], .highlight, .post-body pre, .
 .hero, .post .post-body h2, .post .post-body h3{ scroll-margin-top: 72px; }
 
 /* Matrix gutters only */
-.hero{ position:relative; overflow:hidden }
+.hero{ position:relative; overflow:hidden; min-height:240px; margin:1.25rem 0 2rem; border-radius:12px; }
 .matrix-gutter{ position:absolute; top:0; bottom:0; width:120px; opacity:.22; pointer-events:none }
 .matrix-gutter.left{ left:-64px } .matrix-gutter.right{ right:-64px }
 @media (max-width:1000px){ .matrix-gutter{ width:80px; opacity:.18 } .matrix-gutter.left{ left:-40px } .matrix-gutter.right{ right:-40px } }
-/* Red Rouge palette */
-.highlight{ background:#100b11; color:#f8edf0 }
-.highlight .c, .highlight .cm, .highlight .c1{ color:#8d6b79 }
-.highlight .k, .highlight .kc, .highlight .kd, .highlight .kr{ color:#ff5a76; font-weight:600 }
-.highlight .kt, .highlight .nc, .highlight .no{ color:#ff7f95 }
-.highlight .mi, .highlight .m{ color:#ff9fb1 }
-.highlight .s, .highlight .sb, .highlight .sc, .highlight .s1{ color:#ffd1da }
-.highlight .na, .highlight .nf{ color:#ffa0b3 }
-.highlight .o, .highlight .p{ color:#f4b5c1 }
-.highlight .err{ background:#5a0013; color:#fff }
+.grid .card, .post .post-body, header.site, footer{ position:relative; z-index:1; background-clip:padding-box }
