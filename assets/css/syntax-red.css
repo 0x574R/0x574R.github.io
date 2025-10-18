@@ -1,5 +1,5 @@
 
-/* Red Rouge palette */
+/* Red Rouge palette (scoped overrides, last to load) */
 .highlight{ background:#100b11 !important; color:#f8edf0 !important }
 .highlight pre, pre.highlight{ background:transparent !important; color:inherit !important }
 .highlight .c, .highlight .cm, .highlight .c1{ color:#8d6b79 !important }  /* comments */
