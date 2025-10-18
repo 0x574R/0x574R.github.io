@@ -6,7 +6,7 @@
   <title>{% if page.title %}{{ page.title }} · {% endif %}{{ site.github.owner_name | default: site.title }}</title>
   <meta name="application-name" content="{{ site.brand | default: site.title }}">
   <meta name="description" content="{{ page.excerpt | strip_html | strip_newlines | truncate: 160, '…' | default: site.description }}">
-  <link rel="stylesheet" href="{{ "/assets/css/main.css" | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/main.css?v=fix-2025-10-18' | relative_url }}">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='8' fill='%23be0f2e'/></svg>">
   {%- seo -%}
 
@@ -17,6 +17,26 @@
   <script>window.Prism=window.Prism||{};Prism.manual=false;Prism.plugins=Prism.plugins||{};
   Prism.plugins.autoloader=Prism.plugins.autoloader||{};Prism.plugins.autoloader.languages_path='https://cdn.jsdelivr.net/npm/prismjs/components/';</script>
 
+
+  <!-- HOTFIX_MATRIX_GUTTERS -->
+  <style>
+    .hero{ position:relative; overflow:hidden }
+    .matrix-gutter{ position:absolute; top:0; bottom:0; width:120px; opacity:.22; pointer-events:none }
+    .matrix-gutter.left{ left:-64px } .matrix-gutter.right{ right:-64px }
+    @media (max-width:1000px){ .matrix-gutter{ width:80px; opacity:.18 } .matrix-gutter.left{ left:-40px } .matrix-gutter.right{ right:-40px } }
+    .grid .card, .post .post-body, header.site, footer{ position:relative; z-index:1; background-clip:padding-box }
+    /* Red highlight palette (force) */
+    .highlight{ background:#100b11 !important; color:#f8edf0 !important }
+    .highlight .c, .highlight .cm, .highlight .c1{ color:#8d6b79 !important }
+    .highlight .k, .highlight .kc, .highlight .kd, .highlight .kr{ color:#ff5a76 !important; font-weight:600 !important }
+    .highlight .kt, .highlight .nc, .highlight .no{ color:#ff7f95 !important }
+    .highlight .mi, .highlight .m{ color:#ff9fb1 !important }
+    .highlight .s, .highlight .sb, .highlight .sc, .highlight .s1{ color:#ffd1da !important }
+    .highlight .na, .highlight .nf{ color:#ffa0b3 !important }
+    .highlight .o, .highlight .p{ color:#f4b5c1 !important }
+    .highlight .err{ background:#5a0013 !important; color:#fff !important }
+  </style>
+
 </head>
 <body>
   {% include header.html %}
@@ -24,6 +44,6 @@
     {{ content }}
   </main>
   {% include footer.html %}
-  <script src="{{ "/assets/js/main.js" | relative_url }}"></script>
+  <script src="{{ '/assets/js/main.js?v=fix-2025-10-18' | relative_url }}"></script>
 </body>
 </html>

