@@ -3,7 +3,7 @@
 // Reveal engine (single IntersectionObserver) + helpers
 (function(){
   const observed = new Set();
-  const io = new IntersectionObserver((entries)=>{ entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('is-in'); io.unobserve(e.target); } }); }, { threshold: .01, rootMargin: "0px 0px -35% 0px" });
+  const io = new IntersectionObserver((entries)=>{ entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('is-in'); io.unobserve(e.target); } }); }, { threshold: .01, rootMargin: "0px 0px -65% 0px" });
 
   function addReveal(els, stagger=0){
     els.forEach((el, i)=>{
@@ -18,7 +18,7 @@
 
   // Index grid: staggered cards
   const gridCards = Array.from(document.querySelectorAll('.grid .card'));
-  if(gridCards.length) addReveal(gridCards, 24); // fast
+  if(gridCards.length) addReveal(gridCards, 8); // fast
 
   // Post utilities: reading time + dynamic ToC + reveal of blocks
   (function(){
@@ -49,7 +49,7 @@
 
     // Reveal post blocks with small stagger (fast)
     const blocks = Array.from(container.children);
-    addReveal(blocks, 12);
+    addReveal(blocks, 6);
   })();
 
   // Hero terminals typing: reverse shell then `id`
@@ -97,7 +97,7 @@
 
     const grid = document.querySelector('.term-grid');
     let played = false;
-    const ioHero = new IntersectionObserver((entries)=>{ entries.forEach(e=>{ if(e.isIntersecting && !played){ played = true; run(); ioHero.unobserve(e.target); } }); }, { threshold: .01, rootMargin: "0px 0px -35% 0px" });
+    const ioHero = new IntersectionObserver((entries)=>{ entries.forEach(e=>{ if(e.isIntersecting && !played){ played = true; run(); ioHero.unobserve(e.target); } }); }, { threshold: .01, rootMargin: "0px 0px -65% 0px" });
     if(grid) ioHero.observe(grid); else run();
   })();
 })();
