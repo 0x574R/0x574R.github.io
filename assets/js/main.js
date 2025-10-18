@@ -143,3 +143,56 @@
   if(document.readyState === 'loading') addEventListener('DOMContentLoaded', run);
   else run();
 })();
+
+/* === Matrix rain for side gutters only (hero) === */
+(function(){
+  function Matrix(canvas){
+    this.c = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.w = this.h = this.cols = 0;
+    this.drops = [];
+    this.speed = [];
+    this.dpr = Math.max(1, window.devicePixelRatio || 1);
+  }
+  Matrix.prototype.fit = function(){
+    const r = this.c.getBoundingClientRect();
+    this.c.width  = Math.max(1, Math.floor(r.width * this.dpr));
+    this.c.height = Math.max(1, Math.floor(r.height * this.dpr));
+    this.w = this.c.width / this.dpr; this.h = this.c.height / this.dpr;
+    this.ctx.setTransform(this.dpr,0,0,this.dpr,0,0);
+    const CELL = 14;
+    this.cols = Math.max(1, Math.ceil(this.w / CELL));
+    this.drops = new Array(this.cols).fill(0);
+    this.speed = new Array(this.cols).fill(0).map(()=> 8 + Math.random()*18);
+    this.ctx.font = '14px monospace';
+  };
+  Matrix.prototype.tick = function(){
+    const ctx = this.ctx;
+    ctx.fillStyle = 'rgba(0,0,0,0.09)'; ctx.fillRect(0,0,this.w,this.h);
+    const glyphs = 'アカサタナハマヤラワ0123456789'.split('');
+    const HEAD = '#aaffcc', TAIL = '#0b3';
+    for(let i=0;i<this.cols;i++){
+      const x = i*14;
+      const y = this.drops[i]*16;
+      ctx.fillStyle = TAIL; ctx.fillText(glyphs[(Math.random()*glyphs.length)|0], x, y-16);
+      ctx.fillStyle = HEAD; ctx.fillText(glyphs[(Math.random()*glyphs.length)|0], x, y);
+      this.drops[i] += this.speed[i]/16;
+      if(y > this.h + 100 || Math.random() > 0.995){
+        this.drops[i] = -Math.random()*50;
+        this.speed[i] = 8 + Math.random()*18;
+      }
+    }
+  };
+  const L = document.getElementById('matrix-left');
+  const R = document.getElementById('matrix-right');
+  if(!L || !R) return;
+  const A = new Matrix(L), B = new Matrix(R);
+  function fit(){ A.fit(); B.fit(); }
+  function loop(){ A.tick(); B.tick(); raf = requestAnimationFrame(loop); }
+  let raf; fit(); loop();
+  addEventListener('resize', fit, {passive:true});
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches){
+    cancelAnimationFrame(raf);
+  }
+})();
+
