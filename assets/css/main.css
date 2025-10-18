@@ -34,15 +34,15 @@ a:hover{ text-decoration:underline }
 .container{ max-width: var(--container-max); margin: 0 auto; padding: 1.4rem 1.2rem }
 
 /* Header */
-header.site{ position:sticky; top:0; z-index:10; background: rgba(12,12,14,.6); backdrop-filter: blur(8px); border-bottom:1px solid var(--border); padding:1px 0 }
-.header-inner{ display:flex; align-items:center; justify-content:space-between; gap:.6rem }
+header.site{ position: sticky; top:0; z-index:10; background: rgba(11,11,13,.72); backdrop-filter: blur(10px); border-bottom:1px solid var(--border) }
+.header-inner{ display:flex; align-items:center; justify-content:space-between; gap:1rem }
 .brand{ display:flex; align-items:center; gap:.8rem; font-weight:700 }
-.brand .logo{ height:26px; display:block }
+
 .brand .tagline{ color:var(--muted); font-weight:500; font-size:.95rem }
 
 header nav{ display:flex; gap:1rem; align-items:center }
-header nav a{ padding:.2rem .5rem; border-radius:10px; border:1px solid transparent; font-weight:600; font-size:.9rem; color:var(--text) }
-header nav a:hover{ background: linear-gradient(180deg, rgba(255,77,79,.08), rgba(0,0,0,.08)); border-color:var(--border); text-decoration:none }
+header nav a{ padding:.20rem .55rem; font-weight:600; color:var(--text); border:none }
+header nav a:hover{ opacity:.9 }
 
 /* Footer */
 footer.site{ border-top:1px solid var(--border); color:var(--muted); }
@@ -50,7 +50,7 @@ footer .row{ display:flex; align-items:center; gap:1rem; justify-content:space-b
 .small{ font-size:.9rem; color:var(--muted) }
 
 /* Hero */
-.hero{ margin-top:1.2rem; background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.08)); padding:2rem; border-radius:var(--radius-lg); border:1px solid var(--border); box-shadow: var(--shadow-md) }
+.hero{ margin-top:1.2rem; background: linear-gradient(180deg, rgba(255,77,79,.06), rgba(0,0,0,.12)); padding:2rem; border-radius:var(--radius-lg); border:1px solid var(--border); box-shadow: var(--shadow-md) }
 .hero h1{ margin:.2rem 0 0; font-size: clamp(1.8rem, 2vw + 1rem, 2.6rem); letter-spacing:.3px }
 .hero p{ margin:.5rem 0 0; color:var(--muted) }
 .hero .bar{ margin-top:1rem; display:flex; gap:.5rem; flex-wrap:wrap }
@@ -101,21 +101,18 @@ hr{ border:0; border-top:1px solid var(--border); margin:2rem 0 }
 kbd{ background:var(--card-2); border:1px solid var(--border); padding:.06rem .35rem; border-radius:6px }
 
 /* Reveal */
-.reveal{ /* disabled legacy reveal */ }
-
+.reveal{ opacity:0; transform: translateY(6px); transition: opacity .35s ease, transform .35s ease }
+.reveal.is-in{ opacity:1; transform:none }
 
 
 
 /* Brand logo only */
-.brand .logo{ height:26px; display:block }
-@media (min-width: 1000px){ .brand .logo{ height:26px; display:block } }
+
+@media (min-width: 1000px){  }
 
 /* Fancy underline on nav */
-header nav a{ padding:.2rem .5rem; border-radius:10px; border:1px solid transparent; font-weight:600; font-size:.9rem; color:var(--text) }
-header nav a::after{
-  content:""; position:absolute; left:10%; bottom:8px; width:0; height:2px; background:var(--accent);
-  transition: width .25s ease; border-radius:2px;
-}
+header nav a{ padding:.20rem .55rem; font-weight:600; color:var(--text); border:none }
+
 header nav a:hover::after{ width:80% }
 
 /* Card sheen on hover */
@@ -168,9 +165,9 @@ h1,h2,h3,h4,h5,h6,button,input,textarea,select{ font-family: inherit }
 code,kbd,samp,pre{ font-family: inherit }
 
 /* Keep header height, visually scale logo without affecting layout */
-header.site{ position:sticky; top:0; z-index:10; background: rgba(12,12,14,.6); backdrop-filter: blur(8px); border-bottom:1px solid var(--border); padding:1px 0 }
-.brand .logo{ height:26px; display:block }
-@media (min-width: 1000px){ .brand .logo{ height:26px; display:block } }
+header.site{ --header-h: 54px }
+
+@media (min-width: 1000px){  }
 
 /* No background shading behind code blocks */
 .post-body pre, .highlight{ background: transparent !important; box-shadow: none !important; }
@@ -182,7 +179,7 @@ header.site{ position:sticky; top:0; z-index:10; background: rgba(12,12,14,.6); 
 html, body, *:not(svg):not(path){ font-family: var(--font-mono) !important; letter-spacing: 0 }
 
 /* Keep header height, scale logo visually */
-header.site{ position:sticky; top:0; z-index:10; background: rgba(12,12,14,.6); backdrop-filter: blur(8px); border-bottom:1px solid var(--border); padding:1px 0 }
+header.site{ --header-h: 54px }
 
 /* === Remove ANY background from code areas (Rouge/Markdown) === */
 .highlight, .rouge-table, .rouge-table td, .rouge-table pre, pre.highlight, .highlight pre, .highlight code, .post-body pre, .post-body code{
@@ -248,8 +245,8 @@ pre[class*="language-"], code[class*="language-"]{ background: transparent !impo
 
 /* ===== Animations ===== */
 @keyframes fadeUp { from{opacity:0; transform: translateY(8px)} to{opacity:1; transform:none} }
-.reveal{ /* disabled legacy reveal */ }
-
+.reveal{ opacity:0; transform: translateY(8px); transition: opacity .4s ease, transform .4s ease }
+.reveal.is-in{ opacity:1; transform:none }
 .tilt-in{ will-change: transform; transform: perspective(800px) rotateX(2deg) translateY(6px); transition: transform .4s ease, box-shadow .4s ease }
 .tilt-in.is-in{ transform: none }
 
@@ -263,8 +260,8 @@ pre[class*="language-"], code[class*="language-"]{ background: transparent !impo
 
 /* Reveal */
 @keyframes fadeUp{ from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none} }
-.reveal{ /* disabled legacy reveal */ }
-
+.reveal{ opacity:0; transform:translateY(8px); transition: opacity .4s ease, transform .4s ease }
+.reveal.is-in{ opacity:1; transform:none }
 .tilt-in{ transform: perspective(800px) rotateX(2deg) translateY(6px); transition: transform .4s ease, box-shadow .4s ease }
 .tilt-in.is-in{ transform:none }
 
@@ -283,101 +280,22 @@ pre[class*="language-"], code[class*="language-"], .highlight, .post-body pre, .
   background: transparent !important; box-shadow:none !important;
 }
 
-
-/* === Reddish ASM syntax theme (Prism/Rouge) === */
-pre[class*="language-asm"], pre[class*="language-nasm"],
-code[class*="language-asm"], code[class*="language-nasm"]{
-  background: var(--code-bg);
-  color: #f3f4f6;
+:root{ --logo-visual-height: 120px; --logo-visual-width: 380px; }
+header.site .header-inner .brand .logo-box{ position:relative; width:var(--logo-visual-width); height:0; overflow:visible; display:inline-block }
+header.site .header-inner .brand .brand-logo{
+  position:absolute; left:0; top:50%; height:var(--logo-visual-height); transform:translateY(-50%);
+  display:block; image-rendering:-webkit-optimize-contrast; filter: drop-shadow(0 2px 10px rgba(190,15,46,.28));
 }
-.language-asm .token.comment, .language-nasm .token.comment{ color:#9aa1aa }
-.language-asm .token.label, .language-nasm .token.label{ color:#ff7a90 }
-.language-asm .token.keyword, .language-nasm .token.keyword,
-.language-asm .token.mnemonic, .language-nasm .token.mnemonic{ color:#ff6b6b; font-weight:600 }
-.language-asm .token.register, .language-nasm .token.register{ color:#ffb86c }
-.language-asm .token.number, .language-nasm .token.number,
-.language-asm .token.hexnumber, .language-nasm .token.hexnumber{ color:#ff9aa2 }
-.language-asm .token.operator, .language-nasm .token.operator{ color:#e26d6d }
-.language-asm .token.directive, .language-nasm .token.directive{ color:#f78fb3 }
-.language-asm .token.function, .language-nasm .token.function{ color:#ffd166 }
-.language-asm .token.punctuation, .language-nasm .token.punctuation{ color:#e6edf3 }
-
-
-/* Reveal base */
-.reveal{ /* disabled legacy reveal */ }
-
-
-.site .logo{ height:26px; display:block }
-
-@media (prefers-reduced-motion: reduce){ .reveal{ /* disabled legacy reveal */ } }
-
-
-/* Header compact mode */
-header.site{ position:sticky; top:0; z-index:10; background: rgba(12,12,14,.6); backdrop-filter: blur(8px); border-bottom:1px solid var(--border); padding:1px 0 }
-header .header-inner{ display:flex; align-items:center; justify-content:space-between; gap:.6rem }
-.site .logo{ height:26px; display:block } /* slightly smaller than 64px */
-.site nav a{ font-size: .95rem; padding: .25rem .6rem; line-height: 1.1; }
-
-
-
-/* Header ultra-compact but proportional */
-header.site{ position:sticky; top:0; z-index:10; background: rgba(12,12,14,.6); backdrop-filter: blur(8px); border-bottom:1px solid var(--border); padding:1px 0 }
-header .header-inner{ display:flex; align-items:center; justify-content:space-between; gap:.6rem }
-.site .logo{ height:26px; display:block }
-.site nav a{ font-size: .92rem; padding: .18rem .50rem; line-height: 1.1; }
-
-
-
-/* === New lightweight animation (from scratch) === */
-@keyframes fx-rise {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: none; }
+header.site{ padding:2px 0; }
+.hero, .post .post-body h2, .post .post-body h3{ scroll-margin-top: 72px; }
+@media (max-width: 1024px){
+  :root{ --logo-visual-height: 100px; --logo-visual-width: 330px; }
 }
-.fx-enter {
-  opacity: 0;
-  animation: fx-rise .20s ease forwards;
-  will-change: transform, opacity;
-  backface-visibility: hidden;
+@media (max-width: 640px){
+  :root{ --logo-visual-height: 86px; --logo-visual-width: 290px; }
 }
-@media (prefers-reduced-motion: reduce){
-  .fx-enter{ animation: none; opacity: 1; }
-}
-
-
-.post .post-body h2, .post .post-body h3, .hero{ scroll-margin-top: 56px }
-
-/* Larger visual logo without changing header height */
-.logo-wrap{ position: relative; display:inline-flex; align-items:center; height: 0; }
-.brand .logo{ height:26px; display:block }
-.logo--scale{ transform: scale(1.6) translateY(-2px); transform-origin: left center; will-change: transform; }
-@media (max-width: 640px){ .logo--scale{ transform: scale(1.45) translateY(-1px) } }
-
-/* Sheen effect on logo (hover) */
-.logo-wrap::after{
-  content:""; position:absolute; top:-4px; bottom:-4px; left:-35%;
-  width:32%; transform: skewX(-20deg);
-  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.35), rgba(255,255,255,0));
-  opacity:0; pointer-events:none;
-}
-.logo-wrap:hover::after{ opacity:1; left:130%; transition: left .7s ease; }
-
-/* Nav link underline animation */
-header nav a{
-  background-image: linear-gradient(currentColor, currentColor);
-  background-position: 0 100%;
-  background-repeat: no-repeat;
-  background-size: 0% 2px;
-  transition: background-size .2s ease;
-}
-header nav a:hover{ background-size: 100% 2px; }
-
-/* Cards micro-interaction */
-.grid .card{ transition: transform .18s ease, box-shadow .18s ease; }
-.grid .card:hover{ transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,.3); }
-
-/* Terminal caret blink */
-.hero-term .cursor::after{
-  content:""; display:inline-block; width:8px; height:1.05em; margin-left:2px;
-  background: currentColor; vertical-align:-2px; animation: caretBlink 1s steps(2,end) infinite;
-}
-@keyframes caretBlink{ 0%,49%{opacity:1} 50%,100%{opacity:0} }
+@keyframes appearUp{ from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none} }
+.appear{ opacity:0; animation: appearUp .14s ease forwards; will-change:opacity,transform }
+.grid .card.appear{ animation-delay: calc(var(--i,0) * 24ms) }
+.post .post-body > *.appear{ animation-delay: calc(var(--i,0) * 12ms) }
+@media (prefers-reduced-motion: reduce){ .appear{ animation:none; opacity:1 } }

