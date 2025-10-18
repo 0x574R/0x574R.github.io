@@ -101,7 +101,7 @@ hr{ border:0; border-top:1px solid var(--border); margin:2rem 0 }
 kbd{ background:var(--card-2); border:1px solid var(--border); padding:.06rem .35rem; border-radius:6px }
 
 /* Reveal */
-.reveal{ opacity:0; transform: translateY(8px); transition: opacity .35s ease, transform .35s ease }
+.reveal{opacity:0; transform:translateY(8px); transition:opacity .28s ease, transform .28s ease}
 .reveal.is-in{ opacity:1; transform:none }
 
 
@@ -248,7 +248,7 @@ pre[class*="language-"], code[class*="language-"]{ background: transparent !impo
 
 /* ===== Animations ===== */
 @keyframes fadeUp { from{opacity:0; transform: translateY(8px)} to{opacity:1; transform:none} }
-.reveal{ opacity:0; transform: translateY(8px); transition: opacity .35s ease, transform .35s ease }
+.reveal{opacity:0; transform:translateY(8px); transition:opacity .28s ease, transform .28s ease}
 .reveal.is-in{ opacity:1; transform:none }
 .tilt-in{ will-change: transform; transform: perspective(800px) rotateX(2deg) translateY(6px); transition: transform .4s ease, box-shadow .4s ease }
 .tilt-in.is-in{ transform: none }
@@ -263,7 +263,7 @@ pre[class*="language-"], code[class*="language-"]{ background: transparent !impo
 
 /* Reveal */
 @keyframes fadeUp{ from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none} }
-.reveal{ opacity:0; transform: translateY(8px); transition: opacity .35s ease, transform .35s ease }
+.reveal{opacity:0; transform:translateY(8px); transition:opacity .28s ease, transform .28s ease}
 .reveal.is-in{ opacity:1; transform:none }
 .tilt-in{ transform: perspective(800px) rotateX(2deg) translateY(6px); transition: transform .4s ease, box-shadow .4s ease }
 .tilt-in.is-in{ transform:none }
@@ -304,7 +304,9 @@ code[class*="language-asm"], code[class*="language-nasm"]{
 
 
 /* Reveal base */
-.reveal{ opacity:0; transform: translateY(8px); transition: opacity .35s ease, transform .35s ease }
+.reveal{opacity:0; transform:translateY(8px); transition:opacity .28s ease, transform .28s ease}
 .reveal.is-in{ opacity:1; transform:none; }
 
-.site .logo{ height:56px; display:block }
+.site .logo{height:64px; display:block}
+
+@media (prefers-reduced-motion: reduce){ .reveal{transition:none !important} }

