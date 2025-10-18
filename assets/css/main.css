@@ -37,12 +37,12 @@ a:hover{ text-decoration:underline }
 header.site{ position: sticky; top:0; z-index:10; background: rgba(11,11,13,.72); backdrop-filter: blur(10px); border-bottom:1px solid var(--border) }
 .header-inner{ display:flex; align-items:center; justify-content:space-between; gap:1rem }
 .brand{ display:flex; align-items:center; gap:.8rem; font-weight:700 }
-
+.brand .logo{ height:34px; display:block; filter: drop-shadow(0 2px 10px rgba(190,15,46,.25)); }
 .brand .tagline{ color:var(--muted); font-weight:500; font-size:.95rem }
 
 header nav{ display:flex; gap:1rem; align-items:center }
-header nav a{ padding:.20rem .55rem; font-weight:600; color:var(--text); border:none }
-header nav a:hover{ opacity:.9 }
+header nav a{ padding:.45rem .75rem; border-radius:10px; border:1px solid transparent; font-weight:600; color:var(--text) }
+header nav a:hover{ background: linear-gradient(180deg, rgba(255,77,79,.08), rgba(0,0,0,.08)); border-color:var(--border); text-decoration:none }
 
 /* Footer */
 footer.site{ border-top:1px solid var(--border); color:var(--muted); }
@@ -107,12 +107,15 @@ kbd{ background:var(--card-2); border:1px solid var(--border); padding:.06rem .3
 
 
 /* Brand logo only */
-
-@media (min-width: 1000px){  }
+.brand .logo{ height:56px; display:block; }
+@media (min-width: 1000px){ .brand .logo{ height:68px } }
 
 /* Fancy underline on nav */
-header nav a{ padding:.20rem .55rem; font-weight:600; color:var(--text); border:none }
-
+header nav a{ position:relative; overflow:hidden }
+header nav a::after{
+  content:""; position:absolute; left:10%; bottom:8px; width:0; height:2px; background:var(--accent);
+  transition: width .25s ease; border-radius:2px;
+}
 header nav a:hover::after{ width:80% }
 
 /* Card sheen on hover */
@@ -166,8 +169,8 @@ code,kbd,samp,pre{ font-family: inherit }
 
 /* Keep header height, visually scale logo without affecting layout */
 header.site{ --header-h: 54px }
-
-@media (min-width: 1000px){  }
+.brand .logo{ height:40px; transform: scale(2.4); transform-origin:left center; }
+@media (min-width: 1000px){ .brand .logo{ height:40px; transform: scale(2.4) } }
 
 /* No background shading behind code blocks */
 .post-body pre, .highlight{ background: transparent !important; box-shadow: none !important; }
@@ -280,22 +283,26 @@ pre[class*="language-"], code[class*="language-"], .highlight, .post-body pre, .
   background: transparent !important; box-shadow:none !important;
 }
 
-:root{ --logo-visual-height: 120px; --logo-visual-width: 380px; }
-header.site .header-inner .brand .logo-box{ position:relative; width:var(--logo-visual-width); height:0; overflow:visible; display:inline-block }
-header.site .header-inner .brand .brand-logo{
-  position:absolute; left:0; top:50%; height:var(--logo-visual-height); transform:translateY(-50%);
-  display:block; image-rendering:-webkit-optimize-contrast; filter: drop-shadow(0 2px 10px rgba(190,15,46,.28));
+/* === Hero visible + Matrix background === */
+.hero{
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  background: radial-gradient(1200px 400px at 10% -10%, rgba(255, 58, 90, .06), transparent),
+              radial-gradient(1000px 500px at 100% 0%, rgba(255,255,255,.04), transparent);
+  min-height: 260px;
+  margin: 1.25rem 0 2rem;
 }
-header.site{ padding:2px 0; }
+.hero::after{ content:""; position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,.15), transparent 60%, rgba(0,0,0,.25)); pointer-events:none; }
+#matrix-bg{ position:absolute; inset:0; width:100%; height:100%; opacity:.18; }
+
+.term-grid{ position: relative; display:grid; grid-template-columns: 1fr 1fr; gap:1rem; padding: 1.1rem; }
+@media (max-width: 880px){ .term-grid{ grid-template-columns: 1fr; } }
+
+.term{ background:#121015; border:1px solid #251721; border-radius:10px; padding:.75rem 1rem; color:var(--text); }
+.hero-term .prompt{ display:block; font-weight:600; color:#7fffd4; margin-bottom:.35rem; }
+.hero-term .prompt.attacker{ color:#f0f6ff; }
+.hero-term pre{ margin:0; font: 14px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color:#cfd5ff; white-space: pre-wrap; }
+.hero-term pre .secondary{ color:#9ea3b0; }
+
 .hero, .post .post-body h2, .post .post-body h3{ scroll-margin-top: 72px; }
-@media (max-width: 1024px){
-  :root{ --logo-visual-height: 100px; --logo-visual-width: 330px; }
-}
-@media (max-width: 640px){
-  :root{ --logo-visual-height: 86px; --logo-visual-width: 290px; }
-}
-@keyframes appearUp{ from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none} }
-.appear{ opacity:0; animation: appearUp .14s ease forwards; will-change:opacity,transform }
-.grid .card.appear{ animation-delay: calc(var(--i,0) * 24ms) }
-.post .post-body > *.appear{ animation-delay: calc(var(--i,0) * 12ms) }
-@media (prefers-reduced-motion: reduce){ .appear{ animation:none; opacity:1 } }
