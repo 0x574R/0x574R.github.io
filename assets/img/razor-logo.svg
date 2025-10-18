@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="48" viewBox="0 0 160 48">
+  <defs>
+    <style>
+      .line{fill:none;stroke:#ffffff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+      .text{fill:#ffffff;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-size:16px;font-weight:700;letter-spacing:2px}
+    </style>
+  </defs>
+  <!-- Cutter blade silhouette -->
+  <path class="line" d="M8 8 L152 8 L140 24 L152 40 L8 40 L20 24 Z"/>
+  <!-- Three oval holes like a razor blade -->
+  <ellipse class="line" cx="80" cy="24" rx="12" ry="6"/>
+  <path class="line" d="M56 24 h8 M96 24 h8"/>
+  <!-- RAZOR text -->
+  <text class="text" x="48" y="30">RAZOR</text>
+</svg>

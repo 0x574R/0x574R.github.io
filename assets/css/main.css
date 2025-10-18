@@ -50,7 +50,7 @@ footer .row{ display:flex; align-items:center; gap:1rem; justify-content:space-b
 .small{ font-size:.9rem; color:var(--muted) }
 
 /* Hero */
-.hero{ margin-top:1.2rem; background: linear-gradient(180deg, rgba(255,77,79,.06), rgba(0,0,0,.12)); padding:2rem; border-radius:var(--radius-lg); border:1px solid var(--border); box-shadow: var(--shadow-md) }
+.hero{ margin-top:1.2rem; background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.08)); padding:2rem; border-radius:var(--radius-lg); border:1px solid var(--border); box-shadow: var(--shadow-md) }
 .hero h1{ margin:.2rem 0 0; font-size: clamp(1.8rem, 2vw + 1rem, 2.6rem); letter-spacing:.3px }
 .hero p{ margin:.5rem 0 0; color:var(--muted) }
 .hero .bar{ margin-top:1rem; display:flex; gap:.5rem; flex-wrap:wrap }
@@ -282,3 +282,27 @@ pre[class*="language-"], code[class*="language-"]{ background: transparent !impo
 pre[class*="language-"], code[class*="language-"], .highlight, .post-body pre, .post-body code {
   background: transparent !important; box-shadow:none !important;
 }
+
+
+/* === Reddish ASM syntax theme (Prism/Rouge) === */
+pre[class*="language-asm"], pre[class*="language-nasm"],
+code[class*="language-asm"], code[class*="language-nasm"]{
+  background: var(--code-bg);
+  color: #f3f4f6;
+}
+.language-asm .token.comment, .language-nasm .token.comment{ color:#9aa1aa }
+.language-asm .token.label, .language-nasm .token.label{ color:#ff7a90 }
+.language-asm .token.keyword, .language-nasm .token.keyword,
+.language-asm .token.mnemonic, .language-nasm .token.mnemonic{ color:#ff6b6b; font-weight:600 }
+.language-asm .token.register, .language-nasm .token.register{ color:#ffb86c }
+.language-asm .token.number, .language-nasm .token.number,
+.language-asm .token.hexnumber, .language-nasm .token.hexnumber{ color:#ff9aa2 }
+.language-asm .token.operator, .language-nasm .token.operator{ color:#e26d6d }
+.language-asm .token.directive, .language-nasm .token.directive{ color:#f78fb3 }
+.language-asm .token.function, .language-nasm .token.function{ color:#ffd166 }
+.language-asm .token.punctuation, .language-nasm .token.punctuation{ color:#e6edf3 }
+
+
+/* Reveal base */
+.reveal{ opacity:0; transform: translateY(10px); transition: opacity .6s ease, transform .6s ease; }
+.reveal.is-in{ opacity:1; transform:none; }
