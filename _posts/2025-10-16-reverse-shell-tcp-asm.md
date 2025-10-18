@@ -1,11 +1,9 @@
 ---
-
 date: 2025-10-16 11:00:00 +0200
 tags: [post, reverse-shell, hacking, linux, asm]
 ---
 
 ---
-
 date: 2025-10-16 10:00:00 +0200
 categories: [assembly, security, low-level]
 ---
