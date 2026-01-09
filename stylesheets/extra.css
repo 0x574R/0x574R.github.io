@@ -1,0 +1,30 @@
+/* Custom styles */
+
+/* Code blocks */
+.highlight code {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+/* Cards grid */
+.grid.cards > ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+/* Admonitions */
+.md-typeset .admonition.tip,
+.md-typeset details.tip {
+    border-color: #9c27b0;
+}
+
+.md-typeset .tip > .admonition-title,
+.md-typeset .tip > summary {
+    background-color: rgba(156, 39, 176, 0.1);
+}
+
+/* Difficulty badges */
+.difficulty-easy { color: #4caf50; }
+.difficulty-medium { color: #ff9800; }
+.difficulty-hard { color: #f44336; }
+.difficulty-insane { color: #9c27b0; }
