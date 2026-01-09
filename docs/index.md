@@ -1,4 +1,4 @@
-# 0x574R
+# RAZOR
 
 Offensive security research, writeups y notas técnicas.
 

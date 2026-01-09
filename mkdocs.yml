@@ -1,13 +1,15 @@
-site_name: 0x574R
+site_name: RAZOR
 site_url: https://0x574R.github.io
 
 theme:
   name: material
   palette:
-    scheme: default
+    scheme: slate
   font:
     text: Roboto
     code: Roboto Mono
+  logo: assets/logo.png
+  favicon: assets/logo.png
   features:
     - content.code.copy
     - search.highlight
