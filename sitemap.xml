@@ -1,43 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://TU-USUARIO.github.io/blog-hacking/</loc>
+         <loc>https://0x574R.github.io/</loc>
          <lastmod>2026-01-09</lastmod>
     </url>
     <url>
-         <loc>https://TU-USUARIO.github.io/blog-hacking/cheatsheets/</loc>
+         <loc>https://0x574R.github.io/tags/</loc>
          <lastmod>2026-01-09</lastmod>
     </url>
     <url>
-         <loc>https://TU-USUARIO.github.io/blog-hacking/cheatsheets/linux-privesc/</loc>
+         <loc>https://0x574R.github.io/blog/</loc>
          <lastmod>2026-01-09</lastmod>
     </url>
     <url>
-         <loc>https://TU-USUARIO.github.io/blog-hacking/cheatsheets/windows-privesc/</loc>
+         <loc>https://0x574R.github.io/cheatsheets/</loc>
          <lastmod>2026-01-09</lastmod>
     </url>
     <url>
-         <loc>https://TU-USUARIO.github.io/blog-hacking/kernel/</loc>
+         <loc>https://0x574R.github.io/cheatsheets/linux-privesc/</loc>
          <lastmod>2026-01-09</lastmod>
     </url>
     <url>
-         <loc>https://TU-USUARIO.github.io/blog-hacking/kernel/ebpf-intro/</loc>
+         <loc>https://0x574R.github.io/cheatsheets/windows-privesc/</loc>
          <lastmod>2026-01-09</lastmod>
     </url>
     <url>
-         <loc>https://TU-USUARIO.github.io/blog-hacking/malware-dev/</loc>
+         <loc>https://0x574R.github.io/kernel/</loc>
          <lastmod>2026-01-09</lastmod>
     </url>
     <url>
-         <loc>https://TU-USUARIO.github.io/blog-hacking/malware-dev/shellcode-basics/</loc>
+         <loc>https://0x574R.github.io/kernel/ebpf-intro/</loc>
          <lastmod>2026-01-09</lastmod>
     </url>
     <url>
-         <loc>https://TU-USUARIO.github.io/blog-hacking/writeups/</loc>
+         <loc>https://0x574R.github.io/malware-dev/</loc>
          <lastmod>2026-01-09</lastmod>
     </url>
     <url>
-         <loc>https://TU-USUARIO.github.io/blog-hacking/writeups/htb-example/</loc>
+         <loc>https://0x574R.github.io/malware-dev/shellcode-basics/</loc>
+         <lastmod>2026-01-09</lastmod>
+    </url>
+    <url>
+         <loc>https://0x574R.github.io/research/</loc>
+         <lastmod>2026-01-09</lastmod>
+    </url>
+    <url>
+         <loc>https://0x574R.github.io/research/kernel/</loc>
+         <lastmod>2026-01-09</lastmod>
+    </url>
+    <url>
+         <loc>https://0x574R.github.io/research/kernel/ebpf-intro/</loc>
+         <lastmod>2026-01-09</lastmod>
+    </url>
+    <url>
+         <loc>https://0x574R.github.io/research/malware-dev/</loc>
+         <lastmod>2026-01-09</lastmod>
+    </url>
+    <url>
+         <loc>https://0x574R.github.io/research/malware-dev/shellcode-basics/</loc>
+         <lastmod>2026-01-09</lastmod>
+    </url>
+    <url>
+         <loc>https://0x574R.github.io/writeups/</loc>
+         <lastmod>2026-01-09</lastmod>
+    </url>
+    <url>
+         <loc>https://0x574R.github.io/writeups/htb-example/</loc>
          <lastmod>2026-01-09</lastmod>
     </url>
 </urlset>
