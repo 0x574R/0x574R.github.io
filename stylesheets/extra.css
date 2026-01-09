@@ -1,3 +1,11 @@
+/* ===== FUENTE MONOSPACE ===== */
+:root {
+  --md-text-font: "JetBrains Mono", "Fira Code", "SF Mono", "Consolas", monospace;
+  --md-code-font: "JetBrains Mono", "Fira Code", "SF Mono", "Consolas", monospace;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&display=swap');
+
 /* ===== ESQUEMA DE COLORES ===== */
 [data-md-color-scheme="slate"] {
   --md-default-bg-color: #0d0d0d;
@@ -49,7 +57,8 @@
   background-color: #111 !important;
   border: 1px solid #222 !important;
   border-radius: 3px;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
+  font-family: var(--md-text-font);
   height: 2rem;
   width: 13rem;
   color: #888;
@@ -66,7 +75,8 @@
 /* GitHub */
 .md-source {
   color: #666;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
+  font-family: var(--md-text-font);
 }
 
 .md-source:hover {
@@ -75,23 +85,23 @@
 
 /* ===== LAYOUT PRINCIPAL ===== */
 .md-container {
-  max-width: 1400px;
+  max-width: 1600px;
   margin: 0 auto;
 }
 
 /* Sidebar navegación - izquierda */
 .md-sidebar--primary {
-  width: 13rem;
+  width: 12rem;
 }
 
 /* Sidebar TOC - derecha */
 .md-sidebar--secondary {
-  width: 13rem;
+  width: 12rem;
 }
 
-/* ===== CONTENIDO CENTRAL - ANCHO ÓPTIMO ===== */
+/* ===== CONTENIDO CENTRAL - MÁS ANCHO ===== */
 .md-content {
-  max-width: 750px;
+  max-width: 1150px;
   margin: 0 auto;
 }
 
@@ -102,6 +112,7 @@
 /* ===== NAVEGACIÓN LATERAL ===== */
 .md-nav__title {
   font-size: 0.65rem;
+  font-family: var(--md-text-font);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: #555;
@@ -110,7 +121,8 @@
 }
 
 .md-nav__link {
-  font-size: 0.78rem;
+  font-size: 0.75rem;
+  font-family: var(--md-text-font);
   padding: 0.35rem 0.8rem !important;
   color: #606060 !important;
   transition: color 0.15s;
@@ -145,24 +157,27 @@
   color: #a0a0a0 !important;
 }
 
-/* ===== TIPOGRAFÍA ===== */
+/* ===== TIPOGRAFÍA MONOSPACE ===== */
 .md-typeset {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
+  font-family: var(--md-text-font);
   line-height: 1.7;
   color: #b5b5b5;
 }
 
 .md-typeset h1 {
-  font-size: 1.8rem;
-  font-weight: 400;
+  font-size: 1.6rem;
+  font-weight: 500;
+  font-family: var(--md-text-font);
   color: #e0e0e0;
   margin-bottom: 1.5rem;
   letter-spacing: -0.02em;
 }
 
 .md-typeset h2 {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 500;
+  font-family: var(--md-text-font);
   color: #c5c5c5;
   margin-top: 2.5rem;
   margin-bottom: 1rem;
@@ -171,14 +186,16 @@
 }
 
 .md-typeset h3 {
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 500;
+  font-family: var(--md-text-font);
   color: #a5a5a5;
   margin-top: 1.8rem;
 }
 
 .md-typeset h4 {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  font-family: var(--md-text-font);
   color: #909090;
 }
 
