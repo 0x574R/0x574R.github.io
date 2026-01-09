@@ -1,0 +1,229 @@
+/* Neoteroi-style components */
+
+/* Timeline */
+.timeline {
+  position: relative;
+  padding-left: 2rem;
+  margin: 2rem 0;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, var(--accent-primary), var(--accent-tertiary));
+}
+
+.timeline-item {
+  position: relative;
+  padding-bottom: 2rem;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -2rem;
+  top: 0.5rem;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  border: 2px solid var(--bg-dark);
+  transform: translateX(-5px);
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+/* Feature boxes */
+.feature-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+}
+
+.feature-box:hover {
+  border-color: var(--accent-primary);
+  transform: translateX(8px);
+}
+
+.feature-box .icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.feature-box .content h3 {
+  margin: 0 0 0.5rem;
+  color: var(--text-primary);
+}
+
+.feature-box .content p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+/* Skill bars */
+.skill-bar {
+  margin-bottom: 1rem;
+}
+
+.skill-bar .label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.skill-bar .bar {
+  height: 8px;
+  background: var(--border-color);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.skill-bar .fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-primary), var(--accent-tertiary));
+  border-radius: 4px;
+  transition: width 1s ease;
+}
+
+/* Tool cards */
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.tool-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.25rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.tool-card:hover {
+  border-color: var(--accent-tertiary);
+  transform: translateY(-4px);
+  box-shadow: var(--glow-cyan);
+}
+
+.tool-card .icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.tool-card .name {
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+/* Quote block */
+.quote-block {
+  position: relative;
+  padding: 2rem;
+  padding-left: 3rem;
+  background: var(--bg-card);
+  border-radius: 8px;
+  margin: 2rem 0;
+  font-style: italic;
+  color: var(--text-secondary);
+}
+
+.quote-block::before {
+  content: '"';
+  position: absolute;
+  left: 1rem;
+  top: 0.5rem;
+  font-size: 4rem;
+  font-family: Georgia, serif;
+  color: var(--accent-primary);
+  opacity: 0.3;
+  line-height: 1;
+}
+
+.quote-block .author {
+  margin-top: 1rem;
+  font-style: normal;
+  font-weight: 600;
+  color: var(--accent-tertiary);
+}
+
+/* Animated border */
+.animated-border {
+  position: relative;
+  padding: 2px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, var(--accent-primary), var(--accent-tertiary), var(--accent-primary));
+  background-size: 200% 100%;
+  animation: gradient-move 3s linear infinite;
+}
+
+.animated-border > * {
+  background: var(--bg-dark);
+  border-radius: 10px;
+}
+
+@keyframes gradient-move {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+/* Typing effect */
+.typing {
+  overflow: hidden;
+  border-right: 2px solid var(--accent-tertiary);
+  white-space: nowrap;
+  animation: typing 3s steps(40) forwards, blink 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink {
+  50% { border-color: transparent; }
+}
+
+/* Matrix rain effect for backgrounds */
+.matrix-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.matrix-bg::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(180deg, transparent 0%, var(--bg-dark) 100%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(168, 85, 247, 0.03) 2px,
+      rgba(168, 85, 247, 0.03) 4px
+    );
+  pointer-events: none;
+}

@@ -1,58 +1,83 @@
-site_name: Hacking Notes
-site_url: https://TU-USUARIO.github.io/blog-hacking
-site_description: Blog de seguridad ofensiva y desarrollo de malware
-site_author: Daniel
+site_name: 0x574R
+site_url: https://0x574R.github.io
+site_description: Offensive Security Research & Malware Development
+site_author: 0x574R
 
-repo_name: TU-USUARIO/blog-hacking
-repo_url: https://github.com/TU-USUARIO/blog-hacking
+repo_name: 0x574R/0x574R.github.io
+repo_url: https://github.com/0x574R/0x574R.github.io
 
 theme:
   name: material
   language: es
+  
   palette:
     - scheme: slate
-      primary: deep purple
-      accent: purple
+      primary: black
+      accent: deep purple
       toggle:
-        icon: material/brightness-4
-        name: Cambiar a modo claro
+        icon: material/weather-night
+        name: Modo claro
     - scheme: default
       primary: deep purple
-      accent: purple
+      accent: deep purple
       toggle:
-        icon: material/brightness-7
-        name: Cambiar a modo oscuro
+        icon: material/weather-sunny
+        name: Modo oscuro
+  
+  font:
+    text: Inter
+    code: JetBrains Mono
+  
+  logo: assets/logo.svg
+  favicon: assets/logo.svg
   
   features:
     - navigation.tabs
+    - navigation.tabs.sticky
     - navigation.sections
+    - navigation.expand
     - navigation.top
     - navigation.footer
     - navigation.indexes
+    - navigation.instant
+    - navigation.instant.progress
     - content.code.copy
     - content.code.annotate
+    - content.tabs.link
     - search.highlight
     - search.suggest
+    - search.share
+    - toc.follow
+    - announce.dismiss
   
   icon:
     repo: fontawesome/brands/github
     admonition:
-      note: octicons/tag-16
-      warning: octicons/alert-16
-      danger: octicons/zap-16
-      tip: octicons/squirrel-16
-      example: octicons/beaker-16
+      note: fontawesome/solid/note-sticky
+      abstract: fontawesome/solid/book
+      info: fontawesome/solid/circle-info
+      tip: fontawesome/solid/bullhorn
+      success: fontawesome/solid/check
+      question: fontawesome/solid/circle-question
+      warning: fontawesome/solid/triangle-exclamation
+      failure: fontawesome/solid/bomb
+      danger: fontawesome/solid/skull
+      bug: fontawesome/solid/robot
+      example: fontawesome/solid/flask
+      quote: fontawesome/solid/quote-left
 
 plugins:
   - search:
       lang: es
-  - tags
+  - tags:
+      tags_file: tags.md
 
 markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
+      auto_title: true
   - pymdownx.inlinehilite
   - pymdownx.superfences:
       custom_fences:
@@ -61,30 +86,62 @@ markdown_extensions:
           format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.tabbed:
       alternate_style: true
+      combine_header_slug: true
   - pymdownx.details
   - pymdownx.critic
   - pymdownx.caret
   - pymdownx.keys
   - pymdownx.mark
   - pymdownx.tilde
+  - pymdownx.smartsymbols
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
   - admonition
   - tables
   - attr_list
   - md_in_html
   - def_list
   - footnotes
+  - abbr
   - toc:
       permalink: true
+      permalink_title: Link permanente
+      toc_depth: 3
 
 extra:
+  generator: false
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/TU-USUARIO
+      link: https://github.com/0x574R
+      name: GitHub
     - icon: fontawesome/brands/twitter
-      link: https://twitter.com/TU-USUARIO
+      link: https://twitter.com/0x574R
+      name: Twitter
+  
+  analytics:
+    provider: google
+    property: G-XXXXXXXXXX
+  
+  consent:
+    title: Cookies
+    description: >-
+      Usamos cookies para mejorar la experiencia. 
+      ¿Aceptas?
 
 extra_css:
   - stylesheets/extra.css
+  - stylesheets/neoteroi.css
+
+extra_javascript:
+  - javascripts/extra.js
+  - javascripts/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
 
 nav:
   - Home: index.md
@@ -96,9 +153,12 @@ nav:
     - cheatsheets/index.md
     - cheatsheets/linux-privesc.md
     - cheatsheets/windows-privesc.md
-  - Malware Dev:
-    - malware-dev/index.md
-    - malware-dev/shellcode-basics.md
-  - Kernel:
-    - kernel/index.md
-    - kernel/ebpf-intro.md
+  - Research:
+    - research/index.md
+    - Malware Dev:
+      - research/malware-dev/index.md
+      - research/malware-dev/shellcode-basics.md
+    - Kernel:
+      - research/kernel/index.md
+      - research/kernel/ebpf-intro.md
+  - Tags: tags.md
