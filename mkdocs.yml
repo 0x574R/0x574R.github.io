@@ -12,14 +12,29 @@ theme:
     accent: grey
   font:
     text: Roboto
-    code: Roboto Mono
+    code: JetBrains Mono
   logo: assets/logo.png
   favicon: assets/logo.png
   icon:
     repo: fontawesome/brands/github
+    admonition:
+      note: octicons/tag-16
+      abstract: octicons/checklist-16
+      info: octicons/info-16
+      tip: octicons/squirrel-16
+      success: octicons/check-16
+      question: octicons/question-16
+      warning: octicons/alert-16
+      failure: octicons/x-circle-16
+      danger: octicons/zap-16
+      bug: octicons/bug-16
+      example: octicons/beaker-16
+      quote: octicons/quote-16
   features:
     - content.code.copy
+    - content.code.annotate
     - search.highlight
+    - search.suggest
 
 extra_css:
   - stylesheets/extra.css
@@ -28,12 +43,23 @@ plugins:
   - search
 
 markdown_extensions:
-  - pymdownx.highlight
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+      use_pygments: true
+  - pymdownx.inlinehilite
   - pymdownx.superfences
   - pymdownx.tabbed:
       alternate_style: true
+  - pymdownx.details
+  - pymdownx.mark
+  - pymdownx.critic
+  - pymdownx.keys
   - admonition
   - tables
+  - attr_list
+  - md_in_html
   - toc:
       permalink: true
 

