@@ -2,145 +2,87 @@
 hide:
   - navigation
   - toc
+template: home.html
 ---
 
-<div class="hero" markdown>
-
-# :skull: 0x574R
-
-**Offensive Security Research • Malware Development • Low-Level Programming**
-
-[:octicons-mark-github-16: GitHub](https://github.com/0x574R){ .md-button }
-[:material-file-document: Research](research/index.md){ .md-button .md-button--primary }
-
+<div class="hero">
+  <h1>0x574R</h1>
+  <p class="tagline">Offensive Security Research · Malware Development · Low-Level</p>
+  <div class="buttons">
+    <a href="research/" class="btn btn-primary">Explorar Research</a>
+    <a href="https://github.com/0x574R" class="btn btn-secondary">GitHub</a>
+  </div>
 </div>
 
-<div class="stats" markdown>
-
-<div class="stat-card">
-<div class="number">15+</div>
-<div class="label">Writeups</div>
+<div class="stats">
+  <div class="stat">
+    <div class="stat-value">15+</div>
+    <div class="stat-label">Writeups</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">50+</div>
+    <div class="stat-label">Técnicas</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value">∞</div>
+    <div class="stat-label">Café</div>
+  </div>
 </div>
 
-<div class="stat-card">
-<div class="number">50+</div>
-<div class="label">Técnicas</div>
+<div class="divider"></div>
+
+## Explora
+
+<div class="card-grid">
+  <a href="writeups/" class="card">
+    <h3>⚑ Writeups</h3>
+    <p>Resolución detallada de máquinas CTF con metodología paso a paso.</p>
+    <div class="tags">
+      <span class="tag">HackTheBox</span>
+      <span class="tag">TryHackMe</span>
+    </div>
+  </a>
+  
+  <a href="cheatsheets/" class="card">
+    <h3>📋 Cheatsheets</h3>
+    <p>Referencias rápidas para pentesting y post-explotación.</p>
+    <div class="tags">
+      <span class="tag">Linux</span>
+      <span class="tag">Windows</span>
+      <span class="tag">AD</span>
+    </div>
+  </a>
+  
+  <a href="research/malware-dev/" class="card">
+    <h3>🦠 Malware Dev</h3>
+    <p>Desarrollo de malware, técnicas de evasión y shellcoding.</p>
+    <div class="tags">
+      <span class="tag">Shellcode</span>
+      <span class="tag">Evasion</span>
+    </div>
+  </a>
+  
+  <a href="research/kernel/" class="card">
+    <h3>⚙️ Kernel</h3>
+    <p>Rootkits, eBPF y programación a nivel de kernel.</p>
+    <div class="tags">
+      <span class="tag">eBPF</span>
+      <span class="tag">Rootkits</span>
+    </div>
+  </a>
 </div>
 
-<div class="stat-card">
-<div class="number">∞</div>
-<div class="label">Café</div>
-</div>
+<div class="divider"></div>
 
-</div>
+## Últimas Publicaciones
 
----
+| Fecha | Categoría | Título |
+|-------|-----------|--------|
+| 2025-01-09 | Kernel | [Introducción a eBPF](research/kernel/ebpf-intro.md) |
+| 2025-01-08 | Cheatsheet | [Linux Privilege Escalation](cheatsheets/linux-privesc.md) |
+| 2025-01-07 | Malware | [Shellcode Basics](research/malware-dev/shellcode-basics.md) |
 
-## :compass: Explora
-
-<div class="grid cards" markdown>
-
--   :fontawesome-solid-flag-checkered:{ .lg .middle } **Writeups**
-
-    ---
-    
-    Resolución detallada de máquinas CTF con metodología paso a paso.
-    
-    **HackTheBox** • **TryHackMe** • **Vulnhub**
-
-    [:octicons-arrow-right-24: Ver writeups](writeups/index.md)
-
--   :material-file-document-multiple:{ .lg .middle } **Cheatsheets**
-
-    ---
-    
-    Referencias rápidas para pentesting y post-explotación.
-    
-    **Linux** • **Windows** • **AD** • **Web**
-
-    [:octicons-arrow-right-24: Ver cheatsheets](cheatsheets/index.md)
-
--   :material-virus:{ .lg .middle } **Malware Development**
-
-    ---
-    
-    Desarrollo de malware, técnicas de evasión y shellcoding.
-    
-    **Shellcode** • **Injection** • **Evasion**
-
-    [:octicons-arrow-right-24: Ver research](research/malware-dev/index.md)
-
--   :material-chip:{ .lg .middle } **Kernel & Low-Level**
-
-    ---
-    
-    Rootkits, eBPF y programación a nivel de kernel.
-    
-    **eBPF** • **Rootkits** • **Syscalls**
-
-    [:octicons-arrow-right-24: Ver research](research/kernel/index.md)
-
-</div>
-
----
-
-## :newspaper: Últimas Publicaciones
-
-| Fecha | Categoría | Título | Tags |
-|-------|-----------|--------|------|
-| 2025-01-09 | :material-chip: Kernel | [Introducción a eBPF](research/kernel/ebpf-intro.md) | `ebpf` `linux` |
-| 2025-01-08 | :material-file-document: Cheatsheet | [Linux Privilege Escalation](cheatsheets/linux-privesc.md) | `privesc` `linux` |
-| 2025-01-07 | :material-virus: Malware | [Shellcode Basics](research/malware-dev/shellcode-basics.md) | `shellcode` `asm` |
-
----
-
-## :wrench: Stack
-
-<div class="tool-grid" markdown>
-
-<div class="tool-card">
-<div class="icon">🐍</div>
-<div class="name">Python</div>
-</div>
-
-<div class="tool-card">
-<div class="icon">🦀</div>
-<div class="name">Rust</div>
-</div>
-
-<div class="tool-card">
-<div class="icon">⚙️</div>
-<div class="name">Assembly</div>
-</div>
-
-<div class="tool-card">
-<div class="icon">🐧</div>
-<div class="name">Linux</div>
-</div>
-
-<div class="tool-card">
-<div class="icon">🔬</div>
-<div class="name">Ghidra</div>
-</div>
-
-<div class="tool-card">
-<div class="icon">🐉</div>
-<div class="name">Kali</div>
-</div>
-
-</div>
-
----
-
-<div class="quote-block" markdown>
-
-The quieter you become, the more you can hear.
-
-<div class="author">— BackTrack Linux</div>
-
-</div>
-
----
+<div class="divider"></div>
 
 !!! tip "Contacto"
-    ¿Preguntas o colaboraciones? Encuéntrame en [GitHub](https://github.com/0x574R) o [Twitter](https://twitter.com/0x574R).
+    ¿Preguntas o colaboraciones? → [GitHub](https://github.com/0x574R)
