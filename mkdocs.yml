@@ -8,18 +8,12 @@ theme:
   name: material
   palette:
     scheme: slate
-    primary: black
-    accent: grey
-  font:
-    text: Roboto
-    code: JetBrains Mono
   logo: assets/logo.png
   favicon: assets/logo.png
   icon:
     repo: fontawesome/brands/github
   features:
     - content.code.copy
-    - search.highlight
 
 extra_css:
   - stylesheets/extra.css
@@ -28,9 +22,7 @@ plugins:
   - search
 
 markdown_extensions:
-  - pymdownx.highlight:
-      anchor_linenums: true
-      use_pygments: true
+  - pymdownx.highlight
   - pymdownx.superfences
   - pymdownx.tabbed:
       alternate_style: true
