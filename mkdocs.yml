@@ -1,28 +1,14 @@
 site_name: 0x574R
 site_url: https://0x574R.github.io
-site_description: Offensive Security Research
-site_author: 0x574R
-
-repo_name: 0x574R/0x574R.github.io
-repo_url: https://github.com/0x574R/0x574R.github.io
 
 theme:
   name: material
   language: es
   
   palette:
-    - scheme: slate
-      primary: black
-      accent: purple
-      toggle:
-        icon: material/weather-night
-        name: Modo claro
-    - scheme: default
-      primary: deep purple
-      accent: purple
-      toggle:
-        icon: material/weather-sunny
-        name: Modo oscuro
+    scheme: slate
+    primary: black
+    accent: grey
   
   font:
     text: Inter
@@ -34,38 +20,27 @@ theme:
   features:
     - navigation.sections
     - navigation.top
-    - navigation.footer
-    - navigation.indexes
     - content.code.copy
-    - content.code.annotate
     - search.highlight
-    - search.suggest
-    - toc.follow
   
   icon:
     repo: fontawesome/brands/github
 
 plugins:
-  - search:
-      lang: es
+  - search
 
 markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
-      line_spans: __span
-      pygments_lang_class: true
   - pymdownx.inlinehilite
   - pymdownx.superfences
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.details
-  - pymdownx.keys
-  - pymdownx.mark
   - admonition
   - tables
   - attr_list
   - md_in_html
-  - def_list
   - toc:
       permalink: true
 
@@ -74,14 +49,12 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/0x574R
-    - icon: fontawesome/brands/twitter
-      link: https://twitter.com/0x574R
 
 extra_css:
   - stylesheets/extra.css
 
 nav:
-  - Home: index.md
+  - index.md
   - Writeups:
     - writeups/index.md
     - writeups/htb-example.md
@@ -91,9 +64,7 @@ nav:
     - cheatsheets/windows-privesc.md
   - Research:
     - research/index.md
-    - Malware Dev:
-      - research/malware-dev/index.md
-      - research/malware-dev/shellcode-basics.md
-    - Kernel:
-      - research/kernel/index.md
-      - research/kernel/ebpf-intro.md
+    - research/malware-dev/index.md
+    - research/malware-dev/shellcode-basics.md
+    - research/kernel/index.md
+    - research/kernel/ebpf-intro.md
