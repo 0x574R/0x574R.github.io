@@ -1,6 +1,6 @@
 /* ===== HEADER PROFESIONAL ===== */
 
-/* Header más compacto */
+/* Header compacto */
 .md-header {
   background-color: #0a0a0a !important;
   height: 3.5rem;
@@ -10,16 +10,19 @@
 .md-header__inner {
   padding: 0 1.5rem;
   height: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-/* Logo - tamaño moderado, bien centrado */
+/* Logo - más grande, a la izquierda */
 .md-header__button.md-logo {
   padding: 0;
-  margin-right: 1.5rem;
+  margin-right: auto;
 }
 
 .md-header__button.md-logo img {
-  height: 2rem;
+  height: 2.5rem;
   width: auto;
 }
 
@@ -28,9 +31,16 @@
   display: none;
 }
 
-/* Search bar - más ancho y mejor posicionado */
+/* Contenedor derecho - search + github */
+.md-header__inner > .md-header__source {
+  order: 3;
+}
+
+/* Search bar - a la derecha */
 .md-search {
-  margin: 0 2rem;
+  order: 2;
+  margin-left: auto;
+  margin-right: 1.5rem;
 }
 
 .md-search__input {
@@ -39,20 +49,21 @@
   font-size: 0.85rem;
   height: 2.2rem;
   padding-left: 2.5rem;
+  width: 15rem;
 }
 
 .md-search__icon {
   color: #666;
 }
 
-/* GitHub link - espaciado */
+/* GitHub link - extremo derecho */
 .md-header__source {
-  margin-left: auto;
+  margin-left: 0;
 }
 
 .md-source {
   color: #808080;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
 }
 
 .md-source:hover {
