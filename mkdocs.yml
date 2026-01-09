@@ -1,6 +1,9 @@
 site_name: RAZOR
 site_url: https://0x574R.github.io
 
+repo_url: https://github.com/0x574R
+repo_name: 0x574R
+
 theme:
   name: material
   palette:
@@ -12,6 +15,8 @@ theme:
     code: Roboto Mono
   logo: assets/logo.png
   favicon: assets/logo.png
+  icon:
+    repo: fontawesome/brands/github
   features:
     - content.code.copy
     - search.highlight
