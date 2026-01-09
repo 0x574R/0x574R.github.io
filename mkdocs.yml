@@ -5,8 +5,8 @@ theme:
   name: material
   palette:
     scheme: slate
-    primary: blue grey
-    accent: blue grey
+    primary: black
+    accent: grey
   font:
     text: Roboto
     code: Roboto Mono

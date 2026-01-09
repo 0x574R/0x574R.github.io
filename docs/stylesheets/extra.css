@@ -1,41 +1,112 @@
-/* Logo más grande */
+/* Logo grande */
 .md-header__button.md-logo img {
-  height: 2.5rem;
+  height: 3rem;
   width: auto;
 }
 
-/* Colores sobrios - azul grisáceo */
-:root {
-  --md-primary-fg-color: #37474f;
-  --md-accent-fg-color: #607d8b;
-}
-
+/* Esquema completamente gris/monocromático */
 [data-md-color-scheme="slate"] {
-  --md-primary-fg-color: #37474f;
-  --md-accent-fg-color: #78909c;
-  --md-typeset-a-color: #90a4ae;
+  --md-default-bg-color: #121212;
+  --md-default-bg-color--light: #1a1a1a;
+  --md-primary-fg-color: #1a1a1a;
+  --md-primary-fg-color--light: #2a2a2a;
+  --md-primary-fg-color--dark: #0d0d0d;
+  --md-accent-fg-color: #a0a0a0;
+  --md-typeset-a-color: #a0a0a0;
 }
 
 /* Links */
 .md-typeset a {
-  color: #90a4ae;
+  color: #a0a0a0 !important;
 }
 
 .md-typeset a:hover {
-  color: #b0bec5;
+  color: #e0e0e0 !important;
 }
 
-/* Navegación activa */
-.md-nav__link--active {
-  color: #b0bec5 !important;
-}
-
-/* Tabs y headers */
+/* Header oscuro */
 .md-header {
+  background-color: #0a0a0a !important;
+}
+
+/* Navegación lateral */
+.md-nav__link {
+  color: #808080 !important;
+}
+
+.md-nav__link:hover {
+  color: #c0c0c0 !important;
+}
+
+.md-nav__link--active,
+.md-nav__item--active > .md-nav__link {
+  color: #e0e0e0 !important;
+}
+
+/* Código */
+.md-typeset pre {
+  background-color: #1a1a1a !important;
+}
+
+.md-typeset code {
+  background-color: #1e1e1e;
+  color: #c0c0c0;
+}
+
+/* Tablas */
+.md-typeset table:not([class]) th {
+  background-color: #1a1a1a;
+  color: #a0a0a0;
+}
+
+.md-typeset table:not([class]) td {
+  border-color: #2a2a2a;
+}
+
+/* Search */
+.md-search__input {
+  background-color: #1a1a1a !important;
+  color: #c0c0c0;
+}
+
+/* Footer */
+.md-footer {
+  background-color: #0a0a0a;
+}
+
+.md-footer-meta {
+  background-color: #0a0a0a;
+}
+
+/* Tabs navegación */
+.md-tabs {
+  background-color: #0d0d0d;
+}
+
+.md-tabs__link {
+  color: #808080;
+}
+
+.md-tabs__link--active,
+.md-tabs__link:hover {
+  color: #e0e0e0;
+}
+
+/* Admonitions sin color */
+.md-typeset .admonition,
+.md-typeset details {
+  border-color: #333333;
   background-color: #1a1a1a;
 }
 
-/* Search highlight */
-.md-search__input {
-  background-color: #263238;
+.md-typeset .admonition-title,
+.md-typeset summary {
+  background-color: #222222;
+  border-color: #333333;
+}
+
+/* Quitar iconos de colores en admonitions */
+.md-typeset .admonition-title::before,
+.md-typeset summary::before {
+  filter: grayscale(100%);
 }
