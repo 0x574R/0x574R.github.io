@@ -1,0 +1,10 @@
+/* Minimal tweak: enlarge the logo without increasing the header height */
+.md-header__button.md-logo {
+  overflow: visible;
+}
+
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+  transform: scale(1.55);
+  transform-origin: left center;
+}

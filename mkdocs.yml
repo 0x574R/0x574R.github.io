@@ -53,6 +53,9 @@ theme:
 plugins:
   - search
   - tags
+extra_css:
+  - stylesheets/logo.css
+
 
 markdown_extensions:
   # Markdown features used by Material + custom home/indices
