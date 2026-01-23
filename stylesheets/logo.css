@@ -5,6 +5,7 @@
 
 .md-header__button.md-logo img,
 .md-header__button.md-logo svg {
-  transform: scale(1.55);
+  transform: scale(2.25);
   transform-origin: left center;
+  filter: drop-shadow(0 2px 10px rgba(0,0,0,.35));
 }

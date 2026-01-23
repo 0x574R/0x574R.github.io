@@ -48,8 +48,8 @@
         
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
-        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=JetBrains+Mono:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"JetBrains Mono";--md-code-font:"JetBrains Mono"}</style>
       
     
     
@@ -71,7 +71,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="lime">
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="purple">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -128,7 +128,7 @@
     
     
     
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="lime"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_0">
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="purple"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_0">
     
       <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_1" hidden>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
@@ -138,7 +138,7 @@
     
     
     
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="lime"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_1">
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="purple"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_1">
     
       <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_0" hidden>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
@@ -513,33 +513,56 @@
   
 
 
+<!-- Home page intentionally built with Material native components -->
+
+<div class="grid">
+<div>
+<p><img alt="RAZOR" src="assets/logo.png" width="230" /></p>
 <h1 id="razor">RAZOR</h1>
-<p>Offensive security · Malware dev · Kernel research</p>
+<p><strong>Offensive security · Malware dev · Kernel research</strong></p>
+<p>Writeups, cheatsheets y notas técnicas enfocadas en ofensiva (Linux, eBPF, kernel, post-exploitation).</p>
 <p><a class="md-button md-button--primary" href="writeups/">Writeups</a>
 <a class="md-button" href="cheatsheets/">Cheatsheets</a>
 <a class="md-button" href="research/">Research</a>
 <a class="md-button" href="https://github.com/0x574R">GitHub</a></p>
+</div>
+<div>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="gp">$ </span>whoami
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="go">0x574R</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="gp">$ </span>cat<span class="w"> </span>focus.txt
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="go">Linux  •  eBPF  •  Kernel  •  Malware Dev  •  Red Team</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="gp">$ </span>ls<span class="w"> </span>-la
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="go">writeups/  cheatsheets/  research/</span>
+</span></code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Enfoque</p>
+<p>Contenido práctico, reproducible y orientado a técnica (no filler).</p>
+</div>
+</div>
+</div>
 <hr />
 <h2 id="ultimos-posts">Últimos posts</h2>
 <div class="grid cards">
 <ul>
 <li>
-<p><strong>Introducción a eBPF</strong></p>
-<p><em>Kernel / eBPF</em></p>
-<p>Introducción práctica a eBPF aplicado a observabilidad y seguridad.</p>
-<p><a class="md-button md-button--primary" href="research/kernel/ebpf-intro/">Leer</a></p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 4h12v1h3v2h-3v2h3v2h-3v2h3v2h-3v2h3v2h-3v1H6v-1H3v-2h3v-2H3v-2h3v-2H3V9h3V7H3V5h3zm5 11v3h1v-3zm2 0v3h1v-3zm2 0v3h1v-3z"/></svg></span> <strong>Introducción a eBPF</strong><br />
+<em>Kernel / eBPF</em><br />
+    Introducción práctica a eBPF aplicado a observabilidad y seguridad.<br />
+<a class="md-button md-button--primary" href="research/kernel/ebpf-intro/">Leer</a></p>
 </li>
 <li>
-<p><strong>Linux Privilege Escalation</strong></p>
-<p><em>Cheatsheet</em></p>
-<p>Checklist con comandos clave y vectores comunes.</p>
-<p><a class="md-button md-button--primary" href="cheatsheets/linux-privesc/">Leer</a></p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 9a3 3 0 0 1 3 3 3 3 0 0 1-3 3 3 3 0 0 1-3-3 3 3 0 0 1 3-3m5.86 10.31C16.23 21.22 14.28 22.45 12 23c-2.56-.61-4.7-2.07-6.42-4.37C3.86 16.34 3 13.8 3 11V5l9-4 9 4v6c0 2.39-.64 4.61-1.92 6.67l-2.91-2.91c.52-.79.83-1.76.83-2.76a5 5 0 0 0-5-5 5 5 0 0 0-5 5 5 5 0 0 0 5 5c1 0 1.97-.31 2.76-.83z"/></svg></span> <strong>Linux Privilege Escalation</strong><br />
+<em>Cheatsheet</em><br />
+    Checklist con comandos clave y vectores comunes.<br />
+<a class="md-button md-button--primary" href="cheatsheets/linux-privesc/">Leer</a></p>
 </li>
 <li>
-<p><strong>Shellcode Basics</strong></p>
-<p><em>Malware Dev</em></p>
-<p>Fundamentos de shellcode, registros y syscalls en x86_64.</p>
-<p><a class="md-button md-button--primary" href="research/malware-dev/shellcode-basics/">Leer</a></p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.6 16.6 4.6-4.6-4.6-4.6L16 6l6 6-6 6zm-5.2 0L4.8 12l4.6-4.6L8 6l-6 6 6 6z"/></svg></span> <strong>Shellcode Basics</strong><br />
+<em>Malware Dev</em><br />
+    Fundamentos de shellcode, registros y syscalls en x86_64.<br />
+<a class="md-button md-button--primary" href="research/malware-dev/shellcode-basics/">Leer</a></p>
 </li>
 </ul>
 </div>
@@ -548,25 +571,24 @@
 <div class="grid cards">
 <ul>
 <li>
-<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 12h-4v-2h4m0 6h-4v-2h4m6-6h-2.81a6 6 0 0 0-1.82-1.96L17 4.41 15.59 3l-2.17 2.17a6 6 0 0 0-2.83 0L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20z"/></svg></span> <strong>Writeups</strong></p>
-<p>CTF / HTB / Labs documentados con metodología, notas y evidencia paso a paso.</p>
-<p><a class="md-button" href="writeups/">Explorar</a></p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m6.2 2.44 11.9 11.9 2.12-2.12 1.41 1.41-2.47 2.47 3.18 3.18c.39.39.39 1.02 0 1.41l-.71.71a.996.996 0 0 1-1.41 0L17 18.23l-2.44 2.47-1.41-1.41 2.12-2.12-11.9-11.9V2.44zM15.89 10l4.74-4.74V2.44H17.8l-4.74 4.74zm-4.95 5-2.83-2.87-2.21 2.21-2.12-2.12-1.41 1.41 2.47 2.47-3.18 3.19a.996.996 0 0 0 0 1.41l.71.71c.39.39 1.02.39 1.41 0L7 18.23l2.44 2.47 1.41-1.41-2.12-2.12z"/></svg></span> <strong>Writeups</strong><br />
+<em>CTF / HTB / Labs</em><br />
+    Resolución documentada de máquinas y retos, con metodología y notas.<br />
+<a class="md-button" href="writeups/">Explorar</a></p>
 </li>
 <li>
-<p>:material-terminal: <strong>Cheatsheets</strong></p>
-<p>Referencia rápida para uso diario: Linux, Windows, tooling y comandos esenciales.</p>
-<p><a class="md-button" href="cheatsheets/">Abrir</a></p>
+<p>:material-terminal: <strong>Cheatsheets</strong><br />
+<em>Quick reference</em><br />
+    Linux, Windows, tooling y comandos esenciales para uso diario.<br />
+<a class="md-button" href="cheatsheets/">Abrir</a></p>
 </li>
 <li>
-<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 22a3 3 0 0 1-3-3c0-.6.18-1.16.5-1.63L9 7.81V6a1 1 0 0 1-1-1V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1v1.81l5.5 9.56c.32.47.5 1.03.5 1.63a3 3 0 0 1-3 3zm-1-3a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1c0-.21-.07-.41-.18-.57l-2.29-3.96L14 17l-5.07-5.07-3.75 6.5c-.11.16-.18.36-.18.57m8-9a1 1 0 0 0-1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1 1 1 0 0 0-1-1"/></svg></span> <strong>Research</strong></p>
-<p>Notas técnicas, deep dives y experimentos orientados a kernel, malware y offensive.</p>
-<p><a class="md-button" href="research/">Ver</a></p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 22a3 3 0 0 1-3-3c0-.6.18-1.16.5-1.63L9 7.81V6a1 1 0 0 1-1-1V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1v1.81l5.5 9.56c.32.47.5 1.03.5 1.63a3 3 0 0 1-3 3zm-1-3a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1c0-.21-.07-.41-.18-.57l-2.29-3.96L14 17l-5.07-5.07-3.75 6.5c-.11.16-.18.36-.18.57m8-9a1 1 0 0 0-1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1 1 1 0 0 0-1-1"/></svg></span> <strong>Research</strong><br />
+<em>Kernel · eBPF · Malware</em><br />
+    Notas técnicas, deep dives y experimentos orientados a investigación.<br />
+<a class="md-button" href="research/">Entrar</a></p>
 </li>
 </ul>
-</div>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>Usa la búsqueda para encontrar comandos, técnicas y secciones rápidamente.</p>
 </div>
 
 
