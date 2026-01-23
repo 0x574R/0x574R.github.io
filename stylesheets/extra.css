@@ -1,679 +1,381 @@
-/* ============================================
-   RAZOR - Professional Dark Theme
-   Cybersecurity Blog by 0x574R
-   ============================================ */
+/* ==========================================================
+   RAZOR – Professional MkDocs Material Skin (Refined)
+   Goal: minimal, clean, readable, modern — no heavy glow.
+   ========================================================== */
 
-/* ============================================
-   ROOT VARIABLES - DARK PALETTE
-   ============================================ */
+/* ---------- Core palette (dark) ---------- */
 :root {
-  /* Primary Colors - Pure Black Theme */
+  --razor-bg: #0b0d10;
+  --razor-surface: #10151c;
+  --razor-surface-2: #0f1319;
+  --razor-border: rgba(255, 255, 255, 0.08);
+  --razor-border-strong: rgba(255, 255, 255, 0.14);
+
+  --razor-text: rgba(255, 255, 255, 0.88);
+  --razor-muted: rgba(255, 255, 255, 0.62);
+
+  --razor-accent: #00c2ff;
+  --razor-accent-soft: rgba(0, 194, 255, 0.14);
+
+  /* Reduce perceived "chunkiness" */
+  --razor-radius: 14px;
+
+  /* MkDocs Material overrides */
+  --md-default-bg-color: var(--razor-bg);
+  --md-default-fg-color: var(--razor-text);
+  --md-default-fg-color--light: var(--razor-muted);
+  --md-default-fg-color--lighter: rgba(255, 255, 255, 0.45);
+  --md-default-fg-color--lightest: rgba(255, 255, 255, 0.28);
+
   --md-primary-fg-color: #000000;
-  --md-primary-fg-color--light: #0a0a0a;
-  --md-primary-fg-color--dark: #000000;
-  
-  /* Background Colors */
-  --md-default-bg-color: #0d0d0d;
-  --md-default-bg-color--light: #121212;
-  --md-default-bg-color--lighter: #1a1a1a;
-  --md-default-bg-color--lightest: #242424;
-  
-  /* Accent Colors - Cyber Cyan */
-  --md-accent-fg-color: #00d4ff;
-  --md-accent-fg-color--transparent: rgba(0, 212, 255, 0.1);
-  --md-accent-bg-color: #00d4ff;
-  --md-accent-bg-color--light: rgba(0, 212, 255, 0.15);
-  
-  /* Text Colors */
-  --md-typeset-color: rgba(255, 255, 255, 0.87);
-  --md-default-fg-color: rgba(255, 255, 255, 0.87);
-  --md-default-fg-color--light: rgba(255, 255, 255, 0.54);
-  --md-default-fg-color--lighter: rgba(255, 255, 255, 0.32);
-  --md-default-fg-color--lightest: rgba(255, 255, 255, 0.12);
-  
-  /* Code Block Colors */
-  --md-code-bg-color: #0a0a0a;
-  --md-code-fg-color: #e0e0e0;
-  --md-code-hl-color: rgba(0, 212, 255, 0.15);
-  
-  /* Footer */
-  --md-footer-bg-color: #000000;
-  --md-footer-bg-color--dark: #000000;
-  
-  /* Custom Variables */
-  --razor-glow: 0 0 20px rgba(0, 212, 255, 0.3);
-  --razor-border: 1px solid rgba(0, 212, 255, 0.2);
-  --razor-gradient: linear-gradient(135deg, #000000 0%, #0a0a0a 50%, #0d0d0d 100%);
+  --md-primary-bg-color: var(--razor-text);
+
+  --md-accent-fg-color: var(--razor-accent);
+
+  --md-typeset-a-color: var(--razor-accent);
+
+  --md-code-bg-color: rgba(255, 255, 255, 0.05);
+  --md-code-fg-color: rgba(255, 255, 255, 0.90);
+
+  --md-admonition-bg-color: rgba(255, 255, 255, 0.03);
 }
 
-/* Slate scheme overrides */
-[data-md-color-scheme="slate"] {
-  --md-hue: 210;
-  --md-default-bg-color: #0d0d0d;
-  --md-default-bg-color--light: #121212;
-  --md-default-bg-color--lighter: #1a1a1a;
-  --md-default-bg-color--lightest: #242424;
+/* ---------- Background texture (subtle) ---------- */
+.md-main {
+  background:
+    radial-gradient(900px 600px at 15% 10%, rgba(0, 194, 255, 0.06), transparent 55%),
+    radial-gradient(900px 600px at 85% 15%, rgba(255, 255, 255, 0.03), transparent 55%),
+    var(--razor-bg);
 }
 
-/* ============================================
-   HEADER / TOPBAR - PROFESSIONAL BLACK
-   ============================================ */
+/* Slightly wider content for long technical pages */
+.md-grid {
+  max-width: 72rem;
+}
+
+/* ---------- Header / Topbar (compact & aligned) ---------- */
 .md-header {
-  background: linear-gradient(180deg, #000000 0%, #050505 100%);
-  border-bottom: 1px solid rgba(0, 212, 255, 0.15);
-  box-shadow: 0 1px 14px rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.72);
+  border-bottom: 1px solid var(--razor-border);
+  box-shadow: none;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
-.md-header[data-md-state="shadow"] {
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.9);
-}
-
-/* Header Inner Container */
 .md-header__inner {
-  /* Compact, professional topbar: less height and better spacing */
-  display: flex;
-  justify-content: flex-start;
-  min-height: 3.25rem;
+  min-height: 3.1rem;
   padding: 0 1rem;
-  gap: 0.75rem;
-  align-items: center;
+  gap: 0.5rem;
 }
 
-/* ============================================
-   LOGO STYLING
-   ============================================ */
-.md-header__button.md-logo {
-  padding: 0.15rem 0;
-  margin-right: 0.5rem;
-}
-
-.md-header__button.md-logo img,
-.md-header__button.md-logo svg {
-  height: 1.55rem;
-  width: auto;
-  fill: currentcolor;
-  filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.4));
-  transition: all 0.3s ease;
-}
-
-.md-header__button.md-logo:hover img,
-.md-header__button.md-logo:hover svg {
-  filter: drop-shadow(0 0 15px rgba(0, 212, 255, 0.7));
-  transform: scale(1.05);
-}
-
-/* Site Title in Header */
 .md-header__title {
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
   font-weight: 700;
-  font-size: 1rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #ffffff;
-  text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
-  transition: all 0.3s ease;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-size: 0.92rem;
+  line-height: 1;
 }
 
-/* Keep the header in a single line: show only the site title (hide the page title/topic) */
-.md-header__title .md-header__topic {
-  display: inline;
-}
-
-.md-header__title .md-header__topic + .md-header__topic {
-  display: none;
-}
-
-.md-header__title:hover {
-  text-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
-}
-
-/* Topic Title (breadcrumb style) */
 .md-header__topic {
   font-weight: 600;
 }
 
-.md-header__topic + .md-header__topic {
-  font-weight: 400;
-  opacity: 0.7;
+.md-header__button.md-icon {
+  color: rgba(255, 255, 255, 0.72);
 }
 
-/* ============================================
-   SEARCH BAR - SLEEK DARK
-   ============================================ */
-.md-search {
-  /* Avoid the search stretching too much and breaking alignment */
-  max-width: 520px;
-  flex: 1 1 520px;
-  margin: 0 auto;
+.md-header__button.md-icon:hover {
+  color: rgba(255, 255, 255, 0.95);
 }
 
-.md-search__inner {
-  width: min(520px, 56vw);
+/* Make logo feel like a product mark, not a huge banner */
+.md-logo img,
+.md-logo svg {
+  height: 22px !important;
+  width: auto !important;
 }
 
-.md-search__form {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
-  transition: all 0.3s ease;
-}
-
-.md-search__form:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(0, 212, 255, 0.2);
-}
-
-.md-search__form:focus-within {
-  background: rgba(0, 212, 255, 0.05);
-  border-color: rgba(0, 212, 255, 0.4);
-  box-shadow: 0 0 20px rgba(0, 212, 255, 0.15);
-}
-
-.md-search__input {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.md-search__input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
-  font-style: italic;
-}
-
-.md-search__icon {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.md-search__form:focus-within .md-search__icon {
-  color: var(--md-accent-fg-color);
-}
-
-/* Search Results */
-.md-search__output {
-  background: #0a0a0a;
-  border: 1px solid rgba(0, 212, 255, 0.15);
-  border-radius: 8px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-}
-
-.md-search-result__link {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.md-search-result__link:hover {
-  background: rgba(0, 212, 255, 0.08);
-}
-
-/* ============================================
-   HEADER BUTTONS & ICONS
-   ============================================ */
-.md-header__button {
-  color: rgba(255, 255, 255, 0.7);
-  transition: all 0.3s ease;
-  padding: 0.25rem;
-}
-
-.md-header__button:hover {
-  color: var(--md-accent-fg-color);
-  transform: translateY(-1px);
-}
-
-/* GitHub Icon */
-.md-header__source {
-  background: transparent;
-  border-left: none;
-  padding-left: 0;
-  margin-left: 0;
-}
-
-.md-source {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: rgba(255, 255, 255, 0.8);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.8rem;
-  transition: all 0.3s ease;
-}
-
-.md-source:hover {
-  color: var(--md-accent-fg-color);
-}
-
-.md-source__icon {
-  width: 1.4rem;
-  height: 1.4rem;
-}
-
-.md-source__icon svg {
-  fill: currentcolor;
-}
-
-.md-source__repository {
-  /* Keep the topbar clean: show icon only */
-  display: none;
-}
-
-.md-source__facts {
-  display: none;
-}
-
-/* ============================================
-   NAVIGATION TABS (if using tabs)
-   ============================================ */
+/* ---------- Tabs row (less tall, more premium) ---------- */
 .md-tabs {
-  background: #000000;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.40);
+  border-bottom: 1px solid var(--razor-border);
 }
 
 .md-tabs__link {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.78rem;
-  font-weight: 500;
-  letter-spacing: 0.05em;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.6);
-  padding: 0.55rem 1rem;
-  transition: all 0.3s ease;
+  color: rgba(255, 255, 255, 0.60);
+  padding: 0.46rem 0.95rem;
   position: relative;
-}
-
-.md-tabs__link::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  width: 0;
-  height: 2px;
-  background: var(--md-accent-fg-color);
-  transition: all 0.3s ease;
-  transform: translateX(-50%);
 }
 
 .md-tabs__link:hover {
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.md-tabs__link:hover::after {
-  width: 100%;
+  color: rgba(255, 255, 255, 0.92);
 }
 
 .md-tabs__link--active {
-  color: var(--md-accent-fg-color);
+  color: rgba(255, 255, 255, 0.94);
 }
 
 .md-tabs__link--active::after {
-  width: 100%;
-  box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+  content: "";
+  position: absolute;
+  left: 0.95rem;
+  right: 0.95rem;
+  bottom: 0.25rem;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--razor-accent);
+  opacity: 0.85;
 }
 
-/* ============================================
-   SIDEBAR NAVIGATION
-   ============================================ */
-.md-sidebar {
-  background: transparent;
+/* ---------- Search (pill style, compact) ---------- */
+.md-search__form {
+  height: 2.2rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--razor-border);
+  box-shadow: none;
 }
 
-.md-nav__title {
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 700;
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--md-accent-fg-color);
-  padding: 0.6rem 0.8rem;
-  background: rgba(0, 212, 255, 0.05);
-  border-left: 3px solid var(--md-accent-fg-color);
-  margin-bottom: 0.5rem;
+.md-search__form:hover {
+  border-color: var(--razor-border-strong);
 }
 
-.md-nav__link {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.7);
-  padding: 0.5rem 0.8rem;
-  border-radius: 4px;
-  transition: all 0.2s ease;
+.md-search__form:focus-within {
+  border-color: rgba(0, 194, 255, 0.35);
+  background: rgba(0, 194, 255, 0.06);
 }
 
-.md-nav__link:hover {
-  color: var(--md-accent-fg-color);
-  background: rgba(0, 212, 255, 0.08);
+.md-search__input {
+  font-size: 0.86rem;
+  color: rgba(255, 255, 255, 0.9);
 }
 
-.md-nav__link--active {
-  color: var(--md-accent-fg-color);
-  background: rgba(0, 212, 255, 0.1);
-  font-weight: 600;
-}
-
-/* ============================================
-   CONTENT AREA
-   ============================================ */
-.md-content {
-  background: var(--md-default-bg-color);
-}
-
-.md-typeset h1,
-.md-typeset h2,
-.md-typeset h3,
-.md-typeset h4 {
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 700;
-  color: #ffffff;
-  letter-spacing: -0.01em;
+/* ---------- Typography (more “blog”, less “terminal wall”) ---------- */
+.md-typeset {
+  font-size: 0.95rem;
+  line-height: 1.7;
 }
 
 .md-typeset h1 {
-  font-size: 2rem;
-  margin-bottom: 1.5rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid rgba(0, 212, 255, 0.2);
+  font-size: 1.9rem;
+  letter-spacing: 0.02em;
 }
 
-/* ============================================
-   CODE BLOCKS - TERMINAL STYLE
-   ============================================ */
+.md-typeset h2 {
+  font-size: 1.35rem;
+  margin-top: 2.2rem;
+}
+
+.md-typeset h3 {
+  font-size: 1.1rem;
+}
+
+/* Improve readability of paragraphs and lists */
+.md-typeset p {
+  color: rgba(255, 255, 255, 0.84);
+}
+
+.md-typeset ul li,
+.md-typeset ol li {
+  margin-bottom: 0.25rem;
+}
+
+/* ---------- Code blocks (clean) ---------- */
+.md-typeset pre > code {
+  border-radius: var(--razor-radius);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
 .md-typeset code {
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
-  background: rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
-  padding: 0.1em 0.4em;
-  font-size: 0.85em;
-  color: var(--md-accent-fg-color);
+  border-radius: 10px;
 }
 
-.md-typeset pre {
-  background: #000000;
-  border: 1px solid rgba(0, 212, 255, 0.15);
-  border-radius: 8px;
-  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5);
+/* ---------- Tables (less harsh) ---------- */
+.md-typeset table:not([class]) {
+  border-radius: var(--razor-radius);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.md-typeset table:not([class]) th {
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.md-typeset table:not([class]) td {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+/* ---------- Sidebar (cleaner separators) ---------- */
+.md-nav__title,
+.md-nav__link {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.md-nav__link:hover,
+.md-nav__link--active {
+  color: rgba(255, 255, 255, 0.96);
+}
+
+.md-sidebar {
+  border-right: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* ---------- Home styling (minimal hero + cards) ---------- */
+.razor-hero {
+  background: linear-gradient(180deg, rgba(16, 21, 28, 0.75), rgba(16, 21, 28, 0.45));
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: calc(var(--razor-radius) + 2px);
+  padding: 1.25rem 1.25rem;
+  margin: 0.5rem 0 1.4rem;
   position: relative;
   overflow: hidden;
 }
 
-.md-typeset pre::before {
-  content: '';
+.razor-hero::before {
+  content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, 
-    var(--md-accent-fg-color) 0%, 
-    transparent 50%, 
-    var(--md-accent-fg-color) 100%);
-  opacity: 0.5;
+  inset: -40px;
+  background:
+    radial-gradient(450px 250px at 15% 20%, rgba(0, 194, 255, 0.10), transparent 60%),
+    radial-gradient(450px 250px at 85% 0%, rgba(255, 255, 255, 0.04), transparent 60%);
+  pointer-events: none;
 }
 
-.md-typeset pre code {
-  background: transparent;
-  border: none;
-  padding: 1rem;
-  color: #e0e0e0;
+.razor-hero > * {
+  position: relative;
+  z-index: 1;
 }
 
-/* Copy Button */
-.md-clipboard {
-  color: rgba(255, 255, 255, 0.3);
-  transition: all 0.3s ease;
-}
-
-.md-clipboard:hover {
-  color: var(--md-accent-fg-color);
-}
-
-/* ============================================
-   ADMONITIONS - CYBER STYLE
-   ============================================ */
-.md-typeset .admonition,
-.md-typeset details {
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  overflow: hidden;
-}
-
-.md-typeset .admonition-title,
-.md-typeset summary {
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 600;
-  font-size: 0.85rem;
-  letter-spacing: 0.03em;
+.razor-hero h1 {
+  margin: 0 0 0.4rem;
+  font-size: 2.1rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  background: rgba(0, 0, 0, 0.5);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* Info Admonition */
-.md-typeset .admonition.info,
-.md-typeset details.info {
-  border-color: rgba(0, 212, 255, 0.3);
+.razor-hero .razor-sub {
+  display: block;
+  color: rgba(255, 255, 255, 0.70);
+  max-width: 62ch;
 }
 
-.md-typeset .admonition.info > .admonition-title,
-.md-typeset details.info > summary {
-  background: rgba(0, 212, 255, 0.1);
+.razor-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.95rem;
 }
 
-/* Warning Admonition */
-.md-typeset .admonition.warning,
-.md-typeset details.warning {
-  border-color: rgba(255, 193, 7, 0.3);
-}
-
-/* Danger Admonition */
-.md-typeset .admonition.danger,
-.md-typeset details.danger {
-  border-color: rgba(244, 67, 54, 0.3);
-}
-
-/* ============================================
-   TABLES
-   ============================================ */
-.md-typeset table:not([class]) {
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.md-typeset table:not([class]) th {
-  background: rgba(0, 212, 255, 0.1);
-  font-family: 'JetBrains Mono', monospace;
+.razor-cta a.md-button {
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  padding: 0.52rem 0.95rem;
   font-weight: 600;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--md-accent-fg-color);
 }
 
-.md-typeset table:not([class]) td {
-  border-color: rgba(255, 255, 255, 0.05);
+.razor-cta a.md-button--primary {
+  border-color: rgba(0, 194, 255, 0.40);
+  background: rgba(0, 194, 255, 0.10);
 }
 
-.md-typeset table:not([class]) tr:hover td {
-  background: rgba(0, 212, 255, 0.05);
+.razor-cta a.md-button--primary:hover {
+  background: rgba(0, 194, 255, 0.16);
 }
 
-/* ============================================
-   FOOTER
-   ============================================ */
+.razor-cta a.md-button:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+  transform: translateY(-1px);
+}
+
+/* Material "cards" grid refinements */
+.grid.cards > ul > li {
+  border-radius: var(--razor-radius);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(16, 21, 28, 0.55);
+  box-shadow: none;
+}
+
+.grid.cards > ul > li:hover {
+  border-color: rgba(0, 194, 255, 0.18);
+  background: rgba(16, 21, 28, 0.70);
+  transform: translateY(-2px);
+}
+
+.grid.cards .md-button {
+  border-radius: 999px;
+  padding: 0.45rem 0.85rem;
+}
+
+/* ---------- Footer (lighter) ---------- */
 .md-footer {
-  background: #000000;
-  border-top: 1px solid rgba(0, 212, 255, 0.1);
-}
-
-.md-footer__inner {
-  padding: 1rem 0;
+  background: rgba(0, 0, 0, 0.40);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .md-footer-meta {
-  background: #000000;
+  background: rgba(0, 0, 0, 0.30);
 }
 
-.md-footer__link {
-  color: rgba(255, 255, 255, 0.6);
-  transition: all 0.3s ease;
+/* ---------- Small screens ---------- */
+@media (max-width: 720px) {
+  .md-grid { max-width: 100%; }
+  .md-header__inner { padding: 0 0.75rem; }
+  .md-search__form { height: 2.1rem; }
+  .md-tabs__link { padding: 0.45rem 0.7rem; }
+  .razor-hero { padding: 1rem; }
 }
 
-.md-footer__link:hover {
-  color: var(--md-accent-fg-color);
+
+/* ---------- Light mode (clean white, same identity) ---------- */
+[data-md-color-scheme="default"] {
+  --razor-bg: #f6f7f9;
+  --razor-surface: #ffffff;
+  --razor-surface-2: #ffffff;
+  --razor-border: rgba(0, 0, 0, 0.08);
+  --razor-border-strong: rgba(0, 0, 0, 0.14);
+
+  --razor-text: rgba(0, 0, 0, 0.88);
+  --razor-muted: rgba(0, 0, 0, 0.60);
+
+  --md-default-bg-color: var(--razor-bg);
+  --md-default-fg-color: var(--razor-text);
+  --md-default-fg-color--light: var(--razor-muted);
+  --md-typeset-a-color: var(--razor-accent);
+
+  --md-code-bg-color: rgba(0, 0, 0, 0.04);
+  --md-code-fg-color: rgba(0, 0, 0, 0.88);
 }
 
-.md-copyright {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.4);
+[data-md-color-scheme="default"] .md-main {
+  background:
+    radial-gradient(900px 600px at 15% 10%, rgba(0, 194, 255, 0.10), transparent 55%),
+    radial-gradient(900px 600px at 85% 10%, rgba(0, 0, 0, 0.03), transparent 55%),
+    var(--razor-bg);
 }
 
-/* ============================================
-   TABLE OF CONTENTS (Right Sidebar)
-   ============================================ */
-.md-nav--secondary .md-nav__title {
-  background: transparent;
-  border-left: 2px solid rgba(0, 212, 255, 0.3);
-  padding: 0.4rem 0.8rem;
-  font-size: 0.7rem;
+[data-md-color-scheme="default"] .md-header {
+  background: rgba(255, 255, 255, 0.88);
+  border-bottom: 1px solid var(--razor-border);
 }
 
-.md-nav--secondary .md-nav__link {
-  font-size: 0.8rem;
-  padding: 0.3rem 0.6rem;
+[data-md-color-scheme="default"] .md-tabs {
+  background: rgba(255, 255, 255, 0.85);
 }
 
-/* ============================================
-   SCROLLBAR STYLING
-   ============================================ */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+[data-md-color-scheme="default"] .md-search__form {
+  background: rgba(0, 0, 0, 0.04);
 }
 
-::-webkit-scrollbar-track {
-  background: #0a0a0a;
+[data-md-color-scheme="default"] .razor-hero {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.75));
+  border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-::-webkit-scrollbar-thumb {
-  background: rgba(0, 212, 255, 0.3);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 212, 255, 0.5);
-}
-
-/* ============================================
-   SELECTION HIGHLIGHT
-   ============================================ */
-::selection {
-  background: rgba(0, 212, 255, 0.3);
-  color: #ffffff;
-}
-
-::-moz-selection {
-  background: rgba(0, 212, 255, 0.3);
-  color: #ffffff;
-}
-
-/* ============================================
-   ANIMATIONS
-   ============================================ */
-@keyframes glow-pulse {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
-}
-
-@keyframes slide-in {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Apply animations */
-.md-header {
-  animation: slide-in 0.4s ease-out;
-}
-
-/* ============================================
-   RESPONSIVE ADJUSTMENTS
-   ============================================ */
-@media screen and (max-width: 76.1875em) {
-  .md-nav--primary .md-nav__title {
-    background: #000000;
-    color: #ffffff;
-  }
-  
-  .md-nav--primary .md-nav__title[for="__drawer"] {
-    background: linear-gradient(180deg, #000000 0%, #050505 100%);
-  }
-}
-
-@media screen and (max-width: 59.9375em) {
-  .md-header__title {
-    font-size: 0.95rem;
-  }
-}
-
-/* ============================================
-   LINK STYLING
-   ============================================ */
-.md-typeset a {
-  color: var(--md-accent-fg-color);
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-  transition: all 0.2s ease;
-}
-
-.md-typeset a:hover {
-  border-bottom-color: var(--md-accent-fg-color);
-  text-shadow: 0 0 8px rgba(0, 212, 255, 0.4);
-}
-
-/* ============================================
-   KEYBOARD KEYS
-   ============================================ */
-.md-typeset kbd {
-  background: #1a1a1a;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-bottom-width: 3px;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.8em;
-  color: var(--md-accent-fg-color);
-}
-
-/* ============================================
-   TAGS
-   ============================================ */
-.md-tag {
-  background: rgba(0, 212, 255, 0.1);
-  border: 1px solid rgba(0, 212, 255, 0.3);
-  color: var(--md-accent-fg-color);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  padding: 0.2rem 0.6rem;
-  border-radius: 4px;
-  transition: all 0.2s ease;
-}
-
-.md-tag:hover {
-  background: rgba(0, 212, 255, 0.2);
-  box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+[data-md-color-scheme="default"] .grid.cards > ul > li {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(0, 0, 0, 0.08);
 }
