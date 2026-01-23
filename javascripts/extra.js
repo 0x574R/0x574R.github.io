@@ -4,7 +4,7 @@
   function getPageTitle() {
     // Prefer the first h1 in content
     const h1 = document.querySelector("main .md-content__inner h1");
-    if (h1 && h1.textContent) return h1.textContent.trim();
+    if (h1 && h1.textContent) return h1.textContent.replace(/¶/g, "").trim();
 
     // Fallback: document.title like "Cheatsheets - RAZOR"
     const t = (document.title || "").split(" - ")[0].trim();
