@@ -50,7 +50,20 @@ body{
 
 /* Wider content for large screens (blog-like) */
 .md-grid{
-  max-width: 1220px;
+  /* Wider main canvas so articles are readable on desktop */
+  max-width: 1520px;
+}
+.md-main__inner{
+  /* Prevent overly narrow center column when both sidebars are visible */
+  max-width: 1520px;
+}
+.md-content{ max-width: none; }
+.md-content__inner{ max-width: none; }
+
+/* Slightly slimmer sidebars to give more room to the content */
+@media (min-width: 76.25em){
+  .md-sidebar--primary{ width: 15rem; }
+  .md-sidebar--secondary{ width: 14rem; }
 }
 .md-content__inner{
   padding: 1.15rem 0 2.25rem;
@@ -168,6 +181,22 @@ img{ max-width: 100%; height: auto; }
   border: 1px solid rgba(255,255,255,.10);
   background: rgba(255,255,255,.03);
 }
+
+/* ----------------------------------------------------------
+   Code blocks: cleaner and more readable
+   ---------------------------------------------------------- */
+.md-typeset code{
+  font-size: .95em;
+}
+.md-typeset pre{
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.035);
+}
+.md-typeset pre > code{
+  font-size: .92em;
+  line-height: 1.65;
+}
 .md-typeset .md-button--primary{
   background: linear-gradient(135deg, rgba(139,92,246,.35), rgba(99,102,241,.25));
   border: 1px solid rgba(139,92,246,.38);
@@ -175,6 +204,41 @@ img{ max-width: 100%; height: auto; }
 }
 .md-typeset .md-button--primary:hover{
   background: linear-gradient(135deg, rgba(139,92,246,.45), rgba(99,102,241,.35));
+}
+
+/* ----------------------------------------------------------
+   Tags / badges: cleaner pills
+   ---------------------------------------------------------- */
+.md-typeset .md-tag,
+.md-typeset a.md-tag{
+  border-radius: 999px;
+  padding: .28em .65em;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.03);
+  color: rgba(255,255,255,.80);
+  font-size: .85em;
+}
+.md-typeset .md-tag:hover,
+.md-typeset a.md-tag:hover{
+  border-color: rgba(139,92,246,.35);
+  background: rgba(139,92,246,.08);
+}
+
+/* ----------------------------------------------------------
+   Code blocks: proper formatting & readability
+   ---------------------------------------------------------- */
+.md-typeset code{
+  font-size: .94em;
+}
+.md-typeset pre{
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.03);
+  box-shadow: 0 10px 24px rgba(0,0,0,.25);
+}
+.md-typeset pre > code{
+  font-size: .90em;
+  line-height: 1.55;
 }
 
 /* ----------------------------------------------------------

