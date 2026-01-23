@@ -51,9 +51,20 @@
     const title = getH1Title() || getPageTitleFallback();
     const article = isArticleRoute();
 
+    // Desired behavior:
+    // - Only show the current article title in the topbar
+    // - Do NOT show "RAZOR" next to the logo (home/index pages remain clean)
     document.body.classList.toggle("razor-is-article", article);
-    node.textContent = title;
-    node.setAttribute("title", title);
+
+    if (article) {
+      node.textContent = title;
+      node.setAttribute("title", title);
+      node.style.display = "";
+    } else {
+      node.textContent = "";
+      node.removeAttribute("title");
+      node.style.display = "none";
+    }
   }
 
   // Initial
