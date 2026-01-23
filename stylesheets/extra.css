@@ -51,19 +51,20 @@ body{
 /* Wider content for large screens (blog-like) */
 .md-grid{
   /* Wider main canvas so articles are readable on desktop */
-  max-width: 1520px;
+  max-width: 1760px;
 }
 .md-main__inner{
   /* Prevent overly narrow center column when both sidebars are visible */
-  max-width: 1520px;
+  max-width: 1760px;
 }
 .md-content{ max-width: none; }
 .md-content__inner{ max-width: none; }
 
 /* Slightly slimmer sidebars to give more room to the content */
 @media (min-width: 76.25em){
-  .md-sidebar--primary{ width: 15rem; }
-  .md-sidebar--secondary{ width: 14rem; }
+  /* Reduce sidebars a bit to give the center more space */
+  .md-sidebar--primary{ width: 13.25rem; }
+  .md-sidebar--secondary{ width: 12.5rem; }
 }
 .md-content__inner{
   padding: 1.15rem 0 2.25rem;
