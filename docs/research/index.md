@@ -1,22 +1,26 @@
 # Research
 
-Notas técnicas y deep dives orientados a kernel, eBPF, malware y experimentación.
+Notas técnicas, deep dives y experimentos orientados a kernel, eBPF y malware dev.
 
 <div class="grid cards" markdown>
 
--   :material-chip: **Introducción a eBPF**
+-   **Introducción a eBPF**
 
     `Kernel · eBPF`
+
+    ![eBPF](../assets/cards/ebpf.svg){ .ra-card-img }
 
     Conceptos base y primeros pasos con eBPF aplicado a observabilidad y seguridad.
 
     [Abrir](kernel/ebpf-intro/){ .md-button .md-button--primary }
 
--   :material-code-tags: **Shellcode Basics**
+-   **Shellcode Basics**
 
-    `Malware Dev`
+    `Malware Dev · x86_64`
 
-    Registros, syscalls y ejecución controlada en x86_64.
+    ![Shellcode](../assets/cards/shellcode.svg){ .ra-card-img }
+
+    Fundamentos de shellcode, registros y syscalls en x86_64.
 
     [Abrir](malware-dev/shellcode-basics/){ .md-button .md-button--primary }
 

@@ -4,19 +4,23 @@ Referencia rápida para uso diario: Linux, Windows, tooling y comandos esenciale
 
 <div class="grid cards" markdown>
 
--   :material-linux: **Linux Privilege Escalation**
+-   **Linux Privilege Escalation**
 
-    `Linux · Privesc`
+    `Linux · PrivEsc`
 
-    Checklist práctico con comandos y vectores comunes.
+    ![PrivEsc](../assets/cards/privesc.svg){ .ra-card-img }
+
+    Checklist práctica de escalada con comandos y vectores comunes.
 
     [Abrir](linux-privesc/){ .md-button .md-button--primary }
 
--   :material-microsoft-windows: **Windows Privilege Escalation**
+-   **Windows Privilege Escalation**
 
-    `Windows · Privesc`
+    `Windows · PrivEsc`
 
-    Enumeración, tokens y vectores frecuentes.
+    ![Cheatsheets](../assets/cards/cheatsheets.svg){ .ra-card-img }
+
+    Enumeración y vectores comunes para escalada en entornos Windows.
 
     [Abrir](windows-privesc/){ .md-button .md-button--primary }
 

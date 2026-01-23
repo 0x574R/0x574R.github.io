@@ -15,25 +15,31 @@ Writeups, cheatsheets y notas técnicas enfocadas en ofensiva (Linux, eBPF, kern
 
 <div class="grid cards" markdown>
 
--   :material-chip: **Introducción a eBPF**
+-   **Introducción a eBPF**
 
-    `Kernel / eBPF`
+    `Kernel · eBPF`
 
-    Conceptos base y primeros pasos con eBPF aplicado a observabilidad y seguridad.
+    ![eBPF](assets/cards/ebpf.svg){ .ra-card-img }
+
+    Introducción práctica a eBPF aplicado a observabilidad y seguridad.
 
     [Leer](research/kernel/ebpf-intro/){ .md-button .md-button--primary }
 
--   :material-shield-search: **Linux Privilege Escalation**
+-   **Linux Privilege Escalation**
 
     `Cheatsheet`
 
-    Checklist con comandos clave, enumeración y vectores comunes de escalada.
+    ![PrivEsc](assets/cards/privesc.svg){ .ra-card-img }
+
+    Checklist con comandos clave y vectores comunes.
 
     [Leer](cheatsheets/linux-privesc/){ .md-button .md-button--primary }
 
--   :material-code-tags: **Shellcode Basics**
+-   **Shellcode Basics**
 
     `Malware Dev`
+
+    ![Shellcode](assets/cards/shellcode.svg){ .ra-card-img }
 
     Fundamentos de shellcode, registros y syscalls en x86_64.
 
@@ -47,28 +53,34 @@ Writeups, cheatsheets y notas técnicas enfocadas en ofensiva (Linux, eBPF, kern
 
 <div class="grid cards" markdown>
 
--   :material-sword-cross: **Writeups**
+-   **Writeups**
 
-    `CTF / HTB / Labs`
+    `CTF · HTB · Labs`
 
-    Resolución documentada de máquinas y retos, con metodología y notas.
+    ![Writeups](assets/cards/writeups.svg){ .ra-card-img }
 
-    [Explorar](writeups/){ .md-button }
+    Resolución documentada de máquinas y retos, con metodología y notas reproducibles.
 
--   :material-terminal: **Cheatsheets**
+    [Explorar](writeups/){ .md-button .md-button--primary }
 
-    `Quick reference`
+-   **Cheatsheets**
 
-    Linux, Windows, tooling y comandos esenciales para uso diario.
+    `Linux · Windows · Tooling`
 
-    [Abrir](cheatsheets/){ .md-button }
+    ![Cheatsheets](assets/cards/cheatsheets.svg){ .ra-card-img }
 
--   :material-flask: **Research**
+    Referencia rápida para uso diario: comandos, herramientas y resúmenes.
+
+    [Abrir](cheatsheets/){ .md-button .md-button--primary }
+
+-   **Research**
 
     `Kernel · eBPF · Malware`
 
+    ![Research](assets/cards/research.svg){ .ra-card-img }
+
     Notas técnicas, deep dives y experimentos orientados a investigación.
 
-    [Entrar](research/){ .md-button }
+    [Entrar](research/){ .md-button .md-button--primary }
 
 </div>
