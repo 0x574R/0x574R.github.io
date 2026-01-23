@@ -30,6 +30,12 @@ theme:
     - search.suggest
     - search.highlight
     - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - content.tooltips
+    - content.action.edit
+    - content.action.view
+    - content.tags
 
   palette:
     - scheme: slate
@@ -38,6 +44,7 @@ theme:
 
 plugins:
   - search
+  - tags
 
 markdown_extensions:
   # Markdown features used by Material + custom home/indices
@@ -45,6 +52,8 @@ markdown_extensions:
   - md_in_html
   - admonition
   - footnotes
+  - def_list
+  - abbr
   - tables
   - toc:
       permalink: false
@@ -55,7 +64,14 @@ markdown_extensions:
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
+      linenums: false
+      guess_lang: false
   - pymdownx.inlinehilite
+  - pymdownx.caret
+  - pymdownx.mark
+  - pymdownx.tilde
+  - pymdownx.keys
+  - pymdownx.smartsymbols
   - pymdownx.snippets
   - pymdownx.tabbed:
       alternate_style: true

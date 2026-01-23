@@ -1,1 +1,3 @@
 mkdocs-material
+pymdown-extensions
+pygments
