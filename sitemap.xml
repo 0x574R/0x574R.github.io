@@ -1,47 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://0x574r.github.io/</loc>
+         <loc>https://0x574R.github.io/</loc>
          <lastmod>2026-01-23</lastmod>
     </url>
     <url>
-         <loc>https://0x574r.github.io/cheatsheets/</loc>
+         <loc>https://0x574R.github.io/cheatsheets/</loc>
          <lastmod>2026-01-23</lastmod>
     </url>
     <url>
-         <loc>https://0x574r.github.io/cheatsheets/linux-privesc/</loc>
+         <loc>https://0x574R.github.io/cheatsheets/linux-privesc/</loc>
          <lastmod>2026-01-23</lastmod>
     </url>
     <url>
-         <loc>https://0x574r.github.io/cheatsheets/windows-privesc/</loc>
+         <loc>https://0x574R.github.io/cheatsheets/windows-privesc/</loc>
          <lastmod>2026-01-23</lastmod>
     </url>
     <url>
-         <loc>https://0x574r.github.io/research/</loc>
+         <loc>https://0x574R.github.io/research/</loc>
          <lastmod>2026-01-23</lastmod>
     </url>
     <url>
-         <loc>https://0x574r.github.io/research/kernel/</loc>
+         <loc>https://0x574R.github.io/research/kernel/</loc>
          <lastmod>2026-01-23</lastmod>
     </url>
     <url>
-         <loc>https://0x574r.github.io/research/kernel/ebpf-intro/</loc>
+         <loc>https://0x574R.github.io/research/kernel/ebpf-intro/</loc>
          <lastmod>2026-01-23</lastmod>
     </url>
     <url>
-         <loc>https://0x574r.github.io/research/malware-dev/</loc>
+         <loc>https://0x574R.github.io/research/malware-dev/</loc>
          <lastmod>2026-01-23</lastmod>
     </url>
     <url>
-         <loc>https://0x574r.github.io/research/malware-dev/shellcode-basics/</loc>
+         <loc>https://0x574R.github.io/research/malware-dev/shellcode-basics/</loc>
          <lastmod>2026-01-23</lastmod>
     </url>
     <url>
-         <loc>https://0x574r.github.io/writeups/</loc>
+         <loc>https://0x574R.github.io/writeups/</loc>
          <lastmod>2026-01-23</lastmod>
     </url>
     <url>
-         <loc>https://0x574r.github.io/writeups/htb-example/</loc>
+         <loc>https://0x574R.github.io/writeups/htb-example/</loc>
          <lastmod>2026-01-23</lastmod>
     </url>
 </urlset>
