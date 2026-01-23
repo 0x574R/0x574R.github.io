@@ -1,11 +1,18 @@
 # Writeups
 
-Listado rápido.
+CTF / HTB / Labs documentados con metodología y notas reproducibles.
 
-<div class="razor-latest">
-  <a class="razor-post" href="htb-example/">
-    <div class="razor-post__title">HTB — Example Machine</div>
-    <div class="razor-post__meta">HTB / Easy</div>
-    <div class="razor-post__desc">Recon, explotación y escalada con notas claras.</div>
-  </a>
+<div class="grid cards" markdown>
+
+-   :material-cube-outline: **HTB — Example Machine**
+
+    `HTB · Easy · Linux`
+
+    Recon, explotación y escalada con notas claras.
+
+    [Abrir writeup](htb-example/){ .md-button .md-button--primary }
+
 </div>
+
+!!! tip "Sugerencia"
+    Si quieres mantener consistencia, usa en cada writeup una sección fija: **Recon → Enumeración → Explotación → Post → Root/Flags**.
