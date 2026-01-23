@@ -12,7 +12,7 @@
         <meta name="author" content="0x574R">
       
       
-        <link rel="canonical" href="https://0x574R.github.io/">
+        <link rel="canonical" href="https://0x574r.github.io/">
       
       
       
@@ -418,6 +418,8 @@
           
             
               
+                
+              
               <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
@@ -822,7 +824,9 @@
             
             
               
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" hidden>
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -876,49 +880,78 @@
               <article class="md-content__inner md-typeset">
                 
                   
+  
+
 
 
   
   
 
 
-<h1 id="razor">RAZOR<a class="headerlink" href="#razor" title="Permanent link">&para;</a></h1>
-<p>Offensive security research, writeups y notas técnicas.</p>
-<hr />
+<div class="razor-hero">
+<div class="razor-hero__inner">
+<p class="razor-hero__kicker">Offensive Security • Malware Dev • Kernel Research</p>
+<h1 class="razor-hero__title" id="razor">RAZOR<a class="headerlink" href="#razor" title="Permanent link">&para;</a></h1>
+<p class="razor-hero__subtitle">Writeups, cheatsheets y notas técnicas enfocadas en ciberseguridad ofensiva.</p>
+<div class="razor-hero__cta">
+<p><a class="md-button md-button--primary" href="writeups/">Entrar a Writeups</a>
+<a class="md-button" href="cheatsheets/">Cheatsheets</a>
+<a class="md-button" href="research/">Research</a></p>
+</div>
+<p class="razor-hero__meta">
+<span class="razor-pill">x86_64</span>
+<span class="razor-pill">Linux</span>
+<span class="razor-pill">eBPF</span>
+<span class="razor-pill">Red Team</span>
+</p>
+</div>
+</div>
 <h2 id="ultimos-posts">Últimos posts<a class="headerlink" href="#ultimos-posts" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Fecha</th>
-<th>Título</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>2025-01-09</td>
-<td><a href="research/kernel/ebpf-intro/">Introducción a eBPF</a></td>
-</tr>
-<tr>
-<td>2025-01-08</td>
-<td><a href="cheatsheets/linux-privesc/">Linux Privilege Escalation</a></td>
-</tr>
-<tr>
-<td>2025-01-07</td>
-<td><a href="research/malware-dev/shellcode-basics/">Shellcode Basics</a></td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="secciones">Secciones<a class="headerlink" href="#secciones" title="Permanent link">&para;</a></h2>
+<div class="grid cards razor-cards">
 <ul>
-<li><a href="writeups/">Writeups</a> - Resolución de máquinas CTF</li>
-<li><a href="cheatsheets/">Cheatsheets</a> - Referencias rápidas</li>
-<li><a href="research/">Research</a> - Malware dev, kernel, eBPF</li>
+<li>
+<p><strong>Introducción a eBPF</strong><br />
+    <span class="razor-meta">2025-01-09 • Kernel / eBPF</span><br />
+    Introducción práctica a eBPF aplicado a observabilidad y seguridad.<br />
+<a class="md-button md-button--primary" href="research/kernel/ebpf-intro/">Leer</a></p>
+</li>
+<li>
+<p><strong>Linux Privilege Escalation</strong><br />
+    <span class="razor-meta">2025-01-08 • Cheatsheet</span><br />
+    Checklist de escalada de privilegios (Linux) con comandos clave y vectores comunes.<br />
+<a class="md-button md-button--primary" href="cheatsheets/linux-privesc/">Leer</a></p>
+</li>
+<li>
+<p><strong>Shellcode Basics</strong><br />
+    <span class="razor-meta">2025-01-07 • Malware Dev</span><br />
+    Fundamentos de shellcode, registros y syscalls en x86_64.<br />
+<a class="md-button md-button--primary" href="research/malware-dev/shellcode-basics/">Leer</a></p>
+</li>
 </ul>
-<hr />
-<p><a href="https://github.com/0x574R">GitHub</a></p>
-
-
+</div>
+<h2 id="secciones">Secciones<a class="headerlink" href="#secciones" title="Permanent link">&para;</a></h2>
+<div class="grid cards razor-cards">
+<ul>
+<li>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.4 6H20v10h-7l-.4-2H7v7H5V4h9zm-.4 8h2v-2h2v-2h-2V8h-2v2l-1-2V6h-2v2H9V6H7v2h2v2H7v2h2v-2h2v2h2v-2l1 2zm-3-4V8h2v2zm3 0h2v2h-2z"/></svg></span> <strong>Writeups</strong><br />
+    Resolución de máquinas CTF y laboratorios con enfoque práctico.<br />
+<a class="md-button" href="writeups/">Abrir</a></p>
+</li>
+<li>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.5c-1.35-.85-3.8-1.5-5.5-1.5-1.65 0-3.35.3-4.75 1.05-.1.05-.15.05-.25.05-.25 0-.5-.25-.5-.5V6c.6-.45 1.25-.75 2-1 1.11-.35 2.33-.5 3.5-.5 1.95 0 4.05.4 5.5 1.5 1.45-1.1 3.55-1.5 5.5-1.5 1.17 0 2.39.15 3.5.5.75.25 1.4.55 2 1v14.6c0 .25-.25.5-.5.5-.1 0-.15 0-.25-.05-1.4-.75-3.1-1.05-4.75-1.05-1.7 0-4.15.65-5.5 1.5M12 8v11.5c1.35-.85 3.8-1.5 5.5-1.5 1.2 0 2.4.15 3.5.5V7c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5m1 3.5c1.11-.68 2.6-1 4.5-1 .91 0 1.76.09 2.5.28V9.23c-.87-.15-1.71-.23-2.5-.23q-2.655 0-4.5.84zm4.5.17c-1.71 0-3.21.26-4.5.79v1.69c1.11-.65 2.6-.99 4.5-.99 1.04 0 1.88.08 2.5.24v-1.5c-.87-.16-1.71-.23-2.5-.23m2.5 2.9c-.87-.16-1.71-.24-2.5-.24-1.83 0-3.33.27-4.5.8v1.69c1.11-.66 2.6-.99 4.5-.99 1.04 0 1.88.08 2.5.24z"/></svg></span> <strong>Cheatsheets</strong><br />
+    Referencias rápidas para pentest, privesc, tooling y procedimientos.<br />
+<a class="md-button" href="cheatsheets/">Abrir</a></p>
+</li>
+<li>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 22a3 3 0 0 1-3-3c0-.6.18-1.16.5-1.63L9 7.81V6a1 1 0 0 1-1-1V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1v1.81l5.5 9.56c.32.47.5 1.03.5 1.63a3 3 0 0 1-3 3zm-1-3a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1c0-.21-.07-.41-.18-.57l-2.29-3.96L14 17l-5.07-5.07-3.75 6.5c-.11.16-.18.36-.18.57m8-9a1 1 0 0 0-1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1 1 1 0 0 0-1-1"/></svg></span> <strong>Research</strong><br />
+    Malware dev, kernel internals, eBPF hooking y notas técnicas profundas.<br />
+<a class="md-button" href="research/">Abrir</a></p>
+</li>
+</ul>
+</div>
+<div class="razor-bottom-cta">
+<p><a class="md-button" href="https://github.com/0x574R">GitHub</a></p>
+</div>
 
 
 
@@ -927,7 +960,14 @@
 
 
   
+  
 
+
+
+  
+
+
+  
 
 
 
@@ -952,6 +992,8 @@
         <footer class="md-footer">
   
     
+      
+        
       
       <nav class="md-footer__inner md-grid" aria-label="Pie" >
         
