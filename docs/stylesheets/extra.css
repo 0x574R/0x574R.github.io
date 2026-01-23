@@ -425,3 +425,93 @@ code, pre, kbd, samp {
 .md-nav__link {
   font-size: 0.95rem;
 }
+
+
+
+/* ==========================================================
+   V6 FIXES: header alignment + cleaner nav
+   ========================================================== */
+
+/* Bigger logo without increasing header height */
+.md-header__button.md-logo img {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Page title next to logo: clean text (no pilcrow) */
+.razor-current-title {
+  letter-spacing: 0;
+  font-weight: 600;
+}
+
+/* Search icon perfectly centered */
+.md-search__form .md-search__icon {
+  position: static !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 2.35rem;
+  height: 2.45rem;
+  margin: 0;
+  padding: 0;
+  transform: none !important;
+}
+.md-search__form .md-search__icon svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+.md-search__form .md-search__input {
+  padding-left: 0.2rem;
+}
+
+/* Hide duplicated site title in sidebar header (keep it clean) */
+.md-nav__title[for="__drawer"] {
+  font-weight: 600;
+}
+
+/* Cleaner, more blog-like lists on index pages */
+.razor-index-list a {
+  text-decoration: none;
+}
+.razor-index-list li {
+  margin: 0.35rem 0;
+}
+
+
+
+/* Home minimal layout (blog-like) */
+.razor-kicker{
+  margin: 0.35rem 0 1rem 0;
+  color: var(--razor-muted);
+  font-size: 0.92rem;
+}
+.razor-actions{
+  display:flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin: .25rem 0 1rem 0;
+}
+.razor-grid{
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+@media (max-width: 900px){
+  .razor-grid{ grid-template-columns: 1fr; }
+}
+.razor-card{
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 1rem 1rem;
+}
+.razor-card h3{
+  margin: 0 0 .35rem 0;
+  font-size: 1.05rem;
+}
+.razor-card p{
+  margin: 0;
+  color: var(--razor-muted);
+  font-size: .92rem;
+}

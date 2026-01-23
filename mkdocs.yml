@@ -127,11 +127,8 @@ extra:
 
 nav:
   - Home: index.md
-  - Writeups:
-    - writeups/index.md
-  - Cheatsheets:
-    - cheatsheets/index.md
-  - Research:
-    - research/index.md
+  - Writeups: writeups/index.md
+  - Cheatsheets: cheatsheets/index.md
+  - Research: research/index.md
 
 copyright: Copyright &copy; 2024-2025 0x574R | RAZOR Security Blog

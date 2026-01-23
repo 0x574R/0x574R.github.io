@@ -1,14 +1,15 @@
 # Cheatsheets
 
-Referencias rápidas para pentesting y post-explotación.
+Referencia rápida para uso diario. Comandos clave y checklists.
 
-## Disponibles
+<div class="razor-index-list">
 
-- [Linux Privilege Escalation](linux-privesc.md)
-- [Windows Privilege Escalation](windows-privesc.md)
+## Linux
 
-## Próximamente
+- [Linux Privilege Escalation](linux-privesc.md) — Checklist práctica de privesc en Linux.
 
-- Active Directory
-- Web Application Testing
-- Reverse Shells
+## Windows
+
+- [Windows Privilege Escalation](windows-privesc.md) — Checklist práctica de privesc en Windows.
+
+</div>

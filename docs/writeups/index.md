@@ -1,17 +1,9 @@
 # Writeups
 
-Resoluciones de máquinas CTF y análisis de vulnerabilidades.
+Resolución documentada de máquinas y retos. Enfoque práctico: metodología, notas y aprendizaje.
 
-## HackTheBox
+<div class="razor-index-list">
 
-| Máquina | Dificultad | OS | Fecha |
-|---------|------------|-----|-------|
-| [Example](htb-example.md) | 🟢 Easy | Linux | 2025-01-09 |
+- [HTB Example](htb-example.md) — Ejemplo de writeup (estructura base).
 
-## TryHackMe
-
-*Próximamente...*
-
-## Vulnhub
-
-*Próximamente...*
+</div>
