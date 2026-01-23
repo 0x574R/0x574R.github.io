@@ -42,7 +42,7 @@
 }
 
 /* Readability bump (notably larger) */
-html{ font-size: 19px; }
+html{ font-size: 20px; }
 body{
   background: var(--razor-bg);
   color: var(--razor-text);
@@ -51,11 +51,11 @@ body{
 /* Wider content for large screens (blog-like) */
 .md-grid{
   /* Wider main canvas so articles are readable on desktop */
-  max-width: 1760px;
+  max-width: 1960px;
 }
 .md-main__inner{
   /* Prevent overly narrow center column when both sidebars are visible */
-  max-width: 1760px;
+  max-width: 1960px;
 }
 .md-content{ max-width: none; }
 .md-content__inner{ max-width: none; }
@@ -63,8 +63,8 @@ body{
 /* Slightly slimmer sidebars to give more room to the content */
 @media (min-width: 76.25em){
   /* Reduce sidebars a bit to give the center more space */
-  .md-sidebar--primary{ width: 13.25rem; }
-  .md-sidebar--secondary{ width: 12.5rem; }
+  .md-sidebar--primary{ width: 12.0rem; }
+  .md-sidebar--secondary{ width: 12.0rem; }
 }
 .md-content__inner{
   padding: 1.15rem 0 2.25rem;
@@ -85,6 +85,35 @@ body{
 *, *::before, *::after { box-sizing: border-box; }
 img{ max-width: 100%; height: auto; }
 
+
+/* ----------------------------------------------------------
+   RAZOR Buttons — clean blog CTAs
+   ---------------------------------------------------------- */
+.md-typeset .md-button{
+  border-radius: 999px;
+  padding: .55rem 1rem;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.03);
+  color: var(--razor-text);
+  transition: transform .15s ease, background .15s ease, border-color .15s ease;
+}
+.md-typeset .md-button:hover{
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.18);
+  transform: translateY(-1px);
+}
+.md-typeset .md-button--primary{
+  border-color: rgba(139,92,246,.35);
+  background: rgba(139,92,246,.16);
+  color: rgba(255,255,255,.95);
+}
+.md-typeset .md-button--primary:hover{
+  background: rgba(139,92,246,.22);
+  border-color: rgba(139,92,246,.48);
+}
+
+/* Space buttons row on home */
+.md-typeset p > .md-button{ margin-right: .5rem; margin-bottom: .5rem; }
 /* ----------------------------------------------------------
    Header: keep height but scale logo BIG
    ---------------------------------------------------------- */
@@ -396,4 +425,43 @@ img{ max-width: 100%; height: auto; }
 .md-footer{
   background: rgba(0,0,0,.28);
   border-top: 1px solid rgba(255,255,255,.06);
+}
+
+
+/* ----------------------------------------------------------
+   TOC (secondary nav) — transparent & readable
+   ---------------------------------------------------------- */
+.md-sidebar--secondary .md-nav{
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+.md-sidebar--secondary .md-nav__title{
+  font-size: .85rem;
+  color: rgba(255,255,255,.55);
+  letter-spacing: .02em;
+}
+.md-sidebar--secondary .md-nav__list{
+  border-left: 1px solid rgba(255,255,255,.08);
+  padding-left: .8rem;
+}
+.md-sidebar--secondary .md-nav__link{
+  font-size: .92rem;
+  padding: .15rem 0;
+}
+.md-sidebar--secondary .md-nav__link--active{
+  color: var(--razor-link) !important;
+}
+
+
+/* ----------------------------------------------------------
+   Code blocks — higher contrast, better sizing
+   ---------------------------------------------------------- */
+.md-typeset pre code{
+  font-size: .95rem;
+  line-height: 1.55;
+}
+.md-typeset pre{
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.08);
 }
