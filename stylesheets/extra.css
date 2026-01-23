@@ -11,7 +11,7 @@
 
 /* Base scale (Material uses rem heavily)
    NOTE: balanced for a blog: readable, but still compact */
-html { font-size: 16px; }
+html { font-size: 16.5px; }
 
 :root {
   /* Brand */
@@ -40,7 +40,7 @@ html { font-size: 16px; }
   --md-accent-fg-color--transparent: rgba(0, 194, 255, 0.12);
 
   /* Typeset scale */
-  --md-typeset-font-size: 1rem;
+  --md-typeset-font-size: 1.03rem;
   --md-typeset-line-height: 1.62;
 
   /* Code */
@@ -105,7 +105,7 @@ code, pre, kbd, samp {
 /* Logo sizing */
 .md-header__button.md-logo img,
 .md-header__button.md-logo svg {
-  height: 1.65rem;
+  height: 2.0rem;
   width: auto;
 }
 
@@ -121,13 +121,11 @@ code, pre, kbd, samp {
   opacity: 0.95;
 }
 
-/* Avoid duplicated / oversized header titles (keep the brand only) */
-.md-header__title .md-header__topic {
-  display: none;
-}
 
 /* Search bar: pill, not chunky */
 .md-search__form {
+  display: flex;
+  align-items: center;
   border-radius: 999px;
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.08);
@@ -385,4 +383,45 @@ code, pre, kbd, samp {
 /* Footer subtle */
 .md-footer {
   border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+
+/* -----------------------------
+   Header: show current page title next to logo
+   ----------------------------- */
+.md-header__ellipsis {
+  display: flex;
+  align-items: center;
+}
+
+/* Hide default text (site name / internal title) to avoid duplicates */
+.md-header__ellipsis > .md-header__topic,
+.md-header__ellipsis > .md-header__title {
+  display: none !important;
+}
+
+.razor-page-title {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.55rem;
+  font-size: 0.98rem;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  opacity: 0.92;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 38vw;
+}
+
+.razor-page-title::before {
+  content: "/";
+  margin-right: 0.55rem;
+  opacity: 0.45;
+}
+
+
+/* Nav sizing (slightly bigger, still compact) */
+.md-nav__link {
+  font-size: 0.95rem;
 }
