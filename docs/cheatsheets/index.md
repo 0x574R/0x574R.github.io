@@ -2,14 +2,18 @@
 
 Referencia rápida para uso diario. Comandos clave y checklists.
 
-<div class="razor-index-list">
+## Colección
 
-## Linux
+-   **Linux Privilege Escalation**
 
-- [Linux Privilege Escalation](linux-privesc.md) — Checklist práctica de privesc en Linux.
+    Checklist práctica (enumeración, vectores comunes, misconfigurations y post-exploitation).
 
-## Windows
+    [Abrir →](linux-privesc.md)
 
-- [Windows Privilege Escalation](windows-privesc.md) — Checklist práctica de privesc en Windows.
+-   **Windows Privilege Escalation**
 
-</div>
+    Checklist práctica (privilegios, servicios, UAC, credenciales y paths comunes).
+
+    [Abrir →](windows-privesc.md)
+
+{ .grid .cards }

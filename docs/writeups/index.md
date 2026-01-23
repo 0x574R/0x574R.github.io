@@ -2,8 +2,9 @@
 
 Resolución documentada de máquinas y retos. Enfoque práctico: metodología, notas y aprendizaje.
 
-<div class="razor-index-list">
-
-- [HTB Example](htb-example.md) — Ejemplo de writeup (estructura base).
-
-</div>
+-   **HTB – Example Machine**
+    
+    Estructura base de writeup con enumeración, explotación y escalada de privilegios.
+    
+    [Abrir writeup →](htb-example.md)
+{ .grid .cards }

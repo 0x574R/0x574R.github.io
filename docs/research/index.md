@@ -2,14 +2,16 @@
 
 Notas y experimentos técnicos centrados en kernel, eBPF y malware development.
 
-<div class="razor-index-list">
+-   **Kernel Research**
 
-## Kernel
+    Notas de kernel (internals, mitigaciones, debugging y PoCs).
 
-- [Kernel](kernel/index.md) — Índice de contenido de kernel.
+    [Abrir →](kernel/index.md)
 
-## Malware Development
+-   **Malware Development**
 
-- [Malware Dev](malware-dev/index.md) — Índice de contenido de malware dev.
+    Técnicas, experimentos y apuntes de desarrollo ofensivo.
 
-</div>
+    [Abrir →](malware-dev/index.md)
+
+{ .grid .cards }
