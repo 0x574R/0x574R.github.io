@@ -692,15 +692,15 @@
   
 
 
-<h1 id="introduccion-a-ebpf">Introducción a eBPF<a class="headerlink" href="#introduccion-a-ebpf" title="Permanent link">&para;</a></h1>
-<h2 id="que-es-ebpf">¿Qué es eBPF?<a class="headerlink" href="#que-es-ebpf" title="Permanent link">&para;</a></h2>
+<h1 id="introduccion-a-ebpf">Introducción a eBPF</h1>
+<h2 id="que-es-ebpf">¿Qué es eBPF?</h2>
 <p>eBPF (extended Berkeley Packet Filter) es una tecnología que permite ejecutar código en el kernel de Linux sin modificarlo. Originalmente diseñado para filtrado de paquetes, ahora se usa para observabilidad, seguridad y networking.</p>
 <pre class="mermaid"><code>graph LR
     A[Programa eBPF] --&gt; B[Verificador]
     B --&gt; C[JIT Compiler]
     C --&gt; D[Kernel]
     D --&gt; E[Hook Points]</code></pre>
-<h2 id="casos-de-uso-en-seguridad">Casos de Uso en Seguridad<a class="headerlink" href="#casos-de-uso-en-seguridad" title="Permanent link">&para;</a></h2>
+<h2 id="casos-de-uso-en-seguridad">Casos de Uso en Seguridad</h2>
 <table>
 <thead>
 <tr>
@@ -727,8 +727,8 @@
 </tr>
 </tbody>
 </table>
-<h2 id="arquitectura">Arquitectura<a class="headerlink" href="#arquitectura" title="Permanent link">&para;</a></h2>
-<h3 id="hook-points">Hook Points<a class="headerlink" href="#hook-points" title="Permanent link">&para;</a></h3>
+<h2 id="arquitectura">Arquitectura</h2>
+<h3 id="hook-points">Hook Points</h3>
 <p>eBPF puede attacharse a varios puntos:</p>
 <ul>
 <li><strong>kprobes</strong>: Cualquier función del kernel</li>
@@ -736,7 +736,7 @@
 <li><strong>XDP</strong>: Procesamiento de paquetes en driver</li>
 <li><strong>LSM</strong>: Linux Security Module hooks</li>
 </ul>
-<h3 id="maps">Maps<a class="headerlink" href="#maps" title="Permanent link">&para;</a></h3>
+<h3 id="maps">Maps</h3>
 <p>Estructuras de datos compartidas entre kernel y userspace:</p>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="n">__uint</span><span class="p">(</span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="n">BPF_MAP_TYPE_HASH</span><span class="p">);</span>
@@ -745,8 +745,8 @@
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="n">__type</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="n">u64</span><span class="p">);</span>
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">}</span><span class="w"> </span><span class="n">my_map</span><span class="w"> </span><span class="n">SEC</span><span class="p">(</span><span class="s">&quot;.maps&quot;</span><span class="p">);</span>
 </span></code></pre></div>
-<h2 id="ejemplo-tracing-syscalls">Ejemplo: Tracing Syscalls<a class="headerlink" href="#ejemplo-tracing-syscalls" title="Permanent link">&para;</a></h2>
-<h3 id="programa-ebpf">Programa eBPF<a class="headerlink" href="#programa-ebpf" title="Permanent link">&para;</a></h3>
+<h2 id="ejemplo-tracing-syscalls">Ejemplo: Tracing Syscalls</h2>
+<h3 id="programa-ebpf">Programa eBPF</h3>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">// trace_execve.bpf.c</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;linux/bpf.h&gt;</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;bpf/bpf_helpers.h&gt;</span>
@@ -765,10 +765,10 @@
 </span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>
 </span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="kt">char</span><span class="w"> </span><span class="n">LICENSE</span><span class="p">[]</span><span class="w"> </span><span class="n">SEC</span><span class="p">(</span><span class="s">&quot;license&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;GPL&quot;</span><span class="p">;</span>
 </span></code></pre></div>
-<h3 id="compilacion">Compilación<a class="headerlink" href="#compilacion" title="Permanent link">&para;</a></h3>
+<h3 id="compilacion">Compilación</h3>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>clang<span class="w"> </span>-O2<span class="w"> </span>-target<span class="w"> </span>bpf<span class="w"> </span>-c<span class="w"> </span>trace_execve.bpf.c<span class="w"> </span>-o<span class="w"> </span>trace_execve.bpf.o
 </span></code></pre></div>
-<h3 id="carga-con-bpftool">Carga con bpftool<a class="headerlink" href="#carga-con-bpftool" title="Permanent link">&para;</a></h3>
+<h3 id="carga-con-bpftool">Carga con bpftool</h3>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Cargar programa</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>bpftool<span class="w"> </span>prog<span class="w"> </span>load<span class="w"> </span>trace_execve.bpf.o<span class="w"> </span>/sys/fs/bpf/trace_execve
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
@@ -778,8 +778,8 @@
 </span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c1"># Ver output</span>
 </span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>cat<span class="w"> </span>/sys/kernel/debug/tracing/trace_pipe
 </span></code></pre></div>
-<h2 id="herramientas">Herramientas<a class="headerlink" href="#herramientas" title="Permanent link">&para;</a></h2>
-<h3 id="bpftool">bpftool<a class="headerlink" href="#bpftool" title="Permanent link">&para;</a></h3>
+<h2 id="herramientas">Herramientas</h2>
+<h3 id="bpftool">bpftool</h3>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Listar programas cargados</span>
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>bpftool<span class="w"> </span>prog<span class="w"> </span>list
 </span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
@@ -789,7 +789,7 @@
 </span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="c1"># Dump de programa</span>
 </span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>bpftool<span class="w"> </span>prog<span class="w"> </span>dump<span class="w"> </span>xlated<span class="w"> </span>id<span class="w"> </span>&lt;ID&gt;
 </span></code></pre></div>
-<h3 id="libbpf-skeleton">libbpf + skeleton<a class="headerlink" href="#libbpf-skeleton" title="Permanent link">&para;</a></h3>
+<h3 id="libbpf-skeleton">libbpf + skeleton</h3>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Generar skeleton</label><label for="__tabbed_1_2">Userspace loader</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -815,26 +815,26 @@
 </div>
 </div>
 </div>
-<h2 id="aplicaciones-ofensivas">Aplicaciones Ofensivas<a class="headerlink" href="#aplicaciones-ofensivas" title="Permanent link">&para;</a></h2>
+<h2 id="aplicaciones-ofensivas">Aplicaciones Ofensivas</h2>
 <div class="admonition danger">
 <p class="admonition-title">Uso ético</p>
 <p>Estas técnicas son para investigación y red teaming autorizado.</p>
 </div>
-<h3 id="ocultar-procesos">Ocultar Procesos<a class="headerlink" href="#ocultar-procesos" title="Permanent link">&para;</a></h3>
+<h3 id="ocultar-procesos">Ocultar Procesos</h3>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">SEC</span><span class="p">(</span><span class="s">&quot;kprobe/proc_pid_readdir&quot;</span><span class="p">)</span>
 </span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="kt">int</span><span class="w"> </span><span class="n">hide_process</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">pt_regs</span><span class="w"> </span><span class="o">*</span><span class="n">ctx</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="c1">// Manipular iteración de /proc</span>
 </span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="c1">// para ocultar PIDs específicos</span>
 </span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="p">}</span>
 </span></code></pre></div>
-<h3 id="interceptar-credenciales">Interceptar Credenciales<a class="headerlink" href="#interceptar-credenciales" title="Permanent link">&para;</a></h3>
+<h3 id="interceptar-credenciales">Interceptar Credenciales</h3>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">SEC</span><span class="p">(</span><span class="s">&quot;kprobe/__sys_read&quot;</span><span class="p">)</span>
 </span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="kt">int</span><span class="w"> </span><span class="n">intercept_read</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">pt_regs</span><span class="w"> </span><span class="o">*</span><span class="n">ctx</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span><span class="c1">// Capturar datos leídos de stdin</span>
 </span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">    </span><span class="c1">// útil para keylogging</span>
 </span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="p">}</span>
 </span></code></pre></div>
-<h2 id="recursos">Recursos<a class="headerlink" href="#recursos" title="Permanent link">&para;</a></h2>
+<h2 id="recursos">Recursos</h2>
 <table>
 <thead>
 <tr>
@@ -943,7 +943,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "navigation.footer", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate", "content.tabs.link", "toc.follow", "announce.dismiss"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.tracking", "navigation.sections", "navigation.indexes", "navigation.expand", "navigation.top", "navigation.footer", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate", "content.tabs.link", "toc.follow", "announce.dismiss"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
     
     
       <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
