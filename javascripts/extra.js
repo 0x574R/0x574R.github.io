@@ -1,84 +1,69 @@
-// RAZOR: Header title behavior (MkDocs Material)
-// - Big logo, fixed navbar height
-// - On articles: show the current article title instead of the site name
-// - On section indexes/home: keep the site name (clean blog feel)
-(function () {
-  const SECTIONS = ["writeups", "cheatsheets", "research"];
+// RAZOR — Header title behavior (MkDocs Material)
+// Goal:
+// - Show ONLY the article title in the header (next to the logo) on content pages
+// - Keep it minimal on Home/section indexes (no "RAZOR" duplicated)
+// - Works with Material instant navigation (AJAX)
 
-  function cleanTitle(s) {
+(function () {
+  const SECTION_ROOTS = new Set(["writeups", "cheatsheets", "research"]);
+
+  function cleanText(s) {
     return (s || "")
       .replace(/¶/g, "")
       .replace(/\s+/g, " ")
       .trim();
   }
 
-  function getH1Title() {
+  function isIndexPage(pathname) {
+    // "/", "/writeups/", "/cheatsheets/", "/research/"
+    const p = (pathname || "/").replace(/\/+$/, "/");
+    if (p === "/" || p === "/index/") return true;
+    const seg = p.split("/").filter(Boolean)[0];
+    return SECTION_ROOTS.has(seg) && (p.endsWith(`/${seg}/`) || p.endsWith(`/${seg}/index/`) || p.endsWith(`/${seg}/`));
+  }
+
+  function getH1() {
     const h1 = document.querySelector("main .md-content__inner h1");
-    return cleanTitle(h1?.textContent);
+    return h1 ? cleanText(h1.textContent) : "";
   }
 
-  function getPageTitleFallback() {
-    // document.title is typically "Page - RAZOR"
-    const t = (document.title || "").split(" - ")[0];
-    return cleanTitle(t) || "RAZOR";
-  }
+  function setHeaderTitle() {
+    const topic = document.querySelector(".md-header__topic .md-ellipsis");
+    if (!topic) return;
 
-  function isArticleRoute() {
-    const path = (location.pathname || "/").replace(/index\.html$/i, "");
-    const parts = path.split("/").filter(Boolean);
-    if (parts.length === 0) return false; // home
+    const path = window.location.pathname || "/";
+    const h1 = getH1();
+    const indexLike = isIndexPage(path);
 
-    const first = parts[0];
-    if (!SECTIONS.includes(first)) return true; // any non-section page treated as article-like
-
-    // /writeups/  => index
-    // /writeups/<something>/ => article
-    return parts.length >= 2;
-  }
-
-  function ensureHeaderTitle() {
-    const headerTitle = document.querySelector(".md-header__title");
-    if (!headerTitle) return;
-
-    const ellipsis = headerTitle.querySelector(".md-header__ellipsis") || headerTitle;
-    let node = ellipsis.querySelector(".razor-page-title");
-    if (!node) {
-      node = document.createElement("span");
-      node.className = "razor-page-title";
-      ellipsis.appendChild(node);
-    }
-
-    const title = getH1Title() || getPageTitleFallback();
-    const article = isArticleRoute();
-
-    // Desired behavior:
-    // - Only show the current article title in the topbar
-    // - Do NOT show "RAZOR" next to the logo (home/index pages remain clean)
-    document.body.classList.toggle("razor-is-article", article);
-
-    if (article) {
-      node.textContent = title;
-      node.setAttribute("title", title);
-      node.style.display = "";
+    // On article pages => show H1, otherwise keep minimal (empty)
+    if (h1 && !indexLike && h1.toLowerCase() !== "razor") {
+      topic.textContent = h1;
+      topic.style.opacity = "1";
     } else {
-      node.textContent = "";
-      node.removeAttribute("title");
-      node.style.display = "none";
+      topic.textContent = ""; // minimal header
+      topic.style.opacity = "0.85";
     }
   }
 
-  // Initial
-  ensureHeaderTitle();
+  // Initial run
+  setHeaderTitle();
 
-  // Material instant navigation
-  document.addEventListener("DOMContentLoaded", () => {
-    ensureHeaderTitle();
-    setTimeout(ensureHeaderTitle, 50);
-    document.addEventListener("navigation", () => {
-      ensureHeaderTitle();
-      setTimeout(ensureHeaderTitle, 30);
+  // MkDocs Material supports document$ for instant navigation
+  if (window.document$ && typeof window.document$.subscribe === "function") {
+    window.document$.subscribe(() => {
+      setHeaderTitle();
+      // In case content renders slightly later
+      setTimeout(setHeaderTitle, 30);
     });
-  });
-
-  window.addEventListener("load", () => setTimeout(ensureHeaderTitle, 50));
+  } else {
+    // Fallback for environments without document$
+    document.addEventListener("DOMContentLoaded", () => {
+      setHeaderTitle();
+      setTimeout(setHeaderTitle, 30);
+    });
+    window.addEventListener("popstate", () => {
+      setHeaderTitle();
+      setTimeout(setHeaderTitle, 30);
+    });
+  }
 })();
