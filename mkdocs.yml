@@ -14,7 +14,7 @@ theme:
   favicon: assets/favicon.ico
 
   font:
-    text: Inter
+    text: JetBrains Mono
     code: JetBrains Mono
 
   icon:
@@ -38,14 +38,14 @@ theme:
 
   palette:
     - scheme: slate
-      primary: black
-      accent: lime
+      primary: deep purple
+      accent: purple
       toggle:
         icon: material/weather-sunny
         name: Cambiar a modo claro
     - scheme: default
-      primary: black
-      accent: lime
+      primary: deep purple
+      accent: purple
       toggle:
         icon: material/weather-night
         name: Cambiar a modo oscuro
