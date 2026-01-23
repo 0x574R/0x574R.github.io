@@ -1,19 +1,16 @@
 # Cheatsheets
 
-Referencia rápida para uso diario. Comandos clave y checklists.
+Listado rápido.
 
-## Colección
-
--   **Linux Privilege Escalation**
-
-    Checklist práctica (enumeración, vectores comunes, misconfigurations y post-exploitation).
-
-    [Abrir →](linux-privesc.md)
-
--   **Windows Privilege Escalation**
-
-    Checklist práctica (privilegios, servicios, UAC, credenciales y paths comunes).
-
-    [Abrir →](windows-privesc.md)
-
-{ .grid .cards }
+<div class="razor-latest">
+  <a class="razor-post" href="linux-privesc/">
+    <div class="razor-post__title">Linux Privilege Escalation</div>
+    <div class="razor-post__meta">Linux</div>
+    <div class="razor-post__desc">Checklist práctico con comandos y vectores comunes.</div>
+  </a>
+  <a class="razor-post" href="windows-privesc/">
+    <div class="razor-post__title">Windows Privilege Escalation</div>
+    <div class="razor-post__meta">Windows</div>
+    <div class="razor-post__desc">Resumen de enumeración, tokens y vectores frecuentes.</div>
+  </a>
+</div>

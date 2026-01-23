@@ -1,10 +1,11 @@
 # Writeups
 
-Resolución documentada de máquinas y retos. Enfoque práctico: metodología, notas y aprendizaje.
+Listado rápido.
 
--   **HTB – Example Machine**
-    
-    Estructura base de writeup con enumeración, explotación y escalada de privilegios.
-    
-    [Abrir writeup →](htb-example.md)
-{ .grid .cards }
+<div class="razor-latest">
+  <a class="razor-post" href="htb-example/">
+    <div class="razor-post__title">HTB — Example Machine</div>
+    <div class="razor-post__meta">HTB / Easy</div>
+    <div class="razor-post__desc">Recon, explotación y escalada con notas claras.</div>
+  </a>
+</div>
