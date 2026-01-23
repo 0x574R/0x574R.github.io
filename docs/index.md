@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 <!--
   RAZOR — Clean Home
   Nota: se usa HTML ligero para un layout más profesional sin plugins extra.
