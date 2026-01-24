@@ -1,0 +1,164 @@
+/* ============================================
+   RAZOR - TOC Dark Style for Light Theme
+   ============================================
+   Este CSS hace que el Table of Contents (TOC)
+   del tema claro tenga el mismo diseño visual
+   que el tema oscuro
+   ============================================ */
+
+/* ------------------------------------------
+   TOC Container - Tema Claro con estilo oscuro
+   ------------------------------------------ */
+
+/* Fondo oscuro para el sidebar derecho (TOC) en tema claro */
+[data-md-color-scheme="default"] .md-sidebar--secondary {
+    background-color: #1e1e1e;
+    border-left: 1px solid #333;
+}
+
+/* Contenedor interno del TOC */
+[data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__scrollwrap {
+    background-color: #1e1e1e;
+}
+
+[data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__inner {
+    background-color: #1e1e1e;
+}
+
+/* ------------------------------------------
+   TOC Navigation - Links y elementos
+   ------------------------------------------ */
+
+/* Título "Tabla de contenidos" */
+[data-md-color-scheme="default"] .md-nav--secondary > .md-nav__title {
+    color: #b0b0b0;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.65rem;
+    letter-spacing: 0.05em;
+    padding: 0.6rem 0.6rem 0.3rem;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+/* Links del TOC */
+[data-md-color-scheme="default"] .md-nav--secondary .md-nav__link {
+    color: #a0a0a0;
+    transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+/* Hover en links */
+[data-md-color-scheme="default"] .md-nav--secondary .md-nav__link:hover {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Link activo (sección actual) */
+[data-md-color-scheme="default"] .md-nav--secondary .md-nav__link--active,
+[data-md-color-scheme="default"] .md-nav--secondary .md-nav__item--active > .md-nav__link {
+    color: #4fc3f7;
+    font-weight: 500;
+}
+
+/* Focus en links */
+[data-md-color-scheme="default"] .md-nav--secondary .md-nav__link:focus {
+    color: #ffffff;
+    outline: none;
+}
+
+/* ------------------------------------------
+   TOC - Indicador de scroll / línea lateral
+   ------------------------------------------ */
+
+/* Línea lateral del TOC (si está habilitada) */
+[data-md-color-scheme="default"] .md-nav--secondary .md-nav__item::before {
+    background-color: #333;
+}
+
+/* Indicador de posición actual */
+[data-md-color-scheme="default"] .md-nav--secondary .md-nav__item--active::before {
+    background-color: #4fc3f7;
+}
+
+/* ------------------------------------------
+   TOC - Items anidados (sub-secciones)
+   ------------------------------------------ */
+
+/* Sub-items del TOC */
+[data-md-color-scheme="default"] .md-nav--secondary .md-nav__item .md-nav__item .md-nav__link {
+    color: #808080;
+    padding-left: 1.2rem;
+}
+
+[data-md-color-scheme="default"] .md-nav--secondary .md-nav__item .md-nav__item .md-nav__link:hover {
+    color: #e0e0e0;
+}
+
+/* ------------------------------------------
+   TOC - Scrollbar personalizado
+   ------------------------------------------ */
+
+/* Scrollbar para el TOC */
+[data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__scrollwrap::-webkit-scrollbar {
+    width: 4px;
+}
+
+[data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__scrollwrap::-webkit-scrollbar-track {
+    background: #1e1e1e;
+}
+
+[data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__scrollwrap::-webkit-scrollbar-thumb {
+    background-color: #444;
+    border-radius: 2px;
+}
+
+[data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__scrollwrap::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+/* Firefox scrollbar */
+[data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__scrollwrap {
+    scrollbar-width: thin;
+    scrollbar-color: #444 #1e1e1e;
+}
+
+/* ------------------------------------------
+   TOC - Responsive ajustes
+   ------------------------------------------ */
+
+/* En pantallas medianas y grandes */
+@media screen and (min-width: 76.25em) {
+    [data-md-color-scheme="default"] .md-sidebar--secondary {
+        border-radius: 0;
+    }
+}
+
+/* En tablets - TOC puede estar oculto */
+@media screen and (max-width: 76.1875em) {
+    [data-md-color-scheme="default"] .md-nav--secondary {
+        background-color: #1e1e1e;
+    }
+}
+
+/* ------------------------------------------
+   Variables CSS personalizadas (opcional)
+   ------------------------------------------ */
+
+/* Puedes ajustar estos colores según tu preferencia */
+:root {
+    --toc-bg-dark: #1e1e1e;
+    --toc-border-dark: #333;
+    --toc-text-dark: #a0a0a0;
+    --toc-text-hover: #ffffff;
+    --toc-text-active: #4fc3f7;
+    --toc-title-color: #b0b0b0;
+}
+
+/* Aplicar variables (alternativa usando variables) */
+[data-md-color-scheme="default"] .md-sidebar--secondary {
+    --md-default-fg-color: var(--toc-text-dark);
+    --md-default-fg-color--light: var(--toc-text-dark);
+    --md-default-fg-color--lighter: #666;
+    --md-default-bg-color: var(--toc-bg-dark);
+    --md-typeset-a-color: var(--toc-text-active);
+}
