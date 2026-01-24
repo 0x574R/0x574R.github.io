@@ -56,6 +56,39 @@
   padding: 0.55rem 0.55rem;
 }
 
+/* Light mode: remove the built-in scroll fade overlays that show as
+   a blank "rectangle" above the navigation + TOC boxes. */
+[data-md-color-scheme="default"] .md-sidebar__scrollwrap::before,
+[data-md-color-scheme="default"] .md-sidebar__scrollwrap::after {
+  display: none !important;
+}
+
+[data-md-color-scheme="default"] .md-sidebar__scrollwrap {
+  background: transparent !important;
+}
+
+/* Light mode: make active items in the sidebars/TOC fill the full width
+   of the container (accent reaches the borders). */
+[data-md-color-scheme="default"] .md-sidebar__inner .md-nav__link {
+  display: block;
+  border-radius: 12px;
+  padding: 0.35rem 0.70rem;
+  margin: 0.10rem 0;
+}
+
+[data-md-color-scheme="default"] .md-sidebar__inner .md-nav__link--active {
+  background: rgba(var(--razor-accent-rgb), 0.14);
+  box-shadow: inset 3px 0 0 rgba(var(--razor-accent-rgb), 0.95);
+  margin-left: -0.55rem;
+  margin-right: -0.55rem;
+  padding-left: calc(0.55rem + 0.70rem);
+  padding-right: calc(0.55rem + 0.70rem);
+}
+
+[data-md-color-scheme="default"] .md-sidebar__inner .md-nav__link:hover {
+  background: rgba(var(--razor-accent-rgb), 0.08);
+}
+
 [data-md-color-scheme="default"] .md-nav__title {
   color: rgba(15, 23, 42, 0.86) !important;
   font-weight: 700;
