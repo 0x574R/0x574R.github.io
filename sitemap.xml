@@ -5,6 +5,10 @@
          <lastmod>2026-01-24</lastmod>
     </url>
     <url>
+         <loc>https://0x574r.github.io/tags/</loc>
+         <lastmod>2026-01-24</lastmod>
+    </url>
+    <url>
          <loc>https://0x574r.github.io/cheatsheets/</loc>
          <lastmod>2026-01-24</lastmod>
     </url>
@@ -13,7 +17,7 @@
          <lastmod>2026-01-24</lastmod>
     </url>
     <url>
-         <loc>https://0x574r.github.io/cheatsheets/windows-privesc/</loc>
+         <loc>https://0x574r.github.io/includes/abbreviations/</loc>
          <lastmod>2026-01-24</lastmod>
     </url>
     <url>
@@ -38,10 +42,6 @@
     </url>
     <url>
          <loc>https://0x574r.github.io/writeups/</loc>
-         <lastmod>2026-01-24</lastmod>
-    </url>
-    <url>
-         <loc>https://0x574r.github.io/writeups/htb-example/</loc>
          <lastmod>2026-01-24</lastmod>
     </url>
 </urlset>
