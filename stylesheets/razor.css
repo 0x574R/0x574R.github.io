@@ -7,14 +7,29 @@
 
 :root{
   /* Dark purple cyber palette */
-  --ra-bg: #07060d;
-  --ra-surface: #0d0a14;
-  --ra-surface-2: #141022;
+  --ra-bg: #05040a;
+  --ra-surface: #090713;
+  --ra-surface-2: #0f0b1c;
   --ra-border: rgba(255,255,255,.08);
-  --ra-purple-1: #2a0a3d;   /* header */
-  --ra-purple-2: #3a0f57;   /* accents */
-  --ra-accent: #b56bff;     /* links/active */
-  --ra-accent-2: #7c3aed;   /* buttons */
+  --ra-purple-1: #190528;   /* header */
+  --ra-purple-2: #24073a;   /* accents */
+  --ra-accent: #9d5cff;     /* links/active */
+  --ra-accent-2: #6d28d9;   /* buttons */
+}
+
+/* Light scheme tuned (keep hacking purple but readable) */
+[data-md-color-scheme="default"]{
+  --md-default-bg-color: #f7f4fb;
+  --md-default-fg-color: rgba(12,10,20,.88);
+  --md-default-fg-color--light: rgba(12,10,20,.68);
+  --md-default-fg-color--lighter: rgba(12,10,20,.48);
+
+  --md-primary-fg-color: #2b1540;
+  --md-accent-fg-color: #6d28d9;
+  --md-typeset-a-color: #6d28d9;
+
+  --md-code-bg-color: rgba(109,40,217,.06);
+  --md-code-fg-color: rgba(12,10,20,.88);
 }
 
 /* Material palette overrides (darken the purple top bar + accents) */
@@ -47,13 +62,13 @@
 }
 .md-header__button.md-logo{
   overflow: visible !important;
-  width: 74px;                 /* reserve space (prevents overlap with title) */
+  width: 112px;                /* reserve space (prevents overlap with title) */
   justify-content: flex-start;
   margin-right: .55rem;
 }
 .md-header__button.md-logo img{
-  height: 26px;                 /* keep header height stable */
-  transform: scale(2.35);       /* make it visually large */
+  height: 28px;                 /* keep header height stable */
+  transform: scale(3.25);       /* make it visually large */
   transform-origin: left center;
   filter: drop-shadow(0 6px 18px rgba(0,0,0,.35));
 }
@@ -65,7 +80,10 @@
   border: 1px solid rgba(255,255,255,.10);
 }
 .md-search__input{
-  font-size: .95rem;
+  font-size: .84rem;
+}
+.md-search__input::placeholder{
+  font-size: .84rem;
 }
 .md-search__icon{
   color: rgba(255,255,255,.7);
@@ -98,13 +116,28 @@
   border: 1px solid rgba(255,255,255,.08);
 }
 
-/* Buttons a bit more "hacking" */
-.md-typeset .md-button--primary{
-  background: linear-gradient(180deg, rgba(124,58,237,.95) 0%, rgba(58,15,87,.95) 100%);
-  border-color: rgba(181,107,255,.35);
-}
+/* Buttons: modern pills (cleaner than default rectangles) */
 .md-typeset .md-button{
-  border-radius: 10px;
+  border-radius: 999px;
+  padding: .55em 1.25em;
+  font-weight: 650;
+  letter-spacing: .01em;
+  border-width: 1px;
+  transition: transform .16s ease, box-shadow .16s ease, background .16s ease, border-color .16s ease;
+}
+.md-typeset .md-button--primary{
+  background: linear-gradient(180deg, rgba(109,40,217,.96) 0%, rgba(25,5,40,.96) 100%);
+  border-color: rgba(157,92,255,.35);
+  box-shadow: 0 10px 26px rgba(0,0,0,.28);
+}
+.md-typeset .md-button:not(.md-button--primary){
+  border-color: rgba(157,92,255,.20);
+  background: rgba(157,92,255,.04);
+}
+.md-typeset .md-button:hover{
+  border-color: rgba(157,92,255,.40);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(0,0,0,.22);
 }
 
 /* TOC cleaner (no hard panel) */
