@@ -120,6 +120,26 @@
   background: rgba(var(--razor-accent-rgb), 0.95);
 }
 
+/* If a section header is active AND it contains an active child (index page),
+   avoid double-highlighting. Keep the header readable but un-highlighted,
+   and hide the duplicated active child link.
+
+   This fixes the "Home" / "Linux Privesc" appearing twice when selected.
+*/
+[data-md-color-scheme="default"] .md-nav__item--active > .md-nav__link--active + .md-nav > .md-nav__list > .md-nav__item--active > .md-nav__link--active {
+  display: none !important;
+}
+
+[data-md-color-scheme="default"] .md-nav__item--active:has(.md-nav .md-nav__link--active) > .md-nav__link--active {
+  background: transparent !important;
+  box-shadow: none !important;
+  color: rgba(15, 23, 42, 0.86) !important;
+}
+
+[data-md-color-scheme="default"] .md-nav__item--active:has(.md-nav .md-nav__link--active) > .md-nav__link--active::before {
+  display: none !important;
+}
+
 /* Ancestors of the active item: bold only, NO pill background */
 [data-md-color-scheme="default"] .md-nav__item--active > .md-nav__link:not(.md-nav__link--active) {
   background: transparent !important;
