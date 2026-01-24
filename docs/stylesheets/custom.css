@@ -785,3 +785,98 @@ font-size: 0.82rem;
     transition: none !important;
   }
 }
+
+
+
+/* =========================================================
+   SIMPLE LIGHT MODE SIDEBAR + TOC (clean, minimal)
+   ========================================================= */
+[data-md-color-scheme="default"] .md-sidebar--primary,
+[data-md-color-scheme="default"] .md-sidebar--secondary {
+  filter: none !important;
+}
+
+/* Remove "card" look and any scroll masks/overlays */
+[data-md-color-scheme="default"] .md-sidebar__scrollwrap {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
+}
+[data-md-color-scheme="default"] .md-sidebar__scrollwrap::before,
+[data-md-color-scheme="default"] .md-sidebar__scrollwrap::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* Minimal list styling */
+[data-md-color-scheme="default"] .md-nav {
+  background: transparent !important;
+}
+[data-md-color-scheme="default"] .md-nav__title,
+[data-md-color-scheme="default"] .md-nav__item {
+  background: transparent !important;
+}
+
+/* Links: no pills, no rounded blobs */
+[data-md-color-scheme="default"] .md-nav__link {
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: .25rem .75rem !important;
+  margin: 0 !important;
+  color: rgba(15, 23, 42, 0.78) !important; /* slate-ish */
+}
+[data-md-color-scheme="default"] .md-nav__link:hover {
+  background: rgba(37, 99, 235, 0.08) !important;
+  color: rgba(15, 23, 42, 0.92) !important;
+}
+
+/* Kill any decorative brackets/lines from previous iterations */
+[data-md-color-scheme="default"] .md-nav__link::before,
+[data-md-color-scheme="default"] .md-nav__link::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* Active item: simple left bar + subtle background */
+[data-md-color-scheme="default"] .md-nav__item--active > .md-nav__link,
+[data-md-color-scheme="default"] .md-nav__link--active {
+  background: rgba(37, 99, 235, 0.10) !important;
+  color: rgba(15, 23, 42, 0.96) !important;
+  font-weight: 650 !important;
+  border-left: 3px solid rgba(37, 99, 235, 0.95) !important;
+  padding-left: calc(.75rem - 3px) !important;
+}
+
+/* Reduce sidebar "panel" feeling by aligning it with page background */
+[data-md-color-scheme="default"] .md-sidebar--primary .md-sidebar__inner,
+[data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__inner {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+
+/* TOC: make it match (no box, clean underline/left bar) */
+[data-md-color-scheme="default"] .md-nav--secondary {
+  border-left: 1px solid rgba(15, 23, 42, 0.08) !important;
+  padding-left: .5rem !important;
+}
+[data-md-color-scheme="default"] .md-nav--secondary .md-nav__link {
+  padding: .2rem .5rem !important;
+}
+[data-md-color-scheme="default"] .md-nav--secondary .md-nav__item--active > .md-nav__link {
+  background: rgba(37, 99, 235, 0.10) !important;
+  border-left: 3px solid rgba(37, 99, 235, 0.95) !important;
+  padding-left: calc(.5rem - 3px) !important;
+}
+
+/* Home / main body: keep clean and consistent */
+[data-md-color-scheme="default"] .md-content__inner {
+  color: rgba(15, 23, 42, 0.90) !important;
+}
+
