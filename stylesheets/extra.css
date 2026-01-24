@@ -1,105 +1,104 @@
 /* ============================================
-   RAZOR - TOC Dark Style for Light Theme v2
+   RAZOR - TOC Dark Style for Light Theme v3
    ============================================
-   CSS con !important para forzar estilos
+   Selectores específicos para MkDocs Material
    ============================================ */
 
-/* === SIDEBAR DERECHO (TOC) - TEMA CLARO === */
+/* === MÉTODO 1: Usando data-md-color-scheme === */
 
-/* Fondo oscuro del contenedor principal del TOC */
+/* Sidebar derecho completo */
 [data-md-color-scheme="default"] .md-sidebar--secondary {
-    background-color: #1a1a2e !important;
+    background: #1a1a2e !important;
 }
 
 [data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__scrollwrap {
-    background-color: #1a1a2e !important;
+    background: #1a1a2e !important;
 }
 
 [data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__inner {
-    background-color: #1a1a2e !important;
+    background: #1a1a2e !important;
 }
 
-/* === NAVEGACIÓN TOC === */
-
-/* Contenedor de navegación del TOC */
-[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav {
-    background-color: #1a1a2e !important;
+/* Navegación del TOC */
+[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav--secondary {
+    background: #1a1a2e !important;
 }
 
 /* Título "Tabla de contenidos" */
-[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav__title {
-    color: #7f8c9a !important;
-    background-color: #1a1a2e !important;
+[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav--secondary > .md-nav__title {
+    color: #6e7681 !important;
+    background: #1a1a2e !important;
+    box-shadow: none !important;
     font-size: 0.6rem !important;
     font-weight: 700 !important;
     text-transform: uppercase !important;
     letter-spacing: 0.1em !important;
-    box-shadow: none !important;
-    padding: 0.6rem 0.6rem 0.4rem !important;
 }
 
-/* === LINKS DEL TOC === */
-
-/* Todos los links */
-[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav__link {
+/* Links del TOC */
+[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav--secondary .md-nav__link {
     color: #8b949e !important;
-    transition: color 0.2s ease !important;
 }
 
-/* Hover en links */
-[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav__link:hover {
-    color: #c9d1d9 !important;
+[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav--secondary .md-nav__link:hover {
+    color: #f0f6fc !important;
 }
 
-/* Link activo */
-[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav__link--active {
-    color: #58a6ff !important;
-    font-weight: 500 !important;
-}
-
-/* Items activos */
-[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav__item--active > .md-nav__link {
+[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav--secondary .md-nav__link--active {
     color: #58a6ff !important;
 }
 
-/* === SCROLLBAR === */
+/* === MÉTODO 2: Forzando con :not() para excluir tema oscuro === */
 
-[data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__scrollwrap::-webkit-scrollbar {
-    width: 4px !important;
-}
-
-[data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__scrollwrap::-webkit-scrollbar-track {
+body:not([data-md-color-scheme="slate"]) .md-sidebar--secondary {
     background: #1a1a2e !important;
 }
 
-[data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__scrollwrap::-webkit-scrollbar-thumb {
-    background-color: #30363d !important;
+body:not([data-md-color-scheme="slate"]) .md-sidebar--secondary .md-sidebar__scrollwrap {
+    background: #1a1a2e !important;
+}
+
+body:not([data-md-color-scheme="slate"]) .md-sidebar--secondary .md-nav--secondary {
+    background: #1a1a2e !important;
+}
+
+body:not([data-md-color-scheme="slate"]) .md-sidebar--secondary .md-nav--secondary > .md-nav__title {
+    color: #6e7681 !important;
+    background: #1a1a2e !important;
+    box-shadow: none !important;
+}
+
+body:not([data-md-color-scheme="slate"]) .md-sidebar--secondary .md-nav--secondary .md-nav__link {
+    color: #8b949e !important;
+}
+
+body:not([data-md-color-scheme="slate"]) .md-sidebar--secondary .md-nav--secondary .md-nav__link:hover {
+    color: #f0f6fc !important;
+}
+
+body:not([data-md-color-scheme="slate"]) .md-sidebar--secondary .md-nav--secondary .md-nav__link--active {
+    color: #58a6ff !important;
+}
+
+/* === SCROLLBAR OSCURO === */
+
+[data-md-color-scheme="default"] .md-sidebar--secondary ::-webkit-scrollbar {
+    width: 4px !important;
+}
+
+[data-md-color-scheme="default"] .md-sidebar--secondary ::-webkit-scrollbar-track {
+    background: #1a1a2e !important;
+}
+
+[data-md-color-scheme="default"] .md-sidebar--secondary ::-webkit-scrollbar-thumb {
+    background: #30363d !important;
     border-radius: 2px !important;
 }
 
-/* Firefox */
-[data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__scrollwrap {
-    scrollbar-width: thin !important;
-    scrollbar-color: #30363d #1a1a2e !important;
+/* === DEBUG: Si nada funciona, esto SIEMPRE se aplica === */
+/* Descomenta estas líneas para probar si el CSS se carga */
+/*
+.md-sidebar--secondary {
+    background: red !important;
 }
-
-/* === LÍNEA INDICADORA DE POSICIÓN === */
-
-[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav__link::before {
-    background-color: #30363d !important;
-}
-
-[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav__link--active::before,
-[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav__link:focus::before {
-    background-color: #58a6ff !important;
-}
-
-/* === ITEMS ANIDADOS === */
-
-[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav__item .md-nav .md-nav__link {
-    color: #6e7681 !important;
-}
-
-[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav__item .md-nav .md-nav__link:hover {
-    color: #c9d1d9 !important;
-}
+*/
