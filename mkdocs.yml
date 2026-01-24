@@ -56,5 +56,14 @@ markdown_extensions:
 nav:
   - Home: index.md
   - Writeups: writeups/index.md
-  - Cheatsheets: cheatsheets/index.md
-  - Research: research/index.md
+  - Cheatsheets:
+    - cheatsheets/index.md
+    - Linux Privesc: cheatsheets/linux-privesc.md
+  - Research:
+    - research/index.md
+    - Kernel:
+      - research/kernel/index.md
+      - eBPF Intro: research/kernel/ebpf-intro.md
+    - Malware Dev:
+      - research/malware-dev/index.md
+      - Shellcode Basics: research/malware-dev/shellcode-basics.md
