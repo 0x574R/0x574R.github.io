@@ -1,14 +1,73 @@
-/* RAZOR - Minimal overrides */
+/* RAZOR - Dark Purple theme overrides */
+
+/*
+  Material for MkDocs uses CSS variables for theming.
+  Here we enforce a dark purple palette with a clear separation
+  between header (topbar) and body.
+*/
 
 [data-md-color-scheme="slate"] {
-  --md-primary-fg-color: #0d1117;
-  --md-accent-fg-color: #4ade80;
+  /* Brand palette (dark purple) */
+  --md-primary-fg-color: #2b0a4d;         /* topbar / primary */
+  --md-primary-fg-color--light: #3b0f66;
+  --md-primary-fg-color--dark: #20063a;
+
+  --md-accent-fg-color: #b66dff;          /* links / accents */
+  --md-accent-fg-color--transparent: rgba(182, 109, 255, 0.12);
+
+  /* Page surfaces */
+  --md-default-bg-color: #07030d;         /* body background */
+  --md-code-bg-color: #0e0620;
+  --md-footer-bg-color: #0b0415;
+
+  /* Text */
+  --md-default-fg-color: rgba(255, 255, 255, 0.92);
+  --md-default-fg-color--light: rgba(255, 255, 255, 0.72);
+  --md-default-fg-color--lighter: rgba(255, 255, 255, 0.52);
 }
 
+/* Links */
 .md-typeset a {
-  color: #4ade80;
+  color: var(--md-accent-fg-color);
 }
 
 .md-typeset a:hover {
-  color: #22c55e;
+  opacity: 0.9;
+}
+
+/* Make topbar more distinguishable from body */
+.md-header,
+.md-tabs {
+  background: linear-gradient(90deg, #1a0730 0%, #2b0a4d 60%, #3b0f66 100%);
+}
+
+.md-header {
+  border-bottom: 1px solid rgba(182, 109, 255, 0.22);
+}
+
+/* Enlarge logo (fix: logo was extremely small) */
+.md-header__button.md-logo img {
+  height: 2.75rem;
+  width: auto;
+}
+
+.md-header__button.md-logo {
+  padding: 0.2rem 0.6rem;
+  margin-right: 0.2rem;
+}
+
+/* Ensure title never overlaps logo */
+.md-header__title {
+  padding-left: 0.2rem;
+}
+
+/* Subtle accents on cards and content */
+.md-typeset .admonition,
+.md-typeset details {
+  border-color: rgba(182, 109, 255, 0.25);
+}
+
+/* Search highlight */
+.md-search-result__meta {
+  color: var(--md-default-fg-color--light);
 }
