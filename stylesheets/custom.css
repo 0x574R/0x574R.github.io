@@ -46,47 +46,53 @@
   --md-header-height: 3.0rem;
 }
 
-/* --- Light mode readability: sidebar + TOC contrast --- */
+/* --- Light mode: keep sidebars native (no floating cards)
+   The previous "card" styling caused layout mismatch and introduced
+   a visible ghost rectangle in some contexts.
+*/
 [data-md-color-scheme="default"] .md-sidebar--primary .md-sidebar__inner,
 [data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__inner {
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 16px;
-  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.06);
-  padding: 0.55rem 0.55rem;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
 }
 
-/* Light mode: remove the built-in scroll fade overlays that show as
-   a blank "rectangle" above the navigation + TOC boxes. */
+/* Light mode: remove the built-in scroll fade overlays (ghost rectangles)
+   in both sidebars. Material renders these as pseudo elements. */
 [data-md-color-scheme="default"] .md-sidebar__scrollwrap::before,
-[data-md-color-scheme="default"] .md-sidebar__scrollwrap::after {
+[data-md-color-scheme="default"] .md-sidebar__scrollwrap::after,
+[data-md-color-scheme="default"] .md-sidebar__inner::before,
+[data-md-color-scheme="default"] .md-sidebar__inner::after {
+  content: none !important;
   display: none !important;
 }
 
-[data-md-color-scheme="default"] .md-sidebar__scrollwrap {
-  background: transparent !important;
-}
-
-/* Light mode: make active items in the sidebars/TOC fill the full width
-   of the container (accent reaches the borders). */
-[data-md-color-scheme="default"] .md-sidebar__inner .md-nav__link {
+/* Light mode: navigation highlight integrated (full-width, clean)
+   Avoid the "bubble" look from negative margins. */
+[data-md-color-scheme="default"] .md-nav--primary .md-nav__link,
+[data-md-color-scheme="default"] .md-nav--secondary .md-nav__link {
   display: block;
-  border-radius: 12px;
-  padding: 0.35rem 0.70rem;
-  margin: 0.10rem 0;
+  border-radius: 10px;
+  padding: 0.35rem 0.65rem;
+  margin: 0.12rem 0.35rem;
 }
 
-[data-md-color-scheme="default"] .md-sidebar__inner .md-nav__link--active {
-  background: rgba(var(--razor-accent-rgb), 0.14);
-  box-shadow: inset 3px 0 0 rgba(var(--razor-accent-rgb), 0.95);
-  margin-left: -0.55rem;
-  margin-right: -0.55rem;
-  padding-left: calc(0.55rem + 0.70rem);
-  padding-right: calc(0.55rem + 0.70rem);
+[data-md-color-scheme="default"] .md-nav--primary .md-nav__link--active,
+[data-md-color-scheme="default"] .md-nav--secondary .md-nav__link--active {
+  background: rgba(var(--razor-accent-rgb), 0.10);
+  box-shadow: inset 3px 0 0 rgba(var(--razor-accent-rgb), 0.85);
 }
 
-[data-md-color-scheme="default"] .md-sidebar__inner .md-nav__link:hover {
-  background: rgba(var(--razor-accent-rgb), 0.08);
+[data-md-color-scheme="default"] .md-nav--primary .md-nav__link:hover,
+[data-md-color-scheme="default"] .md-nav--secondary .md-nav__link:hover {
+  background: rgba(var(--razor-accent-rgb), 0.06);
+}
+
+/* Ensure the secondary TOC accent reaches the container edges visually */
+[data-md-color-scheme="default"] .md-nav--secondary .md-nav__list {
+  padding: 0.25rem 0;
 }
 
 [data-md-color-scheme="default"] .md-nav__title {
