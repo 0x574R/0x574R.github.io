@@ -13,6 +13,8 @@ theme:
   language: es
   logo: assets/logo.png
   favicon: assets/logo.png
+
+  # Light/Dark toggle
   palette:
     - scheme: default
       primary: blue grey
@@ -26,9 +28,11 @@ theme:
       toggle:
         icon: material/weather-sunny
         name: Cambiar a modo claro
+
   font:
     text: IBM Plex Sans
     code: JetBrains Mono
+
   features:
     - navigation.instant
     - navigation.sections
@@ -36,6 +40,7 @@ theme:
     - navigation.top
     - search.highlight
     - content.code.copy
+
   icon:
     repo: fontawesome/brands/github
     admonition:
@@ -50,6 +55,7 @@ plugins:
 extra_css:
   - stylesheets/custom.css
 
+# ✅ MkDocs default code highlighting (stable)
 markdown_extensions:
   - admonition
   - toc:
@@ -57,8 +63,6 @@ markdown_extensions:
   - tables
   - attr_list
   - md_in_html
-
-  # ✅ Highlight "MkDocs default"
   - fenced_code
   - codehilite:
       guess_lang: false
@@ -78,4 +82,3 @@ nav:
       - Malware Dev:
           - research/malware-dev/index.md
           - Shellcode Basics: research/malware-dev/shellcode-basics.md
-
