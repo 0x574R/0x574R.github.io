@@ -13,10 +13,21 @@ theme:
   logo: assets/logo.png
   favicon: assets/favicon.ico
 
+  # Dark purple hacking vibe + light mode toggle
   palette:
+    - scheme: default
+      primary: deep purple
+      accent: purple
+      toggle:
+        icon: material/weather-night
+        name: Cambiar a modo oscuro
+
     - scheme: slate
       primary: deep purple
       accent: purple
+      toggle:
+        icon: material/white-balance-sunny
+        name: Cambiar a modo claro
 
   font:
     text: JetBrains Mono
@@ -40,6 +51,9 @@ plugins:
 
 extra_css:
   - stylesheets/razor.css
+
+extra_javascript:
+  - javascripts/header-title.js
 
 markdown_extensions:
   - attr_list
