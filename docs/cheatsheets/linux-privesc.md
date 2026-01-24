@@ -6,7 +6,7 @@ Técnicas de escalada de privilegios en Linux.
 
 ## Enumeration
 
-/// tab | Bash
+### Bash
 
 ```bash
 # System info
@@ -25,9 +25,9 @@ ip a
 ss -tulpn
 ```
 
-///
 
-/// tab | Python
+
+### Python
 
 ```python
 import os
@@ -42,7 +42,7 @@ print(run("sudo -l"))
 print(run("ip a"))
 ```
 
-///
+
 
 ## SUID Binaries
 

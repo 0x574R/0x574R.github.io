@@ -32,7 +32,6 @@ theme:
   - navigation.top
   - search.highlight
   - content.code.copy
-  - content.tabs.link
   icon:
     repo: fontawesome/brands/github
     admonition:
@@ -45,6 +44,16 @@ plugins:
 extra_css:
 - stylesheets/custom.css
 markdown_extensions:
+  - admonition
+  - fenced_code
+  - codehilite:
+      guess_lang: false
+      noclasses: false
+  - toc:
+      permalink: true
+  - tables
+  - attr_list
+  - md_in_html
 - admonition
 - pymdownx.details
 - pymdownx.highlight:
