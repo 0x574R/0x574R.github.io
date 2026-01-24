@@ -10,29 +10,29 @@
       
       
       
-        <link rel="canonical" href="https://0x574r.github.io/">
+        <link rel="canonical" href="https://0x574r.github.io/research/shellcode-basics/">
       
       
+        <link rel="prev" href="../malware-development/">
       
-        <link rel="next" href="writeups/">
       
       
         
       
       
-      <link rel="icon" href="assets/images/razor-favicon.svg">
+      <link rel="icon" href="../../assets/images/razor-favicon.svg">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
-        <title>RAZOR</title>
+        <title>Shellcode Basics - RAZOR</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -51,9 +51,9 @@
       
     
     
-      <link rel="stylesheet" href="stylesheets/extra.css">
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#razor" class="md-skip">
+        <a href="#shellcode-basics" class="md-skip">
           Saltar a contenido
         </a>
       
@@ -94,9 +94,9 @@
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Cabecera">
-    <a href="." title="RAZOR" class="md-header__button md-logo" aria-label="RAZOR" data-md-component="logo">
+    <a href="../.." title="RAZOR" class="md-header__button md-logo" aria-label="RAZOR" data-md-component="logo">
       
-  <img src="assets/images/razor-logo.svg" alt="logo">
+  <img src="../../assets/images/razor-logo.svg" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -113,7 +113,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Home
+              Shellcode Basics
             
           </span>
         </div>
@@ -218,11 +218,9 @@
   
   
   
-    
   
-  
-    <li class="md-tabs__item md-tabs__item--active">
-      <a href="." class="md-tabs__link">
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
         
   
   
@@ -243,7 +241,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="writeups/" class="md-tabs__link">
+        <a href="../../writeups/" class="md-tabs__link">
           
   
   
@@ -265,7 +263,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="cheatsheets/" class="md-tabs__link">
+        <a href="../../cheatsheets/" class="md-tabs__link">
           
   
   
@@ -283,11 +281,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="research/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
           
   
   
@@ -329,9 +329,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegación" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="RAZOR" class="md-nav__button md-logo" aria-label="RAZOR" data-md-component="logo">
+    <a href="../.." title="RAZOR" class="md-nav__button md-logo" aria-label="RAZOR" data-md-component="logo">
       
-  <img src="assets/images/razor-logo.svg" alt="logo">
+  <img src="../../assets/images/razor-logo.svg" alt="logo">
 
     </a>
     RAZOR
@@ -355,37 +355,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Home
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="." class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -401,48 +374,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Tabla de contenidos
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#ultimos-posts" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Últimos posts
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#secciones" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Secciones
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -477,7 +408,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="writeups/" class="md-nav__link ">
+            <a href="../../writeups/" class="md-nav__link ">
               
   
   
@@ -548,7 +479,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="cheatsheets/" class="md-nav__link ">
+            <a href="../../cheatsheets/" class="md-nav__link ">
               
   
   
@@ -592,7 +523,7 @@
   
   
     <li class="md-nav__item">
-      <a href="cheatsheets/linux-privesc/" class="md-nav__link">
+      <a href="../../cheatsheets/linux-privesc/" class="md-nav__link">
         
   
   
@@ -624,6 +555,8 @@
       
   
   
+    
+  
   
   
     
@@ -641,20 +574,23 @@
     
     
       
+        
+        
+      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="research/" class="md-nav__link ">
+            <a href="../" class="md-nav__link ">
               
   
   
@@ -672,13 +608,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
@@ -710,17 +646,20 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
         
           
-          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="">
             
   
   
@@ -756,7 +695,7 @@
   
   
     <li class="md-nav__item">
-      <a href="research/kernel-security/" class="md-nav__link">
+      <a href="../kernel-security/" class="md-nav__link">
         
   
   
@@ -784,7 +723,7 @@
   
   
     <li class="md-nav__item">
-      <a href="research/ebpf-intro/" class="md-nav__link">
+      <a href="../ebpf-intro/" class="md-nav__link">
         
   
   
@@ -817,8 +756,10 @@
                 
   
   
+    
   
   
+  
     
     
       
@@ -831,18 +772,21 @@
     
       
       
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
         
           
-          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="">
             
   
   
@@ -860,7 +804,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_4_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -878,7 +822,7 @@
   
   
     <li class="md-nav__item">
-      <a href="research/malware-development/" class="md-nav__link">
+      <a href="../malware-development/" class="md-nav__link">
         
   
   
@@ -903,10 +847,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="research/shellcode-basics/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shellcode Basics
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -922,6 +893,48 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#registros-y-syscalls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Registros y syscalls
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejemplo-write1-hin-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejemplo: write(1, "hi\n", 3)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -969,10 +982,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#ultimos-posts" class="md-nav__link">
+  <a href="#registros-y-syscalls" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Últimos posts
+        Registros y syscalls
       
     </span>
   </a>
@@ -980,10 +993,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#secciones" class="md-nav__link">
+  <a href="#ejemplo-write1-hin-3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Secciones
+        Ejemplo: write(1, "hi\n", 3)
       
     </span>
   </a>
@@ -1007,103 +1020,39 @@
 
 
 
-<h1 id="razor">RAZOR<a class="headerlink" href="#razor" title="Permanent link">&para;</a></h1>
-<div class="rz-hero" data-rz-reveal>
-  <div class="rz-hero__left">
-    <p class="rz-hero__kicker">Offensive security · Malware dev · Kernel research</p>
-    <h2 class="rz-hero__title">Writeups, cheatsheets y notas técnicas enfocadas en ofensiva.</h2>
-    <p class="rz-hero__subtitle">
-      Contenido práctico, reproducible y orientado a técnica (Linux, eBPF, kernel, post-exploitation).
-    </p>
-    <div class="rz-hero__actions">
-      <a class="md-button rz-btn rz-btn--primary" href="writeups/">Writeups</a>
-      <a class="md-button rz-btn" href="cheatsheets/">Cheatsheets</a>
-      <a class="md-button rz-btn" href="research/">Research</a>
-      <a class="md-button rz-btn rz-btn--ghost" href="https://github.com/0x574R" target="_blank" rel="noopener">GitHub</a>
-    </div>
-
-    <div class="rz-terminal" data-rz-reveal>
-      <div class="rz-terminal__bar">
-        <span></span><span></span><span></span>
-      </div>
-      <pre class="rz-terminal__body"><code>$ whoami
-0x574R
-
-$ cat focus.txt
-Linux  •  eBPF  •  Kernel  •  Malware Dev  •  Red Team
-
-$ ls -la
-writeups/  cheatsheets/  research/
-</code></pre>
-    </div>
-  </div>
-
-  <div class="rz-hero__right" data-rz-reveal>
-    <div class="rz-hero__logo">
-      <img src="assets/images/razor-logo.svg" alt="RAZOR logo" loading="eager" />
-    </div>
-  </div>
-</div>
-
+<h1 id="shellcode-basics">Shellcode Basics<a class="headerlink" href="#shellcode-basics" title="Permanent link">&para;</a></h1>
+<p>Fundamentos rápidos para x86_64 (Linux).</p>
+<h2 id="registros-y-syscalls">Registros y syscalls<a class="headerlink" href="#registros-y-syscalls" title="Permanent link">&para;</a></h2>
+<p>En Linux x86_64 los argumentos de syscall van en:</p>
+<ul>
+<li><code>rdi</code>, <code>rsi</code>, <code>rdx</code>, <code>r10</code>, <code>r8</code>, <code>r9</code></li>
+<li>número de syscall en <code>rax</code></li>
+</ul>
+<h2 id="ejemplo-write1-hin-3">Ejemplo: write(1, "hi\n", 3)<a class="headerlink" href="#ejemplo-write1-hin-3" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">; nasm -f elf64 sc.asm &amp;&amp; ld -o sc sc.o</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">BITS</span><span class="w"> </span><span class="mi">64</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="k">section</span><span class="w"> </span><span class="nv">.text</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="k">global</span><span class="w"> </span><span class="nv">_start</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="nl">_start:</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span><span class="nf">mov</span><span class="w"> </span><span class="nb">rax</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="w">        </span><span class="c1">; sys_write</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">  </span><span class="nf">mov</span><span class="w"> </span><span class="nb">rdi</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="w">        </span><span class="c1">; fd=stdout</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">  </span><span class="nf">lea</span><span class="w"> </span><span class="nb">rsi</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="ow">rel</span><span class="w"> </span><span class="nv">msg</span><span class="p">]</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">  </span><span class="nf">mov</span><span class="w"> </span><span class="nb">rdx</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">  </span><span class="nf">syscall</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">  </span><span class="nf">mov</span><span class="w"> </span><span class="nb">rax</span><span class="p">,</span><span class="w"> </span><span class="mi">60</span><span class="w">       </span><span class="c1">; sys_exit</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">  </span><span class="nf">xor</span><span class="w"> </span><span class="nb">rdi</span><span class="p">,</span><span class="w"> </span><span class="nb">rdi</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">  </span><span class="nf">syscall</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="k">section</span><span class="w"> </span><span class="nv">.data</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="nl">msg:</span><span class="w"> </span><span class="kd">db</span><span class="w"> </span><span class="s">&quot;hi\n&quot;</span>
+</code></pre></div>
 <hr />
-<h2 id="ultimos-posts">Últimos posts<a class="headerlink" href="#ultimos-posts" title="Permanent link">&para;</a></h2>
-<div class="rz-cards rz-cards--3">
-  <a class="rz-article-card" href="research/ebpf-intro/" data-rz-reveal>
-    <div class="rz-article-card__meta">
-      <span class="rz-tag">Kernel</span>
-      <span class="rz-date">2025-01-09</span>
-    </div>
-    <div class="rz-article-card__img">
-      <img src="assets/images/thumb-ebpf.jpg" alt="eBPF" loading="lazy" />
-    </div>
-    <div class="rz-article-card__title">Introducción a eBPF</div>
-    <div class="rz-article-card__desc">Introducción práctica a eBPF aplicado a observabilidad y seguridad.</div>
-    <div class="rz-article-card__cta">Leer →</div>
-  </a>
-
-  <a class="rz-article-card" href="cheatsheets/linux-privesc/" data-rz-reveal>
-    <div class="rz-article-card__meta">
-      <span class="rz-tag">Cheatsheet</span>
-      <span class="rz-date">2025-01-08</span>
-    </div>
-    <div class="rz-article-card__img">
-      <img src="assets/images/thumb-privesc.jpg" alt="Linux PrivEsc" loading="lazy" />
-    </div>
-    <div class="rz-article-card__title">Linux Privilege Escalation</div>
-    <div class="rz-article-card__desc">Checklist con comandos clave y vectores comunes, lista para uso diario.</div>
-    <div class="rz-article-card__cta">Leer →</div>
-  </a>
-
-  <a class="rz-article-card" href="research/shellcode-basics/" data-rz-reveal>
-    <div class="rz-article-card__meta">
-      <span class="rz-tag">Malware Dev</span>
-      <span class="rz-date">2025-01-07</span>
-    </div>
-    <div class="rz-article-card__img">
-      <img src="assets/images/thumb-shellcode.jpg" alt="Shellcode" loading="lazy" />
-    </div>
-    <div class="rz-article-card__title">Shellcode Basics</div>
-    <div class="rz-article-card__desc">Fundamentos de shellcode, registros y syscalls en x86_64.</div>
-    <div class="rz-article-card__cta">Leer →</div>
-  </a>
-</div>
-
-<hr />
-<h2 id="secciones">Secciones<a class="headerlink" href="#secciones" title="Permanent link">&para;</a></h2>
-<div class="rz-cards rz-cards--3">
-  <a class="rz-section-card" href="writeups/" data-rz-reveal>
-    <div class="rz-section-card__title">Writeups</div>
-    <div class="rz-section-card__desc">Resolución de máquinas CTF / HTB / Labs.</div>
-  </a>
-  <a class="rz-section-card" href="cheatsheets/" data-rz-reveal>
-    <div class="rz-section-card__title">Cheatsheets</div>
-    <div class="rz-section-card__desc">Quick reference: Linux, Windows y tooling esencial.</div>
-  </a>
-  <a class="rz-section-card" href="research/" data-rz-reveal>
-    <div class="rz-section-card__title">Research</div>
-    <div class="rz-section-card__desc">Kernel, malware dev y eBPF — notas y deep dives.</div>
-  </a>
-</div>
+<blockquote>
+<p>Completa con: encoding, null-bytes, JMP-CALL-POP, etc.</p>
+</blockquote>
 
 
 
@@ -1153,12 +1102,12 @@ writeups/  cheatsheets/  research/
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "header.autohide"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "header.autohide"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
     
     
-      <script src="assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
-        <script src="javascripts/extra.js"></script>
+        <script src="../../javascripts/extra.js"></script>
       
     
   </body>
