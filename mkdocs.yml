@@ -37,11 +37,12 @@ theme:
     - navigation.top
     - search.highlight
     - content.code.copy
+    - content.tabs.link
   icon:
     repo: fontawesome/brands/github
     admonition:
       note: fontawesome/solid/note-sticky
-      tip: fontawesome/solid/lightbulb
+      tip: fontawesome/solid/link
       warning: fontawesome/solid/triangle-exclamation
       danger: fontawesome/solid/skull-crossbones
 
@@ -57,7 +58,12 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.highlight:
       anchor_linenums: true
+      pygments_lang_class: true
+      pygments_style: github
+      pygments_style_dark: monokai
   - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
   - tables
   - attr_list
   - md_in_html
