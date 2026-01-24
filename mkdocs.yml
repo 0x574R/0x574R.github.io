@@ -1,178 +1,51 @@
-# RAZOR Security Blog - MkDocs Configuration
-# Theme: Cyberpunk/Terminal aesthetic
-
+# RAZOR - Security Blog
 site_name: RAZOR
 site_url: https://0x574r.github.io/
-site_author: 0x574R
-site_description: Offensive security research, writeups y notas técnicas
+site_description: Offensive security research & notes
 
-# Repository
 repo_name: 0x574R
 repo_url: https://github.com/0x574R
 
-# Copyright
-copyright: Copyright &copy; 2024-2025 0x574R | RAZOR Security Blog
+copyright: "© 2025 0x574R"
 
-# Theme configuration
 theme:
   name: material
   language: es
-  custom_dir: docs/overrides
-  logo: assets/logo.svg
-  favicon: assets/favicon.svg
-  
-  font:
-    text: JetBrains Mono
-    code: JetBrains Mono
-  
   palette:
-    - scheme: slate
-      primary: black
-      accent: light green
-      toggle:
-        icon: material/weather-night
-        name: Cambiar a modo claro
-    - scheme: default
-      primary: black
-      accent: green
-      toggle:
-        icon: material/weather-sunny
-        name: Cambiar a modo oscuro
-
+    scheme: slate
+    primary: black
+    accent: green
+  font:
+    text: Inter
+    code: JetBrains Mono
   features:
-    - navigation.tabs
-    - navigation.tabs.sticky
-    - navigation.sections
-    - navigation.expand
-    - navigation.top
-    - navigation.footer
     - navigation.instant
-    - navigation.instant.progress
-    - search.suggest
+    - navigation.tabs
+    - navigation.top
     - search.highlight
-    - search.share
     - content.code.copy
-    - content.code.annotate
-    - content.tabs.link
-    - toc.follow
-    - announce.dismiss
-
   icon:
     repo: fontawesome/brands/github
-    admonition:
-      note: fontawesome/solid/terminal
-      tip: fontawesome/solid/lightbulb
-      warning: fontawesome/solid/triangle-exclamation
-      danger: fontawesome/solid/skull-crossbones
-      bug: fontawesome/solid/bug
-      example: fontawesome/solid/code
-      quote: fontawesome/solid/quote-left
 
-# Plugins
 plugins:
-  - search:
-      lang: es
-      separator: '[\s\-\.]+'
-  - tags:
-      tags_file: tags.md
+  - search
 
-# Extra CSS and JS
 extra_css:
-  - stylesheets/extra.css
-  - stylesheets/animations.css
-  - https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap
+  - stylesheets/custom.css
 
-extra_javascript:
-  - javascripts/extra.js
-
-# Extensions
 markdown_extensions:
-  - abbr
   - admonition
-  - attr_list
-  - def_list
-  - footnotes
-  - md_in_html
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
   - tables
   - toc:
       permalink: true
-      permalink_title: Enlace permanente
-      toc_depth: 3
-  - pymdownx.arithmatex:
-      generic: true
-  - pymdownx.betterem:
-      smart_enable: all
-  - pymdownx.caret
-  - pymdownx.mark
-  - pymdownx.tilde
-  - pymdownx.critic
-  - pymdownx.details
-  - pymdownx.emoji:
-      emoji_index: !!python/name:material.extensions.emoji.twemoji
-      emoji_generator: !!python/name:material.extensions.emoji.to_svg
-  - pymdownx.highlight:
-      anchor_linenums: true
-      line_spans: __span
-      pygments_lang_class: true
-      auto_title: true
-  - pymdownx.inlinehilite
-  - pymdownx.keys
-  - pymdownx.magiclink:
-      repo_url_shorthand: true
-      user: 0x574R
-      repo: 0x574R.github.io
-  - pymdownx.smartsymbols
-  - pymdownx.snippets:
-      auto_append:
-        - includes/abbreviations.md
-  - pymdownx.superfences:
-      custom_fences:
-        - name: mermaid
-          class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_code_format
-  - pymdownx.tabbed:
-      alternate_style: true
-  - pymdownx.tasklist:
-      custom_checkbox: true
 
-# Extra
-extra:
-  social:
-    - icon: fontawesome/brands/github
-      link: https://github.com/0x574R
-      name: GitHub
-    - icon: fontawesome/solid/rss
-      link: /feed_rss_created.xml
-      name: RSS Feed
-  
-  generator: false
-  
-  analytics:
-    feedback:
-      title: ¿Te fue útil esta página?
-      ratings:
-        - icon: material/emoticon-happy-outline
-          name: Sí, me ayudó
-          data: 1
-          note: ¡Gracias por tu feedback!
-        - icon: material/emoticon-sad-outline
-          name: Podría mejorar
-          data: 0
-          note: Gracias, intentaré mejorar el contenido.
-
-# Navigation
 nav:
   - Home: index.md
-  - Writeups:
-    - writeups/index.md
-  - Cheatsheets:
-    - cheatsheets/index.md
-  - Research:
-    - research/index.md
-    - Kernel:
-      - research/kernel/index.md
-      - Introducción a eBPF: research/kernel/ebpf-intro.md
-    - Malware Dev:
-      - research/malware-dev/index.md
-      - Shellcode Basics: research/malware-dev/shellcode-basics.md
-  - Tags: tags.md
+  - Writeups: writeups/index.md
+  - Cheatsheets: cheatsheets/index.md
+  - Research: research/index.md

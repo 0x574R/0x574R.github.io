@@ -1,0 +1,37 @@
+/* RAZOR - Minimal Custom Styles */
+
+:root {
+  --accent: #4ade80;
+}
+
+/* Slight tweaks to Material theme */
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: #111;
+  --md-accent-fg-color: var(--accent);
+}
+
+/* Clean code blocks */
+.md-typeset code {
+  background: #1a1a1a;
+  border-radius: 4px;
+}
+
+.md-typeset pre {
+  border-radius: 6px;
+}
+
+/* Links */
+.md-typeset a {
+  color: var(--accent);
+}
+
+/* Tables */
+.md-typeset table:not([class]) th {
+  background: #1a1a1a;
+}
+
+/* Footer cleanup */
+.md-copyright {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
