@@ -1,37 +1,41 @@
+# RAZOR - Security Blog
 site_name: RAZOR
 site_url: https://0x574r.github.io/
 site_description: Offensive security research & notes
+
 repo_name: 0x574R
 repo_url: https://github.com/0x574R
-copyright: © 2025 0x574R
+
+copyright: "© 2025 0x574R"
+
 theme:
   name: material
   language: es
   logo: assets/logo.png
   favicon: assets/logo.png
   palette:
-  - scheme: default
-    primary: blue grey
-    accent: indigo
-    toggle:
-      icon: material/weather-night
-      name: Cambiar a modo oscuro
-  - scheme: slate
-    primary: blue grey
-    accent: indigo
-    toggle:
-      icon: material/weather-sunny
-      name: Cambiar a modo claro
+    - scheme: default
+      primary: blue grey
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Cambiar a modo oscuro
+    - scheme: slate
+      primary: blue grey
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Cambiar a modo claro
   font:
     text: IBM Plex Sans
     code: JetBrains Mono
   features:
-  - navigation.instant
-  - navigation.sections
-  - navigation.expand
-  - navigation.top
-  - search.highlight
-  - content.code.copy
+    - navigation.instant
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.highlight
+    - content.code.copy
   icon:
     repo: fontawesome/brands/github
     admonition:
@@ -39,49 +43,39 @@ theme:
       tip: fontawesome/solid/link
       warning: fontawesome/solid/triangle-exclamation
       danger: fontawesome/solid/skull-crossbones
+
 plugins:
-- search
+  - search
+
 extra_css:
-- stylesheets/custom.css
+  - stylesheets/custom.css
+
 markdown_extensions:
   - admonition
-  - fenced_code
-  - codehilite:
-      guess_lang: false
-      noclasses: false
   - toc:
       permalink: true
   - tables
   - attr_list
   - md_in_html
-- admonition
-- pymdownx.details
-- pymdownx.highlight:
-    use_pygments: true
-    anchor_linenums: true
-    pygments_lang_class: true
-    pygments_style: github
-- pymdownx.inlinehilite
-- pymdownx.superfences:
-    preserve_tabs: true
-- pymdownx.blocks.tab:
-    alternate_style: true
-- tables
-- attr_list
-- md_in_html
-- toc:
-    permalink: true
+
+  # ✅ Highlight "MkDocs default"
+  - fenced_code
+  - codehilite:
+      guess_lang: false
+      use_pygments: true
+
 nav:
-- Home: index.md
-- Writeups: writeups/index.md
-- Cheatsheets:
-  - cheatsheets/index.md
-  - Linux Privesc: cheatsheets/linux-privesc.md
-- Research:
-  - research/index.md
-  - Kernel:
-    - research/kernel/index.md
-    - eBPF Intro: research/kernel/ebpf-intro.md
-  - Malware Dev:
-    - research/malware-dev/index.md
-    - Shellcode Basics: research/malware-dev/shellcode-basics.md
+  - Home: index.md
+  - Writeups: writeups/index.md
+  - Cheatsheets:
+      - cheatsheets/index.md
+      - Linux Privesc: cheatsheets/linux-privesc.md
+  - Research:
+      - research/index.md
+      - Kernel:
+          - research/kernel/index.md
+          - eBPF Intro: research/kernel/ebpf-intro.md
+      - Malware Dev:
+          - research/malware-dev/index.md
+          - Shellcode Basics: research/malware-dev/shellcode-basics.md
+
