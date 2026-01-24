@@ -1,70 +1,84 @@
-# RAZOR - Security Blog
 site_name: RAZOR
+site_description: Offensive security · Malware dev · Kernel research
 site_url: https://0x574r.github.io/
-site_description: Offensive security research & notes
-
-repo_name: 0x574R
-repo_url: https://github.com/0x574R
-
-copyright: "© 2025 0x574R"
+repo_url: https://github.com/0x574R/0x574R.github.io
+repo_name: 0x574R/0x574R.github.io
+edit_uri: ""
 
 theme:
   name: material
   language: es
-  logo: assets/logo.png
-  favicon: assets/logo.png
-  palette:
-    scheme: slate
-    primary: black
-    accent: green
-  font:
-    text: Inter
-    code: JetBrains Mono
-  features:
-    - navigation.instant
-    - navigation.sections
-    - navigation.expand
-    - navigation.top
-    - search.highlight
-    - content.code.copy
+  logo: assets/images/razor-logo.svg
+  favicon: assets/images/razor-favicon.svg
   icon:
     repo: fontawesome/brands/github
-    admonition:
-      note: fontawesome/solid/note-sticky
-      tip: fontawesome/solid/lightbulb
-      warning: fontawesome/solid/triangle-exclamation
-      danger: fontawesome/solid/skull-crossbones
-
-plugins:
-  - search
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.indexes
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - header.autohide
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep purple
+      accent: purple
+      toggle:
+        icon: material/weather-night
+        name: Cambiar a modo oscuro
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep purple
+      accent: purple
+      toggle:
+        icon: material/white-balance-sunny
+        name: Cambiar a modo claro
 
 extra_css:
-  - stylesheets/custom.css
+  - stylesheets/extra.css
+
+extra_javascript:
+  - javascripts/extra.js
+
+plugins:
+  - search:
+      lang: es
 
 markdown_extensions:
   - admonition
+  - attr_list
+  - md_in_html
+  - footnotes
+  - tables
+  - toc:
+      permalink: true
   - pymdownx.details
   - pymdownx.superfences
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.inlinehilite
-  - tables
-  - attr_list
-  - md_in_html
-  - toc:
-      permalink: true
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.snippets
 
 nav:
   - Home: index.md
-  - Writeups: writeups/index.md
+  - Writeups:
+      - writeups/index.md
   - Cheatsheets:
-    - cheatsheets/index.md
-    - Linux Privesc: cheatsheets/linux-privesc.md
+      - cheatsheets/index.md
+      - Linux Privesc: cheatsheets/linux-privesc.md
   - Research:
-    - research/index.md
-    - Kernel:
-      - research/kernel/index.md
-      - eBPF Intro: research/kernel/ebpf-intro.md
-    - Malware Dev:
-      - research/malware-dev/index.md
-      - Shellcode Basics: research/malware-dev/shellcode-basics.md
+      - research/index.md
+      - Kernel:
+          - Kernel Security: research/kernel-security.md
+          - eBPF Intro: research/ebpf-intro.md
+      - Malware Dev:
+          - Malware Development: research/malware-development.md
+          - Shellcode Basics: research/shellcode-basics.md
