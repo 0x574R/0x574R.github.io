@@ -47,37 +47,32 @@
   --md-header-height: 3.0rem;
 }
 
-/* --- Light mode: sidebars should visually match dark mode (card-like)
-   while keeping excellent readability.
-   We use a subtle glass surface and remove Material's scroll masking
-   to avoid the "ghost rectangle" artifacts.
+/* --- Light mode: sidebars should match the dark mode *cleanly*
+   (no heavy blur / no dirty overlays).
+   Goal: same premium feeling as dark mode, but crisp and readable.
 */
 [data-md-color-scheme="default"] .md-sidebar--primary .md-sidebar__inner,
 [data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__inner {
-  background: rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.94);
   border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 18px;
+  border-radius: 16px;
   box-shadow:
-    0 18px 40px rgba(15, 23, 42, 0.10),
-    0 2px 10px rgba(15, 23, 42, 0.06);
-  padding: 0.70rem 0.65rem;
-  backdrop-filter: blur(10px);
+    0 14px 28px rgba(15, 23, 42, 0.08),
+    0 2px 8px rgba(15, 23, 42, 0.05);
+  padding: 0.55rem 0.55rem;
 }
 
-/* Light mode: ensure the sidebar columns don't look like separate panels */
+/* Light mode: avoid the side columns looking like separate white panels */
 [data-md-color-scheme="default"] .md-sidebar {
   background: transparent;
 }
 
-/* Disable Material's scroll mask fade in sidebars (creates the top "ghost" block)
-   Some browsers render the mask as a visible rectangle on light surfaces. */
+/* Disable Material's scroll masks / fades in sidebars (cause ghost blocks) */
 [data-md-color-scheme="default"] .md-sidebar__scrollwrap {
   -webkit-mask-image: none !important;
   mask-image: none !important;
 }
 
-/* Light mode: remove the built-in scroll fade overlays (ghost rectangles)
-   in both sidebars. Material renders these as pseudo elements. */
 [data-md-color-scheme="default"] .md-sidebar__scrollwrap::before,
 [data-md-color-scheme="default"] .md-sidebar__scrollwrap::after,
 [data-md-color-scheme="default"] .md-sidebar__inner::before,
@@ -86,26 +81,42 @@
   display: none !important;
 }
 
-/* Light mode: navigation highlight integrated (full-width, clean)
-   Avoid the "bubble" look from negative margins. */
+/* Light mode: navigation links (clean, aligned, not "bubbly") */
 [data-md-color-scheme="default"] .md-nav--primary .md-nav__link,
 [data-md-color-scheme="default"] .md-nav--secondary .md-nav__link {
+  position: relative;
   display: block;
   width: 100%;
   border-radius: 12px;
-  padding: 0.38rem 0.65rem;
-  margin: 0.10rem 0;
+  padding: 0.40rem 0.70rem;
+  margin: 0.08rem 0;
+  transition: background 140ms ease, color 140ms ease;
 }
 
-[data-md-color-scheme="default"] .md-nav--primary .md-nav__link--active,
-[data-md-color-scheme="default"] .md-nav--secondary .md-nav__link--active {
-  background: rgba(var(--razor-accent-rgb), 0.12);
-  box-shadow: inset 3px 0 0 rgba(var(--razor-accent-rgb), 0.90);
-}
-
+/* Hover */
 [data-md-color-scheme="default"] .md-nav--primary .md-nav__link:hover,
 [data-md-color-scheme="default"] .md-nav--secondary .md-nav__link:hover {
   background: rgba(var(--razor-accent-rgb), 0.06);
+}
+
+/* Active (full-width background + straight accent bar) */
+[data-md-color-scheme="default"] .md-nav--primary .md-nav__link--active,
+[data-md-color-scheme="default"] .md-nav--secondary .md-nav__link--active {
+  background: rgba(var(--razor-accent-rgb), 0.10);
+  color: rgba(15, 23, 42, 0.92) !important;
+  font-weight: 650;
+}
+
+[data-md-color-scheme="default"] .md-nav--primary .md-nav__link--active::before,
+[data-md-color-scheme="default"] .md-nav--secondary .md-nav__link--active::before {
+  content: "";
+  position: absolute;
+  left: 0.36rem;
+  top: 0.42rem;
+  bottom: 0.42rem;
+  width: 3px;
+  border-radius: 4px;
+  background: rgba(var(--razor-accent-rgb), 0.95);
 }
 
 /* TOC: ensure highlight reaches the edges within our card padding */
