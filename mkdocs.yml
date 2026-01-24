@@ -36,7 +36,7 @@ theme:
   features:
     - navigation.instant
     - navigation.sections
-    - navigation.expand
+    # - navigation.expand  # QUITADO: menús plegados por defecto
     - navigation.top
     - search.highlight
     - content.code.copy
@@ -55,7 +55,6 @@ plugins:
 extra_css:
   - stylesheets/custom.css
 
-
 # ✅ MkDocs default code highlighting (stable)
 markdown_extensions:
   - admonition
@@ -70,7 +69,7 @@ markdown_extensions:
       use_pygments: true
 
 nav:
-  - Home: index.md
+  # Home quitado del menú lateral
   - Writeups: writeups/index.md
   - Cheatsheets:
       - cheatsheets/index.md
