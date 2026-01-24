@@ -786,6 +786,38 @@
    RESPONSIVE
    ============================================================ */
 
+/* Hero images en artículos */
+.hero-image {
+  margin: 0 0 1.5rem 0 !important;
+  padding: 0 !important;
+}
+
+.hero-image img {
+  width: 100% !important;
+  max-height: 200px !important;
+  object-fit: cover !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(var(--razor-accent-rgb), 0.15) !important;
+}
+
+[data-md-color-scheme="default"] .hero-image img {
+  border: 1px solid rgba(15, 23, 42, 0.1) !important;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08) !important;
+}
+
+[data-md-color-scheme="slate"] .hero-image img {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Cards con imágenes */
+.razor-card img {
+  border-radius: 10px !important;
+  width: 100% !important;
+  height: 100px !important;
+  object-fit: cover !important;
+  margin-bottom: 0.5rem !important;
+}
+
 @media (max-width: 900px) {
   .razor-cards,
   .razor-cards--sections {
@@ -883,16 +915,69 @@
    CODE HIGHLIGHTING MEJORADO
    ============================================================ */
 
-/* Título del lenguaje en bloques de código */
-.md-typeset .highlight > .filename {
-  background: rgba(var(--razor-accent-rgb), 0.15);
-  border-bottom: 1px solid rgba(var(--razor-accent-rgb), 0.25);
-  color: var(--md-default-fg-color);
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 0.5rem 1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+/* Contenedor del bloque de código con título */
+.md-typeset .highlight {
+  position: relative;
+}
+
+/* Título del lenguaje - minimalista */
+.md-typeset .highlight > pre > code::before,
+.md-typeset .highlighttable .code pre > code::before {
+  content: none !important;
+}
+
+/* Barra del lenguaje - estilo compacto */
+.md-typeset .highlight > .filename,
+.md-typeset .highlight span.filename {
+  background: rgba(var(--razor-accent-rgb), 0.08) !important;
+  border-bottom: 1px solid rgba(var(--razor-accent-rgb), 0.15) !important;
+  border-radius: 8px 8px 0 0 !important;
+  color: var(--md-default-fg-color--light) !important;
+  font-family: var(--md-code-font-family) !important;
+  font-size: 0.65rem !important;
+  font-weight: 600 !important;
+  padding: 0.35rem 0.8rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  margin: 0 !important;
+  display: inline-block !important;
+}
+
+/* Alternativa: si usa data-md-lang */
+.md-typeset pre[class*="language-"]::before {
+  content: attr(data-md-lang) !important;
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  background: rgba(var(--razor-accent-rgb), 0.1) !important;
+  color: var(--md-default-fg-color--lighter) !important;
+  font-size: 0.6rem !important;
+  font-weight: 600 !important;
+  padding: 0.2rem 0.5rem !important;
+  border-radius: 0 8px 0 6px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+/* Quitar el título automático grande de pymdownx */
+.md-typeset .highlight code[data-md-lang]::before {
+  display: none !important;
+}
+
+/* Dark mode - barra más sutil */
+[data-md-color-scheme="slate"] .md-typeset .highlight > .filename,
+[data-md-color-scheme="slate"] .md-typeset .highlight span.filename {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+  color: var(--md-default-fg-color--lighter) !important;
+}
+
+/* Light mode - barra discreta */
+[data-md-color-scheme="default"] .md-typeset .highlight > .filename,
+[data-md-color-scheme="default"] .md-typeset .highlight span.filename {
+  background: rgba(15, 23, 42, 0.04) !important;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+  color: rgba(15, 23, 42, 0.5) !important;
 }
 
 /* Light mode code highlighting */
