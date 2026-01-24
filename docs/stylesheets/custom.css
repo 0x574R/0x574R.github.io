@@ -8,22 +8,26 @@
 
 [data-md-color-scheme="slate"] {
   /* Brand palette (dark purple) */
-  --md-primary-fg-color: #2b0a4d;         /* topbar / primary */
-  --md-primary-fg-color--light: #3b0f66;
-  --md-primary-fg-color--dark: #20063a;
+  --md-primary-fg-color: #14001f;         /* topbar / primary */
+  --md-primary-fg-color--light: #1f0330;
+  --md-primary-fg-color--dark: #0b0012;
 
-  --md-accent-fg-color: #b66dff;          /* links / accents */
-  --md-accent-fg-color--transparent: rgba(182, 109, 255, 0.12);
+  /* Accents: darker + less neon */
+  --md-accent-fg-color: #7c3aed;          /* links / accents */
+  --md-accent-fg-color--transparent: rgba(124, 58, 237, 0.14);
 
   /* Page surfaces */
-  --md-default-bg-color: #07030d;         /* body background */
-  --md-code-bg-color: #0e0620;
-  --md-footer-bg-color: #0b0415;
+  --md-default-bg-color: #05000a;         /* body background */
+  --md-code-bg-color: #090012;
+  --md-footer-bg-color: #06000e;
 
   /* Text */
   --md-default-fg-color: rgba(255, 255, 255, 0.92);
   --md-default-fg-color--light: rgba(255, 255, 255, 0.72);
   --md-default-fg-color--lighter: rgba(255, 255, 255, 0.52);
+
+  /* Reduce topbar height while keeping it dense */
+  --md-header-height: 3.0rem;
 }
 
 /* Links */
@@ -35,25 +39,37 @@
   opacity: 0.9;
 }
 
-/* Make topbar more distinguishable from body */
+/* Make topbar more distinguishable from body + animated gradient */
 .md-header,
 .md-tabs {
-  background: linear-gradient(90deg, #1a0730 0%, #2b0a4d 60%, #3b0f66 100%);
+  background: linear-gradient(
+    90deg,
+    #06000e 0%,
+    #100018 30%,
+    #1c0330 65%,
+    #14001f 100%
+  );
+  background-size: 220% 220%;
+  animation: razor-header-gradient 10s ease-in-out infinite;
 }
 
 .md-header {
-  border-bottom: 1px solid rgba(182, 109, 255, 0.22);
+  border-bottom: 1px solid rgba(124, 58, 237, 0.22);
 }
 
-/* Enlarge logo (fix: logo was extremely small) */
+/* Enlarge logo A LOT (visual size) while keeping topbar height compact */
 .md-header__button.md-logo img {
-  height: 2.75rem;
+  height: 2.35rem;
   width: auto;
+  transform: scale(1.65);
+  transform-origin: left center;
+  filter: drop-shadow(0 0 10px rgba(124, 58, 237, 0.45));
+  animation: razor-logo-float 4.5s ease-in-out infinite;
 }
 
 .md-header__button.md-logo {
-  padding: 0.2rem 0.6rem;
-  margin-right: 0.2rem;
+  padding: 0.05rem 0.4rem;
+  margin-right: 0.35rem;
 }
 
 /* Ensure title never overlaps logo */
@@ -61,10 +77,65 @@
   padding-left: 0.2rem;
 }
 
+/* Compact the inner header padding to reduce height */
+.md-header__inner {
+  padding-top: 0.05rem;
+  padding-bottom: 0.05rem;
+}
+
+/* Subtle entrance animation for each page */
+.md-content {
+  animation: razor-content-in 240ms ease-out both;
+}
+
+/* Better buttons + hover animations */
+.md-typeset .md-button,
+.md-search__form {
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+}
+
+.md-typeset .md-button {
+  border-radius: 999px;
+  border: 1px solid rgba(124, 58, 237, 0.35);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.md-typeset .md-button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(124, 58, 237, 0.55);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
+}
+
+/* Nav micro-animations */
+.md-nav__link {
+  transition: transform 140ms ease, opacity 140ms ease;
+}
+
+.md-nav__link:hover {
+  transform: translateX(2px);
+}
+
+/* Keyframes */
+@keyframes razor-header-gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes razor-content-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes razor-logo-float {
+  0%, 100% { transform: scale(1.65) translateY(0); }
+  50% { transform: scale(1.65) translateY(-1px); }
+}
+
 /* Subtle accents on cards and content */
 .md-typeset .admonition,
 .md-typeset details {
-  border-color: rgba(182, 109, 255, 0.25);
+  border-color: rgba(124, 58, 237, 0.25);
 }
 
 /* Search highlight */
