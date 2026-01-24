@@ -1,31 +1,31 @@
-/* RAZOR - Dark Purple theme overrides */
+/* RAZOR - Midnight Steel (dark blue/grey) theme overrides */
 
 /*
   Material for MkDocs uses CSS variables for theming.
-  Here we enforce a dark purple palette with a clear separation
-  between header (topbar) and body.
+  Here we enforce a dark blue/grey palette with a clear separation
+  between header (topbar) and body, prioritizing body readability.
 */
 
 [data-md-color-scheme="slate"] {
-  /* Brand palette (Abyss Violet) */
-  /* Topbar / primary */
-  --md-primary-fg-color: #250032;
-  --md-primary-fg-color--light: #3b0764;
-  --md-primary-fg-color--dark: #12001b;
+  /* Brand palette (Midnight Steel) */
+  /* Topbar / primary (blue-grey navy) */
+  --md-primary-fg-color: #0b1220;
+  --md-primary-fg-color--light: #162033;
+  --md-primary-fg-color--dark: #070c16;
 
-  /* Accent: deep violet (dark enough, but still readable) */
-  --razor-accent: #6d28d9;
-  --razor-accent-rgb: 109, 40, 217;
+  /* Accent: steel blue (readable, not neon) */
+  --razor-accent: #60a5fa;
+  --razor-accent-rgb: 96, 165, 250;
   --md-accent-fg-color: var(--razor-accent);
   --md-accent-fg-color--transparent: rgba(var(--razor-accent-rgb), 0.16);
 
-  /* Page surfaces: lifted slightly so dark mode is readable */
-  --md-default-bg-color: #151022;
-  --md-code-bg-color: #1b1530;
-  --md-footer-bg-color: #110b1e;
+  /* Page surfaces: lifted more so the body is easy to read */
+  --md-default-bg-color: #0f1724;
+  --md-code-bg-color: #111c2e;
+  --md-footer-bg-color: #070b12;
 
   /* Side panels */
-  --md-sidebar-bg-color: #120c20;
+  --md-sidebar-bg-color: #0c111a;
 
   /* Text */
   --md-default-fg-color: rgba(255, 255, 255, 0.92);
@@ -80,13 +80,13 @@
 /* Make topbar more distinguishable from body + animated gradient */
 .md-header,
 .md-tabs {
-  /* Darker, richer gradient with subtle movement */
+  /* Blue-grey gradient with subtle movement */
   background: linear-gradient(
     92deg,
-    #07000f 0%,
-    #12001b 24%,
-    #250032 58%,
-    #3b0764 100%
+    #060a12 0%,
+    #0b1220 28%,
+    #0f1a2c 62%,
+    #162033 100%
   );
   background-size: 240% 240%;
   animation: razor-header-gradient 9s ease-in-out infinite;
@@ -173,6 +173,20 @@
   animation: razor-content-in 240ms ease-out both;
 }
 
+/* Give the body/content more structure (better readability) */
+.md-content__inner > .md-typeset {
+  background: rgba(255,255,255,0.012);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 18px;
+  padding: 1.1rem 1.1rem;
+}
+
+@media (max-width: 900px) {
+  .md-content__inner > .md-typeset {
+    padding: 0.9rem 0.9rem;
+  }
+}
+
 /* Better buttons + hover animations */
 .md-typeset .md-button,
 .md-search__form {
@@ -234,6 +248,144 @@
 
 .md-nav__link:hover::after {
   width: 18px;
+}
+
+/* --- Home (Inicio) layout --- */
+
+.razor-hero {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.15rem 1.15rem;
+  border-radius: 18px;
+  background: linear-gradient(135deg,
+    rgba(255,255,255,0.03) 0%,
+    rgba(var(--razor-accent-rgb), 0.10) 40%,
+    rgba(255,255,255,0.02) 100%
+  );
+  border: 1px solid rgba(var(--razor-accent-rgb), 0.18);
+  box-shadow: 0 18px 50px rgba(0,0,0,0.35);
+  animation: razor-content-in 320ms ease-out both;
+}
+
+.razor-hero__logo {
+  width: 92px;
+  height: 92px;
+  flex: 0 0 auto;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(var(--razor-accent-rgb), 0.16);
+  padding: 0.55rem;
+  filter: drop-shadow(0 0 18px rgba(var(--razor-accent-rgb), 0.28));
+  transform: translateZ(0);
+}
+
+.razor-hero__kicker {
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--md-default-fg-color--light);
+  margin-bottom: 0.45rem;
+}
+
+.razor-hero__subtitle {
+  font-size: 1.0rem;
+  line-height: 1.55;
+  color: var(--md-default-fg-color);
+  max-width: 56ch;
+}
+
+.razor-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 0.85rem;
+}
+
+.razor-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.razor-cards--sections {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.razor-card {
+  display: block;
+  padding: 1.05rem 1.05rem;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 14px 40px rgba(0,0,0,0.35);
+  text-decoration: none !important;
+  color: var(--md-default-fg-color) !important;
+  position: relative;
+  overflow: hidden;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.razor-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(700px 220px at 0% 0%, rgba(var(--razor-accent-rgb), 0.18), transparent 50%);
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.razor-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(var(--razor-accent-rgb), 0.26);
+  box-shadow: 0 22px 60px rgba(0,0,0,0.45);
+}
+
+.razor-card__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.92);
+  background: rgba(var(--razor-accent-rgb), 0.14);
+  border: 1px solid rgba(var(--razor-accent-rgb), 0.22);
+  width: fit-content;
+  margin-bottom: 0.55rem;
+}
+
+.razor-card__title {
+  font-size: 1.02rem;
+  line-height: 1.25;
+  font-weight: 700;
+  margin-bottom: 0.45rem;
+}
+
+.razor-card__desc {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--md-default-fg-color--light);
+  margin-bottom: 0.75rem;
+}
+
+.razor-card__meta {
+  font-size: 0.82rem;
+  color: var(--md-default-fg-color--lighter);
+}
+
+@media (max-width: 900px) {
+  .razor-cards,
+  .razor-cards--sections {
+    grid-template-columns: 1fr;
+  }
+
+  .razor-hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 /* Keyframes */

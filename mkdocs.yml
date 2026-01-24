@@ -15,10 +15,10 @@ theme:
   favicon: assets/logo.png
   palette:
     scheme: slate
-    primary: deep purple
-    accent: purple
+    primary: blue grey
+    accent: light blue
   font:
-    text: Inter
+    text: Space Grotesk
     code: JetBrains Mono
   features:
     - navigation.instant
