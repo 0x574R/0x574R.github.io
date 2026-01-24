@@ -71,8 +71,8 @@
         
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
-        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Space+Grotesk:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Space Grotesk";--md-code-font:"JetBrains Mono"}</style>
       
     
     
@@ -92,7 +92,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="purple">
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="light-blue">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -315,10 +315,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#ultimos-posts" class="md-nav__link">
+  <a href="#destacados" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Últimos posts
+        Destacados
       
     </span>
   </a>
@@ -834,10 +834,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#ultimos-posts" class="md-nav__link">
+  <a href="#destacados" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Últimos posts
+        Destacados
       
     </span>
   </a>
@@ -876,42 +876,67 @@
 
 
 <h1 id="razor">RAZOR<a class="headerlink" href="#razor" title="Permanent link">&para;</a></h1>
-<p>Offensive security research, writeups y notas técnicas.</p>
+<div class="razor-hero">
+  <img src="assets/logo.png" class="razor-hero__logo" alt="RAZOR logo" />
+  <div class="razor-hero__content">
+    <div class="razor-hero__kicker">Offensive Security • Kernel • Malware Dev</div>
+    <div class="razor-hero__subtitle">
+      Research técnico, writeups y cheatsheets con foco en Linux internals, eBPF y desarrollo de malware.
+    </div>
+    <div class="razor-hero__actions">
+      <a href="research/index.md" class="md-button md-button--primary">Explorar research</a>
+      <a href="cheatsheets/index.md" class="md-button">Cheatsheets</a>
+      <a href="writeups/index.md" class="md-button">Writeups</a>
+    </div>
+  </div>
+</div>
+
 <hr />
-<h2 id="ultimos-posts">Últimos posts<a class="headerlink" href="#ultimos-posts" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Fecha</th>
-<th>Título</th>
-<th>Categoría</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>2025-01-09</td>
-<td><a href="research/kernel/ebpf-intro/">Introducción a eBPF</a></td>
-<td>Kernel</td>
-</tr>
-<tr>
-<td>2025-01-08</td>
-<td><a href="cheatsheets/linux-privesc/">Linux Privilege Escalation</a></td>
-<td>Cheatsheet</td>
-</tr>
-<tr>
-<td>2025-01-07</td>
-<td><a href="research/malware-dev/shellcode-basics/">Shellcode Basics</a></td>
-<td>Malware Dev</td>
-</tr>
-</tbody>
-</table>
+<h2 id="destacados">Destacados<a class="headerlink" href="#destacados" title="Permanent link">&para;</a></h2>
+<div class="razor-cards">
+  <a class="razor-card" href="research/kernel/ebpf-intro.md">
+    <div class="razor-card__tag">Kernel</div>
+    <div class="razor-card__title">Introducción a eBPF</div>
+    <div class="razor-card__desc">Conceptos base, objetivos y primeros pasos para instrumentación y seguridad.</div>
+    <div class="razor-card__meta">2025-01-09</div>
+  </a>
+
+  <a class="razor-card" href="cheatsheets/linux-privesc.md">
+    <div class="razor-card__tag">Cheatsheet</div>
+    <div class="razor-card__title">Linux Privilege Escalation</div>
+    <div class="razor-card__desc">Checklist rápido con enumeración, vectores típicos y comandos clave.</div>
+    <div class="razor-card__meta">2025-01-08</div>
+  </a>
+
+  <a class="razor-card" href="research/malware-dev/shellcode-basics.md">
+    <div class="razor-card__tag">Malware Dev</div>
+    <div class="razor-card__title">Shellcode Basics</div>
+    <div class="razor-card__desc">Estructura, syscalls y consideraciones prácticas para x86_64.</div>
+    <div class="razor-card__meta">2025-01-07</div>
+  </a>
+</div>
+
 <hr />
 <h2 id="secciones">Secciones<a class="headerlink" href="#secciones" title="Permanent link">&para;</a></h2>
-<ul>
-<li><strong><a href="writeups/">Writeups</a></strong> — Resolución de máquinas CTF</li>
-<li><strong><a href="cheatsheets/">Cheatsheets</a></strong> — Referencias rápidas</li>
-<li><strong><a href="research/">Research</a></strong> — Kernel, malware dev, eBPF</li>
-</ul>
+<div class="razor-cards razor-cards--sections">
+  <a class="razor-card" href="writeups/index.md">
+    <div class="razor-card__tag">CTF</div>
+    <div class="razor-card__title">Writeups</div>
+    <div class="razor-card__desc">Resolución de máquinas, notas de explotación y metodología reproducible.</div>
+  </a>
+
+  <a class="razor-card" href="cheatsheets/index.md">
+    <div class="razor-card__tag">Notas</div>
+    <div class="razor-card__title">Cheatsheets</div>
+    <div class="razor-card__desc">Referencias rápidas para pentesting, privesc, web y herramientas.</div>
+  </a>
+
+  <a class="razor-card" href="research/index.md">
+    <div class="razor-card__tag">R&amp;D</div>
+    <div class="razor-card__title">Research</div>
+    <div class="razor-card__desc">Kernel security, eBPF, rootkits y malware development.</div>
+  </a>
+</div>
 
 
 
