@@ -60,6 +60,7 @@ markdown_extensions:
       anchor_linenums: true
       pygments_lang_class: true
       pygments_style: github
+      pygments_style_dark: monokai
   - pymdownx.inlinehilite
   - pymdownx.tabbed:
       alternate_style: true
