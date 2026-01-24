@@ -6,6 +6,46 @@
   between header (topbar) and body, prioritizing body readability.
 */
 
+/* Wider reading area (central article/content) */
+:root {
+  --razor-max-width: 96rem; /* ~1536px */
+  /* Wider article column */
+  --md-typeset-width: 56rem; /* default is ~45rem */
+}
+
+.md-grid {
+  max-width: var(--razor-max-width);
+}
+
+/* --- Light mode (gris premium) --- */
+[data-md-color-scheme="default"] {
+  /* Header / primary */
+  --md-primary-fg-color: #0b1220;
+  --md-primary-fg-color--light: #162033;
+  --md-primary-fg-color--dark: #070c16;
+
+  /* Accent: blue-grey (contained) */
+  --razor-accent: #2563eb;
+  --razor-accent-rgb: 37, 99, 235;
+  --md-accent-fg-color: var(--razor-accent);
+  --md-accent-fg-color--transparent: rgba(var(--razor-accent-rgb), 0.14);
+
+  /* Greys for body */
+  --md-default-bg-color: #eef0f2;
+  --md-default-fg-color: rgba(15, 23, 42, 0.92);
+  --md-default-fg-color--light: rgba(15, 23, 42, 0.72);
+  --md-default-fg-color--lighter: rgba(15, 23, 42, 0.52);
+
+  --md-code-bg-color: #f5f6f8;
+  --md-footer-bg-color: #0b1220;
+
+  /* Sidebars */
+  --md-sidebar-bg-color: #f4f5f7;
+
+  /* Keep header compact */
+  --md-header-height: 3.0rem;
+}
+
 [data-md-color-scheme="slate"] {
   /* Brand palette (Midnight Steel) */
   /* Topbar / primary (blue-grey navy) */
@@ -19,13 +59,13 @@
   --md-accent-fg-color: var(--razor-accent);
   --md-accent-fg-color--transparent: rgba(var(--razor-accent-rgb), 0.16);
 
-  /* Page surfaces: lifted more so the body is easy to read */
-  --md-default-bg-color: #0f1724;
-  --md-code-bg-color: #111c2e;
+  /* Page surfaces: grey (easier to read than blue) */
+  --md-default-bg-color: #111316;
+  --md-code-bg-color: #171a20;
   --md-footer-bg-color: #070b12;
 
   /* Side panels */
-  --md-sidebar-bg-color: #0c111a;
+  --md-sidebar-bg-color: #0f1217;
 
   /* Text */
   --md-default-fg-color: rgba(255, 255, 255, 0.92);
@@ -179,6 +219,19 @@
   border: 1px solid rgba(255,255,255,0.05);
   border-radius: 18px;
   padding: 1.1rem 1.1rem;
+}
+
+/* Light mode: make the article surface crisp and readable */
+[data-md-color-scheme="default"] .md-content__inner > .md-typeset {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+}
+
+/* Dark mode: lift a touch more so it doesn't feel "crushed" */
+[data-md-color-scheme="slate"] .md-content__inner > .md-typeset {
+  background: rgba(255, 255, 255, 0.020);
+  border: 1px solid rgba(255, 255, 255, 0.060);
 }
 
 @media (max-width: 900px) {
