@@ -1,164 +1,105 @@
 /* ============================================
-   RAZOR - TOC Dark Style for Light Theme
+   RAZOR - TOC Dark Style for Light Theme v2
    ============================================
-   Este CSS hace que el Table of Contents (TOC)
-   del tema claro tenga el mismo diseño visual
-   que el tema oscuro
+   CSS con !important para forzar estilos
    ============================================ */
 
-/* ------------------------------------------
-   TOC Container - Tema Claro con estilo oscuro
-   ------------------------------------------ */
+/* === SIDEBAR DERECHO (TOC) - TEMA CLARO === */
 
-/* Fondo oscuro para el sidebar derecho (TOC) en tema claro */
+/* Fondo oscuro del contenedor principal del TOC */
 [data-md-color-scheme="default"] .md-sidebar--secondary {
-    background-color: #1e1e1e;
-    border-left: 1px solid #333;
+    background-color: #1a1a2e !important;
 }
 
-/* Contenedor interno del TOC */
 [data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__scrollwrap {
-    background-color: #1e1e1e;
+    background-color: #1a1a2e !important;
 }
 
 [data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__inner {
-    background-color: #1e1e1e;
+    background-color: #1a1a2e !important;
 }
 
-/* ------------------------------------------
-   TOC Navigation - Links y elementos
-   ------------------------------------------ */
+/* === NAVEGACIÓN TOC === */
+
+/* Contenedor de navegación del TOC */
+[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav {
+    background-color: #1a1a2e !important;
+}
 
 /* Título "Tabla de contenidos" */
-[data-md-color-scheme="default"] .md-nav--secondary > .md-nav__title {
-    color: #b0b0b0;
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.65rem;
-    letter-spacing: 0.05em;
-    padding: 0.6rem 0.6rem 0.3rem;
-    background-color: transparent;
-    box-shadow: none;
+[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav__title {
+    color: #7f8c9a !important;
+    background-color: #1a1a2e !important;
+    font-size: 0.6rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+    box-shadow: none !important;
+    padding: 0.6rem 0.6rem 0.4rem !important;
 }
 
-/* Links del TOC */
-[data-md-color-scheme="default"] .md-nav--secondary .md-nav__link {
-    color: #a0a0a0;
-    transition: color 0.15s ease, background-color 0.15s ease;
+/* === LINKS DEL TOC === */
+
+/* Todos los links */
+[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav__link {
+    color: #8b949e !important;
+    transition: color 0.2s ease !important;
 }
 
 /* Hover en links */
-[data-md-color-scheme="default"] .md-nav--secondary .md-nav__link:hover {
-    color: #ffffff;
-    background-color: rgba(255, 255, 255, 0.05);
+[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav__link:hover {
+    color: #c9d1d9 !important;
 }
 
-/* Link activo (sección actual) */
-[data-md-color-scheme="default"] .md-nav--secondary .md-nav__link--active,
-[data-md-color-scheme="default"] .md-nav--secondary .md-nav__item--active > .md-nav__link {
-    color: #4fc3f7;
-    font-weight: 500;
+/* Link activo */
+[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav__link--active {
+    color: #58a6ff !important;
+    font-weight: 500 !important;
 }
 
-/* Focus en links */
-[data-md-color-scheme="default"] .md-nav--secondary .md-nav__link:focus {
-    color: #ffffff;
-    outline: none;
+/* Items activos */
+[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav__item--active > .md-nav__link {
+    color: #58a6ff !important;
 }
 
-/* ------------------------------------------
-   TOC - Indicador de scroll / línea lateral
-   ------------------------------------------ */
+/* === SCROLLBAR === */
 
-/* Línea lateral del TOC (si está habilitada) */
-[data-md-color-scheme="default"] .md-nav--secondary .md-nav__item::before {
-    background-color: #333;
-}
-
-/* Indicador de posición actual */
-[data-md-color-scheme="default"] .md-nav--secondary .md-nav__item--active::before {
-    background-color: #4fc3f7;
-}
-
-/* ------------------------------------------
-   TOC - Items anidados (sub-secciones)
-   ------------------------------------------ */
-
-/* Sub-items del TOC */
-[data-md-color-scheme="default"] .md-nav--secondary .md-nav__item .md-nav__item .md-nav__link {
-    color: #808080;
-    padding-left: 1.2rem;
-}
-
-[data-md-color-scheme="default"] .md-nav--secondary .md-nav__item .md-nav__item .md-nav__link:hover {
-    color: #e0e0e0;
-}
-
-/* ------------------------------------------
-   TOC - Scrollbar personalizado
-   ------------------------------------------ */
-
-/* Scrollbar para el TOC */
 [data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__scrollwrap::-webkit-scrollbar {
-    width: 4px;
+    width: 4px !important;
 }
 
 [data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__scrollwrap::-webkit-scrollbar-track {
-    background: #1e1e1e;
+    background: #1a1a2e !important;
 }
 
 [data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__scrollwrap::-webkit-scrollbar-thumb {
-    background-color: #444;
-    border-radius: 2px;
+    background-color: #30363d !important;
+    border-radius: 2px !important;
 }
 
-[data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__scrollwrap::-webkit-scrollbar-thumb:hover {
-    background-color: #555;
-}
-
-/* Firefox scrollbar */
+/* Firefox */
 [data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__scrollwrap {
-    scrollbar-width: thin;
-    scrollbar-color: #444 #1e1e1e;
+    scrollbar-width: thin !important;
+    scrollbar-color: #30363d #1a1a2e !important;
 }
 
-/* ------------------------------------------
-   TOC - Responsive ajustes
-   ------------------------------------------ */
+/* === LÍNEA INDICADORA DE POSICIÓN === */
 
-/* En pantallas medianas y grandes */
-@media screen and (min-width: 76.25em) {
-    [data-md-color-scheme="default"] .md-sidebar--secondary {
-        border-radius: 0;
-    }
+[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav__link::before {
+    background-color: #30363d !important;
 }
 
-/* En tablets - TOC puede estar oculto */
-@media screen and (max-width: 76.1875em) {
-    [data-md-color-scheme="default"] .md-nav--secondary {
-        background-color: #1e1e1e;
-    }
+[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav__link--active::before,
+[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav__link:focus::before {
+    background-color: #58a6ff !important;
 }
 
-/* ------------------------------------------
-   Variables CSS personalizadas (opcional)
-   ------------------------------------------ */
+/* === ITEMS ANIDADOS === */
 
-/* Puedes ajustar estos colores según tu preferencia */
-:root {
-    --toc-bg-dark: #1e1e1e;
-    --toc-border-dark: #333;
-    --toc-text-dark: #a0a0a0;
-    --toc-text-hover: #ffffff;
-    --toc-text-active: #4fc3f7;
-    --toc-title-color: #b0b0b0;
+[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav__item .md-nav .md-nav__link {
+    color: #6e7681 !important;
 }
 
-/* Aplicar variables (alternativa usando variables) */
-[data-md-color-scheme="default"] .md-sidebar--secondary {
-    --md-default-fg-color: var(--toc-text-dark);
-    --md-default-fg-color--light: var(--toc-text-dark);
-    --md-default-fg-color--lighter: #666;
-    --md-default-bg-color: var(--toc-bg-dark);
-    --md-typeset-a-color: var(--toc-text-active);
+[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav__item .md-nav .md-nav__link:hover {
+    color: #c9d1d9 !important;
 }
