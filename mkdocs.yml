@@ -11,8 +11,8 @@ copyright: "© 2025 0x574R"
 theme:
   name: material
   language: es
-  logo: assets/logo.svg
-  favicon: assets/logo.svg
+  logo: assets/logo.png
+  favicon: assets/logo.png
   palette:
     scheme: slate
     primary: black
@@ -22,7 +22,8 @@ theme:
     code: JetBrains Mono
   features:
     - navigation.instant
-    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
     - navigation.top
     - search.highlight
     - content.code.copy
