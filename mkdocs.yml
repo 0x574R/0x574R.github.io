@@ -55,15 +55,24 @@ extra_css:
 markdown_extensions:
   - admonition
   - pymdownx.details
-  - pymdownx.superfences
+
+  # ✅ Syntax highlighting (Material recommended order)
   - pymdownx.highlight:
+      use_pygments: true
       anchor_linenums: true
       pygments_lang_class: true
       pygments_style: github
       pygments_style_dark: monokai
+
   - pymdownx.inlinehilite
+
+  # ✅ Needed for advanced fenced blocks + tabs
+  - pymdownx.superfences
+
+  # ✅ Language selector tabs
   - pymdownx.tabbed:
       alternate_style: true
+
   - tables
   - attr_list
   - md_in_html
