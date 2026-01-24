@@ -748,6 +748,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#deteccion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Detección
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -985,6 +996,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#deteccion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Detección
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1022,38 +1044,42 @@
 <h2 id="hook-points">Hook Points<a class="headerlink" href="#hook-points" title="Permanent link">&para;</a></h2>
 <h3 id="kprobes">Kprobes<a class="headerlink" href="#kprobes" title="Permanent link">&para;</a></h3>
 <p>Interceptar cualquier función del kernel:</p>
-<p><code>c
-SEC("kprobe/sys_execve")
-int trace_execve(struct pt_regs *ctx) {
-    char comm[16];
-    bpf_get_current_comm(&amp;comm, sizeof(comm));
-    bpf_printk("execve: %s\n", comm);
-    return 0;
-}</code></p>
+<div class="codehilite"><pre><span></span><code><span class="n">SEC</span><span class="p">(</span><span class="s">&quot;kprobe/sys_execve&quot;</span><span class="p">)</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">trace_execve</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">pt_regs</span><span class="w"> </span><span class="o">*</span><span class="n">ctx</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">comm</span><span class="p">[</span><span class="mi">16</span><span class="p">];</span>
+<span class="w">    </span><span class="n">bpf_get_current_comm</span><span class="p">(</span><span class="o">&amp;</span><span class="n">comm</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">comm</span><span class="p">));</span>
+<span class="w">    </span><span class="n">bpf_printk</span><span class="p">(</span><span class="s">&quot;execve: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">comm</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 <h3 id="tracepoints">Tracepoints<a class="headerlink" href="#tracepoints" title="Permanent link">&para;</a></h3>
 <p>Puntos de instrumentación estables:</p>
-<p><code>c
-SEC("tracepoint/syscalls/sys_enter_openat")
-int trace_openat(struct trace_event_raw_sys_enter *ctx) {
-    // ...
-    return 0;
-}</code></p>
+<div class="codehilite"><pre><span></span><code><span class="n">SEC</span><span class="p">(</span><span class="s">&quot;tracepoint/syscalls/sys_enter_openat&quot;</span><span class="p">)</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">trace_openat</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">trace_event_raw_sys_enter</span><span class="w"> </span><span class="o">*</span><span class="n">ctx</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 <h3 id="xdp">XDP<a class="headerlink" href="#xdp" title="Permanent link">&para;</a></h3>
 <p>Procesamiento de paquetes a bajo nivel, antes del stack de red.</p>
 <h2 id="compilacion">Compilación<a class="headerlink" href="#compilacion" title="Permanent link">&para;</a></h2>
-<p>```bash</p>
-<h1 id="compilar-programa-bpf">Compilar programa BPF<a class="headerlink" href="#compilar-programa-bpf" title="Permanent link">&para;</a></h1>
-<p>clang -O2 -target bpf -c program.bpf.c -o program.bpf.o</p>
-<h1 id="cargar-con-bpftool">Cargar con bpftool<a class="headerlink" href="#cargar-con-bpftool" title="Permanent link">&para;</a></h1>
-<p>sudo bpftool prog load program.bpf.o /sys/fs/bpf/my_prog
-```</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Compilar programa BPF</span>
+clang<span class="w"> </span>-O2<span class="w"> </span>-target<span class="w"> </span>bpf<span class="w"> </span>-c<span class="w"> </span>program.bpf.c<span class="w"> </span>-o<span class="w"> </span>program.bpf.o
+
+<span class="c1"># Cargar con bpftool</span>
+sudo<span class="w"> </span>bpftool<span class="w"> </span>prog<span class="w"> </span>load<span class="w"> </span>program.bpf.o<span class="w"> </span>/sys/fs/bpf/my_prog
+</code></pre></div>
+
 <h2 id="deteccion">Detección<a class="headerlink" href="#deteccion" title="Permanent link">&para;</a></h2>
-<p>```bash</p>
-<h1 id="listar-programas-bpf-cargados">Listar programas BPF cargados<a class="headerlink" href="#listar-programas-bpf-cargados" title="Permanent link">&para;</a></h1>
-<p>sudo bpftool prog list</p>
-<h1 id="ver-maps">Ver maps<a class="headerlink" href="#ver-maps" title="Permanent link">&para;</a></h1>
-<p>sudo bpftool map list
-```</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Listar programas BPF cargados</span>
+sudo<span class="w"> </span>bpftool<span class="w"> </span>prog<span class="w"> </span>list
+
+<span class="c1"># Ver maps</span>
+sudo<span class="w"> </span>bpftool<span class="w"> </span>map<span class="w"> </span>list
+</code></pre></div>
+
 <div class="admonition warning">
 <p class="admonition-title">Uso ofensivo</p>
 <p>eBPF puede usarse para crear rootkits difíciles de detectar. Monitoriza los programas BPF cargados en sistemas de producción.</p>
@@ -1083,8 +1109,6 @@ int trace_openat(struct trace_event_raw_sys_enter *ctx) {
             </div>
           
           
-  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
-
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
         
@@ -1127,7 +1151,7 @@ int trace_openat(struct trace_event_raw_sys_enter *ctx) {
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "content.code.copy", "content.tabs.link"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
     
     
       <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>

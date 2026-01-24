@@ -489,6 +489,100 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Enumeration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bash" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bash
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Python
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#suid-binaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SUID Binaries
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#capabilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Capabilities
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cron-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cron Jobs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#writable-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Writable Files
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kernel-exploits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kernel Exploits
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#automated-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automated Tools
+      
+    </span>
+  </a>
+  
 </li>
       
     </ul>
@@ -861,6 +955,100 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Enumeration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bash" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bash
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Python
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#suid-binaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SUID Binaries
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#capabilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Capabilities
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cron-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cron Jobs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#writable-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Writable Files
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kernel-exploits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kernel Exploits
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#automated-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automated Tools
+      
+    </span>
+  </a>
+  
 </li>
       
     </ul>
@@ -887,54 +1075,57 @@
 <p>Técnicas de escalada de privilegios en Linux.</p>
 <hr />
 <h2 id="enumeration">Enumeration<a class="headerlink" href="#enumeration" title="Permanent link">&para;</a></h2>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Bash</label><label for="__tabbed_1_2">Python</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<p>```bash</p>
-<h1 id="system-info">System info<a class="headerlink" href="#system-info" title="Permanent link">&para;</a></h1>
-<p>uname -a
-cat /etc/issue</p>
-<h1 id="current-user">Current user<a class="headerlink" href="#current-user" title="Permanent link">&para;</a></h1>
-<p>id
-sudo -l</p>
-<h1 id="users">Users<a class="headerlink" href="#users" title="Permanent link">&para;</a></h1>
-<p>cat /etc/passwd | grep -E '/bin/(ba)?sh'</p>
-<h1 id="network">Network<a class="headerlink" href="#network" title="Permanent link">&para;</a></h1>
-<p>ip a
-ss -tulpn
-```</p>
-</div>
-<div class="tabbed-block">
-<p>```python
-import os
-import subprocess</p>
-<p>def run(cmd: str) -&gt; str:
-    return subprocess.check_output(cmd, shell=True, text=True, stderr=subprocess.DEVNULL)</p>
-<p>print(run("uname -a"))
-print(run("id"))
-print(run("sudo -l"))
-print(run("ip a"))
-```</p>
-</div>
-</div>
-</div>
+<h3 id="bash">Bash<a class="headerlink" href="#bash" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># System info</span>
+uname<span class="w"> </span>-a
+cat<span class="w"> </span>/etc/issue
+
+<span class="c1"># Current user</span>
+id
+sudo<span class="w"> </span>-l
+
+<span class="c1"># Users</span>
+cat<span class="w"> </span>/etc/passwd<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;/bin/(ba)?sh&#39;</span>
+
+<span class="c1"># Network</span>
+ip<span class="w"> </span>a
+ss<span class="w"> </span>-tulpn
+</code></pre></div>
+
+<h3 id="python">Python<a class="headerlink" href="#python" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+
+<span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">check_output</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">DEVNULL</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;uname -a&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;sudo -l&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;ip a&quot;</span><span class="p">))</span>
+</code></pre></div>
+
 <h2 id="suid-binaries">SUID Binaries<a class="headerlink" href="#suid-binaries" title="Permanent link">&para;</a></h2>
-<p><code>bash
-find / -perm -4000 -type f 2&gt;/dev/null</code></p>
+<div class="codehilite"><pre><span></span><code>find<span class="w"> </span>/<span class="w"> </span>-perm<span class="w"> </span>-4000<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+</code></pre></div>
+
 <div class="admonition tip">
 <p class="admonition-title">GTFOBins</p>
 <p>Consulta <a href="https://gtfobins.github.io/">GTFOBins</a> para técnicas de explotación de binarios SUID.</p>
 </div>
 <h2 id="capabilities">Capabilities<a class="headerlink" href="#capabilities" title="Permanent link">&para;</a></h2>
-<p><code>bash
-getcap -r / 2&gt;/dev/null</code></p>
+<div class="codehilite"><pre><span></span><code>getcap<span class="w"> </span>-r<span class="w"> </span>/<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+</code></pre></div>
+
 <h2 id="cron-jobs">Cron Jobs<a class="headerlink" href="#cron-jobs" title="Permanent link">&para;</a></h2>
-<p><code>bash
-cat /etc/crontab
-ls -la /etc/cron.*</code></p>
+<div class="codehilite"><pre><span></span><code>cat<span class="w"> </span>/etc/crontab
+ls<span class="w"> </span>-la<span class="w"> </span>/etc/cron.*
+</code></pre></div>
+
 <h2 id="writable-files">Writable Files<a class="headerlink" href="#writable-files" title="Permanent link">&para;</a></h2>
-<p><code>bash
-find / -writable -type f 2&gt;/dev/null</code></p>
+<div class="codehilite"><pre><span></span><code>find<span class="w"> </span>/<span class="w"> </span>-writable<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+</code></pre></div>
+
 <div class="admonition warning">
 <p class="admonition-title">Archivos críticos</p>
 <p>Si <code>/etc/passwd</code> o <code>/etc/shadow</code> son escribibles, puedes añadir un usuario con privilegios root.</p>
@@ -962,10 +1153,10 @@ find / -writable -type f 2&gt;/dev/null</code></p>
 </tbody>
 </table>
 <h2 id="automated-tools">Automated Tools<a class="headerlink" href="#automated-tools" title="Permanent link">&para;</a></h2>
-<p>```bash</p>
-<h1 id="linpeas">LinPEAS<a class="headerlink" href="#linpeas" title="Permanent link">&para;</a></h1>
-<p>curl -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh | sh
-```</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># LinPEAS</span>
+curl<span class="w"> </span>-L<span class="w"> </span>https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
+</code></pre></div>
+
 <hr />
 <div class="admonition note">
 <p class="admonition-title">Recursos</p>
@@ -991,8 +1182,6 @@ find / -writable -type f 2&gt;/dev/null</code></p>
             </div>
           
           
-  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
-
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
         
@@ -1035,7 +1224,7 @@ find / -writable -type f 2&gt;/dev/null</code></p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "content.code.copy", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
