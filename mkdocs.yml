@@ -11,6 +11,8 @@ copyright: "© 2025 0x574R"
 theme:
   name: material
   language: es
+  logo: assets/logo.svg
+  favicon: assets/logo.svg
   palette:
     scheme: slate
     primary: black
@@ -26,6 +28,11 @@ theme:
     - content.code.copy
   icon:
     repo: fontawesome/brands/github
+    admonition:
+      note: fontawesome/solid/note-sticky
+      tip: fontawesome/solid/lightbulb
+      warning: fontawesome/solid/triangle-exclamation
+      danger: fontawesome/solid/skull-crossbones
 
 plugins:
   - search
@@ -41,6 +48,8 @@ markdown_extensions:
       anchor_linenums: true
   - pymdownx.inlinehilite
   - tables
+  - attr_list
+  - md_in_html
   - toc:
       permalink: true
 

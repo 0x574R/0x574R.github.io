@@ -12,6 +12,9 @@ Una máquina virtual dentro del kernel que ejecuta código de forma segura. Usos
 - **Networking** — Load balancing, firewalls, XDP
 - **Seguridad** — Sandboxing, detección de intrusiones
 
+!!! note "Requisitos"
+    eBPF requiere kernel Linux 4.x+ para funcionalidades básicas y 5.x+ para características avanzadas como BTF.
+
 ## Hook Points
 
 ### Kprobes
@@ -64,6 +67,11 @@ sudo bpftool prog list
 sudo bpftool map list
 ```
 
+!!! warning "Uso ofensivo"
+    eBPF puede usarse para crear rootkits difíciles de detectar. Monitoriza los programas BPF cargados en sistemas de producción.
+
 ---
 
-**Recursos**: [eBPF.io](https://ebpf.io/) · [libbpf-bootstrap](https://github.com/libbpf/libbpf-bootstrap)
+!!! tip "Recursos"
+    - [eBPF.io](https://ebpf.io/) — Documentación oficial
+    - [libbpf-bootstrap](https://github.com/libbpf/libbpf-bootstrap) — Templates para empezar

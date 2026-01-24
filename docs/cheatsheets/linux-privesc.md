@@ -29,7 +29,8 @@ ss -tulpn
 find / -perm -4000 -type f 2>/dev/null
 ```
 
-Consulta [GTFOBins](https://gtfobins.github.io/) para explotación.
+!!! tip "GTFOBins"
+    Consulta [GTFOBins](https://gtfobins.github.io/) para técnicas de explotación de binarios SUID.
 
 ## Capabilities
 
@@ -50,6 +51,9 @@ ls -la /etc/cron.*
 find / -writable -type f 2>/dev/null
 ```
 
+!!! warning "Archivos críticos"
+    Si `/etc/passwd` o `/etc/shadow` son escribibles, puedes añadir un usuario con privilegios root.
+
 ## Kernel Exploits
 
 | Kernel | CVE | Nombre |
@@ -66,4 +70,6 @@ curl -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas
 
 ---
 
-**Recursos**: [HackTricks](https://book.hacktricks.xyz/linux-hardening/privilege-escalation) · [PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings)
+!!! note "Recursos"
+    - [HackTricks - Linux Privesc](https://book.hacktricks.xyz/linux-hardening/privilege-escalation)
+    - [PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings)
