@@ -12,7 +12,7 @@ theme:
   name: material
   language: es
   logo: assets/logo.png
-  favicon: assets/logo.png
+  favicon: site/assets/images/favicon.png
 
   # Light/Dark toggle
   palette:
