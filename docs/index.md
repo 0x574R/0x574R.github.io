@@ -1,16 +1,8 @@
-# RAZOR
-
 <div class="razor-hero">
-  <img src="assets/logo.png" class="razor-hero__logo" alt="RAZOR logo" />
   <div class="razor-hero__content">
     <div class="razor-hero__kicker">Offensive Security • Kernel • Malware Dev</div>
     <div class="razor-hero__subtitle">
       Research técnico, writeups y cheatsheets con foco en Linux internals, eBPF y desarrollo de malware.
-    </div>
-    <div class="razor-hero__actions">
-      <a href="research/index.md" class="md-button md-button--primary">Explorar research</a>
-      <a href="cheatsheets/index.md" class="md-button">Cheatsheets</a>
-      <a href="writeups/index.md" class="md-button">Writeups</a>
     </div>
   </div>
 </div>

@@ -8,9 +8,9 @@
 
 /* Wider reading area (central article/content) */
 :root {
-  --razor-max-width: 96rem; /* ~1536px */
-  /* Wider article column */
-  --md-typeset-width: 56rem; /* default is ~45rem */
+  /* Layout (central reading area) */
+  --razor-max-width: 92rem; /* slightly tighter than before */
+  --md-typeset-width: 52rem; /* wider than default, but less than the previous 56rem */
 }
 
 .md-grid {
@@ -321,6 +321,10 @@
   animation: razor-content-in 320ms ease-out both;
 }
 
+.razor-hero__content {
+  width: 100%;
+}
+
 .razor-hero__logo {
   width: 92px;
   height: 92px;
@@ -366,8 +370,10 @@
 }
 
 .razor-card {
-  display: block;
-  padding: 1.05rem 1.05rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.78rem;
+  padding: 1.40rem 1.40rem;
   border-radius: 18px;
   background: rgba(255,255,255,0.025);
   border: 1px solid rgba(255,255,255,0.06);
@@ -377,6 +383,17 @@
   position: relative;
   overflow: hidden;
   transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+/* Light mode cards: crisp surfaces (avoid muddy dark cards on a grey/white body) */
+[data-md-color-scheme="default"] .razor-card {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+}
+
+[data-md-color-scheme="default"] .razor-card:hover {
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.10);
 }
 
 .razor-card::before {
@@ -404,29 +421,56 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: rgba(255,255,255,0.92);
-  background: rgba(var(--razor-accent-rgb), 0.14);
-  border: 1px solid rgba(var(--razor-accent-rgb), 0.22);
+  background: linear-gradient(
+    135deg,
+    rgba(var(--razor-accent-rgb), 0.18) 0%,
+    rgba(255,255,255,0.04) 100%
+  );
+  border: 1px solid rgba(var(--razor-accent-rgb), 0.30);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.22);
   width: fit-content;
-  margin-bottom: 0.55rem;
+  margin-bottom: 0.25rem;
+}
+
+.razor-card__tag::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(var(--razor-accent-rgb), 0.95);
+  box-shadow: 0 0 10px rgba(var(--razor-accent-rgb), 0.35);
+}
+
+/* Light mode tag text should not be white */
+[data-md-color-scheme="default"] .razor-card__tag {
+  color: rgba(15, 23, 42, 0.92);
+  background: linear-gradient(
+    135deg,
+    rgba(var(--razor-accent-rgb), 0.12) 0%,
+    rgba(15, 23, 42, 0.03) 100%
+  );
+  border: 1px solid rgba(var(--razor-accent-rgb), 0.22);
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
 }
 
 .razor-card__title {
   font-size: 1.02rem;
   line-height: 1.25;
   font-weight: 700;
-  margin-bottom: 0.45rem;
+  margin-bottom: 0.2rem;
 }
 
 .razor-card__desc {
   font-size: 0.92rem;
   line-height: 1.55;
   color: var(--md-default-fg-color--light);
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.55rem;
 }
 
 .razor-card__meta {
   font-size: 0.82rem;
   color: var(--md-default-fg-color--lighter);
+  margin-top: auto;
 }
 
 @media (max-width: 900px) {
