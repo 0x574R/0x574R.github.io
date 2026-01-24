@@ -57,7 +57,6 @@ markdown_extensions:
   - pymdownx.details
 
   # ✅ Syntax highlighting (Material + Pymdown best practice)
-  # Keep this early so the highlighter wraps fenced code properly.
   - pymdownx.highlight:
       use_pygments: true
       anchor_linenums: true
@@ -66,13 +65,12 @@ markdown_extensions:
 
   - pymdownx.inlinehilite
 
-  # ✅ Tabs first, so fenced blocks inside are parsed correctly
+  # ✅ Superfences (must come before tabbed for proper fenced rendering)
+  - pymdownx.superfences
+
+  # ✅ Tabs for language selection
   - pymdownx.tabbed:
       alternate_style: true
-
-  # ✅ Superfences AFTER tabbed (critical for proper code rendering in tabs)
-  - pymdownx.superfences:
-      preserve_tabs: true
 
   - tables
   - attr_list
