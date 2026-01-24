@@ -75,8 +75,6 @@ plugins:
       separator: '[\s\-\.]+'
   - tags:
       tags_file: tags.md
-  - minify:
-      minify_html: true
 
 # Extra CSS and JS
 extra_css:
