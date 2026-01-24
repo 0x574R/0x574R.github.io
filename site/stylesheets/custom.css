@@ -22,9 +22,9 @@
   --md-primary-fg-color--light: #162033;
   --md-primary-fg-color--dark: #070c16;
 
-  /* Accent: blue */
-  --razor-accent: #2563eb;
-  --razor-accent-rgb: 37, 99, 235;
+  /* Accent: steel blue oscuro (similar al topbar) */
+  --razor-accent: #4a6fa5;
+  --razor-accent-rgb: 74, 111, 165;
   --md-accent-fg-color: var(--razor-accent);
   --md-accent-fg-color--transparent: rgba(var(--razor-accent-rgb), 0.14);
 
@@ -46,8 +46,9 @@
   --md-primary-fg-color--light: #162033;
   --md-primary-fg-color--dark: #070c16;
 
-  --razor-accent: #60a5fa;
-  --razor-accent-rgb: 96, 165, 250;
+  /* Accent: steel blue claro para dark mode */
+  --razor-accent: #7a9ec9;
+  --razor-accent-rgb: 122, 158, 201;
   --md-accent-fg-color: var(--razor-accent);
   --md-accent-fg-color--transparent: rgba(var(--razor-accent-rgb), 0.16);
 
@@ -112,6 +113,16 @@
 [data-md-color-scheme="default"] .md-nav__item,
 [data-md-color-scheme="default"] .md-nav__list {
   background: transparent !important;
+}
+
+/* Ocultar título "RAZOR" del sidebar izquierdo */
+.md-nav--primary > .md-nav__title {
+  display: none !important;
+}
+
+/* Ocultar título en el sidebar del TOC también si aparece */
+.md-nav--primary > .md-nav__title[for="__drawer"] {
+  display: none !important;
 }
 
 /* === LINKS DE NAVEGACIÓN - SIN FONDOS, SOLO TEXTO === */

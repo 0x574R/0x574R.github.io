@@ -36,7 +36,6 @@ theme:
   features:
     - navigation.instant
     - navigation.sections
-    # - navigation.expand  # QUITADO: menús plegados por defecto
     - navigation.top
     - search.highlight
     - content.code.copy
@@ -45,9 +44,13 @@ theme:
     repo: fontawesome/brands/github
     admonition:
       note: fontawesome/solid/note-sticky
-      tip: fontawesome/solid/link
+      tip: fontawesome/solid/lightbulb
       warning: fontawesome/solid/triangle-exclamation
       danger: fontawesome/solid/skull-crossbones
+      info: fontawesome/solid/circle-info
+      abstract: fontawesome/solid/book
+      example: fontawesome/solid/flask
+      quote: fontawesome/solid/quote-left
 
 plugins:
   - search
@@ -55,7 +58,7 @@ plugins:
 extra_css:
   - stylesheets/custom.css
 
-# ✅ MkDocs default code highlighting (stable)
+# Syntax highlighting con Pygments + extensiones
 markdown_extensions:
   - admonition
   - toc:
@@ -63,13 +66,19 @@ markdown_extensions:
   - tables
   - attr_list
   - md_in_html
-  - fenced_code
-  - codehilite:
-      guess_lang: false
-      use_pygments: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+      auto_title: true
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.details
+  - pymdownx.mark
+  - pymdownx.critic
+  - pymdownx.keys
 
 nav:
-  # Home quitado del menú lateral
   - Writeups: writeups/index.md
   - Cheatsheets:
       - cheatsheets/index.md
