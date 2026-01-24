@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <defs>
+    <linearGradient id="bg-writeups" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0b1220"/>
+      <stop offset="50%" style="stop-color:#162033"/>
+      <stop offset="100%" style="stop-color:#0f1a2c"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4a6fa5;stop-opacity:0"/>
+      <stop offset="50%" style="stop-color:#4a6fa5;stop-opacity:0.8"/>
+      <stop offset="100%" style="stop-color:#4a6fa5;stop-opacity:0"/>
+    </linearGradient>
+    <filter id="blur">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2"/>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#bg-writeups)"/>
+  
+  <!-- Grid pattern -->
+  <g opacity="0.1">
+    <line x1="0" y1="50" x2="800" y2="50" stroke="#4a6fa5" stroke-width="0.5"/>
+    <line x1="0" y1="100" x2="800" y2="100" stroke="#4a6fa5" stroke-width="0.5"/>
+    <line x1="0" y1="150" x2="800" y2="150" stroke="#4a6fa5" stroke-width="0.5"/>
+    <line x1="0" y1="200" x2="800" y2="200" stroke="#4a6fa5" stroke-width="0.5"/>
+    <line x1="0" y1="250" x2="800" y2="250" stroke="#4a6fa5" stroke-width="0.5"/>
+    <line x1="0" y1="300" x2="800" y2="300" stroke="#4a6fa5" stroke-width="0.5"/>
+    <line x1="0" y1="350" x2="800" y2="350" stroke="#4a6fa5" stroke-width="0.5"/>
+  </g>
+  
+  <!-- Terminal window -->
+  <rect x="150" y="60" width="500" height="280" rx="8" fill="#0a0e14" stroke="#4a6fa5" stroke-width="2"/>
+  
+  <!-- Terminal header -->
+  <rect x="150" y="60" width="500" height="30" rx="8" fill="#162033"/>
+  <circle cx="175" cy="75" r="6" fill="#ff5f56"/>
+  <circle cx="195" cy="75" r="6" fill="#ffbd2e"/>
+  <circle cx="215" cy="75" r="6" fill="#27ca40"/>
+  <text x="400" y="80" font-family="JetBrains Mono, monospace" font-size="12" fill="#7a9ec9" text-anchor="middle">root@kali:~/ctf</text>
+  
+  <!-- Terminal content -->
+  <text x="170" y="120" font-family="JetBrains Mono, monospace" font-size="14" fill="#27ca40">$</text>
+  <text x="185" y="120" font-family="JetBrains Mono, monospace" font-size="14" fill="#c9d1d9"> nmap -sV -sC 10.10.10.1</text>
+  
+  <text x="170" y="150" font-family="JetBrains Mono, monospace" font-size="12" fill="#6e7681">PORT     STATE SERVICE</text>
+  <text x="170" y="170" font-family="JetBrains Mono, monospace" font-size="12" fill="#4a6fa5">22/tcp   open  ssh</text>
+  <text x="170" y="190" font-family="JetBrains Mono, monospace" font-size="12" fill="#4a6fa5">80/tcp   open  http</text>
+  <text x="170" y="210" font-family="JetBrains Mono, monospace" font-size="12" fill="#4a6fa5">443/tcp  open  https</text>
+  
+  <text x="170" y="250" font-family="JetBrains Mono, monospace" font-size="14" fill="#27ca40">$</text>
+  <text x="185" y="250" font-family="JetBrains Mono, monospace" font-size="14" fill="#c9d1d9"> gobuster dir -u http://target</text>
+  
+  <text x="170" y="280" font-family="JetBrains Mono, monospace" font-size="12" fill="#ff7b72">/admin</text>
+  <text x="240" y="280" font-family="JetBrains Mono, monospace" font-size="12" fill="#6e7681">(Status: 200)</text>
+  <text x="170" y="300" font-family="JetBrains Mono, monospace" font-size="12" fill="#ff7b72">/backup</text>
+  <text x="248" y="300" font-family="JetBrains Mono, monospace" font-size="12" fill="#6e7681">(Status: 403)</text>
+  
+  <!-- Cursor blink -->
+  <rect x="170" y="315" width="8" height="14" fill="#4a6fa5" opacity="0.8">
+    <animate attributeName="opacity" values="0.8;0;0.8" dur="1s" repeatCount="indefinite"/>
+  </rect>
+  
+  <!-- Decorative elements -->
+  <rect x="0" y="395" width="800" height="5" fill="url(#glow)"/>
+  
+  <!-- Binary rain effect -->
+  <g opacity="0.15" font-family="JetBrains Mono, monospace" font-size="10" fill="#4a6fa5">
+    <text x="50" y="150">01001000</text>
+    <text x="700" y="100">10110101</text>
+    <text x="80" y="350">11001010</text>
+    <text x="680" y="300">01010111</text>
+  </g>
+</svg>

@@ -1,77 +1,93 @@
 # Introducción a eBPF
 
-eBPF (extended Berkeley Packet Filter) permite ejecutar programas sandboxed en el kernel de Linux sin modificar su código fuente.
+<figure class="hero-image" markdown>
+  ![eBPF](../../assets/images/ebpf-hero.svg){ width="100%" }
+</figure>
+
+eBPF (extended Berkeley Packet Filter) permite ejecutar código en el kernel Linux de forma segura.
 
 ---
 
 ## ¿Qué es eBPF?
 
-Una máquina virtual dentro del kernel que ejecuta código de forma segura. Usos principales:
+eBPF es una tecnología que permite ejecutar programas sandboxed en el kernel Linux sin modificar el código fuente del kernel ni cargar módulos.
 
-- **Observabilidad** — Tracing, profiling, monitorización
-- **Networking** — Load balancing, firewalls, XDP
-- **Seguridad** — Sandboxing, detección de intrusiones
+### Casos de uso
 
-!!! note "Requisitos"
-    eBPF requiere kernel Linux 4.x+ para funcionalidades básicas y 5.x+ para características avanzadas como BTF.
-
-## Hook Points
-
-### Kprobes
-
-Interceptar cualquier función del kernel:
-
-```c
-SEC("kprobe/sys_execve")
-int trace_execve(struct pt_regs *ctx) {
-    char comm[16];
-    bpf_get_current_comm(&comm, sizeof(comm));
-    bpf_printk("execve: %s\n", comm);
-    return 0;
-}
-```
-
-### Tracepoints
-
-Puntos de instrumentación estables:
-
-```c
-SEC("tracepoint/syscalls/sys_enter_openat")
-int trace_openat(struct trace_event_raw_sys_enter *ctx) {
-    // ...
-    return 0;
-}
-```
-
-### XDP
-
-Procesamiento de paquetes a bajo nivel, antes del stack de red.
-
-## Compilación
-
-```bash
-# Compilar programa BPF
-clang -O2 -target bpf -c program.bpf.c -o program.bpf.o
-
-# Cargar con bpftool
-sudo bpftool prog load program.bpf.o /sys/fs/bpf/my_prog
-```
-
-## Detección
-
-```bash
-# Listar programas BPF cargados
-sudo bpftool prog list
-
-# Ver maps
-sudo bpftool map list
-```
-
-!!! warning "Uso ofensivo"
-    eBPF puede usarse para crear rootkits difíciles de detectar. Monitoriza los programas BPF cargados en sistemas de producción.
+- **Observabilidad**: tracing, profiling, monitoring
+- **Networking**: XDP, tc, socket filtering
+- **Security**: LSM hooks, seccomp
 
 ---
 
-!!! tip "Recursos"
-    - [eBPF.io](https://ebpf.io/) — Documentación oficial
-    - [libbpf-bootstrap](https://github.com/libbpf/libbpf-bootstrap) — Templates para empezar
+## Primer programa eBPF
+
+```c
+#include <linux/bpf.h>
+#include <bpf/bpf_helpers.h>
+
+SEC("tracepoint/syscalls/sys_enter_execve")
+int trace_execve(void *ctx) {
+    bpf_printk("execve called\\n");
+    return 0;
+}
+
+char LICENSE[] SEC("license") = "GPL";
+```
+
+### Compilar
+
+```bash
+clang -O2 -target bpf -c trace.bpf.c -o trace.bpf.o
+```
+
+### Cargar con bpftool
+
+```bash
+sudo bpftool prog load trace.bpf.o /sys/fs/bpf/trace
+sudo bpftool prog show
+```
+
+---
+
+## bpftrace one-liners
+
+```bash
+# Trazar llamadas a open()
+sudo bpftrace -e 'tracepoint:syscalls:sys_enter_open { printf("%s %s\n", comm, str(args->filename)); }'
+
+# Contar syscalls por proceso
+sudo bpftrace -e 'tracepoint:raw_syscalls:sys_enter { @[comm] = count(); }'
+
+# Latencia de read()
+sudo bpftrace -e 'tracepoint:syscalls:sys_enter_read { @start[tid] = nsecs; } tracepoint:syscalls:sys_exit_read /@start[tid]/ { @ns = hist(nsecs - @start[tid]); delete(@start[tid]); }'
+```
+
+---
+
+## BPF Maps
+
+Los maps permiten compartir datos entre programas eBPF y userspace.
+
+```c
+struct {
+    __uint(type, BPF_MAP_TYPE_HASH);
+    __uint(max_entries, 1024);
+    __type(key, u32);
+    __type(value, u64);
+} my_map SEC(".maps");
+```
+
+---
+
+!!! warning "Requisitos"
+    - Kernel >= 4.15 (recomendado >= 5.x)
+    - Privilegios CAP_BPF o root
+    - Headers del kernel instalados
+
+---
+
+!!! recursos "Referencias"
+    - [eBPF.io](https://ebpf.io/)
+    - [BPF Portability and CO-RE](https://nakryiko.com/posts/bpf-portability-and-co-re/)
+    - [Learning eBPF - Liz Rice](https://isovalent.com/learning-ebpf/)

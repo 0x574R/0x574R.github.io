@@ -1,40 +1,21 @@
+# RAZOR
+
 <div class="razor-hero">
+  <img src="assets/logo.png" alt="RAZOR Logo" class="razor-hero__logo">
   <div class="razor-hero__content">
-    <div class="razor-hero__kicker">Offensive Security • Kernel • Malware Dev</div>
-    <div class="razor-hero__subtitle">
-      Research técnico, writeups y cheatsheets con foco en Linux internals, eBPF y desarrollo de malware.
-    </div>
-    <div class="razor-hero__disclaimer">
-      Disclaimer: contenido orientado a investigación y aprendizaje. No se fomenta el uso ilícito ni actividades no autorizadas.
+    <div class="razor-hero__kicker">Offensive Security Research</div>
+    <p class="razor-hero__subtitle">
+      Notas técnicas, writeups de CTF y research sobre seguridad ofensiva,
+      desarrollo de malware, kernel exploitation y más.
+    </p>
+    <p class="razor-hero__disclaimer">
+      ⚠️ Todo el contenido es exclusivamente con fines educativos y de investigación.
+    </p>
+    <div class="razor-hero__actions">
+      <a href="writeups/" class="md-button md-button--primary">Writeups</a>
+      <a href="research/" class="md-button">Research</a>
     </div>
   </div>
-</div>
-
----
-
-## Destacados
-
-<div class="razor-cards">
-  <a class="razor-card" href="research/kernel/ebpf-intro.md">
-    <div class="razor-card__tag">Kernel</div>
-    <div class="razor-card__title">Introducción a eBPF</div>
-    <div class="razor-card__desc">Conceptos base, objetivos y primeros pasos para instrumentación y seguridad.</div>
-    <div class="razor-card__meta"><span>2025-01-09</span><span>•</span><span>6 min lectura</span></div>
-  </a>
-
-  <a class="razor-card" href="cheatsheets/linux-privesc.md">
-    <div class="razor-card__tag">Cheatsheet</div>
-    <div class="razor-card__title">Linux Privilege Escalation</div>
-    <div class="razor-card__desc">Checklist rápido con enumeración, vectores típicos y comandos clave.</div>
-    <div class="razor-card__meta"><span>2025-01-08</span><span>•</span><span>8 min lectura</span></div>
-  </a>
-
-  <a class="razor-card" href="research/malware-dev/shellcode-basics.md">
-    <div class="razor-card__tag">Malware Dev</div>
-    <div class="razor-card__title">Shellcode Basics</div>
-    <div class="razor-card__desc">Estructura, syscalls y consideraciones prácticas para x86_64.</div>
-    <div class="razor-card__meta"><span>2025-01-07</span><span>•</span><span>7 min lectura</span></div>
-  </a>
 </div>
 
 ---
@@ -42,21 +23,36 @@
 ## Secciones
 
 <div class="razor-cards razor-cards--sections">
-  <a class="razor-card" href="writeups/index.md">
-    <div class="razor-card__tag">CTF</div>
-    <div class="razor-card__title">Writeups</div>
-    <div class="razor-card__desc">Resolución de máquinas, notas de explotación y metodología reproducible.</div>
-  </a>
 
-  <a class="razor-card" href="cheatsheets/index.md">
-    <div class="razor-card__tag">Notas</div>
-    <div class="razor-card__title">Cheatsheets</div>
-    <div class="razor-card__desc">Referencias rápidas para pentesting, privesc, web y herramientas.</div>
-  </a>
+<a href="writeups/" class="razor-card">
+  <img src="assets/images/writeups-hero.svg" alt="Writeups" style="border-radius: 10px; width: 100%; height: 120px; object-fit: cover; margin-bottom: 0.5rem;">
+  <span class="razor-card__tag">CTF</span>
+  <span class="razor-card__title">Writeups</span>
+  <span class="razor-card__desc">Resolución de máquinas y retos CTF</span>
+</a>
 
-  <a class="razor-card" href="research/index.md">
-    <div class="razor-card__tag">R&amp;D</div>
-    <div class="razor-card__title">Research</div>
-    <div class="razor-card__desc">Kernel security, eBPF, rootkits y malware development.</div>
-  </a>
+<a href="cheatsheets/" class="razor-card">
+  <img src="assets/images/cheatsheets-hero.svg" alt="Cheatsheets" style="border-radius: 10px; width: 100%; height: 120px; object-fit: cover; margin-bottom: 0.5rem;">
+  <span class="razor-card__tag">Reference</span>
+  <span class="razor-card__title">Cheatsheets</span>
+  <span class="razor-card__desc">Referencias rápidas y comandos</span>
+</a>
+
+<a href="research/" class="razor-card">
+  <img src="assets/images/research-hero.svg" alt="Research" style="border-radius: 10px; width: 100%; height: 120px; object-fit: cover; margin-bottom: 0.5rem;">
+  <span class="razor-card__tag">Low-level</span>
+  <span class="razor-card__title">Research</span>
+  <span class="razor-card__desc">Malware dev, kernel, eBPF</span>
+</a>
+
 </div>
+
+---
+
+## Últimos posts
+
+| Fecha | Título | Categoría |
+|-------|--------|-----------|
+| 2025-01-09 | [Introducción a eBPF](research/kernel/ebpf-intro.md) | Research |
+| 2025-01-08 | [Linux Privilege Escalation](cheatsheets/linux-privesc.md) | Cheatsheet |
+| 2025-01-07 | [Shellcode Basics](research/malware-dev/shellcode-basics.md) | Research |

@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <defs>
+    <linearGradient id="bg-cheat" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0b1220"/>
+      <stop offset="50%" style="stop-color:#162033"/>
+      <stop offset="100%" style="stop-color:#0f1a2c"/>
+    </linearGradient>
+    <linearGradient id="card-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a2332"/>
+      <stop offset="100%" style="stop-color:#0f1620"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#bg-cheat)"/>
+  
+  <!-- Grid dots -->
+  <g fill="#4a6fa5" opacity="0.2">
+    <circle cx="50" cy="50" r="2"/><circle cx="100" cy="50" r="2"/><circle cx="150" cy="50" r="2"/>
+    <circle cx="50" cy="100" r="2"/><circle cx="100" cy="100" r="2"/><circle cx="150" cy="100" r="2"/>
+    <circle cx="650" cy="300" r="2"/><circle cx="700" cy="300" r="2"/><circle cx="750" cy="300" r="2"/>
+    <circle cx="650" cy="350" r="2"/><circle cx="700" cy="350" r="2"/><circle cx="750" cy="350" r="2"/>
+  </g>
+  
+  <!-- Card 1 - Linux -->
+  <rect x="80" y="80" width="200" height="240" rx="12" fill="url(#card-gradient)" stroke="#4a6fa5" stroke-width="1.5"/>
+  <rect x="80" y="80" width="200" height="40" rx="12" fill="#4a6fa5" opacity="0.2"/>
+  <text x="180" y="107" font-family="IBM Plex Sans, sans-serif" font-size="14" font-weight="700" fill="#7a9ec9" text-anchor="middle">LINUX</text>
+  
+  <text x="100" y="150" font-family="JetBrains Mono, monospace" font-size="11" fill="#6e7681">$ find / -perm -4000</text>
+  <text x="100" y="175" font-family="JetBrains Mono, monospace" font-size="11" fill="#6e7681">$ getcap -r / 2>/dev/null</text>
+  <text x="100" y="200" font-family="JetBrains Mono, monospace" font-size="11" fill="#6e7681">$ cat /etc/passwd</text>
+  <text x="100" y="225" font-family="JetBrains Mono, monospace" font-size="11" fill="#6e7681">$ sudo -l</text>
+  <text x="100" y="250" font-family="JetBrains Mono, monospace" font-size="11" fill="#6e7681">$ ps aux | grep root</text>
+  <text x="100" y="275" font-family="JetBrains Mono, monospace" font-size="11" fill="#6e7681">$ netstat -tulpn</text>
+  
+  <!-- Card 2 - Windows -->
+  <rect x="300" y="80" width="200" height="240" rx="12" fill="url(#card-gradient)" stroke="#4a6fa5" stroke-width="1.5"/>
+  <rect x="300" y="80" width="200" height="40" rx="12" fill="#4a6fa5" opacity="0.2"/>
+  <text x="400" y="107" font-family="IBM Plex Sans, sans-serif" font-size="14" font-weight="700" fill="#7a9ec9" text-anchor="middle">WINDOWS</text>
+  
+  <text x="320" y="150" font-family="JetBrains Mono, monospace" font-size="11" fill="#6e7681">> whoami /priv</text>
+  <text x="320" y="175" font-family="JetBrains Mono, monospace" font-size="11" fill="#6e7681">> systeminfo</text>
+  <text x="320" y="200" font-family="JetBrains Mono, monospace" font-size="11" fill="#6e7681">> net user</text>
+  <text x="320" y="225" font-family="JetBrains Mono, monospace" font-size="11" fill="#6e7681">> netstat -ano</text>
+  <text x="320" y="250" font-family="JetBrains Mono, monospace" font-size="11" fill="#6e7681">> tasklist /svc</text>
+  <text x="320" y="275" font-family="JetBrains Mono, monospace" font-size="11" fill="#6e7681">> reg query HKLM</text>
+  
+  <!-- Card 3 - Web -->
+  <rect x="520" y="80" width="200" height="240" rx="12" fill="url(#card-gradient)" stroke="#4a6fa5" stroke-width="1.5"/>
+  <rect x="520" y="80" width="200" height="40" rx="12" fill="#4a6fa5" opacity="0.2"/>
+  <text x="620" y="107" font-family="IBM Plex Sans, sans-serif" font-size="14" font-weight="700" fill="#7a9ec9" text-anchor="middle">WEB</text>
+  
+  <text x="540" y="150" font-family="JetBrains Mono, monospace" font-size="11" fill="#6e7681">' OR 1=1--</text>
+  <text x="540" y="175" font-family="JetBrains Mono, monospace" font-size="11" fill="#6e7681">&lt;script&gt;alert(1)</text>
+  <text x="540" y="200" font-family="JetBrains Mono, monospace" font-size="11" fill="#6e7681">{{7*7}}</text>
+  <text x="540" y="225" font-family="JetBrains Mono, monospace" font-size="11" fill="#6e7681">../../etc/passwd</text>
+  <text x="540" y="250" font-family="JetBrains Mono, monospace" font-size="11" fill="#6e7681">;id</text>
+  <text x="540" y="275" font-family="JetBrains Mono, monospace" font-size="11" fill="#6e7681">%00</text>
+  
+  <!-- Bottom accent line -->
+  <rect x="0" y="395" width="800" height="5">
+    <animate attributeName="fill" values="#4a6fa5;#7a9ec9;#4a6fa5" dur="3s" repeatCount="indefinite"/>
+  </rect>
+  
+  <!-- Title -->
+  <text x="400" y="370" font-family="IBM Plex Sans, sans-serif" font-size="16" fill="#4a6fa5" text-anchor="middle" opacity="0.6">QUICK REFERENCE GUIDES</text>
+</svg>
