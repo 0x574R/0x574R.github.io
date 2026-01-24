@@ -40,23 +40,40 @@
   --md-footer-bg-color: #0b1220;
 
   /* Sidebars (slightly brighter than body for contrast) */
-  --md-sidebar-bg-color: #f7f8fa;
+  /* Match the page background to avoid the big light "columns" */
+  --md-sidebar-bg-color: #eef0f2;
 
   /* Keep header compact */
   --md-header-height: 3.0rem;
 }
 
-/* --- Light mode: keep sidebars native (no floating cards)
-   The previous "card" styling caused layout mismatch and introduced
-   a visible ghost rectangle in some contexts.
+/* --- Light mode: sidebars should visually match dark mode (card-like)
+   while keeping excellent readability.
+   We use a subtle glass surface and remove Material's scroll masking
+   to avoid the "ghost rectangle" artifacts.
 */
 [data-md-color-scheme="default"] .md-sidebar--primary .md-sidebar__inner,
 [data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__inner {
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 18px;
+  box-shadow:
+    0 18px 40px rgba(15, 23, 42, 0.10),
+    0 2px 10px rgba(15, 23, 42, 0.06);
+  padding: 0.70rem 0.65rem;
+  backdrop-filter: blur(10px);
+}
+
+/* Light mode: ensure the sidebar columns don't look like separate panels */
+[data-md-color-scheme="default"] .md-sidebar {
   background: transparent;
-  border: 0;
-  border-radius: 0;
-  box-shadow: none;
-  padding: 0;
+}
+
+/* Disable Material's scroll mask fade in sidebars (creates the top "ghost" block)
+   Some browsers render the mask as a visible rectangle on light surfaces. */
+[data-md-color-scheme="default"] .md-sidebar__scrollwrap {
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
 }
 
 /* Light mode: remove the built-in scroll fade overlays (ghost rectangles)
@@ -74,15 +91,16 @@
 [data-md-color-scheme="default"] .md-nav--primary .md-nav__link,
 [data-md-color-scheme="default"] .md-nav--secondary .md-nav__link {
   display: block;
-  border-radius: 10px;
-  padding: 0.35rem 0.65rem;
-  margin: 0.12rem 0.35rem;
+  width: 100%;
+  border-radius: 12px;
+  padding: 0.38rem 0.65rem;
+  margin: 0.10rem 0;
 }
 
 [data-md-color-scheme="default"] .md-nav--primary .md-nav__link--active,
 [data-md-color-scheme="default"] .md-nav--secondary .md-nav__link--active {
-  background: rgba(var(--razor-accent-rgb), 0.10);
-  box-shadow: inset 3px 0 0 rgba(var(--razor-accent-rgb), 0.85);
+  background: rgba(var(--razor-accent-rgb), 0.12);
+  box-shadow: inset 3px 0 0 rgba(var(--razor-accent-rgb), 0.90);
 }
 
 [data-md-color-scheme="default"] .md-nav--primary .md-nav__link:hover,
@@ -90,9 +108,9 @@
   background: rgba(var(--razor-accent-rgb), 0.06);
 }
 
-/* Ensure the secondary TOC accent reaches the container edges visually */
+/* TOC: ensure highlight reaches the edges within our card padding */
 [data-md-color-scheme="default"] .md-nav--secondary .md-nav__list {
-  padding: 0.25rem 0;
+  padding: 0.15rem 0;
 }
 
 [data-md-color-scheme="default"] .md-nav__title {
@@ -500,6 +518,18 @@
   border: 1px solid rgba(var(--razor-accent-rgb), 0.18);
   box-shadow: 0 18px 50px rgba(0,0,0,0.35);
   animation: razor-content-in 320ms ease-out both;
+}
+
+/* Light mode: same hero style as dark, but with a clean readable surface */
+[data-md-color-scheme="default"] .razor-hero {
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.92) 0%,
+    rgba(var(--razor-accent-rgb), 0.08) 42%,
+    rgba(255,255,255,0.88) 100%
+  );
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
 }
 
 .razor-hero__content {
