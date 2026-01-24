@@ -6,39 +6,43 @@ Técnicas de escalada de privilegios en Linux.
 
 ## Enumeration
 
-=== "Bash"
+/// tab | Bash
 
-    ```bash
-    # System info
-    uname -a
-    cat /etc/issue
+```bash
+# System info
+uname -a
+cat /etc/issue
 
-    # Current user
-    id
-    sudo -l
+# Current user
+id
+sudo -l
 
-    # Users
-    cat /etc/passwd | grep -E '/bin/(ba)?sh'
+# Users
+cat /etc/passwd | grep -E '/bin/(ba)?sh'
 
-    # Network
-    ip a
-    ss -tulpn
-    ```
+# Network
+ip a
+ss -tulpn
+```
 
-=== "Python"
+///
 
-    ```python
-    import os
-    import subprocess
+/// tab | Python
 
-    def run(cmd: str) -> str:
-        return subprocess.check_output(cmd, shell=True, text=True, stderr=subprocess.DEVNULL)
+```python
+import os
+import subprocess
 
-    print(run("uname -a"))
-    print(run("id"))
-    print(run("sudo -l"))
-    print(run("ip a"))
-    ```
+def run(cmd: str) -> str:
+    return subprocess.check_output(cmd, shell=True, text=True, stderr=subprocess.DEVNULL)
+
+print(run("uname -a"))
+print(run("id"))
+print(run("sudo -l"))
+print(run("ip a"))
+```
+
+///
 
 ## SUID Binaries
 
