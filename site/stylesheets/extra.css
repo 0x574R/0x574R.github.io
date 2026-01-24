@@ -1,104 +1,149 @@
 /* ============================================
-   RAZOR - TOC Dark Style for Light Theme v3
+   RAZOR - Efectos Dark Theme para Light Theme
    ============================================
-   Selectores específicos para MkDocs Material
+   Iguala animaciones, hover, transiciones e
+   indicadores del tema claro al oscuro.
+   NO cambia colores de fondo.
    ============================================ */
 
-/* === MÉTODO 1: Usando data-md-color-scheme === */
+/* ==========================================
+   SIDEBAR IZQUIERDO (Navegación principal)
+   ========================================== */
 
-/* Sidebar derecho completo */
-[data-md-color-scheme="default"] .md-sidebar--secondary {
-    background: #1a1a2e !important;
+/* Links del menú - transición suave como en tema oscuro */
+[data-md-color-scheme="default"] .md-nav__link {
+    transition: color 0.125s, opacity 0.125s !important;
 }
 
-[data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__scrollwrap {
-    background: #1a1a2e !important;
+/* Hover - efecto del tema oscuro */
+[data-md-color-scheme="default"] .md-nav__link:hover {
+    color: var(--md-accent-fg-color) !important;
+    opacity: 1 !important;
 }
 
-[data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__inner {
-    background: #1a1a2e !important;
+/* Focus visible - mismo estilo que dark */
+[data-md-color-scheme="default"] .md-nav__link:focus-visible {
+    outline-color: var(--md-accent-fg-color) !important;
+    outline-offset: 0.2rem !important;
 }
 
-/* Navegación del TOC */
-[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav--secondary {
-    background: #1a1a2e !important;
-}
-
-/* Título "Tabla de contenidos" */
-[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav--secondary > .md-nav__title {
-    color: #6e7681 !important;
-    background: #1a1a2e !important;
-    box-shadow: none !important;
-    font-size: 0.6rem !important;
+/* Item activo - indicador lateral como en dark */
+[data-md-color-scheme="default"] .md-nav__item--active > .md-nav__link {
+    color: var(--md-typeset-a-color) !important;
     font-weight: 700 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.1em !important;
 }
 
-/* Links del TOC */
-[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav--secondary .md-nav__link {
-    color: #8b949e !important;
+/* Expansión de secciones - transición suave */
+[data-md-color-scheme="default"] .md-nav__item--nested > .md-nav {
+    transition: max-height 0.25s ease-in-out, opacity 0.25s ease-in-out !important;
 }
 
-[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav--secondary .md-nav__link:hover {
-    color: #f0f6fc !important;
+/* Toggle de expansión - rotación suave del icono */
+[data-md-color-scheme="default"] .md-nav__icon {
+    transition: transform 0.25s ease-in-out, background-color 0.25s !important;
 }
 
-[data-md-color-scheme="default"] .md-sidebar--secondary .md-nav--secondary .md-nav__link--active {
-    color: #58a6ff !important;
+[data-md-color-scheme="default"] .md-nav__icon:hover {
+    background-color: var(--md-accent-fg-color--transparent) !important;
 }
 
-/* === MÉTODO 2: Forzando con :not() para excluir tema oscuro === */
+/* ==========================================
+   SIDEBAR DERECHO (TOC - Tabla de contenidos)
+   ========================================== */
 
-body:not([data-md-color-scheme="slate"]) .md-sidebar--secondary {
-    background: #1a1a2e !important;
+/* Links del TOC - transición igual que dark */
+[data-md-color-scheme="default"] .md-nav--secondary .md-nav__link {
+    transition: color 0.125s, border-color 0.125s !important;
 }
 
-body:not([data-md-color-scheme="slate"]) .md-sidebar--secondary .md-sidebar__scrollwrap {
-    background: #1a1a2e !important;
+/* Hover en TOC - efecto dark */
+[data-md-color-scheme="default"] .md-nav--secondary .md-nav__link:hover {
+    color: var(--md-accent-fg-color) !important;
 }
 
-body:not([data-md-color-scheme="slate"]) .md-sidebar--secondary .md-nav--secondary {
-    background: #1a1a2e !important;
+/* Link activo del TOC - estilo dark */
+[data-md-color-scheme="default"] .md-nav--secondary .md-nav__link--active {
+    color: var(--md-typeset-a-color) !important;
+    font-weight: 500 !important;
 }
 
-body:not([data-md-color-scheme="slate"]) .md-sidebar--secondary .md-nav--secondary > .md-nav__title {
-    color: #6e7681 !important;
-    background: #1a1a2e !important;
+/* ==========================================
+   INDICADOR DE SCROLL DEL TOC (línea lateral)
+   ========================================== */
+
+/* Línea base del indicador */
+[data-md-color-scheme="default"] .md-nav--secondary .md-nav__link {
+    border-left: 0.1rem solid transparent !important;
+    margin-left: -0.6rem !important;
+    padding-left: 0.6rem !important;
+}
+
+/* Línea activa - mismo color accent que dark */
+[data-md-color-scheme="default"] .md-nav--secondary .md-nav__link--active {
+    border-left-color: var(--md-accent-fg-color) !important;
+}
+
+/* Hover en línea */
+[data-md-color-scheme="default"] .md-nav--secondary .md-nav__link:hover {
+    border-left-color: var(--md-default-fg-color--lighter) !important;
+}
+
+/* ==========================================
+   SCROLLBAR - Estilo minimalista como dark
+   ========================================== */
+
+/* Scrollbar del sidebar izquierdo */
+[data-md-color-scheme="default"] .md-sidebar__scrollwrap::-webkit-scrollbar {
+    width: 0.2rem !important;
+}
+
+[data-md-color-scheme="default"] .md-sidebar__scrollwrap::-webkit-scrollbar-thumb {
+    background-color: var(--md-default-fg-color--lighter) !important;
+    border-radius: 0.1rem !important;
+}
+
+[data-md-color-scheme="default"] .md-sidebar__scrollwrap::-webkit-scrollbar-thumb:hover {
+    background-color: var(--md-accent-fg-color) !important;
+}
+
+/* Firefox */
+[data-md-color-scheme="default"] .md-sidebar__scrollwrap {
+    scrollbar-width: thin !important;
+    scrollbar-color: var(--md-default-fg-color--lighter) transparent !important;
+}
+
+/* ==========================================
+   TÍTULO "Tabla de contenidos" - Estilo dark
+   ========================================== */
+
+[data-md-color-scheme="default"] .md-nav--secondary > .md-nav__title {
     box-shadow: none !important;
+    background: transparent !important;
 }
 
-body:not([data-md-color-scheme="slate"]) .md-sidebar--secondary .md-nav--secondary .md-nav__link {
-    color: #8b949e !important;
+/* ==========================================
+   ANIMACIONES GLOBALES DE NAVEGACIÓN
+   ========================================== */
+
+/* Instant loading - fade transition */
+[data-md-color-scheme="default"] .md-sidebar {
+    transition: opacity 0.25s !important;
 }
 
-body:not([data-md-color-scheme="slate"]) .md-sidebar--secondary .md-nav--secondary .md-nav__link:hover {
-    color: #f0f6fc !important;
+/* Smooth scroll en sidebars */
+[data-md-color-scheme="default"] .md-sidebar__scrollwrap {
+    scroll-behavior: smooth !important;
 }
 
-body:not([data-md-color-scheme="slate"]) .md-sidebar--secondary .md-nav--secondary .md-nav__link--active {
-    color: #58a6ff !important;
+/* ==========================================
+   BOTÓN "Volver arriba" - Estilo consistente
+   ========================================== */
+
+[data-md-color-scheme="default"] .md-top {
+    transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out !important;
 }
 
-/* === SCROLLBAR OSCURO === */
-
-[data-md-color-scheme="default"] .md-sidebar--secondary ::-webkit-scrollbar {
-    width: 4px !important;
+[data-md-color-scheme="default"] .md-top:hover {
+    background-color: var(--md-accent-fg-color) !important;
+    color: var(--md-accent-bg-color) !important;
 }
-
-[data-md-color-scheme="default"] .md-sidebar--secondary ::-webkit-scrollbar-track {
-    background: #1a1a2e !important;
-}
-
-[data-md-color-scheme="default"] .md-sidebar--secondary ::-webkit-scrollbar-thumb {
-    background: #30363d !important;
-    border-radius: 2px !important;
-}
-
-/* === DEBUG: Si nada funciona, esto SIEMPRE se aplica === */
-/* Descomenta estas líneas para probar si el CSS se carga */
-/*
-.md-sidebar--secondary {
-    background: red !important;
-}
-*/

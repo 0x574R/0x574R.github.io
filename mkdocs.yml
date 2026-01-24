@@ -54,7 +54,7 @@ plugins:
 
 extra_css:
   - stylesheets/custom.css
-  - stylesheets/extra.css
+
 
 # ✅ MkDocs default code highlighting (stable)
 markdown_extensions:
