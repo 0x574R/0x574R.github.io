@@ -16,17 +16,20 @@
   --md-accent-fg-color: #7c3aed;          /* links / accents */
   --md-accent-fg-color--transparent: rgba(124, 58, 237, 0.14);
 
-  /* Page surfaces */
-  --md-default-bg-color: #05000a;         /* body background */
-  --md-code-bg-color: #090012;
-  --md-footer-bg-color: #06000e;
+  /* Page surfaces (lifted so the UI doesn't read as "pure black") */
+  --md-default-bg-color: #120a1f;         /* body background */
+  --md-code-bg-color: #1a0f2b;
+  --md-footer-bg-color: #0f071c;
+
+  /* Slight separation for side panels */
+  --md-sidebar-bg-color: #10071d;
 
   /* Text */
   --md-default-fg-color: rgba(255, 255, 255, 0.92);
   --md-default-fg-color--light: rgba(255, 255, 255, 0.72);
   --md-default-fg-color--lighter: rgba(255, 255, 255, 0.52);
 
-  /* Reduce topbar height while keeping it dense */
+  /* Keep header compact */
   --md-header-height: 3.0rem;
 }
 
@@ -69,12 +72,51 @@
 
 .md-header__button.md-logo {
   padding: 0.05rem 0.4rem;
-  margin-right: 0.35rem;
+  margin-right: 0.9rem; /* more breathing room between logo and titles */
 }
 
 /* Ensure title never overlaps logo */
 .md-header__title {
-  padding-left: 0.2rem;
+  padding-left: 0.35rem;
+}
+
+/* Hide the site title label ("RAZOR") next to the logo, but keep the page/article title */
+.md-header__title .md-header__topic:first-child {
+  display: none;
+}
+
+/* Give the article title a little more room */
+.md-header__title .md-header__topic + .md-header__topic {
+  margin-left: 0.35rem;
+}
+
+/* --- Dark mode readability upgrades (avoid an overly "crushed" look) --- */
+
+/* Slightly lift common surfaces */
+.md-sidebar,
+.md-nav--primary,
+.md-nav--secondary {
+  background: var(--md-sidebar-bg-color);
+}
+
+/* Code blocks: clearer separation without going full gray */
+.md-typeset pre > code {
+  background: var(--md-code-bg-color);
+  border: 1px solid rgba(124, 58, 237, 0.22);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+}
+
+/* Tables: faint surface so they don't disappear into the background */
+.md-typeset table:not([class]) {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* Quotes: readable surface */
+.md-typeset blockquote {
+  background: rgba(124, 58, 237, 0.08);
+  border-left: 4px solid rgba(124, 58, 237, 0.35);
 }
 
 /* Compact the inner header padding to reduce height */
