@@ -230,8 +230,13 @@
 
 [data-md-color-scheme="default"] .md-nav--secondary > .md-nav__title {
   box-shadow: none !important;
-  background: transparent !important;
+  background: var(--md-default-bg-color) !important;
   color: var(--md-default-fg-color--light) !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 1 !important;
+  padding-top: 0.6rem !important;
+  padding-bottom: 0.4rem !important;
 }
 
 [data-md-color-scheme="default"] .md-nav--secondary .md-nav__link {
