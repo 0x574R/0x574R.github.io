@@ -364,9 +364,12 @@
   padding-left: 0.35rem;
 }
 
+/* Mostrar el título del artículo actual (segundo topic) */
 .md-header__title .md-header__topic:first-child {
   display: none;
 }
+
+/* El segundo topic (título de la página) se muestra por defecto */
 
 .md-header__inner {
   padding-top: 0.05rem;

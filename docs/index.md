@@ -48,14 +48,4 @@
   </div>
 </a>
 
-<a href="research/malware-dev/shellcode-basics/" class="razor-card">
-  <img src="assets/images/malware-hero.svg" alt="Shellcode">
-  <span class="razor-card__title">Shellcode Basics</span>
-  <span class="razor-card__desc">Desarrollo de shellcode x86-64 para Linux</span>
-  <div class="razor-card__meta">
-    <span class="razor-card__tag">Assembly</span>
-    <span class="razor-card__time">8 min</span>
-  </div>
-</a>
-
 </div>

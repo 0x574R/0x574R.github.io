@@ -82,5 +82,4 @@ nav:
   - Home: index.md
   - Malware Dev:
       - research/malware-dev/index.md
-      - Shellcode Basics: research/malware-dev/shellcode-basics.md
       - Ptrace Injection: research/malware-dev/ptrace-injection.md
