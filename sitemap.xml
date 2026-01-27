@@ -2,38 +2,18 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://0x574r.github.io/</loc>
-         <lastmod>2026-01-24</lastmod>
-    </url>
-    <url>
-         <loc>https://0x574r.github.io/cheatsheets/</loc>
-         <lastmod>2026-01-24</lastmod>
-    </url>
-    <url>
-         <loc>https://0x574r.github.io/cheatsheets/linux-privesc/</loc>
-         <lastmod>2026-01-24</lastmod>
-    </url>
-    <url>
-         <loc>https://0x574r.github.io/research/</loc>
-         <lastmod>2026-01-24</lastmod>
-    </url>
-    <url>
-         <loc>https://0x574r.github.io/research/kernel/</loc>
-         <lastmod>2026-01-24</lastmod>
-    </url>
-    <url>
-         <loc>https://0x574r.github.io/research/kernel/ebpf-intro/</loc>
-         <lastmod>2026-01-24</lastmod>
+         <lastmod>2026-01-27</lastmod>
     </url>
     <url>
          <loc>https://0x574r.github.io/research/malware-dev/</loc>
-         <lastmod>2026-01-24</lastmod>
+         <lastmod>2026-01-27</lastmod>
+    </url>
+    <url>
+         <loc>https://0x574r.github.io/research/malware-dev/ptrace-injection/</loc>
+         <lastmod>2026-01-27</lastmod>
     </url>
     <url>
          <loc>https://0x574r.github.io/research/malware-dev/shellcode-basics/</loc>
-         <lastmod>2026-01-24</lastmod>
-    </url>
-    <url>
-         <loc>https://0x574r.github.io/writeups/</loc>
-         <lastmod>2026-01-24</lastmod>
+         <lastmod>2026-01-27</lastmod>
     </url>
 </urlset>
