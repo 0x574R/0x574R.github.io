@@ -6,10 +6,11 @@ site_description: Offensive security research & notes
 repo_name: 0x574R
 repo_url: https://github.com/0x574R
 
-copyright: "© 2025 0x574R"
+copyright: "© 2026 0x574R"
 
 theme:
   name: material
+  custom_dir: overrides
   language: es
   logo: assets/logo.png
   favicon: assets/favicon.png
@@ -78,15 +79,8 @@ markdown_extensions:
   - pymdownx.keys
 
 nav:
-  - Writeups: writeups/index.md
-  - Cheatsheets:
-      - cheatsheets/index.md
-      - Linux Privesc: cheatsheets/linux-privesc.md
-  - Research:
-      - research/index.md
-      - Kernel:
-          - research/kernel/index.md
-          - eBPF Intro: research/kernel/ebpf-intro.md
-      - Malware Dev:
-          - research/malware-dev/index.md
-          - Shellcode Basics: research/malware-dev/shellcode-basics.md
+  - Home: index.md
+  - Malware Dev:
+      - research/malware-dev/index.md
+      - Shellcode Basics: research/malware-dev/shellcode-basics.md
+      - Ptrace Injection: research/malware-dev/ptrace-injection.md
