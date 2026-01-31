@@ -82,4 +82,4 @@ nav:
   - Home: index.md
   - Malware Dev:
       - research/malware-dev/index.md
-      - Ptrace Injection: research/malware-dev/ptrace-injection.md
+      - Reverse TCP Shell: research/malware-dev/reverse-shell.md

@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <defs>
+    <linearGradient id="bg-shell" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0b1220"/>
+      <stop offset="50%" style="stop-color:#0a1a10"/>
+      <stop offset="100%" style="stop-color:#0f1a2c"/>
+    </linearGradient>
+    <linearGradient id="connect-glow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#27ca40;stop-opacity:0"/>
+      <stop offset="50%" style="stop-color:#27ca40;stop-opacity:0.6"/>
+      <stop offset="100%" style="stop-color:#27ca40;stop-opacity:0"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#bg-shell)"/>
+  
+  <!-- Network packets background -->
+  <g font-family="JetBrains Mono, monospace" font-size="9" fill="#27ca40" opacity="0.1">
+    <text x="20" y="30">SYN → 192.168.1.100:4444</text>
+    <text x="20" y="45">← SYN-ACK</text>
+    <text x="20" y="60">ACK → [ESTABLISHED]</text>
+    <text x="550" y="375">$ whoami</text>
+    <text x="550" y="390">root</text>
+  </g>
+  
+  <!-- Victim machine -->
+  <g transform="translate(100, 120)">
+    <rect width="180" height="160" rx="8" fill="#0d1420" stroke="#4a6fa5" stroke-width="2"/>
+    <rect width="180" height="28" rx="8" fill="#162033"/>
+    <text x="90" y="18" font-family="JetBrains Mono, monospace" font-size="10" fill="#7a9ec9" text-anchor="middle">VICTIM</text>
+    
+    <!-- Terminal content -->
+    <g font-family="JetBrains Mono, monospace" font-size="9">
+      <text x="12" y="50" fill="#27ca40">$</text>
+      <text x="25" y="50" fill="#c9d1d9">./legitimate_app</text>
+      <text x="12" y="70" fill="#6e7681">[infected]</text>
+      <text x="12" y="95" fill="#27ca40">fork()</text>
+      <text x="70" y="95" fill="#6e7681">→ child</text>
+      <text x="12" y="115" fill="#27ca40">socket()</text>
+      <text x="12" y="135" fill="#27ca40">connect()</text>
+      <text x="85" y="135" fill="#c9545a">→</text>
+    </g>
+  </g>
+  
+  <!-- Attacker machine -->
+  <g transform="translate(520, 120)">
+    <rect width="180" height="160" rx="8" fill="#0d1420" stroke="#c9545a" stroke-width="2"/>
+    <rect width="180" height="28" rx="8" fill="#1a1215"/>
+    <text x="90" y="18" font-family="JetBrains Mono, monospace" font-size="10" fill="#c9545a" text-anchor="middle">ATTACKER</text>
+    
+    <!-- Terminal content -->
+    <g font-family="JetBrains Mono, monospace" font-size="9">
+      <text x="12" y="50" fill="#c9545a">$</text>
+      <text x="25" y="50" fill="#c9d1d9">nc -lvnp 4444</text>
+      <text x="12" y="70" fill="#6e7681">listening...</text>
+      <text x="12" y="95" fill="#27ca40">Connection from</text>
+      <text x="12" y="110" fill="#27ca40">192.168.1.50</text>
+      <text x="12" y="135" fill="#c9545a">$</text>
+      <text x="25" y="135" fill="#c9d1d9">id</text>
+      <text x="12" y="150" fill="#27ca40">uid=0(root)</text>
+    </g>
+  </g>
+  
+  <!-- Connection arrow -->
+  <g>
+    <!-- Main connection line -->
+    <path d="M290 200 L510 200" stroke="#27ca40" stroke-width="2" fill="none" stroke-dasharray="8,4">
+      <animate attributeName="stroke-dashoffset" values="0;-24" dur="1s" repeatCount="indefinite"/>
+    </path>
+    
+    <!-- Arrow head -->
+    <polygon points="510,200 495,192 495,208" fill="#27ca40"/>
+    
+    <!-- Reverse arrow (data back) -->
+    <path d="M510 215 L290 215" stroke="#c9545a" stroke-width="1" fill="none" stroke-dasharray="4,4" opacity="0.6">
+      <animate attributeName="stroke-dashoffset" values="0;16" dur="0.8s" repeatCount="indefinite"/>
+    </path>
+    <polygon points="290,215 305,211 305,219" fill="#c9545a" opacity="0.6"/>
+    
+    <!-- Labels -->
+    <rect x="355" y="175" width="90" height="18" rx="3" fill="#0a1a0a" stroke="#27ca40" stroke-width="1"/>
+    <text x="400" y="188" font-family="JetBrains Mono, monospace" font-size="9" fill="#27ca40" text-anchor="middle">TCP :4444</text>
+    
+    <text x="400" y="235" font-family="JetBrains Mono, monospace" font-size="8" fill="#6e7681" text-anchor="middle">stdin/stdout/stderr</text>
+  </g>
+  
+  <!-- Fork diagram -->
+  <g transform="translate(180, 300)">
+    <text x="0" y="0" font-family="JetBrains Mono, monospace" font-size="9" fill="#4a6fa5">fork()</text>
+    <line x1="30" y1="5" x2="30" y2="20" stroke="#4a6fa5" stroke-width="1"/>
+    <line x1="30" y1="20" x2="0" y2="35" stroke="#4a6fa5" stroke-width="1"/>
+    <line x1="30" y1="20" x2="60" y2="35" stroke="#4a6fa5" stroke-width="1"/>
+    <text x="0" y="50" font-family="JetBrains Mono, monospace" font-size="8" fill="#7a9ec9">parent</text>
+    <text x="0" y="62" font-family="JetBrains Mono, monospace" font-size="7" fill="#6e7681">→ return</text>
+    <text x="55" y="50" font-family="JetBrains Mono, monospace" font-size="8" fill="#27ca40">child</text>
+    <text x="55" y="62" font-family="JetBrains Mono, monospace" font-size="7" fill="#6e7681">→ shell</text>
+  </g>
+  
+  <!-- Syscalls list -->
+  <g transform="translate(350, 310)">
+    <text x="50" y="0" font-family="JetBrains Mono, monospace" font-size="9" fill="#4a6fa5" text-anchor="middle">syscalls:</text>
+    <g font-family="JetBrains Mono, monospace" font-size="8" fill="#6e7681">
+      <text x="0" y="18">fork</text>
+      <text x="35" y="18" fill="#3a4a5a">→</text>
+      <text x="45" y="18">setsid</text>
+      <text x="85" y="18" fill="#3a4a5a">→</text>
+      <text x="95" y="18">socket</text>
+    </g>
+    <g font-family="JetBrains Mono, monospace" font-size="8" fill="#6e7681">
+      <text x="0" y="35">connect</text>
+      <text x="50" y="35" fill="#3a4a5a">→</text>
+      <text x="60" y="35">dup2</text>
+      <text x="85" y="35" fill="#3a4a5a">→</text>
+      <text x="95" y="35" fill="#27ca40">execve</text>
+    </g>
+  </g>
+  
+  <!-- Shell icon -->
+  <g transform="translate(400, 80)" opacity="0.2">
+    <text font-family="JetBrains Mono, monospace" font-size="24" fill="#27ca40" text-anchor="middle">$_</text>
+  </g>
+  
+  <!-- Bottom accent -->
+  <rect x="0" y="395" width="800" height="5" fill="url(#connect-glow)"/>
+  
+  <!-- Pulse effect on connection -->
+  <circle cx="400" cy="200" r="5" fill="#27ca40" opacity="0.5">
+    <animate attributeName="r" values="5;15;5" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.5;0;0.5" dur="2s" repeatCount="indefinite"/>
+  </circle>
+</svg>
