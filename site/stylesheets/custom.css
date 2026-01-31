@@ -998,14 +998,14 @@
   border: 1px solid rgba(74, 111, 165, 0.3);
 }
 
-/* Tema claro - fondo azulado */
+/* Tema claro - fondo azulado más sutil */
 [data-md-color-scheme="default"] .md-typeset code:not(pre code) {
-  background-color: rgba(74, 111, 165, 0.12);
+  background-color: rgba(74, 111, 165, 0.07);
   color: #2c5282;
   padding: 0.1em 0.4em;
   border-radius: 4px;
   font-size: 0.85em;
-  border: 1px solid rgba(74, 111, 165, 0.2);
+  border: 1px solid rgba(74, 111, 165, 0.12);
 }
 
 /* Código inline en tablas */
