@@ -986,6 +986,37 @@
    CODE HIGHLIGHTING MEJORADO
    ============================================================ */
 
+/* === CÓDIGO INLINE (backticks) === */
+
+/* Tema oscuro - fondo azulado */
+[data-md-color-scheme="slate"] .md-typeset code:not(pre code) {
+  background-color: rgba(74, 111, 165, 0.25);
+  color: #a8c7e8;
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  font-size: 0.85em;
+  border: 1px solid rgba(74, 111, 165, 0.3);
+}
+
+/* Tema claro - fondo azulado */
+[data-md-color-scheme="default"] .md-typeset code:not(pre code) {
+  background-color: rgba(74, 111, 165, 0.12);
+  color: #2c5282;
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  font-size: 0.85em;
+  border: 1px solid rgba(74, 111, 165, 0.2);
+}
+
+/* Código inline en tablas */
+[data-md-color-scheme="slate"] .md-typeset table code:not(pre code) {
+  background-color: rgba(74, 111, 165, 0.2);
+}
+
+[data-md-color-scheme="default"] .md-typeset table code:not(pre code) {
+  background-color: rgba(74, 111, 165, 0.1);
+}
+
 /* Contenedor del bloque de código con título */
 .md-typeset .highlight {
   position: relative;
