@@ -83,3 +83,4 @@ nav:
   - Malware Dev:
       - research/malware-dev/index.md
       - Reverse TCP Shell: research/malware-dev/reverse-shell.md
+      - Process Injection via Ptrace: research/malware-dev/ptrace-injection.md

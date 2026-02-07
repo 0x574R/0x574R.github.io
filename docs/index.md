@@ -38,6 +38,16 @@
 
 <div class="razor-cards razor-cards--posts">
 
+<a href="research/malware-dev/ptrace-injection/" class="razor-card">
+  <img src="assets/images/ptrace-hero.svg" alt="Ptrace Injection">
+  <span class="razor-card__title">Process Injection via Ptrace</span>
+  <span class="razor-card__desc">Inyección de código en procesos Linux usando ptrace en ASM puro</span>
+  <div class="razor-card__meta">
+    <span class="razor-card__tag">Assembly</span>
+    <span class="razor-card__time">15 min</span>
+  </div>
+</a>
+
 <a href="research/malware-dev/reverse-shell/" class="razor-card">
   <img src="assets/images/shell-hero.svg" alt="Reverse Shell">
   <span class="razor-card__title">Reverse TCP Shell</span>
