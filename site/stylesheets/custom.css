@@ -999,14 +999,20 @@
   border: 1px solid rgba(74, 111, 165, 0.3);
 }
 
-/* Tema claro - fondo azulado sutil */
+/* Tema claro - fondo azulado muy sutil */
 [data-md-color-scheme="default"] .md-typeset code:not(pre code) {
-  background-color: rgba(74, 111, 165, 0.1);
+  background-color: rgba(74, 111, 165, 0.06);
   color: #2c5282;
   padding: 0.1em 0.4em;
   border-radius: 4px;
   font-size: 0.85em;
   border: none;
+}
+
+/* Tema claro - blockquotes más suaves */
+[data-md-color-scheme="default"] .md-typeset blockquote {
+  border-left-color: rgba(74, 111, 165, 0.3);
+  background-color: rgba(74, 111, 165, 0.03);
 }
 
 /* Código inline en tablas */
