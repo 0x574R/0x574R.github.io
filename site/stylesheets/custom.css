@@ -1089,20 +1089,30 @@
     color: #7a9ec9 !important;
   }
 
-  /* TOC pegado al borde superior - forzar */
+  /* TOC pegado al borde superior - eliminar espacios */
+  .md-sidebar--secondary {
+    top: 0 !important;
+  }
+  
   .md-sidebar--secondary .md-sidebar__scrollwrap {
-    margin-top: 0 !important;
-    padding-top: 0 !important;
+    margin: 0 !important;
+    overflow: visible;
+  }
+  
+  .md-sidebar--secondary .md-sidebar__inner {
+    padding: 0 !important;
   }
 
   .md-nav--secondary {
-    margin-top: 0 !important;
-    padding-top: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   .md-nav--secondary > .md-nav__title {
-    padding-top: 0.8rem;
-    margin-top: 0 !important;
+    padding: 0.6rem 0.8rem;
+    position: sticky;
+    top: 0;
+    z-index: 1;
   }
 }
 
@@ -1117,61 +1127,33 @@
     padding-right: 1rem !important;
   }
 
-  /* Bloques de código responsivos */
+  /* Bloques de código responsivos - borde a borde */
   .md-typeset pre {
-    position: relative;
     margin-left: -1rem;
     margin-right: -1rem;
     padding: 1rem;
     border-radius: 0;
-    max-width: calc(100% + 2rem);
-    overflow-x: auto;
+    position: relative;
   }
 
   .md-typeset pre > code {
     font-size: 0.75rem;
     white-space: pre;
-  }
-
-  /* Botón de copiar dentro del bloque */
-  .md-typeset .md-clipboard {
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-  }
-
-  /* Contenedor de código */
-  .md-typeset .highlight {
-    position: relative;
-  }
-
-  /* Tablas responsivas - ajustadas a los bordes */
-  .md-typeset table:not([class]) {
-    display: block;
-    margin-left: -1rem;
-    margin-right: -1rem;
-    width: calc(100% + 2rem);
-    max-width: calc(100% + 2rem);
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    font-size: 0.8rem;
   }
 
-  .md-typeset table:not([class]) thead,
-  .md-typeset table:not([class]) tbody,
-  .md-typeset table:not([class]) tr {
-    display: table;
-    width: 100%;
-    table-layout: auto;
-  }
-
-  /* Wrapper de tabla */
+  /* Tablas responsivas - borde a borde */
   .md-typeset__table {
     margin-left: -1rem;
     margin-right: -1rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    width: calc(100% + 2rem);
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .md-typeset table:not([class]) {
+    font-size: 0.8rem;
+    margin: 0;
   }
 
   /* Imágenes responsivas */
@@ -1210,25 +1192,16 @@
     margin-left: -0.75rem;
     margin-right: -0.75rem;
     padding: 0.75rem;
-    max-width: calc(100% + 1.5rem);
   }
 
   .md-typeset pre > code {
     font-size: 0.7rem;
   }
 
-  .md-typeset table:not([class]) {
-    margin-left: -0.75rem;
-    margin-right: -0.75rem;
-    width: calc(100% + 1.5rem);
-    max-width: calc(100% + 1.5rem);
-  }
-
   .md-typeset__table {
     margin-left: -0.75rem;
     margin-right: -0.75rem;
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
+    width: calc(100% + 1.5rem);
   }
 
   /* Cards en una columna */
