@@ -1089,16 +1089,20 @@
     color: #7a9ec9 !important;
   }
 
-  /* TOC pegado al borde superior */
-  .md-nav--secondary,
-  .md-nav--secondary .md-nav {
-    top: 0 !important;
+  /* TOC pegado al borde superior - forzar */
+  .md-sidebar--secondary .md-sidebar__scrollwrap {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  .md-nav--secondary {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
   }
 
   .md-nav--secondary > .md-nav__title {
-    position: sticky;
-    top: 0;
-    z-index: 1;
+    padding-top: 0.8rem;
+    margin-top: 0 !important;
   }
 }
 
@@ -1115,26 +1119,59 @@
 
   /* Bloques de código responsivos */
   .md-typeset pre {
+    position: relative;
     margin-left: -1rem;
     margin-right: -1rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding: 1rem;
     border-radius: 0;
-    max-width: 100vw;
+    max-width: calc(100% + 2rem);
+    overflow-x: auto;
   }
 
   .md-typeset pre > code {
     font-size: 0.75rem;
     white-space: pre;
-    overflow-x: auto;
   }
 
-  /* Tablas responsivas */
+  /* Botón de copiar dentro del bloque */
+  .md-typeset .md-clipboard {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+
+  /* Contenedor de código */
+  .md-typeset .highlight {
+    position: relative;
+  }
+
+  /* Tablas responsivas - ajustadas a los bordes */
   .md-typeset table:not([class]) {
     display: block;
+    margin-left: -1rem;
+    margin-right: -1rem;
+    width: calc(100% + 2rem);
+    max-width: calc(100% + 2rem);
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     font-size: 0.8rem;
+  }
+
+  .md-typeset table:not([class]) thead,
+  .md-typeset table:not([class]) tbody,
+  .md-typeset table:not([class]) tr {
+    display: table;
+    width: 100%;
+    table-layout: auto;
+  }
+
+  /* Wrapper de tabla */
+  .md-typeset__table {
+    margin-left: -1rem;
+    margin-right: -1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    overflow-x: auto;
   }
 
   /* Imágenes responsivas */
@@ -1172,12 +1209,26 @@
   .md-typeset pre {
     margin-left: -0.75rem;
     margin-right: -0.75rem;
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
+    padding: 0.75rem;
+    max-width: calc(100% + 1.5rem);
   }
 
   .md-typeset pre > code {
     font-size: 0.7rem;
+  }
+
+  .md-typeset table:not([class]) {
+    margin-left: -0.75rem;
+    margin-right: -0.75rem;
+    width: calc(100% + 1.5rem);
+    max-width: calc(100% + 1.5rem);
+  }
+
+  .md-typeset__table {
+    margin-left: -0.75rem;
+    margin-right: -0.75rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
   }
 
   /* Cards en una columna */
