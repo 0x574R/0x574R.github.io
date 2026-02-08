@@ -108,12 +108,14 @@
   display: none !important;
 }
 
-/* Navegación limpia */
-[data-md-color-scheme="default"] .md-nav,
-[data-md-color-scheme="default"] .md-nav__title,
-[data-md-color-scheme="default"] .md-nav__item,
-[data-md-color-scheme="default"] .md-nav__list {
-  background: transparent !important;
+/* Navegación limpia - SOLO en desktop */
+@media screen and (min-width: 76.25em) {
+  [data-md-color-scheme="default"] .md-nav,
+  [data-md-color-scheme="default"] .md-nav__title,
+  [data-md-color-scheme="default"] .md-nav__item,
+  [data-md-color-scheme="default"] .md-nav__list {
+    background: transparent !important;
+  }
 }
 
 /* Ocultar título "RAZOR" del sidebar izquierdo - SOLO en desktop */
@@ -128,20 +130,21 @@
   }
 }
 
-/* === LINKS DE NAVEGACIÓN - SIN FONDOS, SOLO TEXTO === */
-
-[data-md-color-scheme="default"] .md-nav__link {
-  background: transparent !important;
-  box-shadow: none !important;
-  border: none !important;
-  border-radius: 0 !important;
-  border-left: none !important;
-  padding: 0.4rem 0.6rem !important;
-  margin: 0 !important;
-  color: var(--md-default-fg-color--light) !important;
-  font-weight: 400 !important;
-  transition: color 0.15s ease !important;
-  position: relative !important;
+/* === LINKS DE NAVEGACIÓN - SIN FONDOS, SOLO TEXTO - SOLO DESKTOP === */
+@media screen and (min-width: 76.25em) {
+  [data-md-color-scheme="default"] .md-nav__link {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    border-left: none !important;
+    padding: 0.4rem 0.6rem !important;
+    margin: 0 !important;
+    color: var(--md-default-fg-color--light) !important;
+    font-weight: 400 !important;
+    transition: color 0.15s ease !important;
+    position: relative !important;
+  }
 }
 
 /* Eliminar pseudo-elemento ::before */
@@ -984,126 +987,10 @@
 }
 
 /* ============================================================
-   MÓVIL - DRAWER CON ESTILO OSCURO EN TEMA CLARO
+   MÓVIL - Usar estilos por defecto de MkDocs Material
    ============================================================ */
-
-@media screen and (max-width: 76.1875em) {
-  /* ===== DRAWER PRINCIPAL (Navegación) ===== */
-  
-  /* Contenedor del drawer */
-  [data-md-color-scheme="default"] .md-nav--primary,
-  [data-md-color-scheme="default"] .md-nav--primary .md-nav {
-    background-color: #0f1217 !important;
-  }
-
-  /* Header del drawer con el título */
-  [data-md-color-scheme="default"] .md-nav--primary > .md-nav__title {
-    background-color: #0b1220 !important;
-    color: rgba(255, 255, 255, 0.94) !important;
-    box-shadow: 0 0 0.2rem rgba(0,0,0,.1), 0 0.2rem 0.4rem rgba(0,0,0,.2) !important;
-  }
-
-  /* Texto "Tabla de contenidos" y similares */
-  [data-md-color-scheme="default"] .md-nav--primary > .md-nav__title .md-nav__button {
-    color: rgba(255, 255, 255, 0.94) !important;
-  }
-
-  /* Icono de cerrar/volver en el drawer */
-  [data-md-color-scheme="default"] .md-nav--primary > .md-nav__title .md-nav__icon,
-  [data-md-color-scheme="default"] .md-nav--primary .md-nav__icon {
-    color: rgba(255, 255, 255, 0.8) !important;
-  }
-
-  /* Lista de navegación */
-  [data-md-color-scheme="default"] .md-nav--primary .md-nav__list {
-    background-color: #0f1217 !important;
-  }
-
-  /* Links de navegación - TODOS */
-  [data-md-color-scheme="default"] .md-nav--primary .md-nav__link,
-  [data-md-color-scheme="default"] .md-nav--primary .md-nav__item .md-nav__link {
-    color: rgba(255, 255, 255, 0.82) !important;
-  }
-
-  [data-md-color-scheme="default"] .md-nav--primary .md-nav__link:hover,
-  [data-md-color-scheme="default"] .md-nav--primary .md-nav__link:focus {
-    color: #7a9ec9 !important;
-  }
-
-  [data-md-color-scheme="default"] .md-nav--primary .md-nav__link--active,
-  [data-md-color-scheme="default"] .md-nav--primary .md-nav__item--active > .md-nav__link {
-    color: #7a9ec9 !important;
-  }
-
-  /* Títulos de secciones expandibles */
-  [data-md-color-scheme="default"] .md-nav--primary .md-nav__item--nested > .md-nav__link,
-  [data-md-color-scheme="default"] .md-nav--primary .md-nav__item--section > .md-nav__link {
-    color: rgba(255, 255, 255, 0.94) !important;
-  }
-
-  /* Submenús */
-  [data-md-color-scheme="default"] .md-nav--primary .md-nav--secondary {
-    background-color: #0f1217 !important;
-  }
-
-  /* Labels en el drawer */
-  [data-md-color-scheme="default"] .md-nav--primary label,
-  [data-md-color-scheme="default"] .md-nav--primary .md-nav__link[for] {
-    color: rgba(255, 255, 255, 0.82) !important;
-  }
-
-  /* Todos los textos dentro del nav primario */
-  [data-md-color-scheme="default"] .md-nav--primary * {
-    color: rgba(255, 255, 255, 0.82);
-  }
-
-  /* Elementos activos y hover */
-  [data-md-color-scheme="default"] .md-nav--primary .md-nav__link--active,
-  [data-md-color-scheme="default"] .md-nav--primary .md-nav__link:hover {
-    color: #7a9ec9 !important;
-  }
-
-  /* Iconos SVG */
-  [data-md-color-scheme="default"] .md-nav--primary svg {
-    color: rgba(255, 255, 255, 0.64) !important;
-  }
-}
-
-/* ===== TOC EN MÓVIL ===== */
-@media screen and (max-width: 60em) {
-  [data-md-color-scheme="default"] .md-nav--secondary,
-  [data-md-color-scheme="default"] .md-nav--secondary .md-nav {
-    background-color: #0f1217 !important;
-  }
-
-  [data-md-color-scheme="default"] .md-nav--secondary .md-nav__title {
-    background-color: #0b1220 !important;
-    color: rgba(255, 255, 255, 0.94) !important;
-    box-shadow: 0 0 0.2rem rgba(0,0,0,.1), 0 0.2rem 0.4rem rgba(0,0,0,.2) !important;
-  }
-
-  [data-md-color-scheme="default"] .md-nav--secondary .md-nav__link {
-    color: rgba(255, 255, 255, 0.82) !important;
-  }
-
-  [data-md-color-scheme="default"] .md-nav--secondary .md-nav__link:hover,
-  [data-md-color-scheme="default"] .md-nav--secondary .md-nav__link--active {
-    color: #7a9ec9 !important;
-  }
-}
-
-/* Corregir altura del título en el drawer móvil - tema claro */
-@media screen and (max-width: 76.1875em) {
-  [data-md-color-scheme="default"] .md-nav--primary .md-nav__title {
-    height: 2.4rem !important;
-    padding: 0.4rem 0.8rem !important;
-    line-height: 1.6rem !important;
-  }
-
-  [data-md-color-scheme="default"] .md-nav--primary .md-nav__title .md-nav__icon {
-    top: 0.4rem !important;
-  }
-}
+/* No se aplican estilos personalizados al drawer móvil.
+   Se usa el mismo estilo por defecto que en modo oscuro. */
 
 /* Search highlight */
 .md-search-result__meta {
