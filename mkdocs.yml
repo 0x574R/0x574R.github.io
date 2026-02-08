@@ -59,6 +59,15 @@ plugins:
 extra_css:
   - stylesheets/custom.css
 
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/0x574R
+      name: GitHub
+    - icon: fontawesome/brands/linkedin
+      link: https://linkedin.com/in/yourprofile
+      name: LinkedIn
+
 # Syntax highlighting con Pygments + extensiones
 markdown_extensions:
   - admonition

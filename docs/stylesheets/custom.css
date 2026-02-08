@@ -321,41 +321,27 @@
   }
 }
 
-/* ============================================================
-   HEADER - Enlaces GitHub y LinkedIn (Desktop)
-   ============================================================ */
-@media screen and (min-width: 76.25em) {
-  .md-header__source {
-    display: flex;
-    gap: 0.3rem;
-  }
+/* LinkedIn junto a GitHub en el header */
+.md-header__source {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
 
-  .md-source {
-    display: inline-flex;
-    align-items: center;
-    height: 2.4rem;
-    padding: 0 0.6rem;
-    font-size: 0.64rem;
-    white-space: nowrap;
-    transition: opacity 0.25s;
-    border-radius: 0.2rem;
-  }
+.md-header__source .md-source:not(:first-child) {
+  margin-left: 0.3rem;
+  padding: 0 0.4rem;
+}
 
-  .md-source:hover {
-    opacity: 0.7;
-  }
+.md-header__source .md-source:not(:first-child) .md-source__icon {
+  width: 1.1rem;
+  height: 1.1rem;
+}
 
-  .md-source__icon {
-    width: 1.2rem;
-    height: 1.2rem;
-  }
-
-  .md-source__repository {
-    margin-left: 0.4rem;
-    max-width: 5rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+.md-header__source .md-source:not(:first-child) .md-source__icon svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
 }
 
 /* ============================================================
