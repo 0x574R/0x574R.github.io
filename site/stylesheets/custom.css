@@ -70,68 +70,64 @@
    ============================================================
    Sin fondos de selección, sin barras gruesas,
    solo texto coloreado - limpio y minimalista
+   SOLO APLICA EN DESKTOP - Móvil usa estilos por defecto
    ============================================================ */
 
-/* Fondo transparente para sidebars */
-[data-md-color-scheme="default"] .md-sidebar,
-[data-md-color-scheme="default"] .md-sidebar--primary,
-[data-md-color-scheme="default"] .md-sidebar--secondary {
-  background: transparent !important;
-  filter: none !important;
-}
-
-[data-md-color-scheme="default"] .md-sidebar__inner,
-[data-md-color-scheme="default"] .md-sidebar--primary .md-sidebar__inner,
-[data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__inner {
-  background: transparent !important;
-  box-shadow: none !important;
-  border: none !important;
-  border-radius: 0 !important;
-  padding: 0 !important;
-}
-
-[data-md-color-scheme="default"] .md-sidebar__scrollwrap {
-  background: transparent !important;
-  box-shadow: none !important;
-  border: none !important;
-  border-radius: 0 !important;
-  padding: 0 !important;
-  -webkit-mask-image: none !important;
-  mask-image: none !important;
-}
-
-[data-md-color-scheme="default"] .md-sidebar__scrollwrap::before,
-[data-md-color-scheme="default"] .md-sidebar__scrollwrap::after,
-[data-md-color-scheme="default"] .md-sidebar__inner::before,
-[data-md-color-scheme="default"] .md-sidebar__inner::after {
-  content: none !important;
-  display: none !important;
-}
-
-/* Navegación limpia - SOLO en desktop */
 @media screen and (min-width: 76.25em) {
+  /* Fondo transparente para sidebars */
+  [data-md-color-scheme="default"] .md-sidebar,
+  [data-md-color-scheme="default"] .md-sidebar--primary,
+  [data-md-color-scheme="default"] .md-sidebar--secondary {
+    background: transparent !important;
+    filter: none !important;
+  }
+
+  [data-md-color-scheme="default"] .md-sidebar__inner,
+  [data-md-color-scheme="default"] .md-sidebar--primary .md-sidebar__inner,
+  [data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__inner {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+  }
+
+  [data-md-color-scheme="default"] .md-sidebar__scrollwrap {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+  }
+
+  [data-md-color-scheme="default"] .md-sidebar__scrollwrap::before,
+  [data-md-color-scheme="default"] .md-sidebar__scrollwrap::after,
+  [data-md-color-scheme="default"] .md-sidebar__inner::before,
+  [data-md-color-scheme="default"] .md-sidebar__inner::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  /* Navegación limpia */
   [data-md-color-scheme="default"] .md-nav,
   [data-md-color-scheme="default"] .md-nav__title,
   [data-md-color-scheme="default"] .md-nav__item,
   [data-md-color-scheme="default"] .md-nav__list {
     background: transparent !important;
   }
-}
 
-/* Ocultar título "RAZOR" del sidebar izquierdo - SOLO en desktop */
-@media screen and (min-width: 76.25em) {
+  /* Ocultar título "RAZOR" del sidebar izquierdo */
   .md-nav--primary > .md-nav__title {
     display: none !important;
   }
 
-  /* Ocultar título en el sidebar del TOC también si aparece */
   .md-nav--primary > .md-nav__title[for="__drawer"] {
     display: none !important;
   }
-}
 
-/* === LINKS DE NAVEGACIÓN - SIN FONDOS, SOLO TEXTO - SOLO DESKTOP === */
-@media screen and (min-width: 76.25em) {
+  /* === LINKS DE NAVEGACIÓN - SIN FONDOS, SOLO TEXTO === */
   [data-md-color-scheme="default"] .md-nav__link {
     background: transparent !important;
     box-shadow: none !important;
@@ -145,165 +141,181 @@
     transition: color 0.15s ease !important;
     position: relative !important;
   }
+
+  /* Eliminar pseudo-elemento ::before */
+  [data-md-color-scheme="default"] .md-nav__link::before {
+    display: none !important;
+    content: none !important;
+  }
+
+  /* Línea animada en hover (::after) */
+  [data-md-color-scheme="default"] .md-nav__link::after {
+    content: "" !important;
+    display: block !important;
+    position: absolute !important;
+    left: 0.6rem !important;
+    bottom: 0.2rem !important;
+    height: 2px !important;
+    width: 0 !important;
+    background: rgba(var(--razor-accent-rgb), 0.7) !important;
+    transition: width 180ms ease !important;
+  }
+
+  [data-md-color-scheme="default"] .md-nav__link:hover::after {
+    width: 20px !important;
+  }
+
+  /* Hover - solo cambio de color */
+  [data-md-color-scheme="default"] .md-nav__link:hover {
+    background: transparent !important;
+    color: var(--md-accent-fg-color) !important;
+    transform: none !important;
+  }
+
+  /* Link activo - solo texto coloreado + línea visible */
+  [data-md-color-scheme="default"] .md-nav__link--active,
+  [data-md-color-scheme="default"] .md-nav__item--active > .md-nav__link {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-left: none !important;
+    color: var(--md-accent-fg-color) !important;
+    font-weight: 400 !important;
+  }
+
+  [data-md-color-scheme="default"] .md-nav__link--active::before,
+  [data-md-color-scheme="default"] .md-nav__item--active > .md-nav__link::before {
+    display: none !important;
+    content: none !important;
+  }
+
+  /* Línea visible en link activo */
+  [data-md-color-scheme="default"] .md-nav__link--active::after,
+  [data-md-color-scheme="default"] .md-nav__item--active > .md-nav__link::after {
+    width: 20px !important;
+  }
+
+  /* Títulos de secciones (Cheatsheets, Research, etc.) */
+  [data-md-color-scheme="default"] .md-nav__item--nested > .md-nav__link {
+    color: var(--md-default-fg-color) !important;
+    font-weight: 700 !important;
+    background: transparent !important;
+  }
+
+  /* Items anidados */
+  [data-md-color-scheme="default"] .md-nav__item .md-nav__item .md-nav__link {
+    color: var(--md-default-fg-color--light) !important;
+  }
+
+  [data-md-color-scheme="default"] .md-nav__item .md-nav__item .md-nav__link:hover {
+    color: var(--md-accent-fg-color) !important;
+  }
+
+  [data-md-color-scheme="default"] .md-nav__item .md-nav__item .md-nav__link--active {
+    color: var(--md-accent-fg-color) !important;
+    background: transparent !important;
+  }
+
+  [data-md-color-scheme="default"] .md-nav__item .md-nav__item .md-nav__link--active::after {
+    width: 20px !important;
+  }
+
+  /* === TOC (SIDEBAR DERECHO) - MISMO ESTILO === */
+
+  [data-md-color-scheme="default"] .md-nav--secondary {
+    background: transparent !important;
+    border: none !important;
+    border-left: none !important;
+    padding-left: 0 !important;
+  }
+
+  [data-md-color-scheme="default"] .md-nav--secondary > .md-nav__title {
+    box-shadow: none !important;
+    background: var(--md-default-bg-color) !important;
+    color: var(--md-default-fg-color--light) !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1 !important;
+    padding-top: 0.6rem !important;
+    padding-bottom: 0.4rem !important;
+  }
+
+  [data-md-color-scheme="default"] .md-nav--secondary .md-nav__link {
+    background: transparent !important;
+    border: none !important;
+    border-left: none !important;
+    padding: 0.3rem 0.6rem !important;
+    position: relative !important;
+  }
+
+  /* Línea animada en TOC */
+  [data-md-color-scheme="default"] .md-nav--secondary .md-nav__link::after {
+    content: "" !important;
+    display: block !important;
+    position: absolute !important;
+    left: 0.6rem !important;
+    bottom: 0.1rem !important;
+    height: 2px !important;
+    width: 0 !important;
+    background: rgba(var(--razor-accent-rgb), 0.7) !important;
+    transition: width 180ms ease !important;
+  }
+
+  [data-md-color-scheme="default"] .md-nav--secondary .md-nav__link:hover {
+    background: transparent !important;
+    color: var(--md-accent-fg-color) !important;
+  }
+
+  [data-md-color-scheme="default"] .md-nav--secondary .md-nav__link:hover::after {
+    width: 18px !important;
+  }
+
+  [data-md-color-scheme="default"] .md-nav--secondary .md-nav__link--active {
+    background: transparent !important;
+    border: none !important;
+    color: var(--md-accent-fg-color) !important;
+  }
+
+  [data-md-color-scheme="default"] .md-nav--secondary .md-nav__link--active::after {
+    width: 18px !important;
+  }
+
+  /* Iconos de expansión */
+  [data-md-color-scheme="default"] .md-nav__icon {
+    background: transparent !important;
+  }
+
+  /* === SCROLLBAR MINIMALISTA === */
+
+  [data-md-color-scheme="default"] .md-sidebar__scrollwrap::-webkit-scrollbar {
+    width: 0.2rem !important;
+  }
+
+  [data-md-color-scheme="default"] .md-sidebar__scrollwrap::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.15) !important;
+    border-radius: 0.1rem !important;
+  }
+
+  [data-md-color-scheme="default"] .md-sidebar__scrollwrap {
+    scrollbar-width: thin !important;
+    scrollbar-color: rgba(0, 0, 0, 0.15) transparent !important;
+  }
 }
 
-/* Eliminar pseudo-elemento ::before */
-[data-md-color-scheme="default"] .md-nav__link::before {
-  display: none !important;
-  content: none !important;
-}
+/* ============================================================
+   MÓVIL - Ocultar logo, título y GitHub en el drawer
+   ============================================================ */
+@media screen and (max-width: 76.1875em) {
+  /* Ocultar el logo y título en el header del drawer */
+  .md-nav--primary .md-nav__title .md-logo,
+  .md-nav--primary .md-nav__title .md-header__topic {
+    display: none !important;
+  }
 
-/* Línea animada en hover (::after) */
-[data-md-color-scheme="default"] .md-nav__link::after {
-  content: "" !important;
-  display: block !important;
-  position: absolute !important;
-  left: 0.6rem !important;
-  bottom: 0.2rem !important;
-  height: 2px !important;
-  width: 0 !important;
-  background: rgba(var(--razor-accent-rgb), 0.7) !important;
-  transition: width 180ms ease !important;
-}
-
-[data-md-color-scheme="default"] .md-nav__link:hover::after {
-  width: 20px !important;
-}
-
-/* Hover - solo cambio de color */
-[data-md-color-scheme="default"] .md-nav__link:hover {
-  background: transparent !important;
-  color: var(--md-accent-fg-color) !important;
-  transform: none !important;
-}
-
-/* Link activo - solo texto coloreado + línea visible */
-[data-md-color-scheme="default"] .md-nav__link--active,
-[data-md-color-scheme="default"] .md-nav__item--active > .md-nav__link {
-  background: transparent !important;
-  box-shadow: none !important;
-  border: none !important;
-  border-left: none !important;
-  color: var(--md-accent-fg-color) !important;
-  font-weight: 400 !important;
-}
-
-[data-md-color-scheme="default"] .md-nav__link--active::before,
-[data-md-color-scheme="default"] .md-nav__item--active > .md-nav__link::before {
-  display: none !important;
-  content: none !important;
-}
-
-/* Línea visible en link activo */
-[data-md-color-scheme="default"] .md-nav__link--active::after,
-[data-md-color-scheme="default"] .md-nav__item--active > .md-nav__link::after {
-  width: 20px !important;
-}
-
-/* Títulos de secciones (Cheatsheets, Research, etc.) */
-[data-md-color-scheme="default"] .md-nav__item--nested > .md-nav__link {
-  color: var(--md-default-fg-color) !important;
-  font-weight: 700 !important;
-  background: transparent !important;
-}
-
-/* Items anidados */
-[data-md-color-scheme="default"] .md-nav__item .md-nav__item .md-nav__link {
-  color: var(--md-default-fg-color--light) !important;
-}
-
-[data-md-color-scheme="default"] .md-nav__item .md-nav__item .md-nav__link:hover {
-  color: var(--md-accent-fg-color) !important;
-}
-
-[data-md-color-scheme="default"] .md-nav__item .md-nav__item .md-nav__link--active {
-  color: var(--md-accent-fg-color) !important;
-  background: transparent !important;
-}
-
-[data-md-color-scheme="default"] .md-nav__item .md-nav__item .md-nav__link--active::after {
-  width: 20px !important;
-}
-
-/* === TOC (SIDEBAR DERECHO) - MISMO ESTILO === */
-
-[data-md-color-scheme="default"] .md-nav--secondary {
-  background: transparent !important;
-  border: none !important;
-  border-left: none !important;
-  padding-left: 0 !important;
-}
-
-[data-md-color-scheme="default"] .md-nav--secondary > .md-nav__title {
-  box-shadow: none !important;
-  background: var(--md-default-bg-color) !important;
-  color: var(--md-default-fg-color--light) !important;
-  position: sticky !important;
-  top: 0 !important;
-  z-index: 1 !important;
-  padding-top: 0.6rem !important;
-  padding-bottom: 0.4rem !important;
-}
-
-[data-md-color-scheme="default"] .md-nav--secondary .md-nav__link {
-  background: transparent !important;
-  border: none !important;
-  border-left: none !important;
-  padding: 0.3rem 0.6rem !important;
-  position: relative !important;
-}
-
-/* Línea animada en TOC */
-[data-md-color-scheme="default"] .md-nav--secondary .md-nav__link::after {
-  content: "" !important;
-  display: block !important;
-  position: absolute !important;
-  left: 0.6rem !important;
-  bottom: 0.1rem !important;
-  height: 2px !important;
-  width: 0 !important;
-  background: rgba(var(--razor-accent-rgb), 0.7) !important;
-  transition: width 180ms ease !important;
-}
-
-[data-md-color-scheme="default"] .md-nav--secondary .md-nav__link:hover {
-  background: transparent !important;
-  color: var(--md-accent-fg-color) !important;
-}
-
-[data-md-color-scheme="default"] .md-nav--secondary .md-nav__link:hover::after {
-  width: 18px !important;
-}
-
-[data-md-color-scheme="default"] .md-nav--secondary .md-nav__link--active {
-  background: transparent !important;
-  border: none !important;
-  color: var(--md-accent-fg-color) !important;
-}
-
-[data-md-color-scheme="default"] .md-nav--secondary .md-nav__link--active::after {
-  width: 18px !important;
-}
-
-/* Iconos de expansión */
-[data-md-color-scheme="default"] .md-nav__icon {
-  background: transparent !important;
-}
-
-/* === SCROLLBAR MINIMALISTA === */
-
-[data-md-color-scheme="default"] .md-sidebar__scrollwrap::-webkit-scrollbar {
-  width: 0.2rem !important;
-}
-
-[data-md-color-scheme="default"] .md-sidebar__scrollwrap::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.15) !important;
-  border-radius: 0.1rem !important;
-}
-
-[data-md-color-scheme="default"] .md-sidebar__scrollwrap {
-  scrollbar-width: thin !important;
-  scrollbar-color: rgba(0, 0, 0, 0.15) transparent !important;
+  /* Ocultar enlace de GitHub en móvil */
+  .md-header__source {
+    display: none !important;
+  }
 }
 
 /* ============================================================
