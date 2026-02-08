@@ -952,6 +952,81 @@
   }
 }
 
+/* ============================================================
+   MÓVIL - DRAWER CON ESTILO OSCURO EN TEMA CLARO
+   ============================================================ */
+
+@media screen and (max-width: 76.1875em) {
+  /* Fondo oscuro para el drawer en tema claro */
+  [data-md-color-scheme="default"] .md-sidebar--primary {
+    background-color: #0f1217 !important;
+  }
+
+  [data-md-color-scheme="default"] .md-sidebar--primary .md-sidebar__scrollwrap {
+    background-color: #0f1217 !important;
+  }
+
+  [data-md-color-scheme="default"] .md-sidebar--primary .md-nav {
+    background-color: #0f1217 !important;
+  }
+
+  /* Texto claro en el drawer */
+  [data-md-color-scheme="default"] .md-sidebar--primary .md-nav__link {
+    color: rgba(255, 255, 255, 0.82) !important;
+  }
+
+  [data-md-color-scheme="default"] .md-sidebar--primary .md-nav__link:hover {
+    color: #7a9ec9 !important;
+  }
+
+  [data-md-color-scheme="default"] .md-sidebar--primary .md-nav__link--active,
+  [data-md-color-scheme="default"] .md-sidebar--primary .md-nav__item--active > .md-nav__link {
+    color: #7a9ec9 !important;
+  }
+
+  /* Títulos de sección en el drawer */
+  [data-md-color-scheme="default"] .md-sidebar--primary .md-nav__item--nested > .md-nav__link {
+    color: rgba(255, 255, 255, 0.94) !important;
+  }
+
+  /* Header del drawer */
+  [data-md-color-scheme="default"] .md-nav--primary .md-nav__title {
+    background-color: #0b1220 !important;
+    color: rgba(255, 255, 255, 0.94) !important;
+  }
+
+  [data-md-color-scheme="default"] .md-nav--primary .md-nav__title[for="__drawer"] {
+    background-color: #0b1220 !important;
+    color: rgba(255, 255, 255, 0.94) !important;
+  }
+
+  /* Iconos y elementos del drawer */
+  [data-md-color-scheme="default"] .md-sidebar--primary .md-nav__icon {
+    color: rgba(255, 255, 255, 0.64) !important;
+  }
+
+  /* Línea de hover en móvil */
+  [data-md-color-scheme="default"] .md-sidebar--primary .md-nav__link::after {
+    background: rgba(122, 158, 201, 0.7) !important;
+  }
+}
+
+/* TOC en móvil */
+@media screen and (max-width: 60em) {
+  [data-md-color-scheme="default"] .md-sidebar--secondary {
+    background-color: #0f1217 !important;
+  }
+
+  [data-md-color-scheme="default"] .md-sidebar--secondary .md-nav__link {
+    color: rgba(255, 255, 255, 0.82) !important;
+  }
+
+  [data-md-color-scheme="default"] .md-sidebar--secondary .md-nav__link:hover,
+  [data-md-color-scheme="default"] .md-sidebar--secondary .md-nav__link--active {
+    color: #7a9ec9 !important;
+  }
+}
+
 /* Search highlight */
 .md-search-result__meta {
   color: var(--md-default-fg-color--light);
