@@ -388,6 +388,7 @@
 
 /* Logo más grande en móvil - DESPUÉS de los estilos globales */
 @media screen and (max-width: 76.1875em) {
+  /* Logo en el header móvil */
   .md-header__button.md-logo {
     padding: 0.1rem !important;
     margin-right: 0.5rem !important;
@@ -398,6 +399,17 @@
     width: auto !important;
     transform: scale(2) !important;
     transform-origin: center center !important;
+  }
+
+  /* Logo en el drawer/menú móvil */
+  .md-nav__button.md-logo {
+    padding: 0.5rem !important;
+  }
+
+  .md-nav__button.md-logo img {
+    height: 3rem !important;
+    width: auto !important;
+    max-width: none !important;
   }
 }
 
