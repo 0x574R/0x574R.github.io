@@ -828,7 +828,6 @@
   text-decoration: none !important;
   color: var(--md-default-fg-color) !important;
   position: relative;
-  overflow: hidden;
   transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
 }
 
@@ -861,11 +860,9 @@
 .razor-card > img {
   width: 100% !important;
   height: auto !important;
-  aspect-ratio: 2 / 1 !important;
   object-fit: contain !important;
   border-radius: 10px !important;
   margin-bottom: 0.3rem !important;
-  background: #0a0014 !important;
 }
 
 .razor-card__title {
