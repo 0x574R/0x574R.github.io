@@ -1,132 +1,109 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200">
   <defs>
-    <linearGradient id="bg-shell" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#0b1220"/>
-      <stop offset="50%" style="stop-color:#0a1a10"/>
-      <stop offset="100%" style="stop-color:#0f1a2c"/>
+    <linearGradient id="bgGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0e14"/>
+      <stop offset="100%" style="stop-color:#151c28"/>
     </linearGradient>
-    <linearGradient id="connect-glow" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#27ca40;stop-opacity:0"/>
-      <stop offset="50%" style="stop-color:#27ca40;stop-opacity:0.6"/>
-      <stop offset="100%" style="stop-color:#27ca40;stop-opacity:0"/>
+    <linearGradient id="serverGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a2d3d"/>
+      <stop offset="100%" style="stop-color:#0f1a25"/>
     </linearGradient>
+    <linearGradient id="connectionGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#2ed573"/>
+      <stop offset="100%" style="stop-color:#00d4ff"/>
+    </linearGradient>
+    <linearGradient id="attackerGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#2a1a3d"/>
+      <stop offset="100%" style="stop-color:#1a0f25"/>
+    </linearGradient>
+    <filter id="greenGlow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
   </defs>
   
   <!-- Background -->
-  <rect width="800" height="400" fill="url(#bg-shell)"/>
+  <rect width="400" height="200" fill="url(#bgGrad3)"/>
   
-  <!-- Network packets background -->
-  <g font-family="JetBrains Mono, monospace" font-size="9" fill="#27ca40" opacity="0.1">
-    <text x="20" y="30">SYN → 192.168.1.100:4444</text>
-    <text x="20" y="45">← SYN-ACK</text>
-    <text x="20" y="60">ACK → [ESTABLISHED]</text>
-    <text x="550" y="375">$ whoami</text>
-    <text x="550" y="390">root</text>
+  <!-- Network lines background -->
+  <g opacity="0.06" stroke="#00d4ff" stroke-width="0.5">
+    <path d="M 0 100 Q 100 80 200 100 T 400 100" fill="none"/>
+    <path d="M 0 120 Q 100 140 200 120 T 400 120" fill="none"/>
+    <path d="M 0 80 Q 100 60 200 80 T 400 80" fill="none"/>
   </g>
   
-  <!-- Victim machine -->
-  <g transform="translate(100, 120)">
-    <rect width="180" height="160" rx="8" fill="#0d1420" stroke="#4a6fa5" stroke-width="2"/>
-    <rect width="180" height="28" rx="8" fill="#162033"/>
-    <text x="90" y="18" font-family="JetBrains Mono, monospace" font-size="10" fill="#7a9ec9" text-anchor="middle">VICTIM</text>
+  <!-- Victim Server -->
+  <g transform="translate(40, 45)">
+    <rect width="100" height="110" rx="6" fill="url(#serverGrad)" stroke="#3a5a7a" stroke-width="1.5"/>
+    <text x="50" y="20" fill="#7a9ec9" font-family="monospace" font-size="9" text-anchor="middle">VICTIM</text>
+    
+    <!-- Server icon -->
+    <rect x="30" y="35" width="40" height="30" rx="3" fill="#1a3a5a" stroke="#4a6a8a" stroke-width="1"/>
+    <line x1="35" y1="45" x2="65" y2="45" stroke="#4a6a8a" stroke-width="1"/>
+    <line x1="35" y1="55" x2="65" y2="55" stroke="#4a6a8a" stroke-width="1"/>
+    <circle cx="60" cy="50" r="2" fill="#2ed573">
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="1s" repeatCount="indefinite"/>
+    </circle>
+    
+    <!-- Shell indicator -->
+    <rect x="20" y="75" width="60" height="25" rx="3" fill="#0a1520" stroke="#2ed573" stroke-width="1"/>
+    <text x="50" y="85" fill="#2ed573" font-family="monospace" font-size="7" text-anchor="middle">$ /bin/sh</text>
+    <rect x="25" y="90" width="4" height="6" fill="#2ed573">
+      <animate attributeName="opacity" values="1;0;1" dur="0.8s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+  
+  <!-- Connection Line with data flow -->
+  <g filter="url(#greenGlow)">
+    <path d="M 145 100 C 180 100 220 100 255 100" stroke="url(#connectionGrad)" stroke-width="2" fill="none" stroke-dasharray="8,4">
+      <animate attributeName="stroke-dashoffset" values="12;0" dur="0.5s" repeatCount="indefinite"/>
+    </path>
+  </g>
+  
+  <!-- Data packets -->
+  <g fill="#2ed573" filter="url(#greenGlow)">
+    <circle cx="170" cy="100" r="3">
+      <animate attributeName="cx" values="145;255" dur="1.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.5;1" dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="200" cy="100" r="2">
+      <animate attributeName="cx" values="145;255" dur="1.5s" begin="0.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.5;1" dur="1.5s" begin="0.5s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Port labels -->
+  <text x="200" y="85" fill="#5a7a9a" font-family="monospace" font-size="8" text-anchor="middle">TCP :4444</text>
+  <text x="200" y="120" fill="#3a5a7a" font-family="monospace" font-size="7" text-anchor="middle">← stdin/stdout/stderr →</text>
+  
+  <!-- Attacker -->
+  <g transform="translate(260, 45)">
+    <rect width="100" height="110" rx="6" fill="url(#attackerGrad)" stroke="#7a5a9a" stroke-width="1.5"/>
+    <text x="50" y="20" fill="#9a7abc" font-family="monospace" font-size="9" text-anchor="middle">ATTACKER</text>
+    
+    <!-- Laptop icon -->
+    <rect x="25" y="35" width="50" height="30" rx="3" fill="#2a1a4a" stroke="#5a3a7a" stroke-width="1"/>
+    <rect x="30" y="40" width="40" height="20" rx="1" fill="#0a0515"/>
+    <rect x="20" y="65" width="60" height="5" rx="2" fill="#3a2a5a"/>
     
     <!-- Terminal content -->
-    <g font-family="JetBrains Mono, monospace" font-size="9">
-      <text x="12" y="50" fill="#27ca40">$</text>
-      <text x="25" y="50" fill="#c9d1d9">./legitimate_app</text>
-      <text x="12" y="70" fill="#6e7681">[infected]</text>
-      <text x="12" y="95" fill="#27ca40">fork()</text>
-      <text x="70" y="95" fill="#6e7681">→ child</text>
-      <text x="12" y="115" fill="#27ca40">socket()</text>
-      <text x="12" y="135" fill="#27ca40">connect()</text>
-      <text x="85" y="135" fill="#c9545a">→</text>
-    </g>
-  </g>
-  
-  <!-- Attacker machine -->
-  <g transform="translate(520, 120)">
-    <rect width="180" height="160" rx="8" fill="#0d1420" stroke="#c9545a" stroke-width="2"/>
-    <rect width="180" height="28" rx="8" fill="#1a1215"/>
-    <text x="90" y="18" font-family="JetBrains Mono, monospace" font-size="10" fill="#c9545a" text-anchor="middle">ATTACKER</text>
+    <text x="50" y="52" fill="#2ed573" font-family="monospace" font-size="5" text-anchor="middle">nc -lvnp 4444</text>
     
-    <!-- Terminal content -->
-    <g font-family="JetBrains Mono, monospace" font-size="9">
-      <text x="12" y="50" fill="#c9545a">$</text>
-      <text x="25" y="50" fill="#c9d1d9">nc -lvnp 4444</text>
-      <text x="12" y="70" fill="#6e7681">listening...</text>
-      <text x="12" y="95" fill="#27ca40">Connection from</text>
-      <text x="12" y="110" fill="#27ca40">192.168.1.50</text>
-      <text x="12" y="135" fill="#c9545a">$</text>
-      <text x="25" y="135" fill="#c9d1d9">id</text>
-      <text x="12" y="150" fill="#27ca40">uid=0(root)</text>
-    </g>
+    <!-- Listening indicator -->
+    <rect x="20" y="80" width="60" height="20" rx="3" fill="#0a0515" stroke="#2ed573" stroke-width="1"/>
+    <text x="50" y="93" fill="#2ed573" font-family="monospace" font-size="6" text-anchor="middle">CONNECTED</text>
   </g>
   
-  <!-- Connection arrow -->
-  <g>
-    <!-- Main connection line -->
-    <path d="M290 200 L510 200" stroke="#27ca40" stroke-width="2" fill="none" stroke-dasharray="8,4">
-      <animate attributeName="stroke-dashoffset" values="0;-24" dur="1s" repeatCount="indefinite"/>
-    </path>
-    
-    <!-- Arrow head -->
-    <polygon points="510,200 495,192 495,208" fill="#27ca40"/>
-    
-    <!-- Reverse arrow (data back) -->
-    <path d="M510 215 L290 215" stroke="#c9545a" stroke-width="1" fill="none" stroke-dasharray="4,4" opacity="0.6">
-      <animate attributeName="stroke-dashoffset" values="0;16" dur="0.8s" repeatCount="indefinite"/>
-    </path>
-    <polygon points="290,215 305,211 305,219" fill="#c9545a" opacity="0.6"/>
-    
-    <!-- Labels -->
-    <rect x="355" y="175" width="90" height="18" rx="3" fill="#0a1a0a" stroke="#27ca40" stroke-width="1"/>
-    <text x="400" y="188" font-family="JetBrains Mono, monospace" font-size="9" fill="#27ca40" text-anchor="middle">TCP :4444</text>
-    
-    <text x="400" y="235" font-family="JetBrains Mono, monospace" font-size="8" fill="#6e7681" text-anchor="middle">stdin/stdout/stderr</text>
-  </g>
+  <!-- IP addresses -->
+  <text x="90" y="170" fill="#4a6a8a" font-family="monospace" font-size="8" text-anchor="middle">192.168.1.100</text>
+  <text x="310" y="170" fill="#6a4a8a" font-family="monospace" font-size="8" text-anchor="middle">192.168.1.50</text>
   
-  <!-- Fork diagram -->
-  <g transform="translate(180, 300)">
-    <text x="0" y="0" font-family="JetBrains Mono, monospace" font-size="9" fill="#4a6fa5">fork()</text>
-    <line x1="30" y1="5" x2="30" y2="20" stroke="#4a6fa5" stroke-width="1"/>
-    <line x1="30" y1="20" x2="0" y2="35" stroke="#4a6fa5" stroke-width="1"/>
-    <line x1="30" y1="20" x2="60" y2="35" stroke="#4a6fa5" stroke-width="1"/>
-    <text x="0" y="50" font-family="JetBrains Mono, monospace" font-size="8" fill="#7a9ec9">parent</text>
-    <text x="0" y="62" font-family="JetBrains Mono, monospace" font-size="7" fill="#6e7681">→ return</text>
-    <text x="55" y="50" font-family="JetBrains Mono, monospace" font-size="8" fill="#27ca40">child</text>
-    <text x="55" y="62" font-family="JetBrains Mono, monospace" font-size="7" fill="#6e7681">→ shell</text>
-  </g>
-  
-  <!-- Syscalls list -->
-  <g transform="translate(350, 310)">
-    <text x="50" y="0" font-family="JetBrains Mono, monospace" font-size="9" fill="#4a6fa5" text-anchor="middle">syscalls:</text>
-    <g font-family="JetBrains Mono, monospace" font-size="8" fill="#6e7681">
-      <text x="0" y="18">fork</text>
-      <text x="35" y="18" fill="#3a4a5a">→</text>
-      <text x="45" y="18">setsid</text>
-      <text x="85" y="18" fill="#3a4a5a">→</text>
-      <text x="95" y="18">socket</text>
-    </g>
-    <g font-family="JetBrains Mono, monospace" font-size="8" fill="#6e7681">
-      <text x="0" y="35">connect</text>
-      <text x="50" y="35" fill="#3a4a5a">→</text>
-      <text x="60" y="35">dup2</text>
-      <text x="85" y="35" fill="#3a4a5a">→</text>
-      <text x="95" y="35" fill="#27ca40">execve</text>
-    </g>
-  </g>
-  
-  <!-- Shell icon -->
-  <g transform="translate(400, 80)" opacity="0.2">
-    <text font-family="JetBrains Mono, monospace" font-size="24" fill="#27ca40" text-anchor="middle">$_</text>
-  </g>
-  
-  <!-- Bottom accent -->
-  <rect x="0" y="395" width="800" height="5" fill="url(#connect-glow)"/>
-  
-  <!-- Pulse effect on connection -->
-  <circle cx="400" cy="200" r="5" fill="#27ca40" opacity="0.5">
-    <animate attributeName="r" values="5;15;5" dur="2s" repeatCount="indefinite"/>
-    <animate attributeName="opacity" values="0.5;0;0.5" dur="2s" repeatCount="indefinite"/>
-  </circle>
+  <!-- Arrow direction indicator -->
+  <polygon points="200,140 195,147 205,147" fill="#2ed573" opacity="0.6">
+    <animate attributeName="opacity" values="0.3;0.8;0.3" dur="1s" repeatCount="indefinite"/>
+  </polygon>
+  <text x="200" y="158" fill="#3a5a4a" font-family="monospace" font-size="6" text-anchor="middle">OUTBOUND</text>
 </svg>
