@@ -972,8 +972,14 @@
     box-shadow: 0 0 0.2rem rgba(0,0,0,.1), 0 0.2rem 0.4rem rgba(0,0,0,.2) !important;
   }
 
-  /* Icono de cerrar en el drawer */
-  [data-md-color-scheme="default"] .md-nav--primary > .md-nav__title .md-nav__icon {
+  /* Texto "Tabla de contenidos" y similares */
+  [data-md-color-scheme="default"] .md-nav--primary > .md-nav__title .md-nav__button {
+    color: rgba(255, 255, 255, 0.94) !important;
+  }
+
+  /* Icono de cerrar/volver en el drawer */
+  [data-md-color-scheme="default"] .md-nav--primary > .md-nav__title .md-nav__icon,
+  [data-md-color-scheme="default"] .md-nav--primary .md-nav__icon {
     color: rgba(255, 255, 255, 0.8) !important;
   }
 
@@ -1002,42 +1008,14 @@
     color: rgba(255, 255, 255, 0.94) !important;
   }
 
-  /* Icono de expansión */
-  [data-md-color-scheme="default"] .md-nav--primary .md-nav__icon {
-    color: rgba(255, 255, 255, 0.64) !important;
-  }
-
   /* Submenús */
   [data-md-color-scheme="default"] .md-nav--primary .md-nav--secondary {
     background-color: #0f1217 !important;
   }
 
-  /* ===== HEADER EN MÓVIL ===== */
-  
-  /* Contenedor del header */
-  .md-header__inner {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-  }
-
-  /* Logo centrado en móvil */
-  .md-header__button.md-logo {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%) scale(1.65);
-    order: 0;
-  }
-
-  /* Ocultar título del sitio en móvil */
-  .md-header__title {
-    display: none !important;
-  }
-
-  /* Asegurar que el botón del menú esté a la izquierda */
-  .md-header__button[for="__drawer"] {
-    order: -1;
+  /* Labels en el drawer */
+  [data-md-color-scheme="default"] .md-nav--primary label {
+    color: rgba(255, 255, 255, 0.82) !important;
   }
 }
 
