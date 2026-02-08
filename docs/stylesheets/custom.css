@@ -1240,3 +1240,23 @@
 [data-md-color-scheme="default"] .highlight .vg { color: #e36209 } /* Name.Variable.Global */
 [data-md-color-scheme="default"] .highlight .vi { color: #e36209 } /* Name.Variable.Instance */
 [data-md-color-scheme="default"] .highlight .il { color: #005cc5 } /* Literal.Number.Integer.Long */
+
+/* ============================================================
+   GRID - Tablas lado a lado
+   ============================================================ */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin: 1rem 0;
+}
+
+.grid > table {
+  margin: 0 !important;
+}
+
+@media screen and (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
