@@ -856,7 +856,22 @@
   box-shadow: 0 22px 60px rgba(0,0,0,0.45);
 }
 
-/* Card image */
+/* Card image container */
+.razor-card__image {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 0.3rem;
+  line-height: 0;
+}
+
+.razor-card__image img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  display: block;
+}
+
+/* Fallback for direct img in card */
 .razor-card > img {
   width: 100% !important;
   height: auto !important;
