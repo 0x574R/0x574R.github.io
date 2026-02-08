@@ -1067,6 +1067,32 @@
 }
 
 /* ============================================================
+   TABLAS DUALES (lado a lado)
+   ============================================================ */
+
+.table-dual {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.table-dual > table {
+  flex: 1;
+  min-width: 200px;
+  margin: 0 !important;
+}
+
+@media (max-width: 600px) {
+  .table-dual {
+    flex-direction: column;
+  }
+  
+  .table-dual > table {
+    width: 100%;
+  }
+}
+
+/* ============================================================
    ADMONITION PERSONALIZADO: RECURSOS
    ============================================================ */
 
