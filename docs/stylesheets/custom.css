@@ -957,16 +957,13 @@
    ============================================================ */
 
 @media screen and (max-width: 76.1875em) {
-  /* Fondo oscuro para el drawer en tema claro */
-  [data-md-color-scheme="default"] .md-sidebar--primary {
-    background-color: #0f1217 !important;
-  }
-
-  [data-md-color-scheme="default"] .md-sidebar--primary .md-sidebar__scrollwrap {
-    background-color: #0f1217 !important;
-  }
-
-  [data-md-color-scheme="default"] .md-sidebar--primary .md-nav {
+  /* Fondo oscuro sólido para el drawer en tema claro */
+  [data-md-color-scheme="default"] .md-sidebar--primary,
+  [data-md-color-scheme="default"] .md-sidebar--primary .md-sidebar__inner,
+  [data-md-color-scheme="default"] .md-sidebar--primary .md-sidebar__scrollwrap,
+  [data-md-color-scheme="default"] .md-sidebar--primary .md-nav,
+  [data-md-color-scheme="default"] .md-sidebar--primary .md-nav__list {
+    background: #0f1217 !important;
     background-color: #0f1217 !important;
   }
 
@@ -990,12 +987,9 @@
   }
 
   /* Header del drawer */
-  [data-md-color-scheme="default"] .md-nav--primary .md-nav__title {
-    background-color: #0b1220 !important;
-    color: rgba(255, 255, 255, 0.94) !important;
-  }
-
+  [data-md-color-scheme="default"] .md-nav--primary .md-nav__title,
   [data-md-color-scheme="default"] .md-nav--primary .md-nav__title[for="__drawer"] {
+    background: #0b1220 !important;
     background-color: #0b1220 !important;
     color: rgba(255, 255, 255, 0.94) !important;
   }
@@ -1009,11 +1003,31 @@
   [data-md-color-scheme="default"] .md-sidebar--primary .md-nav__link::after {
     background: rgba(122, 158, 201, 0.7) !important;
   }
+
+  /* Logo centrado en móvil */
+  .md-header__button.md-logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  /* Ajustar header para permitir centrado */
+  .md-header__inner {
+    position: relative;
+  }
+
+  /* Ocultar título del header en móvil para dar espacio al logo centrado */
+  .md-header__title {
+    display: none;
+  }
 }
 
 /* TOC en móvil */
 @media screen and (max-width: 60em) {
-  [data-md-color-scheme="default"] .md-sidebar--secondary {
+  [data-md-color-scheme="default"] .md-sidebar--secondary,
+  [data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__inner,
+  [data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__scrollwrap {
+    background: #0f1217 !important;
     background-color: #0f1217 !important;
   }
 
