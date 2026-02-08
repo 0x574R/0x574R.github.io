@@ -303,7 +303,7 @@
 }
 
 /* ============================================================
-   MÓVIL - Ajustes mínimos
+   MÓVIL - Ajustes
    ============================================================ */
 @media screen and (max-width: 76.1875em) {
   /* Ocultar enlaces de GitHub y LinkedIn en móvil */
@@ -322,37 +322,9 @@
 
   /* Logo más grande en móvil */
   .md-header__button.md-logo img {
-    height: 1.8rem !important;
-    transform: scale(1.3) !important;
+    height: 1.6rem !important;
+    width: auto !important;
   }
-}
-
-/* LinkedIn junto a GitHub en el header (Desktop) */
-.md-header__source {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-/* Estilo para el enlace de LinkedIn añadido por JS */
-.md-header__source .md-source:last-child:not(:first-child) {
-  background: transparent;
-  padding: 0;
-  margin-left: 0.5rem;
-}
-
-.md-header__source .md-source:last-child:not(:first-child) .md-source__icon {
-  width: 1.4rem;
-  height: 1.4rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.md-header__source .md-source:last-child:not(:first-child) .md-source__icon svg {
-  width: 1.4rem;
-  height: 1.4rem;
-  fill: currentColor;
 }
 
 /* ============================================================
