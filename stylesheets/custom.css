@@ -116,14 +116,16 @@
   background: transparent !important;
 }
 
-/* Ocultar título "RAZOR" del sidebar izquierdo */
-.md-nav--primary > .md-nav__title {
-  display: none !important;
-}
+/* Ocultar título "RAZOR" del sidebar izquierdo - SOLO en desktop */
+@media screen and (min-width: 76.25em) {
+  .md-nav--primary > .md-nav__title {
+    display: none !important;
+  }
 
-/* Ocultar título en el sidebar del TOC también si aparece */
-.md-nav--primary > .md-nav__title[for="__drawer"] {
-  display: none !important;
+  /* Ocultar título en el sidebar del TOC también si aparece */
+  .md-nav--primary > .md-nav__title[for="__drawer"] {
+    display: none !important;
+  }
 }
 
 /* === LINKS DE NAVEGACIÓN - SIN FONDOS, SOLO TEXTO === */
