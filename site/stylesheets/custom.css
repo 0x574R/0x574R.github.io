@@ -303,7 +303,7 @@
 }
 
 /* ============================================================
-   MÓVIL - Ocultar logo, título y GitHub en el drawer
+   MÓVIL - Ocultar elementos del drawer y header
    ============================================================ */
 @media screen and (max-width: 76.1875em) {
   /* Ocultar el logo y título en el header del drawer */
@@ -312,8 +312,18 @@
     display: none !important;
   }
 
-  /* Ocultar enlace de GitHub en móvil */
-  .md-header__source {
+  /* Ocultar "RAZOR" del título del drawer */
+  .md-nav--primary > .md-nav__title {
+    font-size: 0 !important;
+  }
+  
+  .md-nav--primary > .md-nav__title .md-nav__icon {
+    font-size: 1rem !important;
+  }
+
+  /* Ocultar enlaces de GitHub y LinkedIn en móvil */
+  .md-header__source,
+  .md-source {
     display: none !important;
   }
 
@@ -359,6 +369,43 @@
   .md-header__option {
     right: 2.8rem !important;
   }
+}
+
+/* ============================================================
+   HEADER - Enlaces GitHub y LinkedIn (Desktop)
+   ============================================================ */
+.md-header__source {
+  display: flex !important;
+  gap: 0.5rem;
+}
+
+.md-source {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 0.6rem;
+  font-size: 0.7rem;
+  white-space: nowrap;
+  transition: opacity 0.2s;
+}
+
+.md-source:hover {
+  opacity: 0.8;
+}
+
+.md-source__icon {
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-right: 0.4rem;
+}
+
+.md-source__icon svg {
+  fill: currentColor;
+}
+
+.md-source__repository {
+  max-width: 5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* ============================================================
