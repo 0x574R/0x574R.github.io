@@ -719,11 +719,40 @@
   color: rgba(15, 23, 42, 0.62);
 }
 
+.razor-hero__tagline {
+  margin-top: 0.8rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--md-default-fg-color--light);
+  letter-spacing: 0.02em;
+  opacity: 0.85;
+}
+
+[data-md-color-scheme="default"] .razor-hero__tagline {
+  color: rgba(15, 23, 42, 0.55);
+}
+
 .razor-hero__actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.55rem;
   margin-top: 0.85rem;
+}
+
+/* Estrella para posts destacados */
+.razor-card__star {
+  color: #fbbf24;
+  margin-right: 0.3rem;
+  font-size: 0.9em;
+}
+
+/* Card destacada */
+.razor-card--featured {
+  border-color: rgba(251, 191, 36, 0.3);
+}
+
+.razor-card--featured:hover {
+  border-color: rgba(251, 191, 36, 0.5);
 }
 
 .razor-cards {
