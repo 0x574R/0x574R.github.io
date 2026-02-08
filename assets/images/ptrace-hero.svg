@@ -1,20 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200">
   <defs>
-    <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#0d1117"/>
-      <stop offset="100%" style="stop-color:#161b22"/>
-    </linearGradient>
-    <linearGradient id="victimGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#1f3a5c"/>
-      <stop offset="100%" style="stop-color:#132740"/>
-    </linearGradient>
-    <linearGradient id="attackGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#5c1f3a"/>
-      <stop offset="100%" style="stop-color:#401327"/>
-    </linearGradient>
-    <linearGradient id="arrowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#f85149"/>
-      <stop offset="100%" style="stop-color:#ff7b72"/>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0014"/>
+      <stop offset="100%" style="stop-color:#1a0033"/>
     </linearGradient>
     <filter id="glow">
       <feGaussianBlur stdDeviation="2" result="blur"/>
@@ -22,73 +10,58 @@
     </filter>
   </defs>
   
-  <rect width="400" height="200" fill="url(#bg2)"/>
+  <rect width="400" height="200" fill="url(#bg)"/>
   
-  <!-- Grid sutil -->
-  <g opacity="0.05" stroke="#58a6ff" stroke-width="0.5">
-    <line x1="0" y1="50" x2="400" y2="50"/>
-    <line x1="0" y1="100" x2="400" y2="100"/>
-    <line x1="0" y1="150" x2="400" y2="150"/>
-    <line x1="100" y1="0" x2="100" y2="200"/>
-    <line x1="200" y1="0" x2="200" y2="200"/>
-    <line x1="300" y1="0" x2="300" y2="200"/>
+  <!-- Título -->
+  <text x="200" y="25" fill="#c084fc" font-family="monospace" font-size="12" text-anchor="middle" font-weight="bold">PTRACE INJECTION</text>
+  
+  <!-- Memory map del proceso -->
+  <rect x="40" y="40" width="320" height="130" rx="4" fill="#0d0620" stroke="#7c3aed" stroke-width="1.5"/>
+  
+  <!-- Header -->
+  <rect x="40" y="40" width="320" height="22" fill="#1a0d40" rx="4"/>
+  <rect x="40" y="58" width="320" height="4" fill="#1a0d40"/>
+  <text x="55" y="55" fill="#a855f7" font-family="monospace" font-size="8">PROCESS MEMORY MAP</text>
+  <text x="300" y="55" fill="#00ffff" font-family="monospace" font-size="7">PID:5204</text>
+  
+  <!-- Segmentos de memoria -->
+  <g font-family="monospace" font-size="8">
+    <!-- .text -->
+    <rect x="55" y="68" width="290" height="18" rx="2" fill="#1a1a2e" stroke="#3d2b69" stroke-width="1"/>
+    <text x="65" y="80" fill="#6b4d9a">0x400000</text>
+    <text x="150" y="80" fill="#48cae4">.text</text>
+    <text x="310" y="80" fill="#3d2b69">r-x</text>
+    
+    <!-- .data -->
+    <rect x="55" y="90" width="290" height="18" rx="2" fill="#1a1a2e" stroke="#3d2b69" stroke-width="1"/>
+    <text x="65" y="102" fill="#6b4d9a">0x600000</text>
+    <text x="150" y="102" fill="#48cae4">.data</text>
+    <text x="310" y="102" fill="#3d2b69">rw-</text>
+    
+    <!-- heap -->
+    <rect x="55" y="112" width="290" height="18" rx="2" fill="#1a1a2e" stroke="#3d2b69" stroke-width="1"/>
+    <text x="65" y="124" fill="#6b4d9a">0x7f4000</text>
+    <text x="150" y="124" fill="#48cae4">[heap]</text>
+    <text x="310" y="124" fill="#3d2b69">rw-</text>
+    
+    <!-- INJECTED (destacado) -->
+    <rect x="55" y="134" width="290" height="28" rx="2" fill="#2d1b69" stroke="#ff00ff" stroke-width="2" filter="url(#glow)">
+      <animate attributeName="opacity" values="0.8;1;0.8" dur="1.2s" repeatCount="indefinite"/>
+    </rect>
+    <text x="65" y="150" fill="#ff00ff" filter="url(#glow)">0x7f5000</text>
+    <text x="150" y="150" fill="#00ffff" font-weight="bold">[SHELLCODE]</text>
+    <text x="310" y="150" fill="#ff00ff" font-weight="bold">rwx</text>
+    <text x="200" y="159" fill="#c084fc" font-size="6" text-anchor="middle" opacity="0.8">b8 39 00 00 00 0f 05 48 83...</text>
   </g>
   
-  <!-- Proceso víctima -->
-  <rect x="30" y="50" width="110" height="100" rx="6" fill="url(#victimGrad)" stroke="#58a6ff" stroke-width="1"/>
-  <text x="85" y="72" fill="#58a6ff" font-family="monospace" font-size="9" text-anchor="middle" font-weight="bold">TRACEE</text>
-  <text x="85" y="88" fill="#8b949e" font-family="monospace" font-size="8" text-anchor="middle">PID: 5204</text>
-  
-  <!-- Bloques de memoria -->
-  <rect x="42" y="100" width="35" height="14" rx="2" fill="#21262d" stroke="#30363d"/>
-  <rect x="42" y="118" width="35" height="14" rx="2" fill="#21262d" stroke="#30363d"/>
-  <rect x="92" y="100" width="35" height="14" rx="2" fill="#21262d" stroke="#30363d"/>
-  <rect x="92" y="118" width="35" height="14" rx="2" fill="#238636" stroke="#3fb950">
-    <animate attributeName="opacity" values="0.7;1;0.7" dur="1.5s" repeatCount="indefinite"/>
-  </rect>
-  <text x="110" y="128" fill="#fff" font-family="monospace" font-size="6" text-anchor="middle">RWX</text>
-  
-  <!-- Proceso atacante -->
-  <rect x="260" y="50" width="110" height="100" rx="6" fill="url(#attackGrad)" stroke="#f85149" stroke-width="1"/>
-  <text x="315" y="72" fill="#f85149" font-family="monospace" font-size="9" text-anchor="middle" font-weight="bold">TRACER</text>
-  <text x="315" y="88" fill="#8b949e" font-family="monospace" font-size="8" text-anchor="middle">proc_inj</text>
-  
-  <!-- Shellcode bytes -->
-  <g font-family="monospace" font-size="7" fill="#7ee787">
-    <text x="272" y="105">0xb8 0x39</text>
-    <text x="272" y="117">0x0f 0x05</text>
-    <text x="272" y="129">0x48 0x83</text>
-    <text x="272" y="141">···</text>
-  </g>
-  
-  <!-- Flecha de inyección -->
-  <g filter="url(#glow)">
-    <line x1="255" y1="100" x2="150" y2="100" stroke="url(#arrowGrad)" stroke-width="2" stroke-dasharray="6,3">
-      <animate attributeName="stroke-dashoffset" values="9;0" dur="0.6s" repeatCount="indefinite"/>
-    </line>
-    <polygon points="150,100 160,95 160,105" fill="#f85149"/>
-  </g>
-  
-  <!-- Label PTRACE -->
-  <rect x="175" y="80" width="50" height="16" rx="3" fill="#21262d" stroke="#f85149"/>
-  <text x="200" y="91" fill="#f85149" font-family="monospace" font-size="8" text-anchor="middle">PTRACE</text>
-  
-  <!-- Indicadores de estado -->
-  <circle cx="45" cy="62" r="4" fill="#3fb950">
-    <animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite"/>
-  </circle>
-  <circle cx="275" cy="62" r="4" fill="#f85149">
-    <animate attributeName="opacity" values="1;0.5;1" dur="1s" repeatCount="indefinite"/>
-  </circle>
-  
-  <!-- Pasos en la parte inferior -->
-  <g font-family="monospace" font-size="7" fill="#8b949e">
-    <text x="60" y="170">ATTACH</text>
-    <text x="130" y="170">→</text>
-    <text x="150" y="170">INJECT</text>
-    <text x="220" y="170">→</text>
-    <text x="245" y="170">EXECUTE</text>
-    <text x="315" y="170">→</text>
-    <text x="340" y="170">DETACH</text>
+  <!-- Footer con syscalls -->
+  <g font-family="monospace" font-size="7" fill="#6b4d9a">
+    <text x="55" y="185">PTRACE_ATTACH</text>
+    <text x="130" y="185" fill="#ff00ff">→</text>
+    <text x="145" y="185">POKEDATA</text>
+    <text x="210" y="185" fill="#ff00ff">→</text>
+    <text x="225" y="185">SETREGS</text>
+    <text x="285" y="185" fill="#ff00ff">→</text>
+    <text x="300" y="185">DETACH</text>
   </g>
 </svg>
