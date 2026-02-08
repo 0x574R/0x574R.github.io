@@ -316,6 +316,49 @@
   .md-header__source {
     display: none !important;
   }
+
+  /* Ocultar título del header en móvil */
+  .md-header__title {
+    display: none !important;
+  }
+
+  /* Centrar el logo en el header en móvil */
+  .md-header__inner {
+    display: flex !important;
+    justify-content: center !important;
+    position: relative !important;
+  }
+
+  /* Botón hamburguesa a la izquierda absoluta */
+  .md-header__button[for="__drawer"] {
+    position: absolute !important;
+    left: 0.4rem !important;
+  }
+
+  /* Logo centrado */
+  .md-header__button.md-logo {
+    position: absolute !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .md-header__button.md-logo img {
+    transform: scale(1.4) !important;
+    transform-origin: center center !important;
+  }
+
+  /* Botones de la derecha (search, theme) */
+  .md-header__option,
+  .md-header__button[for="__search"] {
+    position: absolute !important;
+    right: 0.4rem !important;
+  }
+
+  .md-header__option {
+    right: 2.8rem !important;
+  }
 }
 
 /* ============================================================

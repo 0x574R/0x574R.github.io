@@ -7,7 +7,7 @@
       Notas técnicas sobre seguridad ofensiva y desarrollo de malware.
     </p>
     <p class="razor-hero__tagline">
-      Técnicas de bajo nivel · Ensamblador x86-64 · Linux Internals · Sin dependencias
+      Reconocimiento · Intrusión · Evasión · Exfiltración · Persistencia
     </p>
   </div>
 </div>
