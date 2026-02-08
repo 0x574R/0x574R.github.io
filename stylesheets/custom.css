@@ -988,8 +988,9 @@
     background-color: #0f1217 !important;
   }
 
-  /* Links de navegación */
-  [data-md-color-scheme="default"] .md-nav--primary .md-nav__link {
+  /* Links de navegación - TODOS */
+  [data-md-color-scheme="default"] .md-nav--primary .md-nav__link,
+  [data-md-color-scheme="default"] .md-nav--primary .md-nav__item .md-nav__link {
     color: rgba(255, 255, 255, 0.82) !important;
   }
 
@@ -1004,7 +1005,8 @@
   }
 
   /* Títulos de secciones expandibles */
-  [data-md-color-scheme="default"] .md-nav--primary .md-nav__item--nested > .md-nav__link {
+  [data-md-color-scheme="default"] .md-nav--primary .md-nav__item--nested > .md-nav__link,
+  [data-md-color-scheme="default"] .md-nav--primary .md-nav__item--section > .md-nav__link {
     color: rgba(255, 255, 255, 0.94) !important;
   }
 
@@ -1014,8 +1016,25 @@
   }
 
   /* Labels en el drawer */
-  [data-md-color-scheme="default"] .md-nav--primary label {
+  [data-md-color-scheme="default"] .md-nav--primary label,
+  [data-md-color-scheme="default"] .md-nav--primary .md-nav__link[for] {
     color: rgba(255, 255, 255, 0.82) !important;
+  }
+
+  /* Todos los textos dentro del nav primario */
+  [data-md-color-scheme="default"] .md-nav--primary * {
+    color: rgba(255, 255, 255, 0.82);
+  }
+
+  /* Elementos activos y hover */
+  [data-md-color-scheme="default"] .md-nav--primary .md-nav__link--active,
+  [data-md-color-scheme="default"] .md-nav--primary .md-nav__link:hover {
+    color: #7a9ec9 !important;
+  }
+
+  /* Iconos SVG */
+  [data-md-color-scheme="default"] .md-nav--primary svg {
+    color: rgba(255, 255, 255, 0.64) !important;
   }
 }
 
