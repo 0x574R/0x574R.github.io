@@ -860,10 +860,12 @@
 /* Card image */
 .razor-card > img {
   width: 100% !important;
-  height: 100px !important;
-  object-fit: cover !important;
+  height: auto !important;
+  aspect-ratio: 2 / 1 !important;
+  object-fit: contain !important;
   border-radius: 10px !important;
   margin-bottom: 0.3rem !important;
+  background: #0a0014 !important;
 }
 
 .razor-card__title {
