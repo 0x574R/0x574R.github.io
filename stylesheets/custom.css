@@ -1088,6 +1088,107 @@
   [data-md-color-scheme="default"] .md-nav--secondary .md-nav__link--active {
     color: #7a9ec9 !important;
   }
+
+  /* TOC pegado al borde superior */
+  .md-nav--secondary,
+  .md-nav--secondary .md-nav {
+    top: 0 !important;
+  }
+
+  .md-nav--secondary > .md-nav__title {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+}
+
+/* ============================================================
+   MÓVIL - AJUSTES GENERALES
+   ============================================================ */
+
+@media screen and (max-width: 76.1875em) {
+  /* Padding general del contenido */
+  .md-content__inner {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* Bloques de código responsivos */
+  .md-typeset pre {
+    margin-left: -1rem;
+    margin-right: -1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-radius: 0;
+    max-width: 100vw;
+  }
+
+  .md-typeset pre > code {
+    font-size: 0.75rem;
+    white-space: pre;
+    overflow-x: auto;
+  }
+
+  /* Tablas responsivas */
+  .md-typeset table:not([class]) {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    font-size: 0.8rem;
+  }
+
+  /* Imágenes responsivas */
+  .md-typeset img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Cards con padding */
+  .razor-cards {
+    padding: 0 0.5rem;
+  }
+
+  /* Hero con padding */
+  .razor-hero {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Admonitions con margen */
+  .md-typeset .admonition,
+  .md-typeset details {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+/* Pantallas muy pequeñas */
+@media screen and (max-width: 480px) {
+  .md-content__inner {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+
+  .md-typeset pre {
+    margin-left: -0.75rem;
+    margin-right: -0.75rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .md-typeset pre > code {
+    font-size: 0.7rem;
+  }
+
+  /* Cards en una columna */
+  .razor-cards {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Tagline más pequeño */
+  .razor-hero__tagline {
+    font-size: 0.75rem;
+  }
 }
 
 /* Search highlight */
