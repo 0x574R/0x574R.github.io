@@ -1092,6 +1092,19 @@
   }
 }
 
+/* Corregir altura del título en el drawer móvil - tema claro */
+@media screen and (max-width: 76.1875em) {
+  [data-md-color-scheme="default"] .md-nav--primary .md-nav__title {
+    height: 2.4rem !important;
+    padding: 0.4rem 0.8rem !important;
+    line-height: 1.6rem !important;
+  }
+
+  [data-md-color-scheme="default"] .md-nav--primary .md-nav__title .md-nav__icon {
+    top: 0.4rem !important;
+  }
+}
+
 /* Search highlight */
 .md-search-result__meta {
   color: var(--md-default-fg-color--light);
