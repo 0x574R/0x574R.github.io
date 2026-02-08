@@ -6,6 +6,9 @@
     <p class="razor-hero__subtitle">
       Notas técnicas sobre seguridad ofensiva y desarrollo de malware.
     </p>
+    <p class="razor-hero__tagline">
+      Técnicas de bajo nivel · Ensamblador x86-64 · Linux Internals · Sin dependencias
+    </p>
   </div>
 </div>
 
@@ -32,13 +35,13 @@
 
 <div class="razor-cards razor-cards--posts">
 
-<a href="research/malware-dev/ptrace-injection/" class="razor-card">
+<a href="research/malware-dev/ptrace-injection/" class="razor-card razor-card--featured">
   <img src="assets/images/ptrace-hero.svg" alt="Ptrace Injection">
   <span class="razor-card__title">Process Injection via Ptrace</span>
   <span class="razor-card__desc">Inyección de shellcode en procesos Linux usando Ptrace sin dependencias</span>
   <div class="razor-card__meta">
     <span class="razor-card__tag">Assembly</span>
-    <span class="razor-card__time">15 min</span>
+    <span class="razor-card__time"><span class="razor-card__star">★</span> 120 min</span>
   </div>
 </a>
 
