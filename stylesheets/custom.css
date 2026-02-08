@@ -957,86 +957,109 @@
    ============================================================ */
 
 @media screen and (max-width: 76.1875em) {
-  /* Fondo oscuro sólido para el drawer en tema claro */
-  [data-md-color-scheme="default"] .md-sidebar--primary,
-  [data-md-color-scheme="default"] .md-sidebar--primary .md-sidebar__inner,
-  [data-md-color-scheme="default"] .md-sidebar--primary .md-sidebar__scrollwrap,
-  [data-md-color-scheme="default"] .md-sidebar--primary .md-nav,
-  [data-md-color-scheme="default"] .md-sidebar--primary .md-nav__list {
-    background: #0f1217 !important;
+  /* ===== DRAWER PRINCIPAL (Navegación) ===== */
+  
+  /* Contenedor del drawer */
+  [data-md-color-scheme="default"] .md-nav--primary,
+  [data-md-color-scheme="default"] .md-nav--primary .md-nav {
     background-color: #0f1217 !important;
   }
 
-  /* Texto claro en el drawer */
-  [data-md-color-scheme="default"] .md-sidebar--primary .md-nav__link {
+  /* Header del drawer con el título */
+  [data-md-color-scheme="default"] .md-nav--primary > .md-nav__title {
+    background-color: #0b1220 !important;
+    color: rgba(255, 255, 255, 0.94) !important;
+    box-shadow: 0 0 0.2rem rgba(0,0,0,.1), 0 0.2rem 0.4rem rgba(0,0,0,.2) !important;
+  }
+
+  /* Icono de cerrar en el drawer */
+  [data-md-color-scheme="default"] .md-nav--primary > .md-nav__title .md-nav__icon {
+    color: rgba(255, 255, 255, 0.8) !important;
+  }
+
+  /* Lista de navegación */
+  [data-md-color-scheme="default"] .md-nav--primary .md-nav__list {
+    background-color: #0f1217 !important;
+  }
+
+  /* Links de navegación */
+  [data-md-color-scheme="default"] .md-nav--primary .md-nav__link {
     color: rgba(255, 255, 255, 0.82) !important;
   }
 
-  [data-md-color-scheme="default"] .md-sidebar--primary .md-nav__link:hover {
+  [data-md-color-scheme="default"] .md-nav--primary .md-nav__link:hover,
+  [data-md-color-scheme="default"] .md-nav--primary .md-nav__link:focus {
     color: #7a9ec9 !important;
   }
 
-  [data-md-color-scheme="default"] .md-sidebar--primary .md-nav__link--active,
-  [data-md-color-scheme="default"] .md-sidebar--primary .md-nav__item--active > .md-nav__link {
+  [data-md-color-scheme="default"] .md-nav--primary .md-nav__link--active,
+  [data-md-color-scheme="default"] .md-nav--primary .md-nav__item--active > .md-nav__link {
     color: #7a9ec9 !important;
   }
 
-  /* Títulos de sección en el drawer */
-  [data-md-color-scheme="default"] .md-sidebar--primary .md-nav__item--nested > .md-nav__link {
+  /* Títulos de secciones expandibles */
+  [data-md-color-scheme="default"] .md-nav--primary .md-nav__item--nested > .md-nav__link {
     color: rgba(255, 255, 255, 0.94) !important;
   }
 
-  /* Header del drawer */
-  [data-md-color-scheme="default"] .md-nav--primary .md-nav__title,
-  [data-md-color-scheme="default"] .md-nav--primary .md-nav__title[for="__drawer"] {
-    background: #0b1220 !important;
-    background-color: #0b1220 !important;
-    color: rgba(255, 255, 255, 0.94) !important;
-  }
-
-  /* Iconos y elementos del drawer */
-  [data-md-color-scheme="default"] .md-sidebar--primary .md-nav__icon {
+  /* Icono de expansión */
+  [data-md-color-scheme="default"] .md-nav--primary .md-nav__icon {
     color: rgba(255, 255, 255, 0.64) !important;
   }
 
-  /* Línea de hover en móvil */
-  [data-md-color-scheme="default"] .md-sidebar--primary .md-nav__link::after {
-    background: rgba(122, 158, 201, 0.7) !important;
+  /* Submenús */
+  [data-md-color-scheme="default"] .md-nav--primary .md-nav--secondary {
+    background-color: #0f1217 !important;
+  }
+
+  /* ===== HEADER EN MÓVIL ===== */
+  
+  /* Contenedor del header */
+  .md-header__inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
   }
 
   /* Logo centrado en móvil */
   .md-header__button.md-logo {
     position: absolute;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) scale(1.65);
+    order: 0;
   }
 
-  /* Ajustar header para permitir centrado */
-  .md-header__inner {
-    position: relative;
-  }
-
-  /* Ocultar título del header en móvil para dar espacio al logo centrado */
+  /* Ocultar título del sitio en móvil */
   .md-header__title {
-    display: none;
+    display: none !important;
+  }
+
+  /* Asegurar que el botón del menú esté a la izquierda */
+  .md-header__button[for="__drawer"] {
+    order: -1;
   }
 }
 
-/* TOC en móvil */
+/* ===== TOC EN MÓVIL ===== */
 @media screen and (max-width: 60em) {
-  [data-md-color-scheme="default"] .md-sidebar--secondary,
-  [data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__inner,
-  [data-md-color-scheme="default"] .md-sidebar--secondary .md-sidebar__scrollwrap {
-    background: #0f1217 !important;
+  [data-md-color-scheme="default"] .md-nav--secondary,
+  [data-md-color-scheme="default"] .md-nav--secondary .md-nav {
     background-color: #0f1217 !important;
   }
 
-  [data-md-color-scheme="default"] .md-sidebar--secondary .md-nav__link {
+  [data-md-color-scheme="default"] .md-nav--secondary .md-nav__title {
+    background-color: #0b1220 !important;
+    color: rgba(255, 255, 255, 0.94) !important;
+    box-shadow: 0 0 0.2rem rgba(0,0,0,.1), 0 0.2rem 0.4rem rgba(0,0,0,.2) !important;
+  }
+
+  [data-md-color-scheme="default"] .md-nav--secondary .md-nav__link {
     color: rgba(255, 255, 255, 0.82) !important;
   }
 
-  [data-md-color-scheme="default"] .md-sidebar--secondary .md-nav__link:hover,
-  [data-md-color-scheme="default"] .md-sidebar--secondary .md-nav__link--active {
+  [data-md-color-scheme="default"] .md-nav--secondary .md-nav__link:hover,
+  [data-md-color-scheme="default"] .md-nav--secondary .md-nav__link--active {
     color: #7a9ec9 !important;
   }
 }
