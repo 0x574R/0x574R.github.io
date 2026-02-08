@@ -10,9 +10,8 @@
     </filter>
   </defs>
   
-  <!-- Fondo con borde -->
+  <!-- Fondo -->
   <rect width="560" height="180" fill="url(#bg)"/>
-  <rect x="2" y="2" width="556" height="176" fill="none" stroke="#7c3aed" stroke-width="2" rx="8"/>
   
   <!-- Memory map panel -->
   <rect x="40" y="15" width="480" height="150" rx="8" fill="#0d0620" stroke="#7c3aed" stroke-width="2"/>

@@ -10,9 +10,8 @@
     </filter>
   </defs>
   
-  <!-- Fondo con borde -->
+  <!-- Fondo -->
   <rect width="560" height="180" fill="url(#bg)"/>
-  <rect x="2" y="2" width="556" height="176" fill="none" stroke="#7c3aed" stroke-width="2" rx="8"/>
   
   <!-- Terminal VICTIM -->
   <rect x="40" y="20" width="200" height="140" rx="8" fill="#0d0620" stroke="#00b4d8" stroke-width="2"/>
@@ -56,7 +55,7 @@
     <text x="332" y="85" fill="#6b4d9a">listening...</text>
     <text x="332" y="105" fill="#00ff88">connected!</text>
     <text x="332" y="125" fill="#00ffff">root@server:~#</text>
-    <rect x="455" y="113" width="8" height="14" fill="#00ffff">
+    <rect x="435" y="113" width="8" height="14" fill="#00ffff">
       <animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite"/>
     </rect>
   </g>
