@@ -1274,3 +1274,53 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ============================================================
+   ARTICLE META - Fecha y tiempo de lectura
+   ============================================================ */
+
+.article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  margin: -0.5rem 0 1.5rem 0;
+  padding: 0.8rem 1rem;
+  background: rgba(var(--razor-accent-rgb), 0.06);
+  border-radius: 8px;
+  border-left: 3px solid var(--md-accent-fg-color);
+  font-size: 0.85rem;
+}
+
+.article-date,
+.article-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--md-default-fg-color--light);
+}
+
+[data-md-color-scheme="slate"] .article-meta {
+  background: rgba(var(--razor-accent-rgb), 0.08);
+}
+
+/* ============================================================
+   BREADCRUMBS - Navegación
+   ============================================================ */
+
+.md-path {
+  margin-bottom: 0.8rem;
+}
+
+.md-path__link {
+  font-size: 0.8rem;
+  color: var(--md-default-fg-color--light) !important;
+}
+
+.md-path__link:hover {
+  color: var(--md-accent-fg-color) !important;
+}
+
+.md-path__separator {
+  color: var(--md-default-fg-color--lighter);
+  margin: 0 0.3rem;
+}
