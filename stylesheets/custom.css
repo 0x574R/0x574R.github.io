@@ -306,7 +306,7 @@
    MÓVIL - Ajustes
    ============================================================ */
 @media screen and (max-width: 76.1875em) {
-  /* Ocultar enlaces de GitHub y LinkedIn en móvil */
+  /* Ocultar enlace de GitHub en móvil */
   .md-header__source {
     display: none !important;
   }
@@ -320,10 +320,15 @@
     font-size: 1.2rem !important;
   }
 
-  /* Logo más grande en móvil */
+  /* Logo mucho más grande en móvil */
+  .md-header__button.md-logo {
+    padding: 0.2rem !important;
+  }
+
   .md-header__button.md-logo img {
-    height: 1.6rem !important;
+    height: 2.2rem !important;
     width: auto !important;
+    transform: none !important;
   }
 }
 
