@@ -1322,4 +1322,11 @@ div.tables-centered > table {
 .md-typeset table:not(.tables-centered table) {
   margin-left: auto !important;
   margin-right: auto !important;
+  width: auto !important;
+  display: table !important;
+}
+
+.md-typeset table:not(.tables-centered table) th,
+.md-typeset table:not(.tables-centered table) td {
+  text-align: center !important;
 }
