@@ -607,6 +607,29 @@
   background: rgba(255, 255, 255, 0.018);
 }
 
+/* Warning admonition con fondo rojo */
+.md-typeset .admonition.warning {
+  border-color: rgba(255, 82, 82, 0.5) !important;
+}
+
+[data-md-color-scheme="default"] .md-typeset .admonition.warning {
+  background: rgba(255, 82, 82, 0.08) !important;
+  border: 1px solid rgba(255, 82, 82, 0.25) !important;
+}
+
+[data-md-color-scheme="slate"] .md-typeset .admonition.warning {
+  background: rgba(255, 82, 82, 0.12) !important;
+  border: 1px solid rgba(255, 82, 82, 0.3) !important;
+}
+
+.md-typeset .admonition.warning > .admonition-title {
+  background: rgba(255, 82, 82, 0.15) !important;
+}
+
+.md-typeset .admonition.warning > .admonition-title::before {
+  background-color: #ff5252 !important;
+}
+
 /* ============================================================
    BUTTONS
    ============================================================ */
