@@ -1351,5 +1351,5 @@ div.tables-centered td {
 /* Primera columna más ancha */
 .md-typeset table:not(.tables-centered table) th:first-child,
 .md-typeset table:not(.tables-centered table) td:first-child {
-  min-width: 160px !important;
+  min-width: 200px !important;
 }
