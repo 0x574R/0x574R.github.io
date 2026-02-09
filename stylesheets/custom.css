@@ -1266,7 +1266,7 @@ div.tables-centered {
   display: flex !important;
   justify-content: center !important;
   align-items: flex-start !important;
-  gap: 2.5rem !important;
+  gap: 4rem !important;
   flex-wrap: wrap !important;
   margin: 1rem auto !important;
   max-width: 650px !important;
@@ -1322,9 +1322,14 @@ div.tables-centered > table {
 div.table-wide {
   width: 100% !important;
   margin: 1rem 0 !important;
+  display: block !important;
 }
 
-div.table-wide > table {
+div.table-wide table,
+div.table-wide > table,
+.table-wide table {
   width: 100% !important;
   max-width: 100% !important;
+  min-width: 100% !important;
+  display: table !important;
 }
