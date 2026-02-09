@@ -1317,26 +1317,9 @@ div.tables-centered > table {
 }
 
 /* ============================================================
-   TABLE-WIDE - Tabla expandida
+   TABLAS CENTRADAS POR DEFECTO
    ============================================================ */
-div.table-wide {
-  width: 100% !important;
-  margin: 1rem 0 !important;
-  display: block !important;
-}
-
-div.table-wide table,
-div.table-wide > table,
-.table-wide table {
-  width: 100% !important;
-  max-width: 100% !important;
-  min-width: 100% !important;
-  display: table !important;
-}
-
-/* Tabla con estilo inline width: 100% */
-.md-typeset table[style*="width: 100%"] {
-  width: 100% !important;
-  max-width: 100% !important;
-  min-width: 100% !important;
+.md-typeset table:not(.tables-centered table) {
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
