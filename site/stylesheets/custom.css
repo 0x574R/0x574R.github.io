@@ -1281,6 +1281,12 @@ div.tables-centered > table {
   display: table !important;
 }
 
+/* Texto centrado en tablas duales */
+div.tables-centered th,
+div.tables-centered td {
+  text-align: center !important;
+}
+
 @media screen and (max-width: 768px) {
   div.tables-centered {
     flex-direction: column !important;
@@ -1340,4 +1346,10 @@ div.tables-centered > table {
 .md-typeset table:not(.tables-centered table) th,
 .md-typeset table:not(.tables-centered table) td {
   text-align: center !important;
+}
+
+/* Primera columna más ancha */
+.md-typeset table:not(.tables-centered table) th:first-child,
+.md-typeset table:not(.tables-centered table) td:first-child {
+  min-width: 160px !important;
 }
