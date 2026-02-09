@@ -1266,10 +1266,10 @@ div.tables-centered {
   display: flex !important;
   justify-content: center !important;
   align-items: flex-start !important;
-  gap: 1rem !important;
+  gap: 2.5rem !important;
   flex-wrap: wrap !important;
   margin: 1rem auto !important;
-  max-width: 600px !important;
+  max-width: 650px !important;
 }
 
 div.tables-centered > table {
@@ -1314,4 +1314,17 @@ div.tables-centered > table {
   font-size: 0.75rem;
   color: var(--md-default-fg-color--lighter);
   white-space: nowrap;
+}
+
+/* ============================================================
+   TABLE-WIDE - Tabla expandida
+   ============================================================ */
+div.table-wide {
+  width: 100% !important;
+  margin: 1rem 0 !important;
+}
+
+div.table-wide > table {
+  width: 100% !important;
+  max-width: 100% !important;
 }
