@@ -1059,23 +1059,27 @@
 
 .table-dual {
   display: flex;
-  gap: 1.5rem;
+  justify-content: center;
+  gap: 1rem;
   flex-wrap: wrap;
 }
 
 .table-dual > table {
-  flex: 1;
-  min-width: 200px;
+  flex: 0 1 auto;
+  min-width: 180px;
+  max-width: 280px;
   margin: 0 !important;
 }
 
 @media (max-width: 600px) {
   .table-dual {
     flex-direction: column;
+    align-items: center;
   }
   
   .table-dual > table {
     width: 100%;
+    max-width: 100%;
   }
 }
 
