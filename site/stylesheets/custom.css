@@ -1319,24 +1319,25 @@ div.tables-centered > table {
 /* ============================================================
    TABLAS CENTRADAS POR DEFECTO
    ============================================================ */
+
+/* Centrar el contenedor scrollwrap que Material MkDocs crea */
+.md-typeset__scrollwrap {
+  display: flex !important;
+  justify-content: center !important;
+}
+
+.md-typeset__table {
+  width: auto !important;
+  max-width: fit-content !important;
+}
+
 .md-typeset table:not(.tables-centered table) {
   margin-left: auto !important;
   margin-right: auto !important;
   width: auto !important;
-  display: table !important;
 }
 
 .md-typeset table:not(.tables-centered table) th,
 .md-typeset table:not(.tables-centered table) td {
   text-align: center !important;
-}
-
-/* Contenedor de tabla centrado */
-.md-typeset > table,
-.md-typeset p + table,
-.md-content table {
-  margin-left: auto !important;
-  margin-right: auto !important;
-  width: auto !important;
-  max-width: fit-content !important;
 }
