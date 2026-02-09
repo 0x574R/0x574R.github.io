@@ -1,48 +1,154 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 180" preserveAspectRatio="xMidYMid meet">
   <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#0a0014"/>
-      <stop offset="100%" style="stop-color:#1a0033"/>
+    <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#08080c"/>
+      <stop offset="100%" style="stop-color:#0f0a18"/>
     </linearGradient>
-    <filter id="glow">
-      <feGaussianBlur stdDeviation="2" result="blur"/>
+    <filter id="glow2">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
       <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
   </defs>
   
   <!-- Fondo -->
-  <rect width="560" height="180" fill="url(#bg)"/>
+  <rect width="560" height="180" fill="url(#bg2)"/>
   
-  <!-- Memory map panel -->
-  <rect x="40" y="15" width="480" height="150" rx="8" fill="#0d0620" stroke="#7c3aed" stroke-width="2"/>
-  
-  <!-- Header -->
-  <rect x="40" y="15" width="480" height="28" fill="#1a0d40" rx="8"/>
-  <rect x="40" y="39" width="480" height="4" fill="#1a0d40"/>
-  <text x="60" y="35" fill="#a855f7" font-family="monospace" font-size="12">MEMORY MAP</text>
-  <text x="440" y="35" fill="#00ffff" font-family="monospace" font-size="11">PID: 5204</text>
-  
-  <!-- Segmentos de memoria -->
-  <g font-family="monospace" font-size="12">
-    <!-- .text -->
-    <rect x="60" y="52" width="440" height="26" rx="4" fill="#1a1a2e" stroke="#3d2b69" stroke-width="1"/>
-    <text x="80" y="70" fill="#6b4d9a">0x400000</text>
-    <text x="250" y="70" fill="#48cae4">.text</text>
-    <text x="460" y="70" fill="#3d2b69">r-x</text>
+  <!-- Panel de registros izquierdo -->
+  <g transform="translate(20, 12)">
+    <rect width="160" height="156" rx="5" fill="#0d0d14" stroke="#3d2d5a" stroke-width="1"/>
+    <rect width="160" height="22" rx="5" fill="#1a1428"/>
+    <rect y="18" width="160" height="4" fill="#1a1428"/>
+    <text x="80" y="15" fill="#8b5cf6" font-family="monospace" font-size="9" text-anchor="middle">user_regs_struct</text>
     
-    <!-- .data -->
-    <rect x="60" y="82" width="440" height="26" rx="4" fill="#1a1a2e" stroke="#3d2b69" stroke-width="1"/>
-    <text x="80" y="100" fill="#6b4d9a">0x600000</text>
-    <text x="250" y="100" fill="#48cae4">.data</text>
-    <text x="460" y="100" fill="#3d2b69">rw-</text>
+    <!-- Registros -->
+    <g font-family="monospace" font-size="8">
+      <text x="8" y="38" fill="#4a4a6a">0x80</text>
+      <text x="40" y="38" fill="#7c3aed">RIP</text>
+      <text x="70" y="38" fill="#a78bfa">0x401000</text>
+      
+      <text x="8" y="52" fill="#4a4a6a">0x98</text>
+      <text x="40" y="52" fill="#7c3aed">RSP</text>
+      <text x="70" y="52" fill="#a78bfa">0x7fff48</text>
+      
+      <text x="8" y="66" fill="#4a4a6a">0x50</text>
+      <text x="40" y="66" fill="#7c3aed">RAX</text>
+      <text x="70" y="66" fill="#a78bfa">0x000000</text>
+      
+      <text x="8" y="80" fill="#4a4a6a">0x70</text>
+      <text x="40" y="80" fill="#7c3aed">RDI</text>
+      <text x="70" y="80" fill="#a78bfa">0x000000</text>
+      
+      <text x="8" y="94" fill="#4a4a6a">0x68</text>
+      <text x="40" y="94" fill="#7c3aed">RSI</text>
+      <text x="70" y="94" fill="#a78bfa">0x000000</text>
+      
+      <text x="8" y="108" fill="#4a4a6a">0x60</text>
+      <text x="40" y="108" fill="#7c3aed">RDX</text>
+      <text x="70" y="108" fill="#a78bfa">0x000000</text>
+      
+      <text x="8" y="122" fill="#4a4a6a">0x40</text>
+      <text x="40" y="122" fill="#7c3aed">R9</text>
+      <text x="70" y="122" fill="#a78bfa">0x000000</text>
+      
+      <text x="8" y="136" fill="#4a4a6a">0x38</text>
+      <text x="40" y="136" fill="#7c3aed">R10</text>
+      <text x="70" y="136" fill="#a78bfa">0x000000</text>
+    </g>
     
-    <!-- INJECTED SHELLCODE (destacado) -->
-    <rect x="60" y="112" width="440" height="42" rx="4" fill="#2d1b69" stroke="#ff00ff" stroke-width="2" filter="url(#glow)">
-      <animate attributeName="opacity" values="0.8;1;0.8" dur="1.2s" repeatCount="indefinite"/>
-    </rect>
-    <text x="80" y="135" fill="#ff00ff" font-size="13" filter="url(#glow)">0x7f5000</text>
-    <text x="250" y="135" fill="#00ffff" font-weight="bold" font-size="13">[SHELLCODE]</text>
-    <text x="460" y="135" fill="#ff00ff" font-weight="bold">rwx</text>
-    <text x="280" y="150" fill="#c084fc" font-size="9" text-anchor="middle" opacity="0.7">b8 39 00 00 00 0f 05 48...</text>
+    <text x="80" y="152" fill="#3d2d5a" font-family="monospace" font-size="7" text-anchor="middle">216 bytes · 27 regs</text>
   </g>
+  
+  <!-- Flecha GETREGS/SETREGS -->
+  <g transform="translate(190, 50)">
+    <path d="M 0 20 L 50 20" stroke="#00d4ff" stroke-width="1.5" stroke-dasharray="4,2">
+      <animate attributeName="stroke-dashoffset" from="12" to="0" dur="0.8s" repeatCount="indefinite"/>
+    </path>
+    <polygon points="50,20 44,16 44,24" fill="#00d4ff"/>
+    <text x="25" y="12" fill="#00d4ff" font-family="monospace" font-size="7" text-anchor="middle">GETREGS</text>
+    
+    <path d="M 50 50 L 0 50" stroke="#ff6b6b" stroke-width="1.5" stroke-dasharray="4,2">
+      <animate attributeName="stroke-dashoffset" from="0" to="12" dur="0.8s" repeatCount="indefinite"/>
+    </path>
+    <polygon points="0,50 6,46 6,54" fill="#ff6b6b"/>
+    <text x="25" y="62" fill="#ff6b6b" font-family="monospace" font-size="7" text-anchor="middle">SETREGS</text>
+  </g>
+  
+  <!-- Panel central - Modificación -->
+  <g transform="translate(250, 12)">
+    <rect width="130" height="156" rx="5" fill="#0a0f14" stroke="#1e4a3a" stroke-width="1"/>
+    <rect width="130" height="22" rx="5" fill="#0f1a16"/>
+    <rect y="18" width="130" height="4" fill="#0f1a16"/>
+    <text x="65" y="15" fill="#10b981" font-family="monospace" font-size="9" text-anchor="middle">MODIFY</text>
+    
+    <!-- Modificaciones destacadas -->
+    <g font-family="monospace" font-size="8">
+      <!-- RIP modificado -->
+      <rect x="6" y="30" width="118" height="18" rx="2" fill="#0f2a1f" stroke="#10b981" stroke-width="1">
+        <animate attributeName="opacity" values="0.7;1;0.7" dur="1.2s" repeatCount="indefinite"/>
+      </rect>
+      <text x="12" y="42" fill="#10b981">RIP → 0x7f5000</text>
+      
+      <!-- RAX para mmap -->
+      <rect x="6" y="54" width="118" height="18" rx="2" fill="#1a1a0f" stroke="#eab308" stroke-width="1"/>
+      <text x="12" y="66" fill="#eab308">RAX = 9 (mmap)</text>
+      
+      <!-- RDI -->
+      <rect x="6" y="78" width="118" height="18" rx="2" fill="#1a1a0f" stroke="#eab308" stroke-width="1"/>
+      <text x="12" y="90" fill="#facc15">RDI = 0x0</text>
+      
+      <!-- RSI -->
+      <rect x="6" y="102" width="118" height="18" rx="2" fill="#1a1a0f" stroke="#eab308" stroke-width="1"/>
+      <text x="12" y="114" fill="#facc15">RSI = 0x1000</text>
+      
+      <!-- RDX -->
+      <rect x="6" y="126" width="118" height="18" rx="2" fill="#1a1a0f" stroke="#eab308" stroke-width="1"/>
+      <text x="12" y="138" fill="#facc15">RDX = 7 (rwx)</text>
+    </g>
+    
+    <text x="65" y="152" fill="#1e4a3a" font-family="monospace" font-size="7" text-anchor="middle">prepare syscall</text>
+  </g>
+  
+  <!-- Flecha hacia memoria -->
+  <g transform="translate(390, 65)">
+    <path d="M 0 25 L 40 25" stroke="#ff00ff" stroke-width="2">
+      <animate attributeName="opacity" values="0.5;1;0.5" dur="0.6s" repeatCount="indefinite"/>
+    </path>
+    <polygon points="40,25 34,21 34,29" fill="#ff00ff"/>
+  </g>
+  
+  <!-- Panel de memoria derecho -->
+  <g transform="translate(440, 12)">
+    <rect width="100" height="156" rx="5" fill="#140a1a" stroke="#a855f7" stroke-width="1.5"/>
+    <rect width="100" height="22" rx="5" fill="#2d1640"/>
+    <rect y="18" width="100" height="4" fill="#2d1640"/>
+    <text x="50" y="15" fill="#c084fc" font-family="monospace" font-size="9" text-anchor="middle">MEMORY</text>
+    
+    <!-- Segmentos de memoria -->
+    <g font-family="monospace" font-size="7">
+      <rect x="6" y="28" width="88" height="14" rx="2" fill="#1a1020" stroke="#4a3060"/>
+      <text x="50" y="38" fill="#6b4d8a" text-anchor="middle">.text</text>
+      
+      <rect x="6" y="46" width="88" height="14" rx="2" fill="#1a1020" stroke="#4a3060"/>
+      <text x="50" y="56" fill="#6b4d8a" text-anchor="middle">.data</text>
+      
+      <rect x="6" y="64" width="88" height="14" rx="2" fill="#1a1020" stroke="#4a3060"/>
+      <text x="50" y="74" fill="#6b4d8a" text-anchor="middle">heap</text>
+      
+      <!-- Shellcode inyectado -->
+      <rect x="6" y="86" width="88" height="40" rx="2" fill="#2d0a3d" stroke="#ff00ff" stroke-width="1.5" filter="url(#glow2)">
+        <animate attributeName="opacity" values="0.8;1;0.8" dur="1s" repeatCount="indefinite"/>
+      </rect>
+      <text x="50" y="100" fill="#ff00ff" font-size="8" text-anchor="middle" font-weight="bold">SHELLCODE</text>
+      <text x="50" y="112" fill="#c084fc" font-size="6" text-anchor="middle">0x7f5000</text>
+      <text x="50" y="122" fill="#8b5cf6" font-size="5" text-anchor="middle">b8 39 00 00 00...</text>
+      
+      <rect x="6" y="132" width="88" height="14" rx="2" fill="#1a1020" stroke="#4a3060"/>
+      <text x="50" y="142" fill="#6b4d8a" text-anchor="middle">stack</text>
+    </g>
+    
+    <text x="50" y="152" fill="#4a3060" font-family="monospace" font-size="6" text-anchor="middle">rwx injected</text>
+  </g>
+  
+  <!-- Footer -->
+  <text x="280" y="174" fill="#2a2a4a" font-family="monospace" font-size="8" text-anchor="middle">PTRACE_GETREGS → modify → PTRACE_SETREGS → execute</text>
 </svg>
