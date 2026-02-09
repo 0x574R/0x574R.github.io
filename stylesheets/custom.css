@@ -1263,19 +1263,28 @@
    GRID - Tablas lado a lado
    ============================================================ */
 .grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
   margin: 1rem 0;
 }
 
 .grid > table {
   margin: 0 !important;
+  flex: 0 1 auto;
+  min-width: 180px;
+  max-width: 260px;
 }
 
 @media screen and (max-width: 768px) {
   .grid {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .grid > table {
+    max-width: 100%;
   }
 }
 
