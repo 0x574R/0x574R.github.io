@@ -1279,10 +1279,21 @@
    ARTICLE META - Fecha y tiempo de lectura
    ============================================================ */
 
+.article-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.article-header h1 {
+  margin: 0 !important;
+}
+
 .article-meta {
-  display: block;
   font-size: 0.75rem;
   color: var(--md-default-fg-color--lighter);
-  margin-top: -0.8rem;
-  margin-bottom: 1rem;
+  white-space: nowrap;
 }
