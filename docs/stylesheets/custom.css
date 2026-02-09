@@ -1330,3 +1330,13 @@ div.tables-centered > table {
 .md-typeset table:not(.tables-centered table) td {
   text-align: center !important;
 }
+
+/* Contenedor de tabla centrado */
+.md-typeset > table,
+.md-typeset p + table,
+.md-content table {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: auto !important;
+  max-width: fit-content !important;
+}
