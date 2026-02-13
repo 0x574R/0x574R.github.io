@@ -4,7 +4,7 @@
   <div class="razor-hero__content">
     <div class="razor-hero__kicker">Offensive Security</div>
     <p class="razor-hero__subtitle">
-      Notas técnicas sobre seguridad ofensiva y desarrollo de malware.
+      Notas técnicas sobre seguridad ofensiva.
     </p>
     <p class="razor-hero__tagline">
       Reconocimiento · Intrusión · Evasión · Exfiltración · Persistencia
