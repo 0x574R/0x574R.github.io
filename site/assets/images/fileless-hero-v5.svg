@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 180" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="bg5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#08080c"/>
+      <stop offset="100%" style="stop-color:#0f0a18"/>
+    </linearGradient>
+    <filter id="glow5">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  
+  <rect width="560" height="180" fill="url(#bg5)"/>
+
+  <!-- Left: /proc/pid/maps style listing -->
+  <g transform="translate(15, 14)">
+    <rect width="230" height="152" rx="6" fill="#0d0620" stroke="#a855f7" stroke-width="1.5"/>
+    <rect width="230" height="20" rx="6" fill="#2d1b4e"/>
+    <rect y="17" width="230" height="3" fill="#2d1b4e"/>
+    <circle cx="14" cy="11" r="4" fill="#ff5f56"/>
+    <circle cx="26" cy="11" r="4" fill="#ffbd2e"/>
+    <circle cx="38" cy="11" r="4" fill="#27ca40"/>
+    <text x="115" y="14" fill="#c084fc" font-family="monospace" font-size="7.5" text-anchor="middle">cat /proc/pid/maps</text>
+    
+    <g font-family="monospace" font-size="6.5">
+      <text x="8" y="36" fill="#4a3060">00400000-00401000 r-x loader</text>
+      <text x="8" y="48" fill="#4a3060">00601000-00602000 rw- loader</text>
+      <text x="8" y="60" fill="#4a3060">7f8a00000-7f8a21000 r-- libc</text>
+      
+      <!-- memfd highlighted -->
+      <rect x="4" y="66" width="222" height="14" rx="2" fill="#10b981" opacity="0.12"/>
+      <text x="8" y="76" fill="#10b981" font-weight="bold">/memfd: (deleted)</text>
+      <rect x="4" y="80" width="222" height="14" rx="2" fill="#10b981" opacity="0.08"/>
+      <text x="8" y="90" fill="#10b981">  r-x  00000000  (anon_inode)</text>
+      
+      <text x="8" y="106" fill="#4a3060">7ffd5e000-7ffd60000 rw- [stack]</text>
+      <text x="8" y="118" fill="#4a3060">7ffd5ff000-7ffd60000 r-x [vdso]</text>
+      <text x="8" y="130" fill="#4a3060">ffffffffff600000 --xp [vsyscall]</text>
+    </g>
+    
+    <text x="115" y="148" fill="#2d1b4e" font-family="monospace" font-size="6" text-anchor="middle">no path on any mounted fs</text>
+  </g>
+
+  <!-- Center: conceptual arrow -->
+  <g filter="url(#glow5)">
+    <line x1="255" y1="90" x2="295" y2="90" stroke="#10b981" stroke-width="2.5" stroke-dasharray="6,3">
+      <animate attributeName="stroke-dashoffset" values="9;0" dur="0.5s" repeatCount="indefinite"/>
+    </line>
+    <polygon points="295,90 288,85 288,95" fill="#10b981"/>
+  </g>
+
+  <!-- Right: visual memory layout -->
+  <g transform="translate(310, 14)">
+    <rect width="235" height="152" rx="6" fill="#0a0a12" stroke="#3d2d5a" stroke-width="1"/>
+    <text x="117" y="14" fill="#3d2d5a" font-family="monospace" font-size="8" text-anchor="middle">process address space</text>
+    
+    <!-- Memory segments as stacked bars -->
+    <rect x="30" y="24" width="175" height="14" rx="2" fill="#1a1020" stroke="#3d2d5a" stroke-width="0.5"/>
+    <text x="117" y="34" fill="#4a3060" font-family="monospace" font-size="7" text-anchor="middle">.text (loader)</text>
+    
+    <rect x="30" y="42" width="175" height="14" rx="2" fill="#1a1020" stroke="#3d2d5a" stroke-width="0.5"/>
+    <text x="117" y="52" fill="#4a3060" font-family="monospace" font-size="7" text-anchor="middle">.data / .bss</text>
+    
+    <rect x="30" y="60" width="175" height="14" rx="2" fill="#1a1020" stroke="#3d2d5a" stroke-width="0.5"/>
+    <text x="117" y="70" fill="#4a3060" font-family="monospace" font-size="7" text-anchor="middle">heap</text>
+    
+    <!-- memfd mapping — highlighted and glowing -->
+    <rect x="30" y="82" width="175" height="30" rx="3" fill="#0a2a1a" stroke="#10b981" stroke-width="1.5" filter="url(#glow5)">
+      <animate attributeName="opacity" values="0.7;1;0.7" dur="1.5s" repeatCount="indefinite"/>
+    </rect>
+    <text x="117" y="96" fill="#10b981" font-family="monospace" font-size="8" text-anchor="middle" font-weight="bold">memfd (ELF payload)</text>
+    <text x="117" y="108" fill="#0f6a4a" font-family="monospace" font-size="6" text-anchor="middle">MAP_SHARED · r-x · RAM only</text>
+    
+    <rect x="30" y="118" width="175" height="14" rx="2" fill="#1a1020" stroke="#3d2d5a" stroke-width="0.5"/>
+    <text x="117" y="128" fill="#4a3060" font-family="monospace" font-size="7" text-anchor="middle">[stack]</text>
+    
+    <!-- Disk crossed out -->
+    <g transform="translate(72, 136)">
+      <rect width="90" height="14" rx="3" fill="#1a0808" stroke="#ff5f56" stroke-width="0.8" opacity="0.5"/>
+      <text x="45" y="11" fill="#ff5f56" font-family="monospace" font-size="6.5" text-anchor="middle" opacity="0.7">∅ on-disk file</text>
+      <line x1="3" y1="2" x2="87" y2="12" stroke="#ff5f56" stroke-width="1.2" opacity="0.5"/>
+    </g>
+  </g>
+</svg>
