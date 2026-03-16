@@ -81,6 +81,6 @@ markdown_extensions:
 
 nav:
   - Malware Dev:
-      - The Disk is Lava — Fileless Loader: research/malware-dev/fileless-loader.md
+      - Fileless Loader: research/malware-dev/fileless-loader.md
       - Reverse TCP Shell: research/malware-dev/reverse-shell.md
       - Process Injection via Ptrace: research/malware-dev/ptrace-injection.md

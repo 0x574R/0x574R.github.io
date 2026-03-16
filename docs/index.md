@@ -37,7 +37,19 @@
 
 <div class="razor-cards razor-cards--posts">
 
-<a href="research/malware-dev/ptrace-injection/" class="razor-card razor-card--featured">
+<a href="research/malware-dev/fileless-loader/" class="razor-card razor-card--featured">
+  <div class="razor-card__image">
+    <img src="assets/images/fileless-hero.svg" alt="Fileless Loader">
+  </div>
+  <span class="razor-card__title">Fileless Loader</span>
+  <span class="razor-card__desc">Ejecución de binarios ELF desde memoria sin tocar disco, usando memfd_create y execveat</span>
+  <div class="razor-card__meta">
+    <span class="razor-card__tag">Assembly</span>
+    <span class="razor-card__time"><span class="razor-card__star">★</span> 45 min</span>
+  </div>
+</a>
+
+<a href="research/malware-dev/ptrace-injection/" class="razor-card">
   <div class="razor-card__image">
     <img src="assets/images/ptrace-hero.svg" alt="Ptrace Injection">
   </div>
@@ -45,7 +57,7 @@
   <span class="razor-card__desc">Inyección de shellcode en procesos Linux usando Ptrace sin dependencias</span>
   <div class="razor-card__meta">
     <span class="razor-card__tag">Assembly</span>
-    <span class="razor-card__time"><span class="razor-card__star">★</span> 120 min</span>
+    <span class="razor-card__time">120 min</span>
   </div>
 </a>
 
