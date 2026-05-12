@@ -1413,7 +1413,7 @@
 <p>Este artículo cubre la teoría subyacente a las técnicas ofensivas que manipulan credenciales de proceso. Comprender el modelo de identidad y privilegios del kernel es un requisito fundamental antes de implementar herramientas que operen sobre <code>struct cred</code>.</p>
 </div>
 <h2 id="introduccion">Introducción<a class="headerlink" href="#introduccion" title="Permanent link">&para;</a></h2>
-<p>El kernel Linux concentra toda la información de identidad y privilegios de un proceso en una única estructura: <code>struct cred</code>. Dentro de ella conviven dos sistemas complementarios, los <strong>UIDs/GIDs</strong> (de quién es el proceso) y las <strong>capabilities</strong> (qué operaciones privilegiadas puede ejecutar). Ambas están estrechamente relacionadas, por lo qué, modificaciones en los UIDs desencadenan cambios automáticos en las capabilities y ciertas capabilities son requisito para poder modificar los UIDs libremente. Este artículo cubre ambos sistemas de manera conjunta para un mayor entendimiento de como el sistema opera con los procesos.</p>
+<p>El kernel Linux concentra toda la información de identidad y privilegios de un proceso en una única estructura: <code>struct cred</code>. Dentro de ella conviven dos sistemas complementarios, los <strong>UIDs/GIDs</strong> (de quién es el proceso) y las <strong>capabilities</strong> (qué operaciones privilegiadas puede ejecutar). Ambas están estrechamente relacionadas, por lo que, modificaciones en los UIDs desencadenan cambios automáticos en las capabilities y ciertas capabilities son requisito para poder modificar los UIDs libremente. Este artículo cubre ambos sistemas de manera conjunta para un mayor entendimiento de cómo el sistema opera con los procesos.</p>
 <h2 id="ubicacion-de-las-credenciales-en-el-kernel">Ubicación de las credenciales en el Kernel<a class="headerlink" href="#ubicacion-de-las-credenciales-en-el-kernel" title="Permanent link">&para;</a></h2>
 <p>Las credenciales no son campos directos de <code>task_struct</code> (estructura de datos que representa a un proceso en el kernel). En su lugar, <code>task_struct</code> contiene dos punteros protegidos por RCU (<a href="https://handwiki.org/wiki/Read-copy-update">Read-Copy Update</a>) a una estructura separada:</p>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">const</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">cred</span><span class="w"> </span><span class="n">__rcu</span><span class="w"> </span><span class="o">*</span><span class="n">real_cred</span><span class="p">;</span><span class="w">  </span><span class="c1">// Contexto objetivo (identidad real)</span>
@@ -1421,7 +1421,7 @@
 </span></code></pre></div>
 <ul>
 <li>El <strong>contexto subjetivo</strong> (<code>*cred</code>) es la que el kernel comprueba cuando el proceso actúa <strong>sobre otros objetos</strong>: abrir ficheros, enviar señales, acceder a IPC.</li>
-<li>El <strong>contexto objetivo</strong> (<code>*real_cred</code>) es la que el kernel comprueba cuando <strong>otros procesos actúan sobre este</strong>: enviarle señales, adjuntarse via <code>ptrace</code>.</li>
+<li>El <strong>contexto objetivo</strong> (<code>*real_cred</code>) es la que el kernel comprueba cuando <strong>otros procesos actúan sobre este</strong>: enviarle señales, adjuntarse vía <code>ptrace</code>.</li>
 </ul>
 <div class="admonition note">
 <p>Generalmente, ambos punteros referencian la misma instancia <code>struct cred</code>.</p>
@@ -1484,7 +1484,7 @@
 <li><code>suid</code> (RDX) — Puntero a una región de memoria escribible de al menos 4 bytes (<code>uid_t</code> = 32 bits). El kernel escribe aquí el saved set-user-ID.</li>
 </ul>
 <p><strong>Valores de retorno</strong></p>
-<div class="language-nasm highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">0</span><span class="w">              </span><span class="c1">; Éxito (los tres valores han sido escritos)</span>
+<div class="language-nasm highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">0</span><span class="w">              </span><span class="c1">; Éxito</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nf">rax</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w">              </span><span class="c1">; Error</span>
 </span></code></pre></div>
 <p>Errores comunes:</p>
@@ -1505,7 +1505,7 @@
 </div>
 <p><strong>Valores de retorno</strong></p>
 <div class="language-nasm highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">0</span><span class="w">              </span><span class="c1">; Éxito</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nf">rax</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w">              </span><span class="c1">; Error, ningún UID es modificado (semántica todo-o-nada)</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nf">rax</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w">              </span><span class="c1">; Error (semántica todo-o-nada)</span>
 </span></code></pre></div>
 <p>Errores comunes:</p>
 <ul>
@@ -1514,7 +1514,7 @@
 <li><code>11</code> → <code>EAGAIN</code>: el cambio de <code>ruid</code> excedería <code>RLIMIT_NPROC</code> del UID destino.</li>
 </ul>
 <h2 id="gids">GIDs<a class="headerlink" href="#gids" title="Permanent link">&para;</a></h2>
-<p>El modelo de GIDs: Real GID (RGID), Effective GID (EGID) y Saved Set-Group-ID (SGID) siguen la misma semántica, pero aplicada al control de acceso basado en grupos.</p>
+<p>El modelo de GIDs: Real GID (RGID), Effective GID (EGID) y Saved set-group-ID (SGID) siguen la misma semántica, pero aplicada al control de acceso basado en grupos.</p>
 <hr />
 <p>Existe un cuarto par, <strong>FSUID</strong> y <strong>FSGID</strong>, utilizado exclusivamente para comprobaciones de acceso al filesystem. En kernels modernos, el FSUID sigue al EUID automáticamente en la mayoría de escenarios y rara vez se manipula de forma independiente. No lo cubriremos aquí, pero existe dentro del mismo <code>struct cred</code>.</p>
 <h3 id="syscalls-de-consulta_1">Syscalls de Consulta<a class="headerlink" href="#syscalls-de-consulta_1" title="Permanent link">&para;</a></h3>
@@ -1522,17 +1522,17 @@
 <p><code>getresgid</code> es una llamada al sistema que <strong>devuelve simultáneamente los tres GIDs asociados al proceso</strong> y los escribe en tres buffers de usuario. Es la contrapartida exacta de <code>getresuid</code> pero operando sobre identificadores de grupo.</p>
 <p><strong>Entradas (argumentos de la syscall)</strong></p>
 <div class="language-nasm highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">120</span><span class="w">   </span><span class="c1">; Número de syscall (getresgid)</span>
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nf">rdi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">rgid</span><span class="w">  </span><span class="c1">; Puntero a gid_t donde escribir el Real GID (4 bytes)</span>
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="nf">rsi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">egid</span><span class="w">  </span><span class="c1">; Puntero a gid_t donde escribir el Effective GID (4 bytes)</span>
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="nf">rdx</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">sgid</span><span class="w">  </span><span class="c1">; Puntero a gid_t donde escribir el Saved-set GID (4 bytes)</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nf">rdi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">rgid</span><span class="w">  </span><span class="c1">; Puntero a gid_t donde escribir el real GID (4 bytes)</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="nf">rsi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">egid</span><span class="w">  </span><span class="c1">; Puntero a gid_t donde escribir el effective GID (4 bytes)</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="nf">rdx</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">sgid</span><span class="w">  </span><span class="c1">; Puntero a gid_t donde escribir el saved set-group-ID (4 bytes)</span>
 </span></code></pre></div>
-<ol>
-<li><code>rgid</code> (RDI) — Dirección donde el kernel escribirá el <strong>Real Group ID</strong> del proceso como un <code>gid_t</code> (4 bytes, entero sin signo). El Real GID representa al grupo del usuario que lanzó el proceso en su origen.</li>
-<li><code>egid</code> (RSI) — Dirección donde el kernel escribirá el <strong>Effective Group ID</strong>, que es el que el kernel usa de forma efectiva para los chequeos de permisos DAC sobre ficheros, IPC SysV, señales, etc.</li>
-<li><code>sgid</code> (RDX) — Dirección donde el kernel escribirá el <strong>Saved-set Group ID</strong>. Su propósito es permitir al proceso recuperar un EGID anterior.</li>
-</ol>
+<ul>
+<li><code>rgid</code> (RDI) — Dirección donde el kernel escribirá el <strong>real GID</strong> del proceso como un <code>gid_t</code> (4 bytes, entero sin signo). El Real GID representa al grupo del usuario que lanzó el proceso en su origen.</li>
+<li><code>egid</code> (RSI) — Dirección donde el kernel escribirá el <strong>effective GID</strong>, que es el que el kernel usa de forma efectiva para los chequeos de permisos DAC sobre ficheros, IPC SysV, señales, etc.</li>
+<li><code>sgid</code> (RDX) — Dirección donde el kernel escribirá el <strong>saved set-group-ID</strong>. Su propósito es permitir al proceso recuperar un EGID anterior.</li>
+</ul>
 <p><strong>Valores de retorno</strong></p>
-<div class="language-nasm highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">==</span><span class="w"> </span><span class="mi">0</span><span class="w">  </span><span class="c1">; Éxito, los tres gid_t han sido escritos</span>
+<div class="language-nasm highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">0</span><span class="w">  </span><span class="c1">; Éxito</span>
 </span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nf">rax</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w">   </span><span class="c1">; Error</span>
 </span></code></pre></div>
 <p>Errores comunes:</p>
@@ -1545,16 +1545,16 @@
 <p><code>setresgid</code> es una llamada al sistema que <strong>establece de forma atómica los tres GIDs del proceso</strong> en una única operación. Es la contrapartida de <code>setresuid</code> aplicada a identificadores de grupo y constituye la forma más explícita y predecible de manipular los GIDs.</p>
 <p><strong>Entradas (argumentos de la syscall)</strong></p>
 <div class="language-nasm highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">119</span><span class="w">   </span><span class="c1">; Número de syscall (setresgid)</span>
-</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nf">rdi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">rgid</span><span class="w">  </span><span class="c1">; Nuevo Real GID       (-1 para no modificar)</span>
-</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="nf">rsi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">egid</span><span class="w">  </span><span class="c1">; Nuevo Effective GID  (-1 para no modificar)</span>
-</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="nf">rdx</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">sgid</span><span class="w">  </span><span class="c1">; Nuevo Saved-set GID  (-1 para no modificar)</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nf">rdi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">rgid</span><span class="w">  </span><span class="c1">; Nuevo real GID       (-1 para no modificar)</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="nf">rsi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">egid</span><span class="w">  </span><span class="c1">; Nuevo effective GID  (-1 para no modificar)</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="nf">rdx</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">sgid</span><span class="w">  </span><span class="c1">; Nuevo saved set-group-ID  (-1 para no modificar)</span>
 </span></code></pre></div>
 <div class="admonition note">
 <p>Sin <code>CAP_SETGID</code>, cada argumento debe ser -1 o un valor ya presente en alguno de los tres GIDs actuales del proceso (se pueden redistribuir entre posiciones y repetir), pero no introducir valores nuevos. Con <code>CAP_SETGID</code> no hay restricción.</p>
 </div>
 <p><strong>Valores de retorno</strong></p>
-<div class="language-nasm highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">==</span><span class="w"> </span><span class="mi">0</span><span class="w">  </span><span class="c1">; Éxito</span>
-</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nf">rax</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w">   </span><span class="c1">; Error, ningún GID es modificado (semántica todo-o-nada)</span>
+<div class="language-nasm highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">0</span><span class="w">  </span><span class="c1">; Éxito</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nf">rax</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w">   </span><span class="c1">; Error (semántica todo-o-nada)</span>
 </span></code></pre></div>
 <p>Errores comunes:</p>
 <ul>
@@ -1582,7 +1582,8 @@
 </span></code></pre></div>
 <ul>
 <li>
-<p><code>hdrp</code> (RDI) — Puntero a la cabecera. Puntero a una estructura <code>__user_cap_header_struct</code> que indica la versión del protocolo de capabilities y el hilo objetivo. No puede ser NULL.</p>
+<p><code>hdrp</code> (RDI) — Puntero a la cabecera.</p>
+<p>Puntero a una estructura <code>__user_cap_header_struct</code> que indica la versión del protocolo de capabilities y el hilo objetivo. No puede ser NULL.</p>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">__user_cap_header_struct</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">    </span><span class="n">__u32</span><span class="w"> </span><span class="n">version</span><span class="p">;</span><span class="w">    </span><span class="c1">// Versión del protocolo   (4 bytes)</span>
 </span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="kt">int</span><span class="w">   </span><span class="n">pid</span><span class="p">;</span><span class="w">        </span><span class="c1">// TID/PID del objetivo (0 = actual)  (4 bytes)</span>
@@ -1592,7 +1593,8 @@
 <p><code>pid</code> identifica al hilo/proceso objetivo. A diferencia de <code>capset</code>, <code>capget</code> <strong>puede consultar las capabilities de cualquier hilo/proceso</strong> del sistema: <code>0</code> lee las capabilities del hilo/proceso actual, un PID/TID positivo lee las del hilo con ese TID. No se requiere ninguna capability especial para leer las capabilities de otro hilo/proceso.</p>
 </li>
 <li>
-<p><code>datap</code> (RSI) — Puntero al buffer de salida. Puntero a un array de dos estructuras <code>__user_cap_data_struct</code> contiguas en memoria donde el kernel escribirá las capabilities del objetivo. <code>datap[0]</code> recibe los bits para las capabilities 0–31 y <code>datap[1]</code> para las capabilities 32–63.</p>
+<p><code>datap</code> (RSI) — Puntero al buffer de salida.</p>
+<p>Puntero a un array de dos estructuras <code>__user_cap_data_struct</code> contiguas en memoria donde el kernel escribirá las capabilities del objetivo. <code>datap[0]</code> recibe los bits para las capabilities 0–31 y <code>datap[1]</code> para las capabilities 32–63.</p>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">__user_cap_data_struct</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">    </span><span class="n">__u32</span><span class="w"> </span><span class="n">effective</span><span class="p">;</span><span class="w">     </span><span class="c1">// Capabilities activas (las que el kernel comprueba)</span>
 </span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">    </span><span class="n">__u32</span><span class="w"> </span><span class="n">permitted</span><span class="p">;</span><span class="w">     </span><span class="c1">// Techo: superset de effective e inheritable</span>
@@ -1618,7 +1620,7 @@
 </li>
 </ul>
 <p><strong>Valores de retorno</strong></p>
-<div class="language-nasm highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">0</span><span class="w">   </span><span class="c1">; Éxito: datap contiene las capabilities del hilo/proceso objetivo</span>
+<div class="language-nasm highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">0</span><span class="w">   </span><span class="c1">; Éxito</span>
 </span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="nf">rax</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w">   </span><span class="c1">; Error</span>
 </span></code></pre></div>
 <p>Errores comunes:</p>
@@ -1640,7 +1642,8 @@
 <p><code>hdrp</code> (RDI) — Puntero a la cabecera (misma estructura que en <code>capget</code>). <code>version</code> debe ser <code>0x20080522</code>. <code>pid</code> solo permite <code>0</code> o el propio TID en kernels modernos.</p>
 </li>
 <li>
-<p><code>datap</code> (RSI) — Puntero a los datos de capabilities. Puntero a un <strong>array de dos</strong> estructuras <code>__user_cap_data_struct</code> contiguas en memoria. <code>datap[0]</code> contiene los bits para las capabilities 0–31 y <code>datap[1]</code> para las capabilities 32–63.</p>
+<p><code>datap</code> (RSI) — Puntero a los datos de capabilities.</p>
+<p>Puntero a un <strong>array de dos</strong> estructuras <code>__user_cap_data_struct</code> contiguas en memoria. <code>datap[0]</code> contiene los bits para las capabilities 0–31 y <code>datap[1]</code> para las capabilities 32–63.</p>
 <p><strong>Layout en memoria (con versión 3):</strong></p>
 <div class="language-nasm highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="nf">datap</span><span class="w"> </span><span class="p">(</span><span class="nb">RSI</span><span class="p">)</span><span class="w"> </span><span class="err">──→</span><span class="w"> </span><span class="err">┌──────────────────────────────────────┐</span>
 </span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">                </span><span class="err">│</span><span class="w"> </span><span class="nf">datap</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="nv">.effective</span><span class="w">     </span><span class="p">(</span><span class="nv">caps</span><span class="w"> </span><span class="mi">0</span><span class="err">–</span><span class="mi">31</span><span class="p">)</span><span class="w">   </span><span class="err">│</span><span class="w"> </span><span class="nv">offset</span><span class="w"> </span><span class="o">+</span><span class="mi">0</span>
@@ -1927,13 +1930,13 @@
 <p><code>flags</code> (RSI) — Bitmask combinable con OR:</p>
 <ul>
 <li><code>SECBIT_NOROOT</code> = <code>0x01</code> → Desactiva el tratamiento especial de UID 0 en <code>execve</code>. Normalmente, si un proceso con UID 0 hace <code>execve</code>, el kernel le otorga full capabilities. Con <code>NOROOT</code>, UID 0 ya no recibe capabilities automáticas, solo las obtiene si el binario tiene file capabilities explícitas.</li>
-<li><code>SECBIT_NOROOT_LOCKED</code> = <code>0x02</code> → bloquea <code>SECBIT_NOROOT</code> para que no pueda ser desactivado.</li>
+<li><code>SECBIT_NOROOT_LOCKED</code> = <code>0x02</code> → Bloquea <code>SECBIT_NOROOT</code> para que no pueda ser desactivado.</li>
 <li><code>SECBIT_NO_SETUID_FIXUP</code> = <code>0x04</code> → Desactiva todo ajuste automático de capabilities al cambiar UIDs. Ni permitted, ni effective, ni ambient se modifican. Si este bit está activo, <code>KEEP_CAPS</code> es redundante (es un subconjunto). A diferencia de <code>KEEP_CAPS</code>, no se borra en <code>execve</code>.</li>
-<li><code>SECBIT_NO_SETUID_FIXUP_LOCKED</code> = <code>0x08</code> → bloquea <code>SECBIT_NO_SETUID_FIXUP</code> para que no pueda ser desactivado.</li>
+<li><code>SECBIT_NO_SETUID_FIXUP_LOCKED</code> = <code>0x08</code> → Bloquea <code>SECBIT_NO_SETUID_FIXUP</code> para que no pueda ser desactivado.</li>
 <li><code>SECBIT_KEEP_CAPS</code> = <code>0x10</code> → Cuando root baja a UID non-zero, el kernel no borra el permitted set. El effective y ambient sí se borran, pero las capabilities quedan en permitted y se pueden recuperar después. Se borra automáticamente en cada <code>execve</code>.</li>
-<li><code>SECBIT_KEEP_CAPS_LOCKED</code> = <code>0x20</code> → bloquea <code>SECBIT_KEEP_CAPS</code> para que no pueda ser desactivado.</li>
+<li><code>SECBIT_KEEP_CAPS_LOCKED</code> = <code>0x20</code> → Bloquea <code>SECBIT_KEEP_CAPS</code> para que no pueda ser desactivado.</li>
 <li><code>SECBIT_NO_CAP_AMBIENT_RAISE</code> = <code>0x40</code> → Impide usar <code>PR_CAP_AMBIENT_RAISE</code>. Si está activo, nadie puede añadir capabilities al ambient set. Cierra esa vía de propagación.</li>
-<li><code>SECBIT_NO_CAP_AMBIENT_RAISE_LOCKED</code> = <code>0x80</code> → bloquea <code>SECBIT_NO_CAP_AMBIENT_RAISE</code> para que no pueda ser desactivado.</li>
+<li><code>SECBIT_NO_CAP_AMBIENT_RAISE_LOCKED</code> = <code>0x80</code> → Bloquea <code>SECBIT_NO_CAP_AMBIENT_RAISE</code> para que no pueda ser desactivado.</li>
 </ul>
 <p>Un proceso que arranca con UID 0 activa <code>SECBIT_NO_SETUID_FIXUP</code> + <code>SECBIT_NO_SETUID_FIXUP_LOCKED</code>, luego hace <code>setresuid(1000,1000,1000)</code>. El resultado es un proceso que aparenta ser UID 1000 pero que conserva todas sus capabilities intactas (todos los conjuntos), y nadie (ni siquiera root) puede revertir esa configuración porque el bit locked es irreversible.</p>
 <h2 id="herencia-de-credenciales-fork-clone-y-execve">Herencia de Credenciales: <code>fork</code>, <code>clone</code> y <code>execve</code><a class="headerlink" href="#herencia-de-credenciales-fork-clone-y-execve" title="Permanent link">&para;</a></h2>

@@ -14,6 +14,41 @@
 
 ---
 
+## Próximamente
+
+<div class="razor-cards razor-cards--posts">
+
+<div class="razor-card razor-card--upcoming">
+  <span class="razor-card__title">ELF Internals</span>
+  <span class="razor-card__desc">Estructura interna del formato ELF: headers, secciones, segmentos y su relevancia en técnicas ofensivas</span>
+  <div class="razor-card__meta">
+    <span class="razor-card__tag">Kernel</span>
+    <span class="razor-card__time">27 mayo</span>
+  </div>
+</div>
+
+<div class="razor-card razor-card--upcoming">
+  <span class="razor-card__title">Identificación de Procesos</span>
+  <span class="razor-card__desc">Cómo el kernel identifica y gestiona procesos: PID, TGID, namespaces y las estructuras involucradas</span>
+  <div class="razor-card__meta">
+    <span class="razor-card__tag">Kernel</span>
+    <span class="razor-card__time">3 junio</span>
+  </div>
+</div>
+
+<div class="razor-card razor-card--upcoming">
+  <span class="razor-card__title">DARKCLOAK: Novel Flow for Process Masquerading</span>
+  <span class="razor-card__desc">Pipeline completo de suplantación de identidad de procesos en Linux mediante manipulación directa de credenciales, argv, exe y namespaces</span>
+  <div class="razor-card__meta">
+    <span class="razor-card__tag">Assembly</span>
+    <span class="razor-card__time">17 junio</span>
+  </div>
+</div>
+
+</div>
+
+---
+
 ## Secciones
 
 <div class="razor-cards razor-cards--sections">
