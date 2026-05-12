@@ -847,6 +847,10 @@
   pointer-events: none;
 }
 
+[data-md-color-scheme="default"] .razor-card--upcoming {
+  opacity: 0.85;
+}
+
 .razor-card--upcoming:hover {
   transform: none;
 }
