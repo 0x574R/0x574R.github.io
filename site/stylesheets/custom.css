@@ -602,30 +602,30 @@
   border: 1px solid rgba(15, 23, 42, 0.10) !important;
 }
 
-/* Light mode admonition colors - left border accent */
-[data-md-color-scheme="default"] .md-typeset .admonition.note {
-  border-left: 4px solid #448aff !important;
+/* Light mode - colored border ONLY on no-title admonitions */
+[data-md-color-scheme="default"] .md-typeset .admonition.note:not(:has(.admonition-title)) {
+  border: 1px solid #448aff !important;
 }
-[data-md-color-scheme="default"] .md-typeset .admonition.info {
-  border-left: 4px solid #00b8d4 !important;
+[data-md-color-scheme="default"] .md-typeset .admonition.info:not(:has(.admonition-title)) {
+  border: 1px solid #00b8d4 !important;
 }
-[data-md-color-scheme="default"] .md-typeset .admonition.tip {
-  border-left: 4px solid #00bfa5 !important;
+[data-md-color-scheme="default"] .md-typeset .admonition.tip:not(:has(.admonition-title)) {
+  border: 1px solid #00bfa5 !important;
 }
-[data-md-color-scheme="default"] .md-typeset .admonition.warning {
-  border-left: 4px solid #ff9100 !important;
+[data-md-color-scheme="default"] .md-typeset .admonition.danger:not(:has(.admonition-title)) {
+  border: 1px solid #ff5252 !important;
 }
-[data-md-color-scheme="default"] .md-typeset .admonition.danger {
-  border-left: 4px solid #ff5252 !important;
+[data-md-color-scheme="default"] .md-typeset .admonition.warning:not(:has(.admonition-title)) {
+  border: 1px solid #ff9100 !important;
 }
-[data-md-color-scheme="default"] .md-typeset .admonition.example {
-  border-left: 4px solid #7c4dff !important;
+[data-md-color-scheme="default"] .md-typeset .admonition.example:not(:has(.admonition-title)) {
+  border: 1px solid #7c4dff !important;
 }
-[data-md-color-scheme="default"] .md-typeset .admonition.abstract {
-  border-left: 4px solid #00b0ff !important;
+[data-md-color-scheme="default"] .md-typeset .admonition.abstract:not(:has(.admonition-title)) {
+  border: 1px solid #00b0ff !important;
 }
-[data-md-color-scheme="default"] .md-typeset .admonition.quote {
-  border-left: 4px solid #9e9e9e !important;
+[data-md-color-scheme="default"] .md-typeset .admonition.quote:not(:has(.admonition-title)) {
+  border: 1px solid #9e9e9e !important;
 }
 
 [data-md-color-scheme="slate"] .md-typeset .admonition,

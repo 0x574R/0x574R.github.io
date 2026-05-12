@@ -197,11 +197,8 @@ rsi = egid  ; Nuevo Effective GID  (-1 para no modificar)
 rdx = sgid  ; Nuevo Saved-set GID  (-1 para no modificar)
 ```
 
-1. `rgid` (RDI) — Valor del nuevo Real GID del proceso. Solo se acepta si se cumple una de estas condiciones: el proceso posee `CAP_SETGID` en su user namespace (puede establecer `rgid` a cualquier valor `gid_t` válido) o el proceso no posee `CAP_SETGID`, en cuyo caso el nuevo `rgid` debe coincidir con el `rgid`, `egid` o `sgid` actual del proceso. Usar `-1` preserva el Real GID actual sin tocarlo. Cambiar el Real GID es una operación prácticamente irreversible en procesos no privilegiados, porque elimina del conjunto `{rgid, egid, sgid}` el valor si este no aparece en otra posición. Por eso, la práctica habitual en un drop de privilegios definitivo es establecer los tres al GID no privilegiado.
-
-2. `egid` (RSI) — Valor del nuevo Effective GID, aquel que el kernel usará para los chequeos DAC sobre ficheros, IPC SysV, señales y demás comprobaciones de permisos de grupo. Reglas de aceptación idénticas a `rgid`, con `CAP_SETGID` puede establecer `egid` a cualquier valor válido, sin `CAP_SETGID`, solo se permite si el nuevo valor ya está presente en algún `{rgid, egid, sgid}` del proceso. Usar `-1` preserva el EGID actual. Este es el argumento **más relevante desde el punto de vista ofensivo**, porque manipular el EGID permite bajar y subir privilegios a voluntad dentro del conjunto existente.
-
-3. `sgid` (RDX) — Valor del nuevo Saved-set GID. Mismas reglas de aceptación. Es el GID que puede recuperarse posteriormente como EGID sin privilegios adicionales, porque la política de `setresgid` permite siempre establecer el EGID a un valor que ya esté en la terna `{rgid, egid, sgid}`. Una vez que el SGID deja de contener un GID privilegiado, el proceso pierde la capacidad de recuperarlo (salvo que conserve `CAP_SETGID`). El uso canónico de `-1` en este argumento es mantener accesible el grupo privilegiado mientras se opera temporalmente con un EGID reducido.
+!!! note ""
+    Sin `CAP_SETGID`, cada argumento debe ser -1 o un valor ya presente en alguno de los tres GIDs actuales del proceso (se pueden redistribuir entre posiciones y repetir), pero no introducir valores nuevos. Con `CAP_SETGID` no hay restricción.
 
 **Valores de retorno**
 
@@ -244,48 +241,48 @@ rsi = datap          ; Puntero a struct __user_cap_data_struct[2] (o NULL)
 
 - `hdrp` (RDI) — Puntero a la cabecera. Puntero a una estructura `__user_cap_header_struct` que indica la versión del protocolo de capabilities y el hilo objetivo. No puede ser NULL.
 
-```c
-struct __user_cap_header_struct {
-    __u32 version;    // Versión del protocolo   (4 bytes)
-    int   pid;        // TID/PID del objetivo (0 = actual)  (4 bytes)
-};
-```
+    ```c
+    struct __user_cap_header_struct {
+        __u32 version;    // Versión del protocolo   (4 bytes)
+        int   pid;        // TID/PID del objetivo (0 = actual)  (4 bytes)
+    };
+    ```
 
-`version` debe ser `_LINUX_CAPABILITY_VERSION_3` (`0x20080522`). Esta es la única versión vigente y soporta hasta 64 capabilities (representadas en dos `u32`, uno por cada mitad de 32 bits).
+    `version` debe ser `_LINUX_CAPABILITY_VERSION_3` (`0x20080522`). Esta es la única versión vigente y soporta hasta 64 capabilities (representadas en dos `u32`, uno por cada mitad de 32 bits).
 
-`pid` identifica al hilo/proceso objetivo. A diferencia de `capset`, `capget` **puede consultar las capabilities de cualquier hilo/proceso** del sistema: `0` lee las capabilities del hilo/proceso actual, un PID/TID positivo lee las del hilo con ese TID. No se requiere ninguna capability especial para leer las capabilities de otro hilo/proceso.
+    `pid` identifica al hilo/proceso objetivo. A diferencia de `capset`, `capget` **puede consultar las capabilities de cualquier hilo/proceso** del sistema: `0` lee las capabilities del hilo/proceso actual, un PID/TID positivo lee las del hilo con ese TID. No se requiere ninguna capability especial para leer las capabilities de otro hilo/proceso.
 
 - `datap` (RSI) — Puntero al buffer de salida. Puntero a un array de dos estructuras `__user_cap_data_struct` contiguas en memoria donde el kernel escribirá las capabilities del objetivo. `datap[0]` recibe los bits para las capabilities 0–31 y `datap[1]` para las capabilities 32–63.
 
-```c
-struct __user_cap_data_struct {
-    __u32 effective;     // Capabilities activas (las que el kernel comprueba)
-    __u32 permitted;     // Techo: superset de effective e inheritable
-    __u32 inheritable;   // Capabilities propagables a través de execve
-};
-```
+    ```c
+    struct __user_cap_data_struct {
+        __u32 effective;     // Capabilities activas (las que el kernel comprueba)
+        __u32 permitted;     // Techo: superset de effective e inheritable
+        __u32 inheritable;   // Capabilities propagables a través de execve
+    };
+    ```
 
-Cada campo es una bitmask donde el bit N corresponde a la capability N (para `datap[0]`, caps 0–31) o N-32 (para `datap[1]`, caps 32–63). Las macros del kernel para calcular índice y máscara son:
+    Cada campo es una bitmask donde el bit N corresponde a la capability N (para `datap[0]`, caps 0–31) o N-32 (para `datap[1]`, caps 32–63). Las macros del kernel para calcular índice y máscara son:
 
-```nasm
-CAP_TO_INDEX(cap) = cap >> 5       ; 0 para caps 0–31, 1 para caps 32–63
-CAP_TO_MASK(cap)  = 1 << (cap & 31)
-```
+    ```nasm
+    CAP_TO_INDEX(cap) = cap >> 5       ; 0 para caps 0–31, 1 para caps 32–63
+    CAP_TO_MASK(cap)  = 1 << (cap & 31)
+    ```
 
-**Layout en memoria tras `capget` exitoso (versión 3):**
+    **Layout en memoria tras `capget` exitoso (versión 3):**
 
-```nasm
-datap (RSI) ──→ ┌──────────────────────────────────────┐
-                │ datap[0].effective     (caps 0–31)   │ offset +0   ← kernel escribe
-                │ datap[0].permitted     (caps 0–31)   │ offset +4   ← kernel escribe
-                │ datap[0].inheritable   (caps 0–31)   │ offset +8   ← kernel escribe
-                ├──────────────────────────────────────┤
-                │ datap[1].effective     (caps 32–63)  │ offset +12  ← kernel escribe
-                │ datap[1].permitted     (caps 32–63)  │ offset +16  ← kernel escribe
-                │ datap[1].inheritable   (caps 32–63)  │ offset +20  ← kernel escribe
-                └──────────────────────────────────────┘
-                         Total: 24 bytes
-```
+    ```nasm
+    datap (RSI) ──→ ┌──────────────────────────────────────┐
+                    │ datap[0].effective     (caps 0–31)   │ offset +0   ← kernel escribe
+                    │ datap[0].permitted     (caps 0–31)   │ offset +4   ← kernel escribe
+                    │ datap[0].inheritable   (caps 0–31)   │ offset +8   ← kernel escribe
+                    ├──────────────────────────────────────┤
+                    │ datap[1].effective     (caps 32–63)  │ offset +12  ← kernel escribe
+                    │ datap[1].permitted     (caps 32–63)  │ offset +16  ← kernel escribe
+                    │ datap[1].inheritable   (caps 32–63)  │ offset +20  ← kernel escribe
+                    └──────────────────────────────────────┘
+                             Total: 24 bytes
+    ```
 
 **Valores de retorno**
 
@@ -318,20 +315,20 @@ rsi = datap          ; Puntero a struct __user_cap_data_struct[2]
 
 - `datap` (RSI) — Puntero a los datos de capabilities. Puntero a un **array de dos** estructuras `__user_cap_data_struct` contiguas en memoria. `datap[0]` contiene los bits para las capabilities 0–31 y `datap[1]` para las capabilities 32–63.
 
-**Layout en memoria (con versión 3):**
+    **Layout en memoria (con versión 3):**
 
-```nasm
-datap (RSI) ──→ ┌──────────────────────────────────────┐
-                │ datap[0].effective     (caps 0–31)   │ offset +0
-                │ datap[0].permitted     (caps 0–31)   │ offset +4
-                │ datap[0].inheritable   (caps 0–31)   │ offset +8
-                ├──────────────────────────────────────┤
-                │ datap[1].effective     (caps 32–63)  │ offset +12
-                │ datap[1].permitted     (caps 32–63)  │ offset +16
-                │ datap[1].inheritable   (caps 32–63)  │ offset +20
-                └──────────────────────────────────────┘
-                         Total: 24 bytes
-```
+    ```nasm
+    datap (RSI) ──→ ┌──────────────────────────────────────┐
+                    │ datap[0].effective     (caps 0–31)   │ offset +0
+                    │ datap[0].permitted     (caps 0–31)   │ offset +4
+                    │ datap[0].inheritable   (caps 0–31)   │ offset +8
+                    ├──────────────────────────────────────┤
+                    │ datap[1].effective     (caps 32–63)  │ offset +12
+                    │ datap[1].permitted     (caps 32–63)  │ offset +16
+                    │ datap[1].inheritable   (caps 32–63)  │ offset +20
+                    └──────────────────────────────────────┘
+                             Total: 24 bytes
+    ```
 
 **Valores de retorno**
 
