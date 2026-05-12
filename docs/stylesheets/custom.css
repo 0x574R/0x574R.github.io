@@ -598,34 +598,34 @@
 
 [data-md-color-scheme="default"] .md-typeset .admonition,
 [data-md-color-scheme="default"] .md-typeset details {
-  background: rgba(15, 23, 42, 0.03);
-  border: 1px solid rgba(15, 23, 42, 0.10);
+  background: rgba(15, 23, 42, 0.03) !important;
+  border: 1px solid rgba(15, 23, 42, 0.10) !important;
 }
 
 /* Light mode admonition colors - left border accent */
 [data-md-color-scheme="default"] .md-typeset .admonition.note {
-  border-left: 4px solid #448aff;
+  border-left: 4px solid #448aff !important;
 }
 [data-md-color-scheme="default"] .md-typeset .admonition.info {
-  border-left: 4px solid #00b8d4;
+  border-left: 4px solid #00b8d4 !important;
 }
 [data-md-color-scheme="default"] .md-typeset .admonition.tip {
-  border-left: 4px solid #00bfa5;
+  border-left: 4px solid #00bfa5 !important;
 }
 [data-md-color-scheme="default"] .md-typeset .admonition.warning {
-  border-left: 4px solid #ff9100;
+  border-left: 4px solid #ff9100 !important;
 }
 [data-md-color-scheme="default"] .md-typeset .admonition.danger {
-  border-left: 4px solid #ff5252;
+  border-left: 4px solid #ff5252 !important;
 }
 [data-md-color-scheme="default"] .md-typeset .admonition.example {
-  border-left: 4px solid #7c4dff;
+  border-left: 4px solid #7c4dff !important;
 }
 [data-md-color-scheme="default"] .md-typeset .admonition.abstract {
-  border-left: 4px solid #00b0ff;
+  border-left: 4px solid #00b0ff !important;
 }
 [data-md-color-scheme="default"] .md-typeset .admonition.quote {
-  border-left: 4px solid #9e9e9e;
+  border-left: 4px solid #9e9e9e !important;
 }
 
 [data-md-color-scheme="slate"] .md-typeset .admonition,
@@ -873,13 +873,13 @@
 }
 
 [data-md-color-scheme="default"] .razor-card {
-  background: #ffffff;
-  border: 1px solid rgba(15, 23, 42, 0.10);
-  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.10) !important;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06) !important;
 }
 
 [data-md-color-scheme="default"] .razor-card:hover {
-  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.10);
+  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.10) !important;
 }
 
 .razor-card::before {
@@ -893,7 +893,8 @@
 }
 
 [data-md-color-scheme="default"] .razor-card::before {
-  background: none;
+  background: none !important;
+  opacity: 0 !important;
 }
 
 .razor-card:hover {
@@ -940,18 +941,14 @@
   flex-grow: 1;
 }
 
-/* Meta container - tags + tiempo de lectura al fondo */
+/* Meta container - tag + tiempo de lectura al fondo */
 .razor-card__meta {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 0.35rem;
+  justify-content: space-between;
+  gap: 0.5rem;
   margin-top: auto;
   padding-top: 0.5rem;
-}
-
-.razor-card__time {
-  margin-left: auto;
 }
 
 .razor-card__tag {

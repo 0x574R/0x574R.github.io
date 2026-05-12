@@ -16,7 +16,6 @@ Teoría subyacente del kernel Linux desde una perspectiva ofensiva.
   <span class="razor-card__desc">UIDs, GIDs, capabilities, transiciones y mecanismos de retención en struct cred</span>
   <div class="razor-card__meta">
     <span class="razor-card__tag">Kernel</span>
-    <span class="razor-card__tag">Credentials</span>
     <span class="razor-card__time"><span class="razor-card__star">★</span> 45 min</span>
   </div>
 </a>
