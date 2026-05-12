@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 200" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="bg-kt3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0012"/>
+      <stop offset="100%" style="stop-color:#0d1a2e"/>
+    </linearGradient>
+    <filter id="glow-kt3">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  
+  <rect width="600" height="200" fill="url(#bg-kt3)"/>
+  
+  <!-- USER SPACE layer -->
+  <rect x="55" y="18" width="490" height="32" rx="4" fill="#0a1628" stroke="#3b82f6" stroke-width="1" opacity="0.7"/>
+  <text x="300" y="31" fill="#60a5fa" font-family="monospace" font-size="8" text-anchor="middle" filter="url(#glow-kt3)">USER SPACE (Ring 3)</text>
+  <g font-family="monospace" font-size="7" fill="#6272a4">
+    <text x="110" y="44" text-anchor="middle">process</text>
+    <text x="190" y="44" text-anchor="middle">libc</text>
+    <text x="270" y="44" text-anchor="middle">ELF</text>
+    <text x="370" y="44" text-anchor="middle">signals</text>
+    <text x="460" y="44" text-anchor="middle">threads</text>
+  </g>
+  
+  <!-- Syscall interface -->
+  <rect x="55" y="54" width="490" height="18" rx="0" fill="#1a0a2e" stroke="#ff79c6" stroke-width="1">
+    <animate attributeName="stroke-opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite"/>
+  </rect>
+  <text x="300" y="66" fill="#ff79c6" font-family="monospace" font-size="8" text-anchor="middle" filter="url(#glow-kt3)">SYSCALL INTERFACE · int 0x80 / syscall</text>
+  
+  <!-- KERNEL SPACE -->
+  <rect x="55" y="76" width="490" height="86" rx="4" fill="#0d0618" stroke="#bd93f9" stroke-width="1.5">
+    <animate attributeName="stroke-opacity" values="0.6;1;0.6" dur="3s" repeatCount="indefinite"/>
+  </rect>
+  <text x="300" y="90" fill="#bd93f9" font-family="monospace" font-size="8" text-anchor="middle" filter="url(#glow-kt3)">KERNEL SPACE (Ring 0)</text>
+  
+  <!-- Kernel subsystem boxes -->
+  <g font-family="monospace">
+    <rect x="68" y="98" width="68" height="24" rx="3" fill="#0a1628" stroke="#50fa7b" stroke-width="0.8">
+      <animate attributeName="stroke-opacity" values="0.4;0.9;0.4" dur="2.5s" begin="0s" repeatCount="indefinite"/>
+    </rect>
+    <text x="102" y="113" fill="#50fa7b" font-size="8" text-anchor="middle">Process</text>
+    
+    <rect x="144" y="98" width="68" height="24" rx="3" fill="#0a1628" stroke="#50fa7b" stroke-width="0.8">
+      <animate attributeName="stroke-opacity" values="0.4;0.9;0.4" dur="2.5s" begin="0.3s" repeatCount="indefinite"/>
+    </rect>
+    <text x="178" y="113" fill="#50fa7b" font-size="8" text-anchor="middle">Memory</text>
+    
+    <rect x="220" y="98" width="56" height="24" rx="3" fill="#0a1628" stroke="#50fa7b" stroke-width="0.8">
+      <animate attributeName="stroke-opacity" values="0.4;0.9;0.4" dur="2.5s" begin="0.6s" repeatCount="indefinite"/>
+    </rect>
+    <text x="248" y="113" fill="#50fa7b" font-size="8" text-anchor="middle">VFS</text>
+    
+    <rect x="284" y="98" width="56" height="24" rx="3" fill="#0a1628" stroke="#50fa7b" stroke-width="0.8">
+      <animate attributeName="stroke-opacity" values="0.4;0.9;0.4" dur="2.5s" begin="0.9s" repeatCount="indefinite"/>
+    </rect>
+    <text x="312" y="113" fill="#50fa7b" font-size="8" text-anchor="middle">Net</text>
+    
+    <rect x="348" y="98" width="68" height="24" rx="3" fill="#0a1628" stroke="#50fa7b" stroke-width="0.8">
+      <animate attributeName="stroke-opacity" values="0.4;0.9;0.4" dur="2.5s" begin="1.2s" repeatCount="indefinite"/>
+    </rect>
+    <text x="382" y="113" fill="#50fa7b" font-size="8" text-anchor="middle">Security</text>
+    
+    <rect x="424" y="98" width="52" height="24" rx="3" fill="#0a1628" stroke="#50fa7b" stroke-width="0.8">
+      <animate attributeName="stroke-opacity" values="0.4;0.9;0.4" dur="2.5s" begin="1.5s" repeatCount="indefinite"/>
+    </rect>
+    <text x="450" y="113" fill="#50fa7b" font-size="8" text-anchor="middle">IPC</text>
+    
+    <rect x="484" y="98" width="52" height="24" rx="3" fill="#0a1628" stroke="#50fa7b" stroke-width="0.8">
+      <animate attributeName="stroke-opacity" values="0.4;0.9;0.4" dur="2.5s" begin="1.8s" repeatCount="indefinite"/>
+    </rect>
+    <text x="510" y="113" fill="#50fa7b" font-size="8" text-anchor="middle">eBPF</text>
+    
+    <!-- Row 2: structures -->
+    <g fill="#6272a4" font-size="7">
+      <text x="102" y="134" text-anchor="middle">task_struct</text>
+      <text x="178" y="134" text-anchor="middle">mm_struct</text>
+      <text x="248" y="134" text-anchor="middle">inode</text>
+      <text x="312" y="134" text-anchor="middle">sk_buff</text>
+      <text x="382" y="134" text-anchor="middle">LSM · cred</text>
+      <text x="450" y="134" text-anchor="middle">shm</text>
+      <text x="510" y="134" text-anchor="middle">prog</text>
+    </g>
+    
+    <!-- Scheduler / core -->
+    <text x="300" y="154" fill="#6272a4" font-size="7" text-anchor="middle">scheduler · IDT · APIC · page tables · slab allocator · RCU</text>
+  </g>
+  
+  <!-- HARDWARE layer -->
+  <rect x="55" y="166" width="490" height="20" rx="4" fill="#0a0a14" stroke="#ffb86c" stroke-width="1" opacity="0.8"/>
+  <text x="300" y="179" fill="#ffb86c" font-family="monospace" font-size="8" text-anchor="middle" filter="url(#glow-kt3)">HARDWARE · CPU · MMU · NIC · DMA · IOMMU</text>
+</svg>

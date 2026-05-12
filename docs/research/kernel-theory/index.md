@@ -1,0 +1,24 @@
+# Kernel Theory
+
+Teoría subyacente del kernel Linux desde una perspectiva ofensiva.
+
+---
+
+## Artículos
+
+<div class="razor-cards razor-cards--posts">
+
+<a href="identity-model/" class="razor-card razor-card--featured">
+  <div class="razor-card__image">
+    <img src="../../assets/images/identity-model-hero.svg" alt="Identity Model">
+  </div>
+  <span class="razor-card__title">El Modelo de Identidad y Privilegios</span>
+  <span class="razor-card__desc">UIDs, GIDs, capabilities, transiciones y mecanismos de retención en struct cred</span>
+  <div class="razor-card__meta">
+    <span class="razor-card__tag">Kernel</span>
+    <span class="razor-card__tag">Credentials</span>
+    <span class="razor-card__time"><span class="razor-card__star">★</span> 45 min</span>
+  </div>
+</a>
+
+</div>
