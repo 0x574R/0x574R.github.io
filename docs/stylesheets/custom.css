@@ -839,6 +839,56 @@
   border-color: rgba(251, 191, 36, 0.3);
 }
 
+/* Card próximamente */
+.razor-card--upcoming {
+  opacity: 0.5;
+  border-style: dashed;
+  cursor: default;
+  pointer-events: none;
+}
+
+.razor-card--upcoming:hover {
+  transform: none;
+}
+
+.razor-card--upcoming .razor-card__time {
+  font-style: italic;
+}
+
+/* Upcoming section - quote style */
+.razor-upcoming {
+  border: 1px solid rgba(var(--razor-accent-rgb), 0.2);
+  border-radius: 14px;
+  padding: 1.2rem 1.5rem;
+  margin-bottom: 1rem;
+  background: rgba(var(--razor-accent-rgb), 0.03);
+}
+
+[data-md-color-scheme="default"] .razor-upcoming {
+  background: rgba(var(--razor-accent-rgb), 0.04);
+  border-color: rgba(var(--razor-accent-rgb), 0.15);
+}
+
+.razor-upcoming__header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.razor-upcoming__icon {
+  color: #fbbf24;
+  font-size: 1rem;
+}
+
+.razor-upcoming__title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--md-default-fg-color--light);
+}
+
 .razor-card--featured:hover {
   border-color: rgba(251, 191, 36, 0.5);
 }

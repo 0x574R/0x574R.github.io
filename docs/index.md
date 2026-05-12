@@ -14,7 +14,11 @@
 
 ---
 
-## Próximamente
+<div class="razor-upcoming" markdown>
+<div class="razor-upcoming__header">
+<span class="razor-upcoming__icon">★</span>
+<span class="razor-upcoming__title">Próximamente</span>
+</div>
 
 <div class="razor-cards razor-cards--posts">
 
@@ -43,6 +47,8 @@
     <span class="razor-card__tag">Assembly</span>
     <span class="razor-card__time">17 junio</span>
   </div>
+</div>
+
 </div>
 
 </div>
