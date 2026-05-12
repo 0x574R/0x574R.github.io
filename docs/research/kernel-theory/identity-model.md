@@ -27,8 +27,8 @@ const struct cred __rcu *real_cred;  // Contexto objetivo (identidad real)
 const struct cred __rcu *cred;       // Contexto subjetivo (identidad activa)
 ```
 
-- El **contexto subjetivo** (`*cred`) es la que el kernel comprueba cuando el proceso actúa **sobre otros objetos**: abrir ficheros, enviar señales, acceder a IPC.
-- El **contexto objetivo** (`*real_cred`) es la que el kernel comprueba cuando **otros procesos actúan sobre este**: enviarle señales, adjuntarse vía `ptrace`.
+- El **contexto subjetivo** (`*cred`) es el que el kernel comprueba cuando el proceso actúa **sobre otros objetos**: abrir ficheros, enviar señales, acceder a IPC.
+- El **contexto objetivo** (`*real_cred`) es el que el kernel comprueba cuando **otros procesos actúan sobre este**: enviarle señales, adjuntarse vía `ptrace`.
 
 !!! note ""
     Generalmente, ambos punteros referencian la misma instancia `struct cred`.
@@ -70,9 +70,9 @@ Cuando un proceso quiere cambiar algún UID, la operación se realiza entrando a
 
 ## UIDs
 
-Cuando un usuario ejecuta un programa, el sistema operativo no trabaja con el nombre del usuario, sino con un identificador numérico único, el UID. Ese UID es la identidad con la que el sistema trata tanto al usuario como a los procesos que este genera. A partir de ese momento, cualquier programa que ese usuario ejecute queda vinculado a ese identificador, y el kernel lo utiliza como referencia constante para aplicar políticas de permisos.
+Cuando un usuario ejecuta un programa, el sistema operativo no utiliza directamente su nombre de usuario, sino que hace uso de un identificador numérico llamado UID. Este UID representa la identidad del usuario dentro del sistema y queda asociado a todos los procesos que este ejecuta. El kernel utiliza ese identificador para aplicar las políticas de permisos y control de acceso.
 
-Cada proceso que se ejecuta tiene un conjunto de identidades relacionadas con el valor UID. Esto se debe a que los procesos pueden necesitar comportarse de forma diferente dependiendo de la situación, especialmente cuando intervienen permisos elevados. Por ello, el sistema distingue entre varios tipos de UID:
+Cada proceso en ejecución mantiene un conjunto de identidades relacionadas con el UID. Esto se debe a que, en determinadas situaciones (especialmente cuando intervienen privilegios elevados), un proceso puede necesitar comportarse con identidades distintas según el contexto. Por esta razón, el sistema diferencia entre varios tipos de UID:
 
 - **Real UID (RUID)**: Identifica al usuario que originalmente creó el proceso. El RUID es lo que el kernel consulta al aplicar los límites de recursos (`RLIMIT_NPROC`) y el que determina al propietario del proceso para el envío de señales.
 - **Effective UID (EUID)**: Es el identificador que el kernel comprueba durante las decisiones de control de acceso.
@@ -96,9 +96,9 @@ rsi = euid          ; Puntero a uid_t donde escribir el effective UID
 rdx = suid          ; Puntero a uid_t donde escribir el saved set-user-ID
 ```
 
-- `ruid` (RDI) — Puntero a una región de memoria escribible de al menos 4 bytes (`uid_t` = 32 bits). El kernel escribe aquí el real UID actual.
-- `euid` (RSI) — Puntero a una región de memoria escribible de al menos 4 bytes (`uid_t` = 32 bits). El kernel escribe aquí el effective UID actual.
-- `suid` (RDX) — Puntero a una región de memoria escribible de al menos 4 bytes (`uid_t` = 32 bits). El kernel escribe aquí el saved set-user-ID.
+- `ruid` (RDI) — Puntero a una región de memoria escribible de al menos 4 bytes (`uid_t` = 32 bits). El kernel escribe aquí el **real UID** actual.
+- `euid` (RSI) — Puntero a una región de memoria escribible de al menos 4 bytes (`uid_t` = 32 bits). El kernel escribe aquí el **effective UID** actual.
+- `suid` (RDX) — Puntero a una región de memoria escribible de al menos 4 bytes (`uid_t` = 32 bits). El kernel escribe aquí el **saved set-user-ID**.
 
 **Valores de retorno**
 
@@ -165,15 +165,15 @@ rsi = egid  ; Puntero a gid_t donde escribir el effective GID (4 bytes)
 rdx = sgid  ; Puntero a gid_t donde escribir el saved set-group-ID (4 bytes)
 ```
 
-- `rgid` (RDI) — Dirección donde el kernel escribirá el **real GID** del proceso como un `gid_t` (4 bytes, entero sin signo). El Real GID representa al grupo del usuario que lanzó el proceso en su origen.
+- `rgid` (RDI) — Dirección donde el kernel escribirá el **real GID** del proceso como un `gid_t` (4 bytes, entero sin signo). El real GID representa al grupo del usuario que lanzó el proceso en su origen.
 - `egid` (RSI) — Dirección donde el kernel escribirá el **effective GID**, que es el que el kernel usa de forma efectiva para los chequeos de permisos DAC sobre ficheros, IPC SysV, señales, etc.
 - `sgid` (RDX) — Dirección donde el kernel escribirá el **saved set-group-ID**. Su propósito es permitir al proceso recuperar un EGID anterior.
 
 **Valores de retorno**
 
 ```nasm
-rax = 0  ; Éxito
-rax < 0   ; Error
+rax = 0              ; Éxito
+rax < 0              ; Error
 ```
 
 Errores comunes:
@@ -203,13 +203,13 @@ rdx = sgid  ; Nuevo saved set-group-ID  (-1 para no modificar)
 **Valores de retorno**
 
 ```nasm
-rax = 0  ; Éxito
-rax < 0   ; Error (semántica todo-o-nada)
+rax = 0              ; Éxito
+rax < 0              ; Error (semántica todo-o-nada)
 ```
 
 Errores comunes:
 
-- `1` → `EPERM`: el proceso no posee `CAP_SETGID` en su user namespace y al menos uno de los valores solicitados (`rgid`, `egid`, o `sgid`) no coincide con ninguno de los GIDs actuales de la terna.
+- `1` → `EPERM`: el proceso no tiene `CAP_SETGID` en su user namespace y al menos uno de los valores solicitados (`rgid`, `egid`, o `sgid`) no coincide con ninguno de los GIDs actuales de la terna.
 - `22` → `EINVAL`: alguno de los valores no es un GID válido en el user namespace actual.
 - `11` → `EAGAIN`: el cambio provocaría que el número de procesos del nuevo Real GID excediera `RLIMIT_NPROC`. Solo se dispara cuando se modifica el `rgid`.
 
@@ -220,10 +220,10 @@ El modelo Unix tradicional es binario, EUID=0 otorga todos los privilegios, cual
 ### Los cinco conjuntos
 
 - **Permitted (P)**: Conjunto completo de privilegios del proceso. Solo puede reducirse, nunca ampliarse. Ningún otro conjunto puede tener un bit que no esté en P (excepto bounding, que es independiente).
-- **Effective (E)**: Conjunto que el kernel comprueba en cada acción privilegiada. Un proceso puede tener el privilegio `CAP_SYS_RESOURCE` en P sin tenerla en E, este privilegio no tendría efecto hasta que sea activado estableciendo el bit correspondiente a 1 en el effective set.
+- **Effective (E)**: Conjunto que el kernel comprueba en cada acción privilegiada. Un proceso puede tener el privilegio `CAP_SYS_RESOURCE` en P sin tenerlo en E, este privilegio no tendría efecto hasta que sea activado estableciendo el bit correspondiente a 1 en el effective set.
 - **Inheritable (I)**: Controla qué capabilities pueden propagarse a través de `execve` cuando el binario tiene [file capabilities](https://man7.org/linux/man-pages/man7/capabilities.7.html). Para activar un bit, debe estar en P y en B (o tener `CAP_SETPCAP` en E).
 - **Bounding set (B)**: Límite superior para lo que puede adquirirse durante `execve`. Solo puede reducirse (`PR_CAPBSET_DROP`).
-- **Ambient (A)**: Permite establecer que capabilities se propagan a través de `execve` si el binario no tiene privilegios especiales (file capabilities o setuid/setgid).
+- **Ambient (A)**: Permite establecer qué capabilities se propagan a través de `execve` si el binario no tiene privilegios especiales (file capabilities o setuid/setgid).
 
 ### Syscalls de Consulta
 
@@ -250,9 +250,7 @@ rsi = datap          ; Puntero a struct __user_cap_data_struct[2] (o NULL)
     };
     ```
 
-    `version` debe ser `_LINUX_CAPABILITY_VERSION_3` (`0x20080522`). Esta es la única versión vigente y soporta hasta 64 capabilities (representadas en dos `u32`, uno por cada mitad de 32 bits).
-
-    `pid` identifica al hilo/proceso objetivo. A diferencia de `capset`, `capget` **puede consultar las capabilities de cualquier hilo/proceso** del sistema: `0` lee las capabilities del hilo/proceso actual, un PID/TID positivo lee las del hilo con ese TID. No se requiere ninguna capability especial para leer las capabilities de otro hilo/proceso.
+    - `version` debe ser `_LINUX_CAPABILITY_VERSION_3` (`0x20080522`). Esta es la única versión vigente y soporta hasta 64 capabilities (representadas en dos `u32`, uno por cada mitad de 32 bits).
 
 - `datap` (RSI) — Puntero al buffer de salida.
 
@@ -264,13 +262,6 @@ rsi = datap          ; Puntero a struct __user_cap_data_struct[2] (o NULL)
         __u32 permitted;     // Techo: superset de effective e inheritable
         __u32 inheritable;   // Capabilities propagables a través de execve
     };
-    ```
-
-    Cada campo es una bitmask donde el bit N corresponde a la capability N (para `datap[0]`, caps 0–31) o N-32 (para `datap[1]`, caps 32–63). Las macros del kernel para calcular índice y máscara son:
-
-    ```nasm
-    CAP_TO_INDEX(cap) = cap >> 5       ; 0 para caps 0–31, 1 para caps 32–63
-    CAP_TO_MASK(cap)  = 1 << (cap & 31)
     ```
 
     **Layout en memoria tras `capget` exitoso (versión 3):**
@@ -291,14 +282,14 @@ rsi = datap          ; Puntero a struct __user_cap_data_struct[2] (o NULL)
 **Valores de retorno**
 
 ```nasm
-rax = 0   ; Éxito
-rax < 0   ; Error
+rax = 0              ; Éxito
+rax < 0              ; Error
 ```
 
 Errores comunes:
 
 - `14` → `EFAULT`: `hdrp` apunta a memoria inaccesible (no puede ser NULL) o `datap` apunta a memoria no escribible y no es NULL.
-- `22` → `EINVAL`: campo `version` en el header no es una versión reconocida. El kernel sobreescribe `version` con la versión preferida (`0x20080522`). Este error es esperado cuando se usa `capget` para sondear la versión.
+- `22` → `EINVAL`: campo `version` en el header no es una versión reconocida. El kernel sobrescribe `version` con la versión preferida (`0x20080522`). Este error es esperado cuando se usa `capget` para sondear la versión.
 - `3` → `ESRCH`: no existe ningún proceso/hilo con el PID/TID especificado.
 
 ### Syscalls de Modificación
@@ -346,11 +337,11 @@ rax < 0              ; Error
 Errores comunes:
 
 - `14` → `EFAULT`: `hdrp` o `datap` apuntan a memoria inaccesible. `hdrp` nunca puede ser NULL.
-- `22` → `EINVAL`: campo `version` en el header no es una versión reconocida. El kernel sobreescribe `version` con la versión preferida (`0x20080522`), esto permite sondear la versión soportada.
+- `22` → `EINVAL`: campo `version` en el header no es una versión reconocida. El kernel sobrescribe `version` con la versión preferida (`0x20080522`), esto permite sondear la versión soportada.
 - `1` → `EPERM`: se intentó añadir una capability al **permitted** set (el permitted solo puede reducirse), se intentó activar en **effective** una capability que no está en **permitted**, se intentó añadir al **inheritable** una capability que no está en el **bounding set** o que no está en **permitted** y el proceso carece de `CAP_SETPCAP` en effective, o se intentó modificar capabilities de un hilo diferente al actual.
 - `3` → `ESRCH`: el PID/TID especificado no existe (solo ocurre si se pasa un pid no-cero distinto del propio en kernels que lo permiten).
 
-### Capabilities Relevantes Desde el Contexto Ofensivo
+### Capabilities Relevantes desde el Contexto Ofensivo
 
 **Capabilities 0–31:**
 
@@ -363,7 +354,7 @@ Errores comunes:
 | 5 | `CAP_KILL` | Enviar señales a cualquier proceso (sin restricción de UID) |
 | 6 | `CAP_SETGID` | Manipular GIDs del proceso (`setgid`, `setregid`, `setresgid`) |
 | 7 | `CAP_SETUID` | Manipular UIDs del proceso (`setuid`, `setreuid`, `setresuid`) |
-| 8 | `CAP_SETPCAP` | Modificar el inheritable set y el bounding set del propio proceso |
+| 8 | `CAP_SETPCAP` | Modificar el inheritable set y el bounding set del propio proceso, además de gestionar ciertos securebits |
 | 10 | `CAP_NET_BIND_SERVICE` | Bind a puertos privilegiados (< 1024) |
 | 12 | `CAP_NET_ADMIN` | Configuración de red: interfaces, rutas, firewall, sniffing promiscuo |
 | 13 | `CAP_NET_RAW` | Crear raw sockets y packet sockets (captura de tráfico, inyección de paquetes) |
@@ -394,7 +385,7 @@ Errores comunes:
 
 La premisa de diseño define que si un proceso deja de ser root, las capabilities que tenía por el hecho de serlo deberían desaparecer. De lo contrario, un proceso con UID 1000 y `CAP_SYS_ADMIN` sería tan peligroso como root pero invisible para herramientas que solo comprueban el UID.
 
-El UID fixup es el mecanismo que implementa esta premisa. Cada vez que un proceso modifica sus UIDs (via `setresuid`, `setreuid` o `setuid`), el kernel evalúa si la transición implica un cambio en el nivel de privilegio y ajusta los conjuntos de capabilities en consecuencia. El ajuste opera en ambas direcciones, un proceso que abandona root pierde capabilities y un proceso que obtiene EUID=0 recupera capabilities desde su permitted set.
+El UID fixup es el mecanismo que implementa esta premisa. Cada vez que un proceso modifica sus UIDs (vía `setresuid`, `setreuid` o `setuid`), el kernel evalúa si la transición implica un cambio en el nivel de privilegio y ajusta los conjuntos de capabilities en consecuencia. El ajuste opera en ambas direcciones, un proceso que abandona root pierde capabilities y un proceso que obtiene EUID=0 recupera capabilities desde su permitted set.
 
 El fixup evita que un proceso pueda degradar su UID para evadir la detección mientras retiene privilegios completos. Pero también crea un problema para cualquier herramienta que necesite legítimamente operar con UIDs no privilegiados y capabilities activas. Los mecanismos de retención (`SECURE_KEEP_CAPS` y securebits, cubiertos más adelante) existen precisamente para los casos en los que el comportamiento por defecto del fixup es demasiado agresivo.
 
@@ -471,7 +462,8 @@ syscall
     - 0 → comportamiento por defecto, cuando un proceso con UID 0 (root) transiciona todos sus UIDs (real, effective, saved) a valores non-zero (ej. `setresuid(1000, 1000, 1000)`), el kernel limpia los conjuntos permitted, effective y ambient.
     - 1 → las capabilities del conjunto permitted se conservan tras la transición de UIDs. Los conjuntos effective y ambient se borran igualmente (`PR_SET_KEEPCAPS` solo protege el permitted set). Las capabilities pueden recuperarse después, desde permitted a effective usando la syscall `capset` y desde permitted a ambient usando `PR_CAP_AMBIENT_RAISE` (requiere que la capability también esté en inheritable).
 
-Un proceso que arranca como root puede hacer `prctl(PR_SET_KEEPCAPS, 1)`, luego `setuid(1000)` para aparentar ser un usuario normal y conservar capabilities críticas como `CAP_NET_RAW`, `CAP_DAC_READ_SEARCH` o `CAP_SYS_PTRACE` en su permitted set. Desde ahí, puede elevarlas al effective set o propagarlas vía ambient capabilities. Herramientas que solo alertan sobre procesos ejecutándose como root no detectarán un proceso con UID 1000 que retiene capabilities privilegiadas.
+!!! danger ""
+    Un proceso que arranca como root puede hacer `prctl(PR_SET_KEEPCAPS, 1)`, luego `setuid(1000)` para aparentar ser un usuario normal y conservar capabilities críticas como `CAP_NET_RAW`, `CAP_DAC_READ_SEARCH` o `CAP_SYS_PTRACE` en su permitted set. Desde ahí, puede elevarlas al effective set o propagarlas vía ambient capabilities. Herramientas que solo alertan sobre procesos ejecutándose como root no detectarán un proceso con UID 1000 que retiene capabilities privilegiadas.
 
 #### **PR_SET_SECUREBITS (`prctl` option 28)**
 
