@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 200" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="bg-pid" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#08080c"/>
+      <stop offset="100%" style="stop-color:#0a0f1e"/>
+    </linearGradient>
+    <filter id="glow-pid">
+      <feGaussianBlur stdDeviation="1.8" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="600" height="200" fill="url(#bg-pid)"/>
+  <rect x="55" y="20" width="490" height="160" rx="8" fill="#0d0618" stroke="#3b82f6" stroke-width="1.5">
+    <animate attributeName="stroke-opacity" values="0.5;1;0.5" dur="3s" repeatCount="indefinite"/>
+  </rect>
+  <rect x="55" y="20" width="490" height="26" rx="8" fill="#1a1025"/>
+  <rect x="55" y="42" width="490" height="4" fill="#1a1025"/>
+  <circle cx="73" cy="33" r="5" fill="#ff5555"/>
+  <circle cx="89" cy="33" r="5" fill="#ffb86c"/>
+  <circle cx="105" cy="33" r="5" fill="#50fa7b"/>
+  <text x="300" y="37" fill="#60a5fa" font-family="monospace" font-size="9" text-anchor="middle">/proc/1337</text>
+  <g font-family="monospace" font-size="9" transform="translate(70, 0)">
+    <text x="0" y="64" fill="#bd93f9">$</text>
+    <text x="14" y="64" fill="#f8f8f2"> ls /proc/1337/</text>
+    <text x="0" y="82" fill="#ff79c6">├──</text>
+    <text x="30" y="82" fill="#8be9fd">cmdline</text>
+    <text x="110" y="82" fill="#6272a4">argv[0], argv[1]...</text>
+    <text x="0" y="98" fill="#ff79c6">├──</text>
+    <text x="30" y="98" fill="#8be9fd">exe</text>
+    <text x="110" y="98" fill="#6272a4">→ /usr/bin/target</text>
+    <text x="0" y="114" fill="#ff79c6">├──</text>
+    <text x="30" y="114" fill="#8be9fd">status</text>
+    <text x="110" y="114" fill="#6272a4">Name, Pid, Uid, Gid</text>
+    <text x="0" y="130" fill="#ff79c6">├──</text>
+    <text x="30" y="130" fill="#8be9fd">comm</text>
+    <text x="110" y="130" fill="#6272a4">task_struct→comm</text>
+    <text x="0" y="146" fill="#ff79c6">├──</text>
+    <text x="30" y="146" fill="#8be9fd">maps</text>
+    <text x="110" y="146" fill="#6272a4">vm_area_struct layout</text>
+    <text x="0" y="162" fill="#ff79c6">└──</text>
+    <text x="30" y="162" fill="#8be9fd">environ</text>
+    <text x="110" y="162" fill="#6272a4">KEY=value pairs</text>
+  </g>
+  <g transform="translate(350, 58)">
+    <rect x="0" y="0" width="170" height="110" rx="6" fill="#0a1628" stroke="#bd93f9" stroke-width="1">
+      <animate attributeName="stroke-opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite"/>
+    </rect>
+    <text x="85" y="16" fill="#bd93f9" font-family="monospace" font-size="8" text-anchor="middle" filter="url(#glow-pid)">task_struct</text>
+    <g font-family="monospace" font-size="7.5">
+      <text x="12" y="34" fill="#50fa7b">pid</text>
+      <text x="60" y="34" fill="#f8f8f2">= 1337</text>
+      <text x="12" y="48" fill="#50fa7b">comm</text>
+      <text x="60" y="48" fill="#f8f8f2">= "target"</text>
+      <text x="12" y="62" fill="#50fa7b">*mm</text>
+      <text x="60" y="62" fill="#6272a4">→ mm_struct</text>
+      <text x="12" y="76" fill="#50fa7b">*cred</text>
+      <text x="60" y="76" fill="#6272a4">→ struct cred</text>
+      <text x="12" y="90" fill="#50fa7b">*fs</text>
+      <text x="60" y="90" fill="#6272a4">→ fs_struct</text>
+      <text x="12" y="104" fill="#50fa7b">*nsproxy</text>
+      <text x="60" y="104" fill="#6272a4">→ nsproxy</text>
+    </g>
+  </g>
+</svg>

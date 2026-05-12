@@ -39,7 +39,7 @@
     <img src="assets/images/process-id-hero.svg" alt="Identificación de Procesos">
   </div>
   <span class="razor-card__title">Identificación de Procesos</span>
-  <span class="razor-card__desc">Cómo se representa un proceso en el sistema: /proc/PID, cmdline, exe, comm, environ, maps y su relación con las estructuras del kernel</span>
+  <span class="razor-card__desc">Cómo se representa y expone la identidad de un proceso en el sistema desde la perspectiva del kernel y del espacio de usuario</span>
   <div class="razor-card__meta">
     <span class="razor-card__tag">Kernel</span>
     <span class="razor-card__time">3 junio</span>

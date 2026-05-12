@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 200" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="bg-elf" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#08080c"/>
+      <stop offset="100%" style="stop-color:#0a0f1e"/>
+    </linearGradient>
+    <filter id="glow-elf">
+      <feGaussianBlur stdDeviation="1.8" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="600" height="200" fill="url(#bg-elf)"/>
+  <rect x="55" y="20" width="490" height="160" rx="8" fill="#0d0618" stroke="#3b82f6" stroke-width="1.5">
+    <animate attributeName="stroke-opacity" values="0.5;1;0.5" dur="3s" repeatCount="indefinite"/>
+  </rect>
+  <rect x="55" y="20" width="490" height="26" rx="8" fill="#1a1025"/>
+  <rect x="55" y="42" width="490" height="4" fill="#1a1025"/>
+  <circle cx="73" cy="33" r="5" fill="#ff5555"/>
+  <circle cx="89" cy="33" r="5" fill="#ffb86c"/>
+  <circle cx="105" cy="33" r="5" fill="#50fa7b"/>
+  <text x="300" y="37" fill="#60a5fa" font-family="monospace" font-size="9" text-anchor="middle">readelf -h</text>
+  <g font-family="monospace" font-size="9" transform="translate(70, 0)">
+    <text x="0" y="64" fill="#6272a4">ELF Header:</text>
+    <text x="0" y="80" fill="#50fa7b">  Magic:</text>
+    <text x="70" y="80" fill="#f8f8f2">7f 45 4c 46 02 01 01 00</text>
+    <text x="0" y="96" fill="#50fa7b">  Type:</text>
+    <text x="70" y="96" fill="#f8f8f2">EXEC (Executable file)</text>
+    <text x="0" y="112" fill="#50fa7b">  Machine:</text>
+    <text x="70" y="112" fill="#f8f8f2">Advanced Micro Devices X86-64</text>
+    <text x="0" y="128" fill="#50fa7b">  Entry:</text>
+    <text x="70" y="128" fill="#ff79c6">0x401000</text>
+    <text x="0" y="144" fill="#50fa7b">  Phdr:</text>
+    <text x="70" y="144" fill="#f8f8f2">3 program headers</text>
+    <text x="0" y="160" fill="#50fa7b">  Shdr:</text>
+    <text x="70" y="160" fill="#f8f8f2">6 section headers</text>
+  </g>
+  <g transform="translate(350, 58)">
+    <text x="0" y="0" fill="#60a5fa" font-family="monospace" font-size="8" filter="url(#glow-elf)">ELF Layout</text>
+    <rect x="0" y="8" width="160" height="18" rx="2" fill="#1a0a2e" stroke="#ff79c6" stroke-width="0.8">
+      <animate attributeName="stroke-opacity" values="0.4;1;0.4" dur="2s" begin="0s" repeatCount="indefinite"/>
+    </rect>
+    <text x="80" y="20" fill="#ff79c6" font-family="monospace" font-size="7" text-anchor="middle">ELF Header</text>
+    <rect x="0" y="30" width="160" height="18" rx="2" fill="#1a0a2e" stroke="#bd93f9" stroke-width="0.8">
+      <animate attributeName="stroke-opacity" values="0.4;1;0.4" dur="2s" begin="0.3s" repeatCount="indefinite"/>
+    </rect>
+    <text x="80" y="42" fill="#bd93f9" font-family="monospace" font-size="7" text-anchor="middle">Program Headers</text>
+    <rect x="0" y="52" width="160" height="36" rx="2" fill="#1a0a2e" stroke="#50fa7b" stroke-width="0.8">
+      <animate attributeName="stroke-opacity" values="0.4;1;0.4" dur="2s" begin="0.6s" repeatCount="indefinite"/>
+    </rect>
+    <text x="80" y="68" fill="#50fa7b" font-family="monospace" font-size="7" text-anchor="middle">.text  .data  .bss</text>
+    <text x="80" y="80" fill="#6272a4" font-family="monospace" font-size="7" text-anchor="middle">Segments</text>
+    <rect x="0" y="92" width="160" height="18" rx="2" fill="#1a0a2e" stroke="#ffb86c" stroke-width="0.8">
+      <animate attributeName="stroke-opacity" values="0.4;1;0.4" dur="2s" begin="0.9s" repeatCount="indefinite"/>
+    </rect>
+    <text x="80" y="104" fill="#ffb86c" font-family="monospace" font-size="7" text-anchor="middle">Section Headers</text>
+  </g>
+</svg>
