@@ -16,7 +16,7 @@ Cómo el kernel Linux gestiona la identidad y los privilegios de un proceso
 
 ## Introducción
 
-El kernel Linux concentra toda la información de identidad y privilegios de un proceso en una única estructura: `struct cred`. Dentro de ella conviven dos sistemas complementarios, los **UIDs/GIDs** (de quién es el proceso) y las **capabilities** (qué operaciones privilegiadas puede ejecutar). Ambas están estrechamente relacionadas, por lo qué, modificaciones en los UIDs desencadenan cambios automáticos en las capabilities y ciertas capabilities son requisito para poder modificar los UIDs libremente. Este artículo cubre ambos sistemas de manera conjunta para un mayor entendimiento de como el sistema opera con los procesos.
+El kernel Linux concentra toda la información de identidad y privilegios de un proceso en una única estructura: `struct cred`. Dentro de ella conviven dos sistemas complementarios, los **UIDs/GIDs** (de quién es el proceso) y las **capabilities** (qué operaciones privilegiadas puede ejecutar). Ambas están estrechamente relacionadas, por lo que, modificaciones en los UIDs desencadenan cambios automáticos en las capabilities y ciertas capabilities son requisito para poder modificar los UIDs libremente. Este artículo cubre ambos sistemas de manera conjunta para un mayor entendimiento de cómo el sistema opera con los procesos.
 
 ## Ubicación de las credenciales en el Kernel
 
@@ -28,7 +28,7 @@ const struct cred __rcu *cred;       // Contexto subjetivo (identidad activa)
 ```
 
 - El **contexto subjetivo** (`*cred`) es la que el kernel comprueba cuando el proceso actúa **sobre otros objetos**: abrir ficheros, enviar señales, acceder a IPC.
-- El **contexto objetivo** (`*real_cred`) es la que el kernel comprueba cuando **otros procesos actúan sobre este**: enviarle señales, adjuntarse via `ptrace`.
+- El **contexto objetivo** (`*real_cred`) es la que el kernel comprueba cuando **otros procesos actúan sobre este**: enviarle señales, adjuntarse vía `ptrace`.
 
 !!! note ""
     Generalmente, ambos punteros referencian la misma instancia `struct cred`.
@@ -103,7 +103,7 @@ rdx = suid          ; Puntero a uid_t donde escribir el saved set-user-ID
 **Valores de retorno**
 
 ```nasm
-rax = 0              ; Éxito (los tres valores han sido escritos)
+rax = 0              ; Éxito
 rax < 0              ; Error
 ```
 
@@ -133,7 +133,7 @@ rdx = suid           ; Nuevo saved set-user-ID (o -1 para no cambiar)
 
 ```nasm
 rax = 0              ; Éxito
-rax < 0              ; Error, ningún UID es modificado (semántica todo-o-nada)
+rax < 0              ; Error (semántica todo-o-nada)
 ```
 
 Errores comunes:
@@ -144,7 +144,7 @@ Errores comunes:
 
 ## GIDs
 
-El modelo de GIDs: Real GID (RGID), Effective GID (EGID) y Saved Set-Group-ID (SGID) siguen la misma semántica, pero aplicada al control de acceso basado en grupos.
+El modelo de GIDs: Real GID (RGID), Effective GID (EGID) y Saved set-group-ID (SGID) siguen la misma semántica, pero aplicada al control de acceso basado en grupos.
 
 ---
 
@@ -160,19 +160,19 @@ Existe un cuarto par, **FSUID** y **FSGID**, utilizado exclusivamente para compr
 
 ```nasm
 rax = 120   ; Número de syscall (getresgid)
-rdi = rgid  ; Puntero a gid_t donde escribir el Real GID (4 bytes)
-rsi = egid  ; Puntero a gid_t donde escribir el Effective GID (4 bytes)
-rdx = sgid  ; Puntero a gid_t donde escribir el Saved-set GID (4 bytes)
+rdi = rgid  ; Puntero a gid_t donde escribir el real GID (4 bytes)
+rsi = egid  ; Puntero a gid_t donde escribir el effective GID (4 bytes)
+rdx = sgid  ; Puntero a gid_t donde escribir el saved set-group-ID (4 bytes)
 ```
 
-1. `rgid` (RDI) — Dirección donde el kernel escribirá el **Real Group ID** del proceso como un `gid_t` (4 bytes, entero sin signo). El Real GID representa al grupo del usuario que lanzó el proceso en su origen.
-2. `egid` (RSI) — Dirección donde el kernel escribirá el **Effective Group ID**, que es el que el kernel usa de forma efectiva para los chequeos de permisos DAC sobre ficheros, IPC SysV, señales, etc.
-3. `sgid` (RDX) — Dirección donde el kernel escribirá el **Saved-set Group ID**. Su propósito es permitir al proceso recuperar un EGID anterior.
+- `rgid` (RDI) — Dirección donde el kernel escribirá el **real GID** del proceso como un `gid_t` (4 bytes, entero sin signo). El Real GID representa al grupo del usuario que lanzó el proceso en su origen.
+- `egid` (RSI) — Dirección donde el kernel escribirá el **effective GID**, que es el que el kernel usa de forma efectiva para los chequeos de permisos DAC sobre ficheros, IPC SysV, señales, etc.
+- `sgid` (RDX) — Dirección donde el kernel escribirá el **saved set-group-ID**. Su propósito es permitir al proceso recuperar un EGID anterior.
 
 **Valores de retorno**
 
 ```nasm
-rax == 0  ; Éxito, los tres gid_t han sido escritos
+rax = 0  ; Éxito
 rax < 0   ; Error
 ```
 
@@ -192,9 +192,9 @@ En la práctica, una llamada a `getresgid` con punteros válidos a memoria del p
 
 ```nasm
 rax = 119   ; Número de syscall (setresgid)
-rdi = rgid  ; Nuevo Real GID       (-1 para no modificar)
-rsi = egid  ; Nuevo Effective GID  (-1 para no modificar)
-rdx = sgid  ; Nuevo Saved-set GID  (-1 para no modificar)
+rdi = rgid  ; Nuevo real GID       (-1 para no modificar)
+rsi = egid  ; Nuevo effective GID  (-1 para no modificar)
+rdx = sgid  ; Nuevo saved set-group-ID  (-1 para no modificar)
 ```
 
 !!! note ""
@@ -203,8 +203,8 @@ rdx = sgid  ; Nuevo Saved-set GID  (-1 para no modificar)
 **Valores de retorno**
 
 ```nasm
-rax == 0  ; Éxito
-rax < 0   ; Error, ningún GID es modificado (semántica todo-o-nada)
+rax = 0  ; Éxito
+rax < 0   ; Error (semántica todo-o-nada)
 ```
 
 Errores comunes:
@@ -239,7 +239,9 @@ rdi = hdrp           ; Puntero a struct __user_cap_header_struct
 rsi = datap          ; Puntero a struct __user_cap_data_struct[2] (o NULL)
 ```
 
-- `hdrp` (RDI) — Puntero a la cabecera. Puntero a una estructura `__user_cap_header_struct` que indica la versión del protocolo de capabilities y el hilo objetivo. No puede ser NULL.
+- `hdrp` (RDI) — Puntero a la cabecera.
+
+    Puntero a una estructura `__user_cap_header_struct` que indica la versión del protocolo de capabilities y el hilo objetivo. No puede ser NULL.
 
     ```c
     struct __user_cap_header_struct {
@@ -252,7 +254,9 @@ rsi = datap          ; Puntero a struct __user_cap_data_struct[2] (o NULL)
 
     `pid` identifica al hilo/proceso objetivo. A diferencia de `capset`, `capget` **puede consultar las capabilities de cualquier hilo/proceso** del sistema: `0` lee las capabilities del hilo/proceso actual, un PID/TID positivo lee las del hilo con ese TID. No se requiere ninguna capability especial para leer las capabilities de otro hilo/proceso.
 
-- `datap` (RSI) — Puntero al buffer de salida. Puntero a un array de dos estructuras `__user_cap_data_struct` contiguas en memoria donde el kernel escribirá las capabilities del objetivo. `datap[0]` recibe los bits para las capabilities 0–31 y `datap[1]` para las capabilities 32–63.
+- `datap` (RSI) — Puntero al buffer de salida.
+
+    Puntero a un array de dos estructuras `__user_cap_data_struct` contiguas en memoria donde el kernel escribirá las capabilities del objetivo. `datap[0]` recibe los bits para las capabilities 0–31 y `datap[1]` para las capabilities 32–63.
 
     ```c
     struct __user_cap_data_struct {
@@ -287,7 +291,7 @@ rsi = datap          ; Puntero a struct __user_cap_data_struct[2] (o NULL)
 **Valores de retorno**
 
 ```nasm
-rax = 0   ; Éxito: datap contiene las capabilities del hilo/proceso objetivo
+rax = 0   ; Éxito
 rax < 0   ; Error
 ```
 
@@ -313,7 +317,9 @@ rsi = datap          ; Puntero a struct __user_cap_data_struct[2]
 
 - `hdrp` (RDI) — Puntero a la cabecera (misma estructura que en `capget`). `version` debe ser `0x20080522`. `pid` solo permite `0` o el propio TID en kernels modernos.
 
-- `datap` (RSI) — Puntero a los datos de capabilities. Puntero a un **array de dos** estructuras `__user_cap_data_struct` contiguas en memoria. `datap[0]` contiene los bits para las capabilities 0–31 y `datap[1]` para las capabilities 32–63.
+- `datap` (RSI) — Puntero a los datos de capabilities.
+
+    Puntero a un **array de dos** estructuras `__user_cap_data_struct` contiguas en memoria. `datap[0]` contiene los bits para las capabilities 0–31 y `datap[1]` para las capabilities 32–63.
 
     **Layout en memoria (con versión 3):**
 
@@ -481,13 +487,13 @@ syscall
 `flags` (RSI) — Bitmask combinable con OR:
 
 - `SECBIT_NOROOT` = `0x01` → Desactiva el tratamiento especial de UID 0 en `execve`. Normalmente, si un proceso con UID 0 hace `execve`, el kernel le otorga full capabilities. Con `NOROOT`, UID 0 ya no recibe capabilities automáticas, solo las obtiene si el binario tiene file capabilities explícitas.
-- `SECBIT_NOROOT_LOCKED` = `0x02` → bloquea `SECBIT_NOROOT` para que no pueda ser desactivado.
+- `SECBIT_NOROOT_LOCKED` = `0x02` → Bloquea `SECBIT_NOROOT` para que no pueda ser desactivado.
 - `SECBIT_NO_SETUID_FIXUP` = `0x04` → Desactiva todo ajuste automático de capabilities al cambiar UIDs. Ni permitted, ni effective, ni ambient se modifican. Si este bit está activo, `KEEP_CAPS` es redundante (es un subconjunto). A diferencia de `KEEP_CAPS`, no se borra en `execve`.
-- `SECBIT_NO_SETUID_FIXUP_LOCKED` = `0x08` → bloquea `SECBIT_NO_SETUID_FIXUP` para que no pueda ser desactivado.
+- `SECBIT_NO_SETUID_FIXUP_LOCKED` = `0x08` → Bloquea `SECBIT_NO_SETUID_FIXUP` para que no pueda ser desactivado.
 - `SECBIT_KEEP_CAPS` = `0x10` → Cuando root baja a UID non-zero, el kernel no borra el permitted set. El effective y ambient sí se borran, pero las capabilities quedan en permitted y se pueden recuperar después. Se borra automáticamente en cada `execve`.
-- `SECBIT_KEEP_CAPS_LOCKED` = `0x20` → bloquea `SECBIT_KEEP_CAPS` para que no pueda ser desactivado.
+- `SECBIT_KEEP_CAPS_LOCKED` = `0x20` → Bloquea `SECBIT_KEEP_CAPS` para que no pueda ser desactivado.
 - `SECBIT_NO_CAP_AMBIENT_RAISE` = `0x40` → Impide usar `PR_CAP_AMBIENT_RAISE`. Si está activo, nadie puede añadir capabilities al ambient set. Cierra esa vía de propagación.
-- `SECBIT_NO_CAP_AMBIENT_RAISE_LOCKED` = `0x80` → bloquea `SECBIT_NO_CAP_AMBIENT_RAISE` para que no pueda ser desactivado.
+- `SECBIT_NO_CAP_AMBIENT_RAISE_LOCKED` = `0x80` → Bloquea `SECBIT_NO_CAP_AMBIENT_RAISE` para que no pueda ser desactivado.
 
 Un proceso que arranca con UID 0 activa `SECBIT_NO_SETUID_FIXUP` + `SECBIT_NO_SETUID_FIXUP_LOCKED`, luego hace `setresuid(1000,1000,1000)`. El resultado es un proceso que aparenta ser UID 1000 pero que conserva todas sus capabilities intactas (todos los conjuntos), y nadie (ni siquiera root) puede revertir esa configuración porque el bit locked es irreversible.
 

@@ -1549,17 +1549,9 @@
 </span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="nf">rsi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">egid</span><span class="w">  </span><span class="c1">; Nuevo Effective GID  (-1 para no modificar)</span>
 </span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="nf">rdx</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">sgid</span><span class="w">  </span><span class="c1">; Nuevo Saved-set GID  (-1 para no modificar)</span>
 </span></code></pre></div>
-<ol>
-<li>
-<p><code>rgid</code> (RDI) — Valor del nuevo Real GID del proceso. Solo se acepta si se cumple una de estas condiciones: el proceso posee <code>CAP_SETGID</code> en su user namespace (puede establecer <code>rgid</code> a cualquier valor <code>gid_t</code> válido) o el proceso no posee <code>CAP_SETGID</code>, en cuyo caso el nuevo <code>rgid</code> debe coincidir con el <code>rgid</code>, <code>egid</code> o <code>sgid</code> actual del proceso. Usar <code>-1</code> preserva el Real GID actual sin tocarlo. Cambiar el Real GID es una operación prácticamente irreversible en procesos no privilegiados, porque elimina del conjunto <code>{rgid, egid, sgid}</code> el valor si este no aparece en otra posición. Por eso, la práctica habitual en un drop de privilegios definitivo es establecer los tres al GID no privilegiado.</p>
-</li>
-<li>
-<p><code>egid</code> (RSI) — Valor del nuevo Effective GID, aquel que el kernel usará para los chequeos DAC sobre ficheros, IPC SysV, señales y demás comprobaciones de permisos de grupo. Reglas de aceptación idénticas a <code>rgid</code>, con <code>CAP_SETGID</code> puede establecer <code>egid</code> a cualquier valor válido, sin <code>CAP_SETGID</code>, solo se permite si el nuevo valor ya está presente en algún <code>{rgid, egid, sgid}</code> del proceso. Usar <code>-1</code> preserva el EGID actual. Este es el argumento <strong>más relevante desde el punto de vista ofensivo</strong>, porque manipular el EGID permite bajar y subir privilegios a voluntad dentro del conjunto existente.</p>
-</li>
-<li>
-<p><code>sgid</code> (RDX) — Valor del nuevo Saved-set GID. Mismas reglas de aceptación. Es el GID que puede recuperarse posteriormente como EGID sin privilegios adicionales, porque la política de <code>setresgid</code> permite siempre establecer el EGID a un valor que ya esté en la terna <code>{rgid, egid, sgid}</code>. Una vez que el SGID deja de contener un GID privilegiado, el proceso pierde la capacidad de recuperarlo (salvo que conserve <code>CAP_SETGID</code>). El uso canónico de <code>-1</code> en este argumento es mantener accesible el grupo privilegiado mientras se opera temporalmente con un EGID reducido.</p>
-</li>
-</ol>
+<div class="admonition note">
+<p>Sin <code>CAP_SETGID</code>, cada argumento debe ser -1 o un valor ya presente en alguno de los tres GIDs actuales del proceso (se pueden redistribuir entre posiciones y repetir), pero no introducir valores nuevos. Con <code>CAP_SETGID</code> no hay restricción.</p>
+</div>
 <p><strong>Valores de retorno</strong></p>
 <div class="language-nasm highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">==</span><span class="w"> </span><span class="mi">0</span><span class="w">  </span><span class="c1">; Éxito</span>
 </span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nf">rax</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w">   </span><span class="c1">; Error, ningún GID es modificado (semántica todo-o-nada)</span>
@@ -1589,8 +1581,8 @@
 </span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="nf">rsi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">datap</span><span class="w">          </span><span class="c1">; Puntero a struct __user_cap_data_struct[2] (o NULL)</span>
 </span></code></pre></div>
 <ul>
-<li><code>hdrp</code> (RDI) — Puntero a la cabecera. Puntero a una estructura <code>__user_cap_header_struct</code> que indica la versión del protocolo de capabilities y el hilo objetivo. No puede ser NULL.</li>
-</ul>
+<li>
+<p><code>hdrp</code> (RDI) — Puntero a la cabecera. Puntero a una estructura <code>__user_cap_header_struct</code> que indica la versión del protocolo de capabilities y el hilo objetivo. No puede ser NULL.</p>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">__user_cap_header_struct</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">    </span><span class="n">__u32</span><span class="w"> </span><span class="n">version</span><span class="p">;</span><span class="w">    </span><span class="c1">// Versión del protocolo   (4 bytes)</span>
 </span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="kt">int</span><span class="w">   </span><span class="n">pid</span><span class="p">;</span><span class="w">        </span><span class="c1">// TID/PID del objetivo (0 = actual)  (4 bytes)</span>
@@ -1598,9 +1590,9 @@
 </span></code></pre></div>
 <p><code>version</code> debe ser <code>_LINUX_CAPABILITY_VERSION_3</code> (<code>0x20080522</code>). Esta es la única versión vigente y soporta hasta 64 capabilities (representadas en dos <code>u32</code>, uno por cada mitad de 32 bits).</p>
 <p><code>pid</code> identifica al hilo/proceso objetivo. A diferencia de <code>capset</code>, <code>capget</code> <strong>puede consultar las capabilities de cualquier hilo/proceso</strong> del sistema: <code>0</code> lee las capabilities del hilo/proceso actual, un PID/TID positivo lee las del hilo con ese TID. No se requiere ninguna capability especial para leer las capabilities de otro hilo/proceso.</p>
-<ul>
-<li><code>datap</code> (RSI) — Puntero al buffer de salida. Puntero a un array de dos estructuras <code>__user_cap_data_struct</code> contiguas en memoria donde el kernel escribirá las capabilities del objetivo. <code>datap[0]</code> recibe los bits para las capabilities 0–31 y <code>datap[1]</code> para las capabilities 32–63.</li>
-</ul>
+</li>
+<li>
+<p><code>datap</code> (RSI) — Puntero al buffer de salida. Puntero a un array de dos estructuras <code>__user_cap_data_struct</code> contiguas en memoria donde el kernel escribirá las capabilities del objetivo. <code>datap[0]</code> recibe los bits para las capabilities 0–31 y <code>datap[1]</code> para las capabilities 32–63.</p>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">__user_cap_data_struct</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">    </span><span class="n">__u32</span><span class="w"> </span><span class="n">effective</span><span class="p">;</span><span class="w">     </span><span class="c1">// Capabilities activas (las que el kernel comprueba)</span>
 </span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">    </span><span class="n">__u32</span><span class="w"> </span><span class="n">permitted</span><span class="p">;</span><span class="w">     </span><span class="c1">// Techo: superset de effective e inheritable</span>
@@ -1623,6 +1615,8 @@
 </span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="w">                </span><span class="err">└──────────────────────────────────────┘</span>
 </span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="w">                         </span><span class="nl">Total:</span><span class="w"> </span><span class="err">24</span><span class="w"> </span><span class="nf">bytes</span>
 </span></code></pre></div>
+</li>
+</ul>
 <p><strong>Valores de retorno</strong></p>
 <div class="language-nasm highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">0</span><span class="w">   </span><span class="c1">; Éxito: datap contiene las capabilities del hilo/proceso objetivo</span>
 </span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="nf">rax</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w">   </span><span class="c1">; Error</span>
@@ -1647,8 +1641,6 @@
 </li>
 <li>
 <p><code>datap</code> (RSI) — Puntero a los datos de capabilities. Puntero a un <strong>array de dos</strong> estructuras <code>__user_cap_data_struct</code> contiguas en memoria. <code>datap[0]</code> contiene los bits para las capabilities 0–31 y <code>datap[1]</code> para las capabilities 32–63.</p>
-</li>
-</ul>
 <p><strong>Layout en memoria (con versión 3):</strong></p>
 <div class="language-nasm highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="nf">datap</span><span class="w"> </span><span class="p">(</span><span class="nb">RSI</span><span class="p">)</span><span class="w"> </span><span class="err">──→</span><span class="w"> </span><span class="err">┌──────────────────────────────────────┐</span>
 </span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">                </span><span class="err">│</span><span class="w"> </span><span class="nf">datap</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="nv">.effective</span><span class="w">     </span><span class="p">(</span><span class="nv">caps</span><span class="w"> </span><span class="mi">0</span><span class="err">–</span><span class="mi">31</span><span class="p">)</span><span class="w">   </span><span class="err">│</span><span class="w"> </span><span class="nv">offset</span><span class="w"> </span><span class="o">+</span><span class="mi">0</span>
@@ -1661,6 +1653,8 @@
 </span><span id="__span-17-9"><a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="w">                </span><span class="err">└──────────────────────────────────────┘</span>
 </span><span id="__span-17-10"><a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="w">                         </span><span class="nl">Total:</span><span class="w"> </span><span class="err">24</span><span class="w"> </span><span class="nf">bytes</span>
 </span></code></pre></div>
+</li>
+</ul>
 <p><strong>Valores de retorno</strong></p>
 <div class="language-nasm highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">0</span><span class="w">              </span><span class="c1">; Éxito</span>
 </span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="nf">rax</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w">              </span><span class="c1">; Error</span>
