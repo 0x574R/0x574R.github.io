@@ -841,7 +841,7 @@
 
 /* Card próximamente */
 .razor-card--upcoming {
-  opacity: 0.5;
+  opacity: 0.7;
   border-style: dashed;
   cursor: default;
   pointer-events: none;
