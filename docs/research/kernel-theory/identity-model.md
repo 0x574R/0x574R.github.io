@@ -3,7 +3,7 @@ date: 2026-05-12
 ---
 
 <div class="article-header">
-<h1>El Modelo de Identidad y Privilegios en el Kernel Linux (Procesos)</h1>
+<h1>Identity and Privileges of a Process</h1>
 <span class="article-meta">12/05/2026 · 45 min</span>
 </div>
 
