@@ -8,7 +8,19 @@ Teoría subyacente del kernel Linux desde una perspectiva ofensiva.
 
 <div class="razor-cards razor-cards--posts">
 
-<a href="identity-model/" class="razor-card razor-card--featured">
+<a href="elf-internals/" class="razor-card razor-card--featured">
+  <div class="razor-card__image">
+    <img src="../../assets/images/elf-internals-hero.svg" alt="ELF Internals">
+  </div>
+  <span class="razor-card__title">ELF Internals</span>
+  <span class="razor-card__desc">Estructura interna del formato ELF: headers, segments, sections, carga por el kernel y auxiliary vector</span>
+  <div class="razor-card__meta">
+    <span class="razor-card__tag">Kernel</span>
+    <span class="razor-card__time"><span class="razor-card__star">★</span> 35 min</span>
+  </div>
+</a>
+
+<a href="identity-model/" class="razor-card">
   <div class="razor-card__image">
     <img src="../../assets/images/identity-model-hero.svg" alt="Identity Model">
   </div>

@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Offensive security blog">
+        <meta name="description" content="Cómo el kernel Linux gestiona la identidad y los privilegios de un proceso. UIDs, capabilities, securebits y credential structs.">
       
       
       
@@ -21,11 +21,11 @@
       
       
       <link rel="icon" href="../../../assets/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
-        <title>El Modelo de Identidad y Privilegios (Procesos) - RAZOR</title>
+        <title>Identity and Privileges of a Process - RAZOR</title>
       
     
     
@@ -104,9 +104,32 @@
 
     
     
+<!-- Favicons -->
 <link rel="apple-touch-icon" sizes="180x180" href="https://0x574r.github.io/assets/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://0x574r.github.io/assets/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="https://0x574r.github.io/assets/favicon-16x16.png">
+
+<!-- Open Graph -->
+
+
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Identity and Privileges of a Process — RAZOR">
+<meta property="og:description" content="Cómo el kernel Linux gestiona la identidad y los privilegios de un proceso. UIDs, capabilities, securebits y credential structs.">
+<meta property="og:image" content="https://0x574r.github.io/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://0x574r.github.io/research/kernel-theory/identity-model/">
+<meta property="og:site_name" content="RAZOR">
+<meta property="og:locale" content="es_ES">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Identity and Privileges of a Process — RAZOR">
+<meta name="twitter:description" content="Cómo el kernel Linux gestiona la identidad y los privilegios de un proceso. UIDs, capabilities, securebits y credential structs.">
+<meta name="twitter:image" content="https://0x574r.github.io/assets/og-image.png">
 
   </head>
   
@@ -162,7 +185,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              El Modelo de Identidad y Privilegios (Procesos)
+              Identity and Privileges of a Process
             
           </span>
         </div>
@@ -518,7 +541,7 @@
   <span class="md-ellipsis">
     
   
-    El Modelo de Identidad y Privilegios (Procesos)
+    Identity and Privileges of a Process
   
 
     
@@ -536,7 +559,7 @@
   <span class="md-ellipsis">
     
   
-    El Modelo de Identidad y Privilegios (Procesos)
+    Identity and Privileges of a Process
   
 
     
@@ -1402,7 +1425,7 @@
 
 
 <div class="article-header">
-<h1>El Modelo de Identidad y Privilegios en el Kernel Linux (Procesos)</h1>
+<h1>Identity and Privileges of a Process</h1>
 <span class="article-meta">12/05/2026 · 45 min</span>
 </div>
 

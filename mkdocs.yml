@@ -85,4 +85,5 @@ nav:
       - Reverse TCP Shell: research/malware-dev/reverse-shell.md
       - Process Injection via Ptrace: research/malware-dev/ptrace-injection.md
   - Kernel Theory:
+      - ELF Internals: research/kernel-theory/elf-internals.md
       - Identity and Privileges of a Process: research/kernel-theory/identity-model.md

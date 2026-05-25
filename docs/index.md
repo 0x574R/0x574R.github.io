@@ -52,7 +52,19 @@ description: Blog de seguridad ofensiva. Técnicas de bajo nivel en ensamblador 
 
 <div class="razor-cards razor-cards--posts">
 
-<a href="research/kernel-theory/identity-model/" class="razor-card razor-card--featured">
+<a href="research/kernel-theory/elf-internals/" class="razor-card razor-card--featured">
+  <div class="razor-card__image">
+    <img src="assets/images/elf-internals-hero.svg" alt="ELF Internals">
+  </div>
+  <span class="razor-card__title">ELF Internals</span>
+  <span class="razor-card__desc">Estructura interna del formato ELF: headers, segments, sections, carga por el kernel y auxiliary vector</span>
+  <div class="razor-card__meta">
+    <span class="razor-card__tag">Kernel</span>
+    <span class="razor-card__time"><span class="razor-card__star">★</span> 35 min</span>
+  </div>
+</a>
+
+<a href="research/kernel-theory/identity-model/" class="razor-card">
   <div class="razor-card__image">
     <img src="assets/images/identity-model-hero.svg" alt="Identity Model">
   </div>
@@ -111,18 +123,6 @@ description: Blog de seguridad ofensiva. Técnicas de bajo nivel en ensamblador 
 </div>
 
 <div class="razor-cards razor-cards--posts">
-
-<div class="razor-card razor-card--upcoming">
-  <div class="razor-card__image">
-    <img src="assets/images/elf-internals-hero.svg" alt="ELF Internals">
-  </div>
-  <span class="razor-card__title">ELF Internals</span>
-  <span class="razor-card__desc">Estructura interna del formato ELF: headers, secciones, segmentos y su relevancia en técnicas ofensivas</span>
-  <div class="razor-card__meta">
-    <span class="razor-card__tag">Kernel</span>
-    <span class="razor-card__time">27 mayo</span>
-  </div>
-</div>
 
 <div class="razor-card razor-card--upcoming">
   <div class="razor-card__image">
