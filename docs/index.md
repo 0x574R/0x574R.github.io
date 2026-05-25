@@ -1,3 +1,7 @@
+---
+description: Blog de seguridad ofensiva. Técnicas de bajo nivel en ensamblador x86-64 sobre Linux, sin libc.
+---
+
 # RAZOR
 
 <div class="razor-hero razor-hero--no-logo">

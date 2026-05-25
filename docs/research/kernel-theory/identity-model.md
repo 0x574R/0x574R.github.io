@@ -1,5 +1,6 @@
 ---
 date: 2026-05-12
+description: Cómo el kernel Linux gestiona la identidad y los privilegios de un proceso. UIDs, capabilities, securebits y credential structs.
 ---
 
 <div class="article-header">
