@@ -1472,3 +1472,7 @@ div.tables-centered td {
 .field-list > ul > li::before {
   display: none !important;
 }
+/* Restaurar bullets en listas anidadas dentro de field-list */
+.field-list ul ul {
+  list-style-type: disc !important;
+}
