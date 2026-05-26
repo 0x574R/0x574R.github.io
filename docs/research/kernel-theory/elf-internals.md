@@ -1,6 +1,6 @@
 ---
 date: 2026-05-27
-description: Qué contiene un binario ELF y cómo se transforma de un fichero a un proceso en ejecución.
+description: Qué contiene un binario ELF y cómo lo interpreta el kernel para convertirlo en un proceso.
 ---
 
 <div class="article-header">
@@ -8,7 +8,7 @@ description: Qué contiene un binario ELF y cómo se transforma de un fichero a 
 <span class="article-meta">27/05/2026 · 60 min</span>
 </div>
 
-Qué contiene un binario ELF y cómo se transforma de un fichero a un proceso en ejecución
+Qué contiene un binario ELF y cómo lo interpreta el kernel para convertirlo en un proceso
 
 ---
 

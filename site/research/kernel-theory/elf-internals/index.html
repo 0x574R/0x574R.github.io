@@ -2009,9 +2009,8 @@
 <li><strong>Tipo:</strong> <code>SHT_PROGBITS</code></li>
 <li><strong>Atributos:</strong> <code>SHF_ALLOC | SHF_WRITE</code></li>
 <li><strong>Segmento:</strong> <code>PT_LOAD</code> con permisos <code>PF_R | PF_W</code></li>
-<li>La GOT es la estructura central del enlazado dinámico para el acceso a datos y funciones externas.</li>
-</ul>
-</div>
+<li>
+<p>La GOT es la estructura central del enlazado dinámico para el acceso a datos y funciones externas.</p>
 <p>En x86-64 se divide en:</p>
 <ul>
 <li>
@@ -2023,15 +2022,18 @@
 <p>Entradas para funciones importadas, resueltas via lazy binding.</p>
 </li>
 </ul>
+</li>
+</ul>
+</div>
 <h3 id="procedure-linkage-table-plt-pltsec-y-pltgot">Procedure Linkage Table <code>.plt</code>, <code>.plt.sec</code> y <code>.plt.got</code><a class="headerlink" href="#procedure-linkage-table-plt-pltsec-y-pltgot" title="Permanent link">&para;</a></h3>
 <div class="field-list">
 <ul>
 <li><strong>Tipo:</strong> <code>SHT_PROGBITS</code></li>
 <li><strong>Atributos:</strong> <code>SHF_ALLOC | SHF_EXECINSTR</code></li>
 <li><strong>Segmento:</strong> <code>PT_LOAD</code> con permisos <code>PF_R | PF_X</code></li>
-<li>Sección de código con stubs trampolín para cada función importada:</li>
-</ul>
-</div>
+<li>
+<p>Sección de código con stubs trampolín para cada función importada:</p>
+<!-- -->
 <ul>
 <li>
 <p><strong><code>.plt</code></strong></p>
@@ -2046,6 +2048,9 @@
 <p>Stubs para funciones importadas cuya dirección se almacena en una variable (function pointer) en lugar de llamarse directamente.</p>
 </li>
 </ul>
+</li>
+</ul>
+</div>
 <h3 id="tablas-de-simbolos">Tablas de Símbolos<a class="headerlink" href="#tablas-de-simbolos" title="Permanent link">&para;</a></h3>
 <p>Las tablas de símbolos asocian nombres con direcciones, tamaños y atributos.</p>
 <h4 id="estructura-de-elf64_sym">Estructura de <code>Elf64_Sym</code><a class="headerlink" href="#estructura-de-elf64_sym" title="Permanent link">&para;</a></h4>
