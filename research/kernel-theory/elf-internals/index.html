@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Estructura interna del formato ELF en Linux. Headers, segments, sections, carga por el kernel y auxiliary vector.">
+        <meta name="description" content="Qué contiene un binario ELF y cómo se transforma de un fichero a un proceso en ejecución.">
       
       
       
@@ -119,7 +119,7 @@
 
 <meta property="og:type" content="article">
 <meta property="og:title" content="ELF Internals — RAZOR">
-<meta property="og:description" content="Estructura interna del formato ELF en Linux. Headers, segments, sections, carga por el kernel y auxiliary vector.">
+<meta property="og:description" content="Qué contiene un binario ELF y cómo se transforma de un fichero a un proceso en ejecución.">
 <meta property="og:image" content="https://0x574r.github.io/assets/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -130,7 +130,7 @@
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="ELF Internals — RAZOR">
-<meta name="twitter:description" content="Estructura interna del formato ELF en Linux. Headers, segments, sections, carga por el kernel y auxiliary vector.">
+<meta name="twitter:description" content="Qué contiene un binario ELF y cómo se transforma de un fichero a un proceso en ejecución.">
 <meta name="twitter:image" content="https://0x574r.github.io/assets/og-image.png">
 
   </head>
@@ -844,6 +844,106 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Secciones Fundamentales">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#codigo-ejecutable-text" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Código ejecutable .text
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datos-de-solo-lectura-rodata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Datos de solo lectura .rodata
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datos-inicializados-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Datos inicializados .data
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datos-no-inicializados-bss" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Datos no inicializados .bss
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#global-offset-table-got-y-gotplt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Global Offset Table .got y .got.plt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#procedure-linkage-table-plt-pltsec-y-pltgot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Procedure Linkage Table .plt, .plt.sec y .plt.got
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tablas-de-simbolos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tablas de Símbolos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tablas de Símbolos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#estructura-de-elf64_sym" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Estructura de Elf64_Sym
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1185,6 +1285,106 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Secciones Fundamentales">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#codigo-ejecutable-text" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Código ejecutable .text
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datos-de-solo-lectura-rodata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Datos de solo lectura .rodata
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datos-inicializados-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Datos inicializados .data
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datos-no-inicializados-bss" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Datos no inicializados .bss
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#global-offset-table-got-y-gotplt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Global Offset Table .got y .got.plt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#procedure-linkage-table-plt-pltsec-y-pltgot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Procedure Linkage Table .plt, .plt.sec y .plt.got
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tablas-de-simbolos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tablas de Símbolos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tablas de Símbolos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#estructura-de-elf64_sym" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Estructura de Elf64_Sym
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1220,10 +1420,10 @@
 
 <div class="article-header">
 <h1>ELF Internals</h1>
-<span class="article-meta">27/05/2026 · 35 min</span>
+<span class="article-meta">27/05/2026 · 60 min</span>
 </div>
 
-<p>TODO_INTRO</p>
+<p>Qué contiene un binario ELF y cómo se transforma de un fichero a un proceso en ejecución</p>
 <hr />
 <div class="admonition info">
 <p class="admonition-title">Contexto</p>
@@ -1767,51 +1967,51 @@
 </ul>
 </div>
 <h2 id="secciones-fundamentales">Secciones Fundamentales<a class="headerlink" href="#secciones-fundamentales" title="Permanent link">&para;</a></h2>
+<h3 id="codigo-ejecutable-text">Código ejecutable <code>.text</code><a class="headerlink" href="#codigo-ejecutable-text" title="Permanent link">&para;</a></h3>
+<div class="field-list">
 <ul>
-<li>
-<p><strong>Código ejecutable <code>.text</code></strong></p>
-<p><strong>Tipo:</strong> <code>SHT_PROGBITS</code></p>
-<ul>
+<li><strong>Tipo:</strong> <code>SHT_PROGBITS</code></li>
 <li><strong>Atributos:</strong> <code>SHF_ALLOC | SHF_EXECINSTR</code></li>
 <li><strong>Segmento:</strong> <code>PT_LOAD</code> con permisos <code>PF_R | PF_X</code></li>
 <li>Contiene el código máquina del programa. El entry point (<code>e_entry</code>) apunta normalmente al interior de <code>.text</code>.</li>
 </ul>
-</li>
-<li>
-<p><strong>Datos de solo lectura <code>.rodata</code></strong></p>
-<p><strong>Tipo:</strong> <code>SHT_PROGBITS</code></p>
+</div>
+<h3 id="datos-de-solo-lectura-rodata">Datos de solo lectura <code>.rodata</code><a class="headerlink" href="#datos-de-solo-lectura-rodata" title="Permanent link">&para;</a></h3>
+<div class="field-list">
 <ul>
+<li><strong>Tipo:</strong> <code>SHT_PROGBITS</code></li>
 <li><strong>Atributos:</strong> <code>SHF_ALLOC</code></li>
 <li><strong>Segmento:</strong> <code>PT_LOAD</code> con permisos <code>PF_R</code></li>
 <li>Constantes: cadenas de texto, tablas de lookup, constantes numéricas…</li>
 </ul>
-</li>
-<li>
-<p><strong>Datos inicializados <code>.data</code></strong></p>
-<p><strong>Tipo:</strong> <code>SHT_PROGBITS</code></p>
+</div>
+<h3 id="datos-inicializados-data">Datos inicializados <code>.data</code><a class="headerlink" href="#datos-inicializados-data" title="Permanent link">&para;</a></h3>
+<div class="field-list">
 <ul>
+<li><strong>Tipo:</strong> <code>SHT_PROGBITS</code></li>
 <li><strong>Atributos:</strong> <code>SHF_ALLOC | SHF_WRITE</code></li>
 <li><strong>Segmento:</strong> <code>PT_LOAD</code> con permisos <code>PF_R | PF_W</code></li>
 <li>Variables estáticas y globales inicializadas con valores no nulos. Los valores iniciales se copian desde el fichero al mapeado en memoria durante la carga.</li>
 </ul>
-</li>
-<li>
-<p><strong>Datos no inicializados <code>.bss</code></strong></p>
-<p><strong>Tipo:</strong> <code>SHT_NOBITS</code></p>
+</div>
+<h3 id="datos-no-inicializados-bss">Datos no inicializados <code>.bss</code><a class="headerlink" href="#datos-no-inicializados-bss" title="Permanent link">&para;</a></h3>
+<div class="field-list">
 <ul>
+<li><strong>Tipo:</strong> <code>SHT_NOBITS</code></li>
 <li><strong>Atributos:</strong> <code>SHF_ALLOC | SHF_WRITE</code></li>
 <li><strong>Segmento:</strong> Ubicado en el <code>PT_LOAD</code> de datos (<code>PF_R | PF_W</code>)</li>
 <li>Variables globales y estáticas inicializadas a cero o sin inicializar.</li>
 </ul>
-</li>
-<li>
-<p><strong>Global Offset Table <code>.got</code> y <code>.got.plt</code></strong></p>
-<p><strong>Tipo:</strong> <code>SHT_PROGBITS</code></p>
+</div>
+<h3 id="global-offset-table-got-y-gotplt">Global Offset Table <code>.got</code> y <code>.got.plt</code><a class="headerlink" href="#global-offset-table-got-y-gotplt" title="Permanent link">&para;</a></h3>
+<div class="field-list">
 <ul>
+<li><strong>Tipo:</strong> <code>SHT_PROGBITS</code></li>
 <li><strong>Atributos:</strong> <code>SHF_ALLOC | SHF_WRITE</code></li>
 <li><strong>Segmento:</strong> <code>PT_LOAD</code> con permisos <code>PF_R | PF_W</code></li>
 <li>La GOT es la estructura central del enlazado dinámico para el acceso a datos y funciones externas.</li>
 </ul>
+</div>
 <p>En x86-64 se divide en:</p>
 <ul>
 <li>
@@ -1823,16 +2023,15 @@
 <p>Entradas para funciones importadas, resueltas via lazy binding.</p>
 </li>
 </ul>
-</li>
-<li>
-<p><strong>Procedure Linkage Table <code>.plt</code>, <code>.plt.sec</code> y <code>.plt.got</code></strong></p>
-<p><strong>Tipo:</strong> <code>SHT_PROGBITS</code></p>
+<h3 id="procedure-linkage-table-plt-pltsec-y-pltgot">Procedure Linkage Table <code>.plt</code>, <code>.plt.sec</code> y <code>.plt.got</code><a class="headerlink" href="#procedure-linkage-table-plt-pltsec-y-pltgot" title="Permanent link">&para;</a></h3>
+<div class="field-list">
 <ul>
+<li><strong>Tipo:</strong> <code>SHT_PROGBITS</code></li>
 <li><strong>Atributos:</strong> <code>SHF_ALLOC | SHF_EXECINSTR</code></li>
 <li><strong>Segmento:</strong> <code>PT_LOAD</code> con permisos <code>PF_R | PF_X</code></li>
 <li>Sección de código con stubs trampolín para cada función importada:</li>
 </ul>
-<!-- -->
+</div>
 <ul>
 <li>
 <p><strong><code>.plt</code></strong></p>
@@ -1847,11 +2046,9 @@
 <p>Stubs para funciones importadas cuya dirección se almacena en una variable (function pointer) en lugar de llamarse directamente.</p>
 </li>
 </ul>
-</li>
-<li>
-<p><strong>Tablas de Símbolos</strong></p>
+<h3 id="tablas-de-simbolos">Tablas de Símbolos<a class="headerlink" href="#tablas-de-simbolos" title="Permanent link">&para;</a></h3>
 <p>Las tablas de símbolos asocian nombres con direcciones, tamaños y atributos.</p>
-<p><strong>Estructura de <code>Elf64_Sym</code></strong></p>
+<h4 id="estructura-de-elf64_sym">Estructura de <code>Elf64_Sym</code><a class="headerlink" href="#estructura-de-elf64_sym" title="Permanent link">&para;</a></h4>
 <p>Cada entrada ocupa 24 bytes:</p>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">elf64_sym</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span><span class="n">Elf64_Word</span><span class="w">    </span><span class="n">st_name</span><span class="p">;</span><span class="w">    </span><span class="cm">/* Índice en la string table     (4 bytes)  */</span>
@@ -1863,6 +2060,7 @@
 </span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="p">}</span><span class="w"> </span><span class="n">Elf64_Sym</span><span class="p">;</span>
 </span></code></pre></div>
 <p>Un binario puede contener dos tablas distintas:</p>
+<div class="field-list">
 <ul>
 <li>
 <p><strong><code>.symtab</code></strong> (tipo <code>SHT_SYMTAB</code>)</p>
@@ -1873,8 +2071,7 @@
 <p>Contiene solo los símbolos necesarios para el enlazado dinámico: funciones y variables importadas/exportadas.</p>
 </li>
 </ul>
-</li>
-</ul>
+</div>
 <h2 id="agradecimientos">Agradecimientos<a class="headerlink" href="#agradecimientos" title="Permanent link">&para;</a></h2>
 <p>Gracias por llegar hasta aquí.</p>
 <p>Si encuentras errores o quieres mejorar/ampliar el artículo, el contenido del blog está abierto a Pull Requests. Toda contribución es bienvenida.</p>
