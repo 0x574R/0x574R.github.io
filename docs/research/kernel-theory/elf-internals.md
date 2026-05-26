@@ -469,13 +469,17 @@ readelf -S <program>
 
     En x86-64 se divide en:
 
-    - **`.got`**
+</div>
 
-        Entradas para variables globales importadas y direcciones resueltas via eager binding.
+<div style="padding-left: 1.5em" markdown>
 
-    - **`.got.plt`**
+- **`.got`**
 
-        Entradas para funciones importadas, resueltas via lazy binding.
+    Entradas para variables globales importadas y direcciones resueltas via eager binding.
+
+- **`.got.plt`**
+
+    Entradas para funciones importadas, resueltas via lazy binding.
 
 </div>
 
@@ -488,19 +492,21 @@ readelf -S <program>
 - **Segmento:** `PT_LOAD` con permisos `PF_R | PF_X`
 - Sección de código con stubs trampolín para cada función importada:
 
-    <!-- -->
+</div>
 
-    - **`.plt`**
+<div style="padding-left: 1.5em" markdown>
 
-        Stubs de fallback para lazy binding (no llamados directamente por el código del programa).
+- **`.plt`**
 
-    - **`.plt.sec`**
+    Stubs de fallback para lazy binding (no llamados directamente por el código del programa).
 
-        Stubs que el código del programa llama directamente cuando invoca una función importada.
+- **`.plt.sec`**
 
-    - **`.plt.got`**
+    Stubs que el código del programa llama directamente cuando invoca una función importada.
 
-        Stubs para funciones importadas cuya dirección se almacena en una variable (function pointer) en lugar de llamarse directamente.
+- **`.plt.got`**
+
+    Stubs para funciones importadas cuya dirección se almacena en una variable (function pointer) en lugar de llamarse directamente.
 
 </div>
 

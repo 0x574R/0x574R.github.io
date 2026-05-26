@@ -1473,6 +1473,4 @@ div.tables-centered td {
   display: none !important;
 }
 /* Restaurar bullets en listas anidadas dentro de field-list */
-.field-list ul ul {
-  list-style-type: disc !important;
-}
+/* (eliminado: usamos divs con padding para bullets explícitos) */
