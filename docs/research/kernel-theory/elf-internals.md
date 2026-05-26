@@ -26,10 +26,10 @@ La arquitectura ELF presenta una dualidad fundamental, el mismo archivo puede de
 - La **vista de ejecución** organiza el contenido en **segments** (descritos por la Program Header Table). Los segments representan cómo el kernel mapea el binario en memoria virtual cuando se ejecuta el programa.
 - La **vista de enlazado** organiza el contenido en **sections** (descritas por la Section Header Table). Las sections son unidades lógicas con semántica específica utilizadas por el linker durante el proceso de construcción del binario ELF y por herramientas de análisis estático.
 
-!!! note ""
-    La Section Header Table es prescindible en tiempo de ejecución.
+    !!! note ""
+        La Section Header Table es prescindible en tiempo de ejecución.
 
-Ambas vistas son formas de interpretar el mismo ELF en distintas fases del ciclo de vida del programa (construcción (linking) y ejecución (loading)).
+Ambas vistas, son formas de interpretar el mismo ELF en distintas fases del ciclo de vida del programa (construcción (linking) y ejecución (loading)).
 
 ## Layout físico del archivo
 
@@ -82,54 +82,74 @@ readelf -h <program>
 
 ### Campos de la Estructura Relevantes
 
-**`e_ident`**
+- **`e_ident`**
 
-Los primeros 16 bytes codifican la identificación y las propiedades fundamentales del binario:
+    Los primeros 16 bytes codifican la identificación y las propiedades fundamentales del binario:
 
-| Índice | Constante | Valor x86-64 | Significado |
-|--------|-----------|--------------|-------------|
-| 0 | `EI_MAG0` | `0x7f` | Primer byte del magic number |
-| 1 | `EI_MAG1` | `0x45 ('E')` | Segundo byte del magic number |
-| 2 | `EI_MAG2` | `0x4c ('L')` | Tercer byte del magic number |
-| 3 | `EI_MAG3` | `0x46 ('F')` | Cuarto byte del magic number |
-| 4 | `EI_CLASS` | `2 (ELFCLASS64)` | Clase: 64 bits |
-| 5 | `EI_DATA` | `1 (ELFDATA2LSB)` | Endianness: little-endian |
-| 6 | `EI_VERSION` | `1 (EV_CURRENT)` | Versión del formato |
-| 7 | `EI_OSABI` | `0 (ELFOSABI_NONE)` | ABI del SO |
-| 8 | `EI_PAD` | `0` | Padding (bytes 8–15 a cero) |
+    | Índice | Constante | Valor x86-64 | Significado |
+    |--------|-----------|--------------|-------------|
+    | 0 | `EI_MAG0` | `0x7f` | Primer byte del magic number |
+    | 1 | `EI_MAG1` | `0x45 ('E')` | Segundo byte del magic number |
+    | 2 | `EI_MAG2` | `0x4c ('L')` | Tercer byte del magic number |
+    | 3 | `EI_MAG3` | `0x46 ('F')` | Cuarto byte del magic number |
+    | 4 | `EI_CLASS` | `2 (ELFCLASS64)` | Clase: 64 bits |
+    | 5 | `EI_DATA` | `1 (ELFDATA2LSB)` | Endianness: little-endian |
+    | 6 | `EI_VERSION` | `1 (EV_CURRENT)` | Versión del formato |
+    | 7 | `EI_OSABI` | `0 (ELFOSABI_NONE)` | ABI del SO |
+    | 8 | `EI_PAD` | `0` | Padding (bytes 8–15 a cero) |
 
-!!! warning ""
-    El kernel realiza las siguientes validaciones con los datos del ELF Header: magic bytes = `\177ELF` (`0x7f 0x45 0x4c 0x46`), `e_type` ∈ {`ET_EXEC`, `ET_DYN`}, `e_machine` compatible con la arquitectura (`EM_X86_64` = 62 en x86-64) y `e_phentsize` = 56. Si cualquier comprobación falla, retorna `-ENOEXEC`.
+    !!! note ""
+        El kernel realiza las siguientes validaciones con los datos del ELF Header: magic bytes = `\177ELF` (`0x7f 0x45 0x4c 0x46`), `e_type` ∈ {`ET_EXEC`, `ET_DYN`}, `e_machine` compatible con la arquitectura (`EM_X86_64` = 62 en x86-64) y `e_phentsize` = 56. Si cualquier comprobación falla, retorna `-ENOEXEC`.
 
-**`e_type`** — Naturaleza del archivo. `ET_REL` (1) = objeto reubicable (.o), `ET_EXEC` (2) = ejecutable con direcciones absolutas, `ET_DYN` (3) = shared object / PIE executable, `ET_CORE` (4) = core dump.
+- **`e_type`**
 
-**`e_machine`** — Arquitectura. Para x86-64: `62` (`EM_X86_64`).
+    Naturaleza del archivo. `ET_REL` (1) = objeto reubicable (.o), `ET_EXEC` (2) = ejecutable con direcciones absolutas, `ET_DYN` (3) = shared object / PIE executable, `ET_CORE` (4) = core dump.
 
-**`e_entry`** — Dirección virtual del punto de entrada (`_start`). En binarios no-PIE (`ET_EXEC`), es una dirección absoluta fija. En binarios PIE (`ET_DYN`), es un offset relativo a la base de carga, que el kernel suma a la dirección base establecida por ASLR.
+- **`e_machine`**
 
-**`e_phoff`** y **`e_shoff`** — Offsets en bytes de la PHT y la SHT dentro del archivo.
+    Arquitectura. Para x86-64: `62` (`EM_X86_64`).
 
-**`e_phentsize`** — Tamaño de cada entrada de la PHT (56 bytes para ELF64).
+- **`e_entry`**
 
-**`e_shentsize`** — Tamaño de cada entrada de la SHT (64 bytes para ELF64).
+    Dirección virtual del punto de entrada (`_start`). En binarios no-PIE (`ET_EXEC`), es una dirección absoluta fija. En binarios PIE (`ET_DYN`), es un offset relativo a la base de carga, que el kernel suma a la dirección base establecida por ASLR.
 
-**`e_phnum`** — Número de entradas en la PHT.
+- **`e_phoff`** y **`e_shoff`**
 
-**`e_shnum`** — Número de secciones en la SHT.
+    Offsets en bytes de la PHT y la SHT dentro del archivo.
 
-**`e_shstrndx`** — Índice de la sección `.shstrtab` (contiene los nombres de las secciones como cadenas terminadas en `\0`).
+- **`e_phentsize`**
 
-```asm
-; .shstrtab
+    Tamaño de cada entrada de la PHT (56 bytes para ELF64).
 
-00                                           
-2e 74 65 78 74 00                      ; ".text"               
-2e 64 61 74 61 00                      ; ".data"               
-2e 62 73 73 00                         ; ".bss"                
-2e 73 68 73 74 72 74 61 62 00          ; ".shstrtab"    
-```
+- **`e_shentsize`**
 
-**`e_flags`** — Flags específicas de la arquitectura. En x86-64, es siempre `0`.
+    Tamaño de cada entrada de la SHT (64 bytes para ELF64).
+
+- **`e_phnum`**
+
+    Número de entradas en la PHT.
+
+- **`e_shnum`**
+
+    Número de secciones en la SHT.
+
+- **`e_shstrndx`**
+
+    Índice de la sección `.shstrtab` (contiene los nombres de las secciones como cadenas terminadas en `\0`).
+
+    ```asm
+    ; .shstrtab
+
+    00                                           
+    2e 74 65 78 74 00                      ; ".text"               
+    2e 64 61 74 61 00                      ; ".data"               
+    2e 62 73 73 00                         ; ".bss"                
+    2e 73 68 73 74 72 74 61 62 00          ; ".shstrtab"    
+    ```
+
+- **`e_flags`**
+
+    Flags específicas de la arquitectura. En x86-64, es siempre `0`.
 
 ## Program Headers
 
@@ -165,37 +185,49 @@ readelf -l <program>
 
 ### Campos de la Estructura Relevantes
 
-#### Tipos de segmentos (`p_type`)
+- **Tipos de segmentos (`p_type`)**
 
-**`PT_LOAD`** — Segmento cargable. Cada `PT_LOAD` define una región que el kernel mapea al espacio de direcciones virtuales del proceso mediante `mmap`. Un binario típico contiene dos o tres segments `PT_LOAD`: uno para código (RX), uno para datos (RW) y opcionalmente uno para constantes de solo lectura (R).
+    - **`PT_LOAD`**
 
-**`PT_DYNAMIC`** — Apunta a la información necesaria para el enlazado dinámico. Normalmente contiene la sección `.dynamic`, formada por un array de estructuras `Elf64_Dyn`, que actúa como la tabla principal utilizada por el dynamic linker (generalmente `ld-linux.so`).
+        Segmento cargable. Cada `PT_LOAD` define una región que el kernel mapea al espacio de direcciones virtuales del proceso mediante `mmap`. Un binario típico contiene dos o tres segments `PT_LOAD`: uno para código (RX), uno para datos (RW) y opcionalmente uno para constantes de solo lectura (R).
 
-**`PT_INTERP`** — Ruta del intérprete ELF (dynamic linker). El kernel lee esta ruta y carga al intérprete como un segundo binario ELF antes de transferir el control. Un ejecutable estáticamente enlazado carece de este segmento.
+    - **`PT_DYNAMIC`**
 
-**`PT_PHDR`** — Indica dónde se encuentra cargada en memoria la propia PHT. Esto permite al intérprete ELF localizar directamente la tabla de segmentos durante la carga dinámica del ejecutable, sin la necesidad de volver a leer el ELF Header desde el archivo en disco.
+        Apunta a la información necesaria para el enlazado dinámico. Normalmente contiene la sección `.dynamic`, formada por un array de estructuras `Elf64_Dyn`, que actúa como la tabla principal utilizada por el dynamic linker (generalmente `ld-linux.so`).
 
-**`PT_NOTE`** — Información auxiliar (notas).
+    - **`PT_INTERP`**
 
-**`PT_TLS`** — Plantilla para Thread-Local Storage. Define el bloque de datos que cada thread recibe como copia privada.
+        Ruta del intérprete ELF (dynamic linker). El kernel lee esta ruta y carga al intérprete como un segundo binario ELF antes de transferir el control. Un ejecutable estáticamente enlazado carece de este segmento.
 
-#### Permisos (`p_flags`)
+    - **`PT_PHDR`**
 
-```c
-#define PF_X  0x1   /* Ejecución  */
-#define PF_W  0x2   /* Escritura  */
-#define PF_R  0x4   /* Lectura    */
-```
+        Indica dónde se encuentra cargada en memoria la propia PHT. Esto permite al intérprete ELF localizar directamente la tabla de segmentos durante la carga dinámica del ejecutable, sin la necesidad de volver a leer el ELF Header desde el archivo en disco.
 
-El kernel traduce estas flags a protecciones de página (granularidad mínima):
+    - **`PT_NOTE`**
 
-| Combinación ELF (`p_flags`) | Protección de páginas | Uso | Secciones relevantes |
-|---|---|---|---|
-| `PF_R \| PF_X` | `PROT_READ \| PROT_EXEC` | Código ejecutable | `.text` |
-| `PF_R \| PF_W` | `PROT_READ \| PROT_WRITE` | Datos modificables | `.data` y `.bss` |
-| `PF_R` | `PROT_READ` | Datos de solo lectura | `.rodata` |
+        Información auxiliar (notas).
 
-### Alineamiento y cálculo de rangos
+    - **`PT_TLS`**
+
+        Plantilla para Thread-Local Storage. Define el bloque de datos que cada thread recibe como copia privada.
+
+- **Permisos (`p_flags`)**
+
+    ```c
+    #define PF_X  0x1   /* Ejecución  */
+    #define PF_W  0x2   /* Escritura  */
+    #define PF_R  0x4   /* Lectura    */
+    ```
+
+    El kernel traduce estas flags a protecciones de página (granularidad mínima):
+
+    | Combinación ELF (`p_flags`) | Protección de páginas | Uso | Secciones relevantes |
+    |---|---|---|---|
+    | `PF_R` &#124; `PF_X` | `PROT_READ` &#124; `PROT_EXEC` | Código ejecutable | `.text` |
+    | `PF_R` &#124; `PF_W` | `PROT_READ` &#124; `PROT_WRITE` | Datos modificables | `.data` y `.bss` |
+    | `PF_R` | `PROT_READ` | Datos de solo lectura | `.rodata` |
+
+#### Alineamiento y cálculo de rangos
 
 El rango real de memoria de un segmento se redondea al siguiente múltiplo de `p_align`:
 
@@ -213,28 +245,24 @@ Para ELF, el handler es `load_elf_binary`. La función comienza validando el ELF
 
 Superada la validación, el kernel itera la PHT buscando dos tipos de segmento:
 
-### Detección de `PT_INTERP`
+- **Detección de `PT_INTERP`**<br>Si la PHT contiene un segmento `PT_INTERP`, el kernel lee la ruta del intérprete dinámico y lo mapea en el nuevo espacio de direcciones, junto con los segmentos del binario principal. Un binario estáticamente enlazado no tiene `PT_INTERP`, de modo que el kernel transfiere el control directamente a su entry point.
 
-Si la PHT contiene un segmento `PT_INTERP`, el kernel lee la ruta del intérprete dinámico y lo mapea en el nuevo espacio de direcciones, junto con los segmentos del binario principal. Un binario estáticamente enlazado no tiene `PT_INTERP`, de modo que el kernel transfiere el control directamente a su entry point.
+    !!! note ""
+        `execve` no crea un proceso nuevo, sino que reemplaza la imagen del proceso que la invoca. El PID es el mismo. El kernel descarta el espacio de direcciones del proceso invocador y construye uno nuevo donde mapea los segmentos del binario a ejecutar.
 
-!!! note ""
-    `execve` no crea un proceso nuevo, sino que reemplaza la imagen del proceso que la invoca. El PID es el mismo. El kernel descarta el espacio de direcciones del proceso invocador y construye uno nuevo donde mapea los segmentos del binario a ejecutar.
+- **Mapeado de segmentos `PT_LOAD`**<br>Cada segmento `PT_LOAD` en la PHT describe un rango de bytes del fichero ELF (`p_offset`, `p_filesz`), la dirección en memoria virtual donde deben colocarse esos bytes (`p_vaddr`) y los permisos de esa zona (`p_flags`). Si el segmento necesita más memoria de la que ocupa en el fichero (`p_memsz > p_filesz`), el kernel extiende la zona con memoria inicializada a cero, esa diferencia corresponde a la región `.bss`, las variables globales sin valor inicial.
 
-### Mapeado de segmentos `PT_LOAD`
+    !!! note ""
+        Cada `PT_LOAD` genera una o más VMAs en el `mm_struct` del proceso.
 
-Cada segmento `PT_LOAD` en la PHT describe un rango de bytes del fichero ELF (`p_offset`, `p_filesz`), la dirección en memoria virtual donde deben colocarse esos bytes (`p_vaddr`) y los permisos de esa zona (`p_flags`). Si el segmento necesita más memoria de la que ocupa en el fichero (`p_memsz > p_filesz`), el kernel extiende la zona con memoria inicializada a cero, esa diferencia corresponde a la región `.bss`, las variables globales sin valor inicial.
+    El cálculo de la dirección depende del tipo de binario:
 
-!!! note ""
-    Cada `PT_LOAD` genera una o más VMAs en el `mm_struct` del proceso.
+    - En `ET_EXEC` (no-PIE): `p_vaddr` es una dirección virtual absoluta. El kernel mapea el segmento exactamente en esa dirección. Cada ejecución produce el mismo layout de memoria.
+    - En `ET_DYN` (PIE): el kernel selecciona una dirección base aleatoria (debido al ASLR) y suma `p_vaddr` como offset. Cada ejecución produce un layout diferente. La aleatorización dificulta ataques que dependen de conocer las direcciones de código o datos.
 
-El cálculo de la dirección depende del tipo de binario:
+### Transferencia de control
 
-- En `ET_EXEC` (no-PIE): `p_vaddr` es una dirección virtual absoluta. El kernel mapea el segmento exactamente en esa dirección. Cada ejecución produce el mismo layout de memoria.
-- En `ET_DYN` (PIE): el kernel selecciona una dirección base aleatoria (debido al ASLR) y suma `p_vaddr` como offset. Cada ejecución produce un layout diferente. La aleatorización dificulta ataques que dependen de conocer las direcciones de código o datos.
-
-### ==Transferencia de control==
-
-==Si el binario tiene intérprete, el kernel transfiere el control al entry point del intérprete, no al del programa. El intérprete procesa `PT_DYNAMIC` (resolviendo símbolos y aplicando reubicaciones), mapea las bibliotecas compartidas necesarias y finalmente salta al entry point real del programa (`AT_ENTRY`). Si no hay intérprete, el kernel salta directamente a `e_entry`.==
+Si el binario tiene intérprete, el kernel transfiere el control al entry point del intérprete, no al del programa. El intérprete procesa `PT_DYNAMIC` (resolviendo símbolos y aplicando reubicaciones), mapea las bibliotecas compartidas necesarias y finalmente salta al entry point real del programa (`AT_ENTRY`). Si no hay intérprete, el kernel salta directamente a `e_entry`.
 
 ## Auxiliary Vector
 
@@ -301,7 +329,7 @@ El array termina cuando `a_type == AT_NULL`.
 !!! note ""
     El kernel genera exactamente una entrada por cada `a_type`, no hay duplicados. El `auxv` no es opcional, lo genera el kernel incondicionalmente para todo proceso ELF, estático o dinámico.
 
-### Introspección via `auxv`
+#### Introspección via `auxv`
 
 Con los valores de `AT_PHDR`, `AT_PHENT` y `AT_PHNUM`, el proceso puede recorrer su propia PHT en memoria y localizar cualquier segmento.
 
@@ -344,83 +372,111 @@ readelf -S <program>
 
 ### Campos de la Estructura Relevantes
 
-#### Tipos de sección (`sh_type`)
+- **Tipos de sección (`sh_type`)**
 
-| Valor | Constante | Descripción |
-|-------|-----------|-------------|
-| 0 | `SHT_NULL` | Entrada inactiva |
-| 1 | `SHT_PROGBITS` | Contenido definido por el programa (código, datos) |
-| 2 | `SHT_SYMTAB` | Tabla de símbolos completa (linking) |
-| 3 | `SHT_STRTAB` | Tabla de cadenas |
-| 4 | `SHT_RELA` | Entradas de reubicación con addend explícito |
-| 6 | `SHT_DYNAMIC` | Información de enlazado dinámico |
-| 7 | `SHT_NOTE` | Información auxiliar |
-| 8 | `SHT_NOBITS` | Sección sin contenido en archivo (`.bss`) |
-| 9 | `SHT_REL` | Entradas de reubicación sin addend |
-| 11 | `SHT_DYNSYM` | Tabla de símbolos dinámicos |
+    | Valor | Constante | Descripción |
+    |-------|-----------|-------------|
+    | 0 | `SHT_NULL` | Entrada inactiva |
+    | 1 | `SHT_PROGBITS` | Contenido definido por el programa (código, datos) |
+    | 2 | `SHT_SYMTAB` | Tabla de símbolos completa (linking) |
+    | 3 | `SHT_STRTAB` | Tabla de cadenas |
+    | 4 | `SHT_RELA` | Entradas de reubicación con addend explícito |
+    | 6 | `SHT_DYNAMIC` | Información de enlazado dinámico |
+    | 7 | `SHT_NOTE` | Información auxiliar |
+    | 8 | `SHT_NOBITS` | Sección sin contenido en archivo (`.bss`) |
+    | 9 | `SHT_REL` | Entradas de reubicación sin addend |
+    | 11 | `SHT_DYNSYM` | Tabla de símbolos dinámicos |
 
-#### Flags de sección (`sh_flags`)
+- **Flags de sección (`sh_flags`)**
 
-| Valor | Constante | Significado |
-|-------|-----------|-------------|
-| `0x1` | `SHF_WRITE` | Escribible en ejecución |
-| `0x2` | `SHF_ALLOC` | Ocupa memoria en ejecución |
-| `0x4` | `SHF_EXECINSTR` | Contiene instrucciones ejecutables |
-| `0x10` | `SHF_MERGE` | Puede fusionarse para eliminar duplicados |
-| `0x20` | `SHF_STRINGS` | Contiene cadenas terminadas en `\0` |
-| `0x400` | `SHF_TLS` | Datos thread-local |
+    | Valor | Constante | Significado |
+    |-------|-----------|-------------|
+    | `0x1` | `SHF_WRITE` | Escribible en ejecución |
+    | `0x2` | `SHF_ALLOC` | Ocupa memoria en ejecución |
+    | `0x4` | `SHF_EXECINSTR` | Contiene instrucciones ejecutables |
+    | `0x10` | `SHF_MERGE` | Puede fusionarse para eliminar duplicados |
+    | `0x20` | `SHF_STRINGS` | Contiene cadenas terminadas en `\0` |
+    | `0x400` | `SHF_TLS` | Datos thread-local |
 
-Flags específicas del kernel: `SHF_RELA_LIVEPATCH` (`0x00100000`) marca secciones de reubicación para live patching, `SHF_RO_AFTER_INIT` (`0x00200000`) marca secciones que se convierten en solo lectura tras la inicialización del kernel.
+    Flags específicas del kernel: `SHF_RELA_LIVEPATCH` (`0x00100000`) marca secciones de reubicación para live patching, `SHF_RO_AFTER_INIT` (`0x00200000`) marca secciones que se convierten en solo lectura tras la inicialización del kernel.
 
 ## Secciones Fundamentales
 
 ### Código ejecutable `.text`
 
-**Tipo:** `SHT_PROGBITS` · **Atributos:** `SHF_ALLOC | SHF_EXECINSTR` · **Segmento:** `PT_LOAD` con permisos `PF_R | PF_X`
+**Tipo:** `SHT_PROGBITS`
 
-Contiene el código máquina del programa. El entry point (`e_entry`) apunta normalmente al interior de `.text`.
+- **Atributos:** `SHF_ALLOC | SHF_EXECINSTR`
+- **Segmento:** `PT_LOAD` con permisos `PF_R | PF_X`
+
+    Contiene el código máquina del programa. El entry point (`e_entry`) apunta normalmente al interior de `.text`.
 
 ### Datos de solo lectura `.rodata`
 
-**Tipo:** `SHT_PROGBITS` · **Atributos:** `SHF_ALLOC` · **Segmento:** `PT_LOAD` con permisos `PF_R`
+**Tipo:** `SHT_PROGBITS`
 
-Constantes: cadenas de texto, tablas de lookup, constantes numéricas…
+- **Atributos:** `SHF_ALLOC`
+- **Segmento:** `PT_LOAD` con permisos `PF_R`
+
+    Constantes: cadenas de texto, tablas de lookup, constantes numéricas…
 
 ### Datos inicializados `.data`
 
-**Tipo:** `SHT_PROGBITS` · **Atributos:** `SHF_ALLOC | SHF_WRITE` · **Segmento:** `PT_LOAD` con permisos `PF_R | PF_W`
+**Tipo:** `SHT_PROGBITS`
 
-Variables estáticas y globales inicializadas con valores no nulos. Los valores iniciales se copian desde el fichero al mapeado en memoria durante la carga.
+- **Atributos:** `SHF_ALLOC | SHF_WRITE`
+- **Segmento:** `PT_LOAD` con permisos `PF_R | PF_W`
+
+    Variables estáticas y globales inicializadas con valores no nulos. Los valores iniciales se copian desde el fichero al mapeado en memoria durante la carga.
 
 ### Datos no inicializados `.bss`
 
-**Tipo:** `SHT_NOBITS` · **Atributos:** `SHF_ALLOC | SHF_WRITE` · **Segmento:** ubicado en el `PT_LOAD` de datos (`PF_R | PF_W`)
+**Tipo:** `SHT_NOBITS`
 
-Variables globales y estáticas inicializadas a cero o sin inicializar.
+- **Atributos:** `SHF_ALLOC | SHF_WRITE`
+- **Segmento:** Ubicado en el `PT_LOAD` de datos (`PF_R | PF_W`)
+
+    Variables globales y estáticas inicializadas a cero o sin inicializar.
 
 ### Global Offset Table `.got` y `.got.plt`
 
-**Tipo:** `SHT_PROGBITS` · **Atributos:** `SHF_ALLOC | SHF_WRITE` · **Segmento:** `PT_LOAD` con permisos `PF_R | PF_W`
+**Tipo:** `SHT_PROGBITS`
 
-La GOT es la estructura central del enlazado dinámico para el acceso a datos y funciones externas.
+- **Atributos:** `SHF_ALLOC | SHF_WRITE`
+- **Segmento:** `PT_LOAD` con permisos `PF_R | PF_W`
 
-En x86-64 se divide en:
+    La GOT es la estructura central del enlazado dinámico para el acceso a datos y funciones externas.
 
-**`.got`** — Entradas para variables globales importadas y direcciones resueltas via eager binding.
+    En x86-64 se divide en:
 
-**`.got.plt`** — Entradas para funciones importadas, resueltas via lazy binding.
+    - **`.got`**
+
+        Entradas para variables globales importadas y direcciones resueltas via eager binding.
+
+    - **`.got.plt`**
+
+        Entradas para funciones importadas, resueltas via lazy binding.
 
 ### Procedure Linkage Table `.plt`, `.plt.sec` y `.plt.got`
 
-**Tipo:** `SHT_PROGBITS` · **Atributos:** `SHF_ALLOC | SHF_EXECINSTR` · **Segmento:** `PT_LOAD` con permisos `PF_R | PF_X`
+**Tipo:** `SHT_PROGBITS`
 
-Sección de código con stubs trampolín para cada función importada:
+- **Atributos:** `SHF_ALLOC | SHF_EXECINSTR`
+- **Segmento:** `PT_LOAD` con permisos `PF_R | PF_X`
 
-**`.plt`** — Stubs de fallback para lazy binding (no llamados directamente por el código del programa).
+    Sección de código con stubs trampolín para cada función importada:
 
-**`.plt.sec`** — Stubs que el código del programa llama directamente cuando invoca una función importada.
+    - **`.plt`**
 
-**`.plt.got`** — Stubs para funciones importadas cuya dirección se almacena en una variable (function pointer) en lugar de llamarse directamente.
+        Stubs de fallback para lazy binding (no llamados directamente por el código del programa).
+
+    - **`.plt.sec`**
+
+        Stubs que el código del programa llama directamente cuando invoca una función importada.
+
+    - **`.plt.got`**
+
+        Stubs para funciones importadas cuya dirección se almacena en una variable (function pointer) en lugar de llamarse directamente.
 
 ### Tablas de Símbolos
 
@@ -443,9 +499,13 @@ typedef struct elf64_sym {
 
 Un binario puede contener dos tablas distintas:
 
-**`.symtab`** (tipo `SHT_SYMTAB`) — Contiene todos los símbolos: funciones locales, variables estáticas, labels internos…
+- **`.symtab`** (tipo `SHT_SYMTAB`)
 
-**`.dynsym`** (tipo `SHT_DYNSYM`) — Contiene solo los símbolos necesarios para el enlazado dinámico: funciones y variables importadas/exportadas.
+    Contiene todos los símbolos: funciones locales, variables estáticas, labels internos…
+
+- **`.dynsym`** (tipo `SHT_DYNSYM`)
+
+    Contiene solo los símbolos necesarios para el enlazado dinámico: funciones y variables importadas/exportadas.
 
 ## Agradecimientos
 
