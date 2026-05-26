@@ -57,10 +57,10 @@ description: Blog de seguridad ofensiva. Técnicas de bajo nivel en ensamblador 
     <img src="assets/images/elf-internals-hero.svg" alt="ELF Internals">
   </div>
   <span class="razor-card__title">ELF Internals</span>
-  <span class="razor-card__desc">Estructura interna del formato ELF: headers, segments, sections, carga por el kernel y auxiliary vector</span>
+  <span class="razor-card__desc">Qué contiene un binario ELF y cómo se transforma de un fichero a un proceso en ejecución</span>
   <div class="razor-card__meta">
     <span class="razor-card__tag">Kernel</span>
-    <span class="razor-card__time"><span class="razor-card__star">★</span> 35 min</span>
+    <span class="razor-card__time"><span class="razor-card__star">★</span> 60 min</span>
   </div>
 </a>
 

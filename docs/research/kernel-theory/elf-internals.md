@@ -1,14 +1,14 @@
 ---
 date: 2026-05-27
-description: Estructura interna del formato ELF en Linux. Headers, segments, sections, carga por el kernel y auxiliary vector.
+description: Qué contiene un binario ELF y cómo se transforma de un fichero a un proceso en ejecución.
 ---
 
 <div class="article-header">
 <h1>ELF Internals</h1>
-<span class="article-meta">27/05/2026 · 35 min</span>
+<span class="article-meta">27/05/2026 · 60 min</span>
 </div>
 
-TODO_INTRO
+Qué contiene un binario ELF y cómo se transforma de un fichero a un proceso en ejecución
 
 ---
 
@@ -414,106 +414,126 @@ readelf -S <program>
 
 ## Secciones Fundamentales
 
-- **Código ejecutable `.text`**
+### Código ejecutable `.text`
 
-    **Tipo:** `SHT_PROGBITS`
+<div class="field-list" markdown>
 
-    - **Atributos:** `SHF_ALLOC | SHF_EXECINSTR`
-    - **Segmento:** `PT_LOAD` con permisos `PF_R | PF_X`
-    - Contiene el código máquina del programa. El entry point (`e_entry`) apunta normalmente al interior de `.text`.
+- **Tipo:** `SHT_PROGBITS`
+- **Atributos:** `SHF_ALLOC | SHF_EXECINSTR`
+- **Segmento:** `PT_LOAD` con permisos `PF_R | PF_X`
+- Contiene el código máquina del programa. El entry point (`e_entry`) apunta normalmente al interior de `.text`.
 
-- **Datos de solo lectura `.rodata`**
+</div>
 
-    **Tipo:** `SHT_PROGBITS`
+### Datos de solo lectura `.rodata`
 
-    - **Atributos:** `SHF_ALLOC`
-    - **Segmento:** `PT_LOAD` con permisos `PF_R`
-    - Constantes: cadenas de texto, tablas de lookup, constantes numéricas…
+<div class="field-list" markdown>
 
-- **Datos inicializados `.data`**
+- **Tipo:** `SHT_PROGBITS`
+- **Atributos:** `SHF_ALLOC`
+- **Segmento:** `PT_LOAD` con permisos `PF_R`
+- Constantes: cadenas de texto, tablas de lookup, constantes numéricas…
 
-    **Tipo:** `SHT_PROGBITS`
+</div>
 
-    - **Atributos:** `SHF_ALLOC | SHF_WRITE`
-    - **Segmento:** `PT_LOAD` con permisos `PF_R | PF_W`
-    - Variables estáticas y globales inicializadas con valores no nulos. Los valores iniciales se copian desde el fichero al mapeado en memoria durante la carga.
+### Datos inicializados `.data`
 
-- **Datos no inicializados `.bss`**
+<div class="field-list" markdown>
 
-    **Tipo:** `SHT_NOBITS`
+- **Tipo:** `SHT_PROGBITS`
+- **Atributos:** `SHF_ALLOC | SHF_WRITE`
+- **Segmento:** `PT_LOAD` con permisos `PF_R | PF_W`
+- Variables estáticas y globales inicializadas con valores no nulos. Los valores iniciales se copian desde el fichero al mapeado en memoria durante la carga.
 
-    - **Atributos:** `SHF_ALLOC | SHF_WRITE`
-    - **Segmento:** Ubicado en el `PT_LOAD` de datos (`PF_R | PF_W`)
-    - Variables globales y estáticas inicializadas a cero o sin inicializar.
+</div>
 
-- **Global Offset Table `.got` y `.got.plt`**
+### Datos no inicializados `.bss`
 
-    **Tipo:** `SHT_PROGBITS`
+<div class="field-list" markdown>
 
-    - **Atributos:** `SHF_ALLOC | SHF_WRITE`
-    - **Segmento:** `PT_LOAD` con permisos `PF_R | PF_W`
-    - La GOT es la estructura central del enlazado dinámico para el acceso a datos y funciones externas.
+- **Tipo:** `SHT_NOBITS`
+- **Atributos:** `SHF_ALLOC | SHF_WRITE`
+- **Segmento:** Ubicado en el `PT_LOAD` de datos (`PF_R | PF_W`)
+- Variables globales y estáticas inicializadas a cero o sin inicializar.
 
-    En x86-64 se divide en:
+</div>
 
-    - **`.got`**
+### Global Offset Table `.got` y `.got.plt`
 
-        Entradas para variables globales importadas y direcciones resueltas via eager binding.
+<div class="field-list" markdown>
 
-    - **`.got.plt`**
+- **Tipo:** `SHT_PROGBITS`
+- **Atributos:** `SHF_ALLOC | SHF_WRITE`
+- **Segmento:** `PT_LOAD` con permisos `PF_R | PF_W`
+- La GOT es la estructura central del enlazado dinámico para el acceso a datos y funciones externas.
 
-        Entradas para funciones importadas, resueltas via lazy binding.
+</div>
 
-- **Procedure Linkage Table `.plt`, `.plt.sec` y `.plt.got`**
+En x86-64 se divide en:
 
-    **Tipo:** `SHT_PROGBITS`
+- **`.got`**
 
-    - **Atributos:** `SHF_ALLOC | SHF_EXECINSTR`
-    - **Segmento:** `PT_LOAD` con permisos `PF_R | PF_X`
-    - Sección de código con stubs trampolín para cada función importada:
+    Entradas para variables globales importadas y direcciones resueltas via eager binding.
 
-    <!-- -->
+- **`.got.plt`**
 
-    - **`.plt`**
+    Entradas para funciones importadas, resueltas via lazy binding.
 
-        Stubs de fallback para lazy binding (no llamados directamente por el código del programa).
+### Procedure Linkage Table `.plt`, `.plt.sec` y `.plt.got`
 
-    - **`.plt.sec`**
+<div class="field-list" markdown>
 
-        Stubs que el código del programa llama directamente cuando invoca una función importada.
+- **Tipo:** `SHT_PROGBITS`
+- **Atributos:** `SHF_ALLOC | SHF_EXECINSTR`
+- **Segmento:** `PT_LOAD` con permisos `PF_R | PF_X`
+- Sección de código con stubs trampolín para cada función importada:
 
-    - **`.plt.got`**
+</div>
 
-        Stubs para funciones importadas cuya dirección se almacena en una variable (function pointer) en lugar de llamarse directamente.
+- **`.plt`**
 
-- **Tablas de Símbolos**
+    Stubs de fallback para lazy binding (no llamados directamente por el código del programa).
 
-    Las tablas de símbolos asocian nombres con direcciones, tamaños y atributos.
+- **`.plt.sec`**
 
-    **Estructura de `Elf64_Sym`**
+    Stubs que el código del programa llama directamente cuando invoca una función importada.
 
-    Cada entrada ocupa 24 bytes:
+- **`.plt.got`**
 
-    ```c
-    typedef struct elf64_sym {
-      Elf64_Word    st_name;    /* Índice en la string table     (4 bytes)  */
-      unsigned char st_info;    /* Tipo y binding del símbolo     (1 byte)   */
-      unsigned char st_other;   /* Visibilidad                    (1 byte)   */
-      Elf64_Half    st_shndx;   /* Índice de sección asociada     (2 bytes)  */
-      Elf64_Addr    st_value;   /* Valor del símbolo (dirección)  (8 bytes)  */
-      Elf64_Xword   st_size;    /* Tamaño del objeto asociado     (8 bytes)  */
-    } Elf64_Sym;
-    ```
+    Stubs para funciones importadas cuya dirección se almacena en una variable (function pointer) en lugar de llamarse directamente.
 
-    Un binario puede contener dos tablas distintas:
+### Tablas de Símbolos
 
-    - **`.symtab`** (tipo `SHT_SYMTAB`)
+Las tablas de símbolos asocian nombres con direcciones, tamaños y atributos.
 
-        Contiene todos los símbolos: funciones locales, variables estáticas, labels internos…
+#### Estructura de `Elf64_Sym`
 
-    - **`.dynsym`** (tipo `SHT_DYNSYM`)
+Cada entrada ocupa 24 bytes:
 
-        Contiene solo los símbolos necesarios para el enlazado dinámico: funciones y variables importadas/exportadas.
+```c
+typedef struct elf64_sym {
+  Elf64_Word    st_name;    /* Índice en la string table     (4 bytes)  */
+  unsigned char st_info;    /* Tipo y binding del símbolo     (1 byte)   */
+  unsigned char st_other;   /* Visibilidad                    (1 byte)   */
+  Elf64_Half    st_shndx;   /* Índice de sección asociada     (2 bytes)  */
+  Elf64_Addr    st_value;   /* Valor del símbolo (dirección)  (8 bytes)  */
+  Elf64_Xword   st_size;    /* Tamaño del objeto asociado     (8 bytes)  */
+} Elf64_Sym;
+```
+
+Un binario puede contener dos tablas distintas:
+
+<div class="field-list" markdown>
+
+- **`.symtab`** (tipo `SHT_SYMTAB`)
+
+    Contiene todos los símbolos: funciones locales, variables estáticas, labels internos…
+
+- **`.dynsym`** (tipo `SHT_DYNSYM`)
+
+    Contiene solo los símbolos necesarios para el enlazado dinámico: funciones y variables importadas/exportadas.
+
+</div>
 
 ## Agradecimientos
 
