@@ -467,17 +467,17 @@ readelf -S <program>
 - **Segmento:** `PT_LOAD` con permisos `PF_R | PF_W`
 - La GOT es la estructura central del enlazado dinámico para el acceso a datos y funciones externas.
 
+    En x86-64 se divide en:
+
+    - **`.got`**
+
+        Entradas para variables globales importadas y direcciones resueltas via eager binding.
+
+    - **`.got.plt`**
+
+        Entradas para funciones importadas, resueltas via lazy binding.
+
 </div>
-
-En x86-64 se divide en:
-
-- **`.got`**
-
-    Entradas para variables globales importadas y direcciones resueltas via eager binding.
-
-- **`.got.plt`**
-
-    Entradas para funciones importadas, resueltas via lazy binding.
 
 ### Procedure Linkage Table `.plt`, `.plt.sec` y `.plt.got`
 
@@ -488,19 +488,21 @@ En x86-64 se divide en:
 - **Segmento:** `PT_LOAD` con permisos `PF_R | PF_X`
 - Sección de código con stubs trampolín para cada función importada:
 
+    <!-- -->
+
+    - **`.plt`**
+
+        Stubs de fallback para lazy binding (no llamados directamente por el código del programa).
+
+    - **`.plt.sec`**
+
+        Stubs que el código del programa llama directamente cuando invoca una función importada.
+
+    - **`.plt.got`**
+
+        Stubs para funciones importadas cuya dirección se almacena en una variable (function pointer) en lugar de llamarse directamente.
+
 </div>
-
-- **`.plt`**
-
-    Stubs de fallback para lazy binding (no llamados directamente por el código del programa).
-
-- **`.plt.sec`**
-
-    Stubs que el código del programa llama directamente cuando invoca una función importada.
-
-- **`.plt.got`**
-
-    Stubs para funciones importadas cuya dirección se almacena en una variable (function pointer) en lugar de llamarse directamente.
 
 ### Tablas de Símbolos
 
