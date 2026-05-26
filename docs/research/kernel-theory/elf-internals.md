@@ -8,7 +8,7 @@ description: Estructura interna del formato ELF en Linux. Headers, segments, sec
 <span class="article-meta">27/05/2026 · 35 min</span>
 </div>
 
-Estructura interna del formato ELF: headers, segments, sections, carga por el kernel y auxiliary vector
+TODO_INTRO
 
 ---
 
@@ -82,6 +82,8 @@ readelf -h <program>
 
 ### Campos de la Estructura Relevantes
 
+<div class="field-list" markdown>
+
 - **`e_ident`**
 
     Los primeros 16 bytes codifican la identificación y las propiedades fundamentales del binario:
@@ -151,6 +153,8 @@ readelf -h <program>
 
     Flags específicas de la arquitectura. En x86-64, es siempre `0`.
 
+</div>
+
 ## Program Headers
 
 Habiéndose establecido el ELF Header como punto de entrada interpretativo, la siguiente estructura crítica para la carga en memoria es la Program Header Table (PHT). Esta tabla describe los segments del binario, bloques contiguos de datos que el kernel mapea directamente al espacio de direcciones virtual del proceso.
@@ -184,6 +188,8 @@ readelf -l <program>
 ![Salida de readelf -l mostrando los program headers y el mapping section-to-segment](ELF/readelf_l.png "Salida de readelf -l")
 
 ### Campos de la Estructura Relevantes
+
+<div class="field-list" markdown>
 
 - **Tipos de segmentos (`p_type`)**
 
@@ -227,6 +233,8 @@ readelf -l <program>
     | `PF_R` &#124; `PF_W` | `PROT_READ` &#124; `PROT_WRITE` | Datos modificables | `.data` y `.bss` |
     | `PF_R` | `PROT_READ` | Datos de solo lectura | `.rodata` |
 
+</div>
+
 #### Alineamiento y cálculo de rangos
 
 El rango real de memoria de un segmento se redondea al siguiente múltiplo de `p_align`:
@@ -245,6 +253,8 @@ Para ELF, el handler es `load_elf_binary`. La función comienza validando el ELF
 
 Superada la validación, el kernel itera la PHT buscando dos tipos de segmento:
 
+<div class="field-list" markdown>
+
 - **Detección de `PT_INTERP`**<br>Si la PHT contiene un segmento `PT_INTERP`, el kernel lee la ruta del intérprete dinámico y lo mapea en el nuevo espacio de direcciones, junto con los segmentos del binario principal. Un binario estáticamente enlazado no tiene `PT_INTERP`, de modo que el kernel transfiere el control directamente a su entry point.
 
     !!! note ""
@@ -259,6 +269,8 @@ Superada la validación, el kernel itera la PHT buscando dos tipos de segmento:
 
     - En `ET_EXEC` (no-PIE): `p_vaddr` es una dirección virtual absoluta. El kernel mapea el segmento exactamente en esa dirección. Cada ejecución produce el mismo layout de memoria.
     - En `ET_DYN` (PIE): el kernel selecciona una dirección base aleatoria (debido al ASLR) y suma `p_vaddr` como offset. Cada ejecución produce un layout diferente. La aleatorización dificulta ataques que dependen de conocer las direcciones de código o datos.
+
+</div>
 
 ### Transferencia de control
 
@@ -372,6 +384,8 @@ readelf -S <program>
 
 ### Campos de la Estructura Relevantes
 
+<div class="field-list" markdown>
+
 - **Tipos de sección (`sh_type`)**
 
     | Valor | Constante | Descripción |
@@ -400,47 +414,67 @@ readelf -S <program>
 
     Flags específicas del kernel: `SHF_RELA_LIVEPATCH` (`0x00100000`) marca secciones de reubicación para live patching, `SHF_RO_AFTER_INIT` (`0x00200000`) marca secciones que se convierten en solo lectura tras la inicialización del kernel.
 
+</div>
+
 ## Secciones Fundamentales
 
 ### Código ejecutable `.text`
 
 **Tipo:** `SHT_PROGBITS`
 
+<div class="field-list" markdown>
+
 - **Atributos:** `SHF_ALLOC | SHF_EXECINSTR`
 - **Segmento:** `PT_LOAD` con permisos `PF_R | PF_X`
 
     Contiene el código máquina del programa. El entry point (`e_entry`) apunta normalmente al interior de `.text`.
 
+</div>
+
 ### Datos de solo lectura `.rodata`
 
 **Tipo:** `SHT_PROGBITS`
+
+<div class="field-list" markdown>
 
 - **Atributos:** `SHF_ALLOC`
 - **Segmento:** `PT_LOAD` con permisos `PF_R`
 
     Constantes: cadenas de texto, tablas de lookup, constantes numéricas…
 
+</div>
+
 ### Datos inicializados `.data`
 
 **Tipo:** `SHT_PROGBITS`
+
+<div class="field-list" markdown>
 
 - **Atributos:** `SHF_ALLOC | SHF_WRITE`
 - **Segmento:** `PT_LOAD` con permisos `PF_R | PF_W`
 
     Variables estáticas y globales inicializadas con valores no nulos. Los valores iniciales se copian desde el fichero al mapeado en memoria durante la carga.
 
+</div>
+
 ### Datos no inicializados `.bss`
 
 **Tipo:** `SHT_NOBITS`
+
+<div class="field-list" markdown>
 
 - **Atributos:** `SHF_ALLOC | SHF_WRITE`
 - **Segmento:** Ubicado en el `PT_LOAD` de datos (`PF_R | PF_W`)
 
     Variables globales y estáticas inicializadas a cero o sin inicializar.
 
+</div>
+
 ### Global Offset Table `.got` y `.got.plt`
 
 **Tipo:** `SHT_PROGBITS`
+
+<div class="field-list" markdown>
 
 - **Atributos:** `SHF_ALLOC | SHF_WRITE`
 - **Segmento:** `PT_LOAD` con permisos `PF_R | PF_W`
@@ -457,9 +491,13 @@ readelf -S <program>
 
         Entradas para funciones importadas, resueltas via lazy binding.
 
+</div>
+
 ### Procedure Linkage Table `.plt`, `.plt.sec` y `.plt.got`
 
 **Tipo:** `SHT_PROGBITS`
+
+<div class="field-list" markdown>
 
 - **Atributos:** `SHF_ALLOC | SHF_EXECINSTR`
 - **Segmento:** `PT_LOAD` con permisos `PF_R | PF_X`
@@ -477,6 +515,8 @@ readelf -S <program>
     - **`.plt.got`**
 
         Stubs para funciones importadas cuya dirección se almacena en una variable (function pointer) en lugar de llamarse directamente.
+
+</div>
 
 ### Tablas de Símbolos
 
@@ -499,6 +539,8 @@ typedef struct elf64_sym {
 
 Un binario puede contener dos tablas distintas:
 
+<div class="field-list" markdown>
+
 - **`.symtab`** (tipo `SHT_SYMTAB`)
 
     Contiene todos los símbolos: funciones locales, variables estáticas, labels internos…
@@ -506,6 +548,8 @@ Un binario puede contener dos tablas distintas:
 - **`.dynsym`** (tipo `SHT_DYNSYM`)
 
     Contiene solo los símbolos necesarios para el enlazado dinámico: funciones y variables importadas/exportadas.
+
+</div>
 
 ## Agradecimientos
 
