@@ -525,8 +525,6 @@ typedef struct elf64_sym {
 
 Un binario puede contener dos tablas distintas:
 
-<div class="field-list" markdown>
-
 - **`.symtab`** (tipo `SHT_SYMTAB`)
 
     Contiene todos los símbolos: funciones locales, variables estáticas, labels internos…
@@ -534,8 +532,6 @@ Un binario puede contener dos tablas distintas:
 - **`.dynsym`** (tipo `SHT_DYNSYM`)
 
     Contiene solo los símbolos necesarios para el enlazado dinámico: funciones y variables importadas/exportadas.
-
-</div>
 
 ## Agradecimientos
 
