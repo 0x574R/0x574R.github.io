@@ -235,7 +235,7 @@ readelf -l <program>
 
 </div>
 
-#### Alineamiento y cálculo de rangos
+### Alineamiento y cálculo de rangos
 
 El rango real de memoria de un segmento se redondea al siguiente múltiplo de `p_align`:
 
@@ -267,10 +267,6 @@ Superada la validación, el kernel itera la PHT buscando dos tipos de segmento:
 
     - En `ET_EXEC` (no-PIE): `p_vaddr` es una dirección virtual absoluta. El kernel mapea el segmento exactamente en esa dirección. Cada ejecución produce el mismo layout de memoria.
     - En `ET_DYN` (PIE): el kernel selecciona una dirección base aleatoria (debido al ASLR) y suma `p_vaddr` como offset. Cada ejecución produce un layout diferente. La aleatorización dificulta ataques que dependen de conocer las direcciones de código o datos.
-
-### Transferencia de control
-
-Si el binario tiene intérprete, el kernel transfiere el control al entry point del intérprete, no al del programa. El intérprete procesa `PT_DYNAMIC` (resolviendo símbolos y aplicando reubicaciones), mapea las bibliotecas compartidas necesarias y finalmente salta al entry point real del programa (`AT_ENTRY`). Si no hay intérprete, el kernel salta directamente a `e_entry`.
 
 ## Auxiliary Vector
 
@@ -337,7 +333,7 @@ El array termina cuando `a_type == AT_NULL`.
 !!! note ""
     El kernel genera exactamente una entrada por cada `a_type`, no hay duplicados. El `auxv` no es opcional, lo genera el kernel incondicionalmente para todo proceso ELF, estático o dinámico.
 
-#### Introspección via `auxv`
+### Introspección via `auxv`
 
 Con los valores de `AT_PHDR`, `AT_PHENT` y `AT_PHNUM`, el proceso puede recorrer su propia PHT en memoria y localizar cualquier segmento.
 

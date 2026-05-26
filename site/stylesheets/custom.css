@@ -1461,16 +1461,27 @@ div.tables-centered td {
   width: calc(100% + 0.625em) !important;
 }
 
-/* Listas de campos técnicos: indentación sin bullets (solo primer nivel) */
-.field-list > ul {
+/* Listas de campos técnicos: indentación sin bullets (todos los niveles) */
+.field-list ul {
   list-style-type: none !important;
+}
+.field-list li {
+  list-style-type: none !important;
+}
+.field-list li::marker {
+  content: "" !important;
+  font-size: 0 !important;
+}
+.field-list > ul {
   padding-left: 0 !important;
 }
 .field-list > ul > li {
   padding-left: 0 !important;
 }
-.field-list > ul > li::before {
-  display: none !important;
+
+/* Listas con bullets explícitos (GOT, PLT, etc.): reducir separación con texto anterior */
+.field-list + div[style] > ul:first-child {
+  margin-top: -0.4em !important;
 }
 /* Restaurar bullets en listas anidadas dentro de field-list */
 /* (eliminado: usamos divs con padding para bullets explícitos) */
