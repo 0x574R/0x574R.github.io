@@ -1454,3 +1454,9 @@ div.tables-centered td {
 .md-typeset table:not(.tables-centered table) td:first-child {
   min-width: 200px !important;
 }
+
+/* Tablas dentro de listas: compensar indentación para centrar al reader */
+.md-typeset li > .md-typeset__scrollwrap {
+  margin-left: -0.625em !important;
+  width: calc(100% + 0.625em) !important;
+}
