@@ -1423,7 +1423,7 @@
 <span class="article-meta">27/05/2026 · 35 min</span>
 </div>
 
-<p>Estructura interna del formato ELF: headers, segments, sections, carga por el kernel y auxiliary vector</p>
+<p>TODO_INTRO</p>
 <hr />
 <div class="admonition info">
 <p class="admonition-title">Contexto</p>
@@ -1479,6 +1479,7 @@
 </span></code></pre></div>
 <p><img alt="Salida de readelf -h mostrando los campos del ELF Header" src="../ELF/readelf_h.png" title="Salida de readelf -h" /></p>
 <h3 id="campos-de-la-estructura-relevantes">Campos de la Estructura Relevantes<a class="headerlink" href="#campos-de-la-estructura-relevantes" title="Permanent link">&para;</a></h3>
+<div class="field-list">
 <ul>
 <li>
 <p><strong><code>e_ident</code></strong></p>
@@ -1602,6 +1603,7 @@
 <p>Flags específicas de la arquitectura. En x86-64, es siempre <code>0</code>.</p>
 </li>
 </ul>
+</div>
 <h2 id="program-headers">Program Headers<a class="headerlink" href="#program-headers" title="Permanent link">&para;</a></h2>
 <p>Habiéndose establecido el ELF Header como punto de entrada interpretativo, la siguiente estructura crítica para la carga en memoria es la Program Header Table (PHT). Esta tabla describe los segments del binario, bloques contiguos de datos que el kernel mapea directamente al espacio de direcciones virtual del proceso.</p>
 <h3 id="estructura-de-elf64_phdr">Estructura de <code>Elf64_Phdr</code><a class="headerlink" href="#estructura-de-elf64_phdr" title="Permanent link">&para;</a></h3>
@@ -1625,6 +1627,7 @@
 </span></code></pre></div>
 <p><img alt="Salida de readelf -l mostrando los program headers y el mapping section-to-segment" src="../ELF/readelf_l.png" title="Salida de readelf -l" /></p>
 <h3 id="campos-de-la-estructura-relevantes_1">Campos de la Estructura Relevantes<a class="headerlink" href="#campos-de-la-estructura-relevantes_1" title="Permanent link">&para;</a></h3>
+<div class="field-list">
 <ul>
 <li>
 <p><strong>Tipos de segmentos (<code>p_type</code>)</strong></p>
@@ -1694,6 +1697,7 @@
 </table>
 </li>
 </ul>
+</div>
 <h4 id="alineamiento-y-calculo-de-rangos">Alineamiento y cálculo de rangos<a class="headerlink" href="#alineamiento-y-calculo-de-rangos" title="Permanent link">&para;</a></h4>
 <p>El rango real de memoria de un segmento se redondea al siguiente múltiplo de <code>p_align</code>:</p>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">end</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">p_vaddr</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">p_memsz</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">p_align</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="o">~</span><span class="p">(</span><span class="n">p_align</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
@@ -1703,6 +1707,7 @@
 <p>Cuando un proceso invoca a la syscall <code>execve</code>, el kernel no sabe de antemano qué formato tiene el binario a ejecutar. Linux soporta múltiples formatos binarios, cada uno vinculado a un handler en una lista enlazada. El kernel itera esa lista y pasa el archivo a cada handler hasta que uno lo acepta.</p>
 <p>Para ELF, el handler es <code>load_elf_binary</code>. La función comienza validando el ELF Header (magic bytes, <code>e_type</code>, <code>e_machine</code>, <code>e_phentsize</code>). Si la validación falla, retorna <code>-ENOEXEC</code> y el kernel continúa probando el siguiente handler de la lista.</p>
 <p>Superada la validación, el kernel itera la PHT buscando dos tipos de segmento:</p>
+<div class="field-list">
 <ul>
 <li>
 <p><strong>Detección de <code>PT_INTERP</code></strong><br>Si la PHT contiene un segmento <code>PT_INTERP</code>, el kernel lee la ruta del intérprete dinámico y lo mapea en el nuevo espacio de direcciones, junto con los segmentos del binario principal. Un binario estáticamente enlazado no tiene <code>PT_INTERP</code>, de modo que el kernel transfiere el control directamente a su entry point.</p>
@@ -1722,6 +1727,7 @@
 </ul>
 </li>
 </ul>
+</div>
 <h3 id="transferencia-de-control">Transferencia de control<a class="headerlink" href="#transferencia-de-control" title="Permanent link">&para;</a></h3>
 <p>Si el binario tiene intérprete, el kernel transfiere el control al entry point del intérprete, no al del programa. El intérprete procesa <code>PT_DYNAMIC</code> (resolviendo símbolos y aplicando reubicaciones), mapea las bibliotecas compartidas necesarias y finalmente salta al entry point real del programa (<code>AT_ENTRY</code>). Si no hay intérprete, el kernel salta directamente a <code>e_entry</code>.</p>
 <h2 id="auxiliary-vector">Auxiliary Vector<a class="headerlink" href="#auxiliary-vector" title="Permanent link">&para;</a></h2>
@@ -1849,6 +1855,7 @@
 </span></code></pre></div>
 <p><img alt="Salida de readelf -S mostrando las section headers del binario" src="../ELF/readelf_S.png" title="Salida de readelf -S" /></p>
 <h3 id="campos-de-la-estructura-relevantes_2">Campos de la Estructura Relevantes<a class="headerlink" href="#campos-de-la-estructura-relevantes_2" title="Permanent link">&para;</a></h3>
+<div class="field-list">
 <ul>
 <li>
 <p><strong>Tipos de sección (<code>sh_type</code>)</strong></p>
@@ -1960,9 +1967,11 @@
 <p>Flags específicas del kernel: <code>SHF_RELA_LIVEPATCH</code> (<code>0x00100000</code>) marca secciones de reubicación para live patching, <code>SHF_RO_AFTER_INIT</code> (<code>0x00200000</code>) marca secciones que se convierten en solo lectura tras la inicialización del kernel.</p>
 </li>
 </ul>
+</div>
 <h2 id="secciones-fundamentales">Secciones Fundamentales<a class="headerlink" href="#secciones-fundamentales" title="Permanent link">&para;</a></h2>
 <h3 id="codigo-ejecutable-text">Código ejecutable <code>.text</code><a class="headerlink" href="#codigo-ejecutable-text" title="Permanent link">&para;</a></h3>
 <p><strong>Tipo:</strong> <code>SHT_PROGBITS</code></p>
+<div class="field-list">
 <ul>
 <li><strong>Atributos:</strong> <code>SHF_ALLOC | SHF_EXECINSTR</code></li>
 <li>
@@ -1970,8 +1979,10 @@
 <p>Contiene el código máquina del programa. El entry point (<code>e_entry</code>) apunta normalmente al interior de <code>.text</code>.</p>
 </li>
 </ul>
+</div>
 <h3 id="datos-de-solo-lectura-rodata">Datos de solo lectura <code>.rodata</code><a class="headerlink" href="#datos-de-solo-lectura-rodata" title="Permanent link">&para;</a></h3>
 <p><strong>Tipo:</strong> <code>SHT_PROGBITS</code></p>
+<div class="field-list">
 <ul>
 <li><strong>Atributos:</strong> <code>SHF_ALLOC</code></li>
 <li>
@@ -1979,8 +1990,10 @@
 <p>Constantes: cadenas de texto, tablas de lookup, constantes numéricas…</p>
 </li>
 </ul>
+</div>
 <h3 id="datos-inicializados-data">Datos inicializados <code>.data</code><a class="headerlink" href="#datos-inicializados-data" title="Permanent link">&para;</a></h3>
 <p><strong>Tipo:</strong> <code>SHT_PROGBITS</code></p>
+<div class="field-list">
 <ul>
 <li><strong>Atributos:</strong> <code>SHF_ALLOC | SHF_WRITE</code></li>
 <li>
@@ -1988,8 +2001,10 @@
 <p>Variables estáticas y globales inicializadas con valores no nulos. Los valores iniciales se copian desde el fichero al mapeado en memoria durante la carga.</p>
 </li>
 </ul>
+</div>
 <h3 id="datos-no-inicializados-bss">Datos no inicializados <code>.bss</code><a class="headerlink" href="#datos-no-inicializados-bss" title="Permanent link">&para;</a></h3>
 <p><strong>Tipo:</strong> <code>SHT_NOBITS</code></p>
+<div class="field-list">
 <ul>
 <li><strong>Atributos:</strong> <code>SHF_ALLOC | SHF_WRITE</code></li>
 <li>
@@ -1997,8 +2012,10 @@
 <p>Variables globales y estáticas inicializadas a cero o sin inicializar.</p>
 </li>
 </ul>
+</div>
 <h3 id="global-offset-table-got-y-gotplt">Global Offset Table <code>.got</code> y <code>.got.plt</code><a class="headerlink" href="#global-offset-table-got-y-gotplt" title="Permanent link">&para;</a></h3>
 <p><strong>Tipo:</strong> <code>SHT_PROGBITS</code></p>
+<div class="field-list">
 <ul>
 <li><strong>Atributos:</strong> <code>SHF_ALLOC | SHF_WRITE</code></li>
 <li>
@@ -2017,8 +2034,10 @@
 </ul>
 </li>
 </ul>
+</div>
 <h3 id="procedure-linkage-table-plt-pltsec-y-pltgot">Procedure Linkage Table <code>.plt</code>, <code>.plt.sec</code> y <code>.plt.got</code><a class="headerlink" href="#procedure-linkage-table-plt-pltsec-y-pltgot" title="Permanent link">&para;</a></h3>
 <p><strong>Tipo:</strong> <code>SHT_PROGBITS</code></p>
+<div class="field-list">
 <ul>
 <li><strong>Atributos:</strong> <code>SHF_ALLOC | SHF_EXECINSTR</code></li>
 <li>
@@ -2040,6 +2059,7 @@
 </ul>
 </li>
 </ul>
+</div>
 <h3 id="tablas-de-simbolos">Tablas de Símbolos<a class="headerlink" href="#tablas-de-simbolos" title="Permanent link">&para;</a></h3>
 <p>Las tablas de símbolos asocian nombres con direcciones, tamaños y atributos.</p>
 <h4 id="estructura-de-elf64_sym">Estructura de <code>Elf64_Sym</code><a class="headerlink" href="#estructura-de-elf64_sym" title="Permanent link">&para;</a></h4>
@@ -2054,6 +2074,7 @@
 </span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="p">}</span><span class="w"> </span><span class="n">Elf64_Sym</span><span class="p">;</span>
 </span></code></pre></div>
 <p>Un binario puede contener dos tablas distintas:</p>
+<div class="field-list">
 <ul>
 <li>
 <p><strong><code>.symtab</code></strong> (tipo <code>SHT_SYMTAB</code>)</p>
@@ -2064,6 +2085,7 @@
 <p>Contiene solo los símbolos necesarios para el enlazado dinámico: funciones y variables importadas/exportadas.</p>
 </li>
 </ul>
+</div>
 <h2 id="agradecimientos">Agradecimientos<a class="headerlink" href="#agradecimientos" title="Permanent link">&para;</a></h2>
 <p>Gracias por llegar hasta aquí.</p>
 <p>Si encuentras errores o quieres mejorar/ampliar el artículo, el contenido del blog está abierto a Pull Requests. Toda contribución es bienvenida.</p>
