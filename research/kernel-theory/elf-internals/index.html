@@ -688,8 +688,7 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Campos de la Estructura Relevantes">
-      <ul class="md-nav__list">
+</li>
         
           <li class="md-nav__item">
   <a href="#alineamiento-y-calculo-de-rangos" class="md-nav__link">
@@ -706,11 +705,6 @@
     </nav>
   
 </li>
-        
-      </ul>
-    </nav>
-  
-</li>
       
         <li class="md-nav__item">
   <a href="#carga-de-un-binario-elf-por-el-kernel" class="md-nav__link">
@@ -720,23 +714,6 @@
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Carga de un binario ELF por el kernel">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#transferencia-de-control" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Transferencia de control
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -772,8 +749,7 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Entradas relevantes">
-      <ul class="md-nav__list">
+</li>
         
           <li class="md-nav__item">
   <a href="#introspeccion-via-auxv" class="md-nav__link">
@@ -783,11 +759,6 @@
       
     </span>
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
         
@@ -1129,8 +1100,7 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Campos de la Estructura Relevantes">
-      <ul class="md-nav__list">
+</li>
         
           <li class="md-nav__item">
   <a href="#alineamiento-y-calculo-de-rangos" class="md-nav__link">
@@ -1147,11 +1117,6 @@
     </nav>
   
 </li>
-        
-      </ul>
-    </nav>
-  
-</li>
       
         <li class="md-nav__item">
   <a href="#carga-de-un-binario-elf-por-el-kernel" class="md-nav__link">
@@ -1161,23 +1126,6 @@
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Carga de un binario ELF por el kernel">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#transferencia-de-control" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Transferencia de control
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1213,8 +1161,7 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Entradas relevantes">
-      <ul class="md-nav__list">
+</li>
         
           <li class="md-nav__item">
   <a href="#introspeccion-via-auxv" class="md-nav__link">
@@ -1224,11 +1171,6 @@
       
     </span>
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
         
@@ -1698,7 +1640,7 @@
 </li>
 </ul>
 </div>
-<h4 id="alineamiento-y-calculo-de-rangos">Alineamiento y cálculo de rangos<a class="headerlink" href="#alineamiento-y-calculo-de-rangos" title="Permanent link">&para;</a></h4>
+<h3 id="alineamiento-y-calculo-de-rangos">Alineamiento y cálculo de rangos<a class="headerlink" href="#alineamiento-y-calculo-de-rangos" title="Permanent link">&para;</a></h3>
 <p>El rango real de memoria de un segmento se redondea al siguiente múltiplo de <code>p_align</code>:</p>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">end</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">p_vaddr</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">p_memsz</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">p_align</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="o">~</span><span class="p">(</span><span class="n">p_align</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
 </span></code></pre></div>
@@ -1726,8 +1668,6 @@
 </ul>
 </li>
 </ul>
-<h3 id="transferencia-de-control">Transferencia de control<a class="headerlink" href="#transferencia-de-control" title="Permanent link">&para;</a></h3>
-<p>Si el binario tiene intérprete, el kernel transfiere el control al entry point del intérprete, no al del programa. El intérprete procesa <code>PT_DYNAMIC</code> (resolviendo símbolos y aplicando reubicaciones), mapea las bibliotecas compartidas necesarias y finalmente salta al entry point real del programa (<code>AT_ENTRY</code>). Si no hay intérprete, el kernel salta directamente a <code>e_entry</code>.</p>
 <h2 id="auxiliary-vector">Auxiliary Vector<a class="headerlink" href="#auxiliary-vector" title="Permanent link">&para;</a></h2>
 <p>Tras mapear los segmentos, el kernel construye la pila inicial del proceso, colocando en ella <code>argc</code>, los punteros de <code>argv[]</code>, los punteros de <code>envp[]</code> y el auxiliary vector. El <code>auxv</code> es un array de pares clave-valor que transmite al espacio de usuario la información que el kernel conoce en el momento de la carga: la dirección de la PHT en memoria (<code>AT_PHDR</code>), el tamaño de cada entrada (<code>AT_PHENT</code>), el número de entradas (<code>AT_PHNUM</code>), el entry point del programa (<code>AT_ENTRY</code>) y la dirección base del intérprete (<code>AT_BASE</code>).</p>
 <p><strong>Estos valores permiten al intérprete dinámico (y al propio proceso) localizar las estructuras del binario sin acceder al fichero en disco, sin ellos, el intérprete no tendría forma de localizar la PHT del programa que debe procesar.</strong></p>
@@ -1826,7 +1766,7 @@
 <div class="admonition note">
 <p>El kernel genera exactamente una entrada por cada <code>a_type</code>, no hay duplicados. El <code>auxv</code> no es opcional, lo genera el kernel incondicionalmente para todo proceso ELF, estático o dinámico.</p>
 </div>
-<h4 id="introspeccion-via-auxv">Introspección via <code>auxv</code><a class="headerlink" href="#introspeccion-via-auxv" title="Permanent link">&para;</a></h4>
+<h3 id="introspeccion-via-auxv">Introspección via <code>auxv</code><a class="headerlink" href="#introspeccion-via-auxv" title="Permanent link">&para;</a></h3>
 <p>Con los valores de <code>AT_PHDR</code>, <code>AT_PHENT</code> y <code>AT_PHNUM</code>, el proceso puede recorrer su propia PHT en memoria y localizar cualquier segmento.</p>
 <p>En un binario PIE, las direcciones <code>p_vaddr</code> de cada segmento son offsets relativos a una base de carga que el kernel elige aleatoriamente (ASLR). El <code>auxv</code> no contiene esa base directamente, pero puede deducirse, ya que <code>AT_PHDR</code> indica dónde quedó la PHT en memoria tras la carga y <code>p_offset</code> del primer segmento indica a qué distancia del inicio del fichero se encontraba la PHT. Como el kernel mapea el fichero a partir de la base, la relación es <code>base = AT_PHDR - p_offset</code>. Con la base conocida, la dirección real de cualquier segmento se obtiene como <code>base + p_vaddr</code>. En binarios no-PIE (<code>ET_EXEC</code>), las direcciones <code>p_vaddr</code> son absolutas y este cálculo no es necesario.</p>
 <p>Este mecanismo permite al código resolver el layout de memoria del proceso sin acceder a <code>/proc/self/maps</code>, evitando las syscalls <code>openat</code>/<code>read</code>/<code>close</code> que un monitor de seguridad podría detectar. Los datos del <code>auxv</code> ya están en el stack del proceso, por lo que acceder a ellos es una simple lectura de memoria, invisible para cualquier mecanismo de tracing a nivel de syscalls.</p>
