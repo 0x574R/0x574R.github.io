@@ -13,6 +13,8 @@
         <link rel="canonical" href="https://0x574r.github.io/research/kernel-theory/process-identity/">
       
       
+        <link rel="prev" href="../identity-model/">
+      
       
       
         
@@ -23,7 +25,7 @@
     
     
       
-        <title>Process identity - RAZOR</title>
+        <title>Visible Identity of a Process - RAZOR</title>
       
     
     
@@ -114,7 +116,7 @@
 
 
 <meta property="og:type" content="article">
-<meta property="og:title" content="Process identity — RAZOR">
+<meta property="og:title" content="Visible Identity of a Process — RAZOR">
 <meta property="og:description" content="Fuentes de identidad visible de un proceso Linux, mecanismos de manipulación via prctl y PR_SET_MM, memoria virtual, VMAs y anonimización.">
 <meta property="og:image" content="https://0x574r.github.io/assets/og-image.png">
 <meta property="og:image:width" content="1200">
@@ -125,7 +127,7 @@
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Process identity — RAZOR">
+<meta name="twitter:title" content="Visible Identity of a Process — RAZOR">
 <meta name="twitter:description" content="Fuentes de identidad visible de un proceso Linux, mecanismos de manipulación via prctl y PR_SET_MM, memoria virtual, VMAs y anonimización.">
 <meta name="twitter:image" content="https://0x574r.github.io/assets/og-image.png">
 
@@ -183,7 +185,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Process identity
+              Visible Identity of a Process
             
           </span>
         </div>
@@ -468,8 +470,10 @@
       
   
   
+    
   
   
+  
     
     
     
@@ -480,11 +484,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
           <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
@@ -505,7 +509,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -567,6 +571,394 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visible Identity of a Process
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visible Identity of a Process
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduccion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introducción
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#donde-consultar-la-identidad-de-un-proceso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dónde Consultar la Identidad de un Proceso
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Dónde Consultar la Identidad de un Proceso">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-traves-de-herramientas-como-ps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A través de herramientas como ps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consultando-directamente-el-contenido-alojado-en-la-memoria-del-proceso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Consultando directamente el contenido alojado en la memoria del proceso
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analizando-el-directorio-procpid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analizando el directorio /proc/&lt;PID&gt;/
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#la-interfaz-de-gestion-del-proceso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        La Interfaz de Gestión del Proceso
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="La Interfaz de Gestión del Proceso">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pr_set_name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PR_SET_NAME
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pr_set_dumpable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PR_SET_DUMPABLE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pr_set_mm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PR_SET_MM
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PR_SET_MM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pr_set_mm_arg_start-pr_set_mm_arg_end" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PR_SET_MM_ARG_START / PR_SET_MM_ARG_END
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pr_set_mm_env_start-pr_set_mm_env_end" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PR_SET_MM_ENV_START / PR_SET_MM_ENV_END
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pr_set_mm_exe_file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PR_SET_MM_EXE_FILE
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#memoria-virtual-y-vmas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Memoria Virtual y VMAs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Memoria Virtual y VMAs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#vmas-file-backed-vs-vmas-anonimas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VMAs file-backed vs VMAs anónimas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="VMAs file-backed vs VMAs anónimas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#vmas-file-backed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VMAs file-backed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vmas-anonimas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VMAs anónimas
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#primitivas-de-gestion-de-la-memoria-virtual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Primitivas de gestión de la Memoria Virtual
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Primitivas de gestión de la Memoria Virtual">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MMAP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mremap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MREMAP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mprotect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MPROTECT
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#munmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MUNMAP
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#anonimizacion-de-vmas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anonimización de VMAs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Anonimización de VMAs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#procedimiento-de-anonimizacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Procedimiento de anonimización
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#el-problema-del-segmento-text" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        El problema del segmento .text
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#agradecimientos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agradecimientos
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -942,7 +1334,7 @@
 
 <div class="article-header">
 <h1>Visible Identity of a Process</h1>
-<span class="article-meta">03/06/2026 · 50 min</span>
+<span class="article-meta">03/06/2026 · 60 min</span>
 </div>
 
 <p>Qué información expone Linux sobre sus procesos, dónde reside y cómo se manipula</p>

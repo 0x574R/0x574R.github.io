@@ -124,17 +124,17 @@ description: Blog de seguridad ofensiva. Técnicas de bajo nivel en ensamblador 
 
 <div class="razor-cards razor-cards--posts">
 
-<div class="razor-card razor-card--upcoming">
+<a href="research/kernel-theory/process-identity/" class="razor-card razor-card--featured">
   <div class="razor-card__image">
-    <img src="assets/images/process-id-hero.svg" alt="Identificación de Procesos">
+    <img src="assets/images/process-id-hero.svg" alt="Process Identity Spoofing">
   </div>
-  <span class="razor-card__title">Process Footprint</span>
-  <span class="razor-card__desc">Cómo se representa y expone la identidad de un proceso en el sistema desde la perspectiva del kernel y del espacio de usuario</span>
+  <span class="razor-card__title">Process Identity Spoofing: What Linux Exposes and How to Fake It</span>
+  <span class="razor-card__desc">Qué información expone Linux sobre sus procesos, dónde reside y cómo se manipula</span>
   <div class="razor-card__meta">
     <span class="razor-card__tag">Kernel</span>
-    <span class="razor-card__time">3 junio</span>
+    <span class="razor-card__time"><span class="razor-card__star">★</span> 60 min</span>
   </div>
-</div>
+</a>
 
 <div class="razor-card razor-card--upcoming">
   <div class="razor-card__image">
