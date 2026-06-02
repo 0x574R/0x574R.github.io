@@ -50,11 +50,10 @@ description: Blog de seguridad ofensiva. Técnicas de bajo nivel en ensamblador 
 
 ## Últimos posts
 
-<div class="razor-series" markdown>
-<div class="razor-series__header">
-<span class="razor-series__icon"><span></span><span></span><span></span></span>
-<span class="razor-series__title">Serie DARKCLOAK</span>
-<span class="razor-series__subtitle">4 artículos · Process Identity Cloaking</span>
+<div class="razor-series-header">
+<span class="razor-series-header__dot"><span></span><span></span><span></span></span>
+<span class="razor-series-header__title">Serie DARKCLOAK</span>
+<span class="razor-series-header__count">4 artículos · Process Identity Cloaking</span>
 </div>
 
 <div class="razor-cards razor-cards--posts">
@@ -67,6 +66,7 @@ description: Blog de seguridad ofensiva. Técnicas de bajo nivel en ensamblador 
   <span class="razor-card__desc">UIDs, GIDs, capabilities, transiciones y mecanismos de retención en struct cred</span>
   <div class="razor-card__meta">
     <span class="razor-card__tag">Kernel</span>
+    <span class="razor-card__series-badge">DARKCLOAK · 1/4</span>
     <span class="razor-card__time"><span class="razor-card__star">★</span> 45 min</span>
   </div>
 </a>
@@ -79,6 +79,7 @@ description: Blog de seguridad ofensiva. Técnicas de bajo nivel en ensamblador 
   <span class="razor-card__desc">Qué contiene un binario ELF y cómo lo interpreta el kernel para convertirlo en un proceso</span>
   <div class="razor-card__meta">
     <span class="razor-card__tag">Kernel</span>
+    <span class="razor-card__series-badge">DARKCLOAK · 2/4</span>
     <span class="razor-card__time"><span class="razor-card__star">★</span> 60 min</span>
   </div>
 </a>
@@ -91,6 +92,7 @@ description: Blog de seguridad ofensiva. Técnicas de bajo nivel en ensamblador 
   <span class="razor-card__desc">Qué información expone Linux sobre sus procesos, dónde reside y cómo se manipula</span>
   <div class="razor-card__meta">
     <span class="razor-card__tag">Kernel</span>
+    <span class="razor-card__series-badge">DARKCLOAK · 3/4</span>
     <span class="razor-card__time"><span class="razor-card__star">★</span> 60 min</span>
   </div>
 </a>
@@ -103,12 +105,14 @@ description: Blog de seguridad ofensiva. Técnicas de bajo nivel en ensamblador 
   <span class="razor-card__desc">Pipeline completo de suplantación de identidad de procesos en Linux</span>
   <div class="razor-card__meta">
     <span class="razor-card__tag">Assembly</span>
+    <span class="razor-card__series-badge">DARKCLOAK · 4/4</span>
     <span class="razor-card__time">17 junio</span>
   </div>
 </div>
 
 </div>
-</div>
+
+---
 
 <div class="razor-cards razor-cards--posts">
 
