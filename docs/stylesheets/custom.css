@@ -467,6 +467,16 @@
   position: relative;
 }
 
+/* h4 más grande que bold normal para distinguirse */
+.md-typeset h4 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  margin-top: 1.2em;
+  margin-bottom: 0.6em;
+  color: var(--md-default-fg-color);
+}
+
 .md-typeset h2::after,
 .md-typeset h3::after {
   content: "";

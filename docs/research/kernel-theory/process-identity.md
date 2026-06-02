@@ -12,7 +12,7 @@ Qué información expone Linux sobre sus procesos, dónde reside y cómo se mani
 
 ---
 
-!!! info "Contexto"
+!!! note "Contexto"
     Este artículo cubre la información que el sistema operativo expone sobre cada proceso y cómo puede modificarse desde userspace. Es el tercer artículo de la serie DARKCLOAK y asume conocimiento previo del modelo de credenciales y capabilities (artículo 1) y del formato ELF (artículo 2).
 
 ## Introducción
@@ -47,7 +47,7 @@ No es una propiedad alojada internamente por el kernel, sino un dato en la memor
 
 Cada proceso tiene un directorio en `/proc/` determinado por su PID. Los ficheros dentro de ese directorio no existen en disco, sino que pertenecen a **`procfs`**, un filesystem virtual donde cada operación de lectura invoca a una función del kernel que genera el contenido dinámicamente a partir de las estructuras internas del proceso.
 
-#### Fuentes de identidad y sus mecanismos de manipulación en `/proc/<PID>/`
+#### **Fuentes de identidad y sus mecanismos de manipulación en `/proc/<PID>/`**
 
 Cada valor consultable tiene origen en las estructuras internas del kernel vinculadas al proceso.
 
@@ -97,7 +97,7 @@ El campo `comm` en `task_struct` es un array de 16 bytes (15 caracteres útiles 
     syscall
 ```
 
-!!! tip ""
+!!! note ""
     Los nombres entre corchetes (`[kworker/0:1]`, `[migration/0]`) son por convención hilos del kernel, por lo que un proceso en userspace puede adoptar uno de estos para mimetizarse con procesos legítimos del sistema.
 
 ### `PR_SET_DUMPABLE`
@@ -130,7 +130,7 @@ El `mm_struct` de un proceso contiene los campos que el kernel consulta para gen
 
 El uso de esta opción requiere la capability `CAP_SYS_RESOURCE` (bit 24) en el effective set.
 
-#### `PR_SET_MM_ARG_START` / `PR_SET_MM_ARG_END`
+#### **`PR_SET_MM_ARG_START` / `PR_SET_MM_ARG_END`**
 
 Permiten modificar `arg_start` y `arg_end`. Cualquier lectura posterior de `/proc/PID/cmdline` lee la memoria entre estas dos direcciones.
 
@@ -158,7 +158,7 @@ Permiten modificar `arg_start` y `arg_end`. Cualquier lectura posterior de `/pro
 !!! note ""
     Existe una relación entre `/proc/PID/cmdline` y `argv[0]`: por defecto, `arg_start` apunta al área del stack donde reside `argv[0]`, por lo que ambos comparten la misma región de memoria. Mientras esa relación no se altere, sobrescribir `argv[0]` cambia también lo que `cmdline` devuelve, porque el kernel lee el contenido a partir de esa dirección, no una copia almacenada por separado. Si `arg_start` se redirige a otro buffer vía `PR_SET_MM`, las dos fuentes se desacoplan: `cmdline` lee del nuevo buffer y la sobrescritura de `argv[0]` solo afecta a herramientas que acceden directamente al stack del proceso.
 
-#### `PR_SET_MM_ENV_START` / `PR_SET_MM_ENV_END`
+#### **`PR_SET_MM_ENV_START` / `PR_SET_MM_ENV_END`**
 
 Equivalente para `/proc/PID/environ`.
 
@@ -183,7 +183,7 @@ Equivalente para `/proc/PID/environ`.
     syscall
 ```
 
-#### `PR_SET_MM_EXE_FILE`
+#### **`PR_SET_MM_EXE_FILE`**
 
 Permite modificar el symlink `/proc/PID/exe`. A diferencia de los anteriores, recibe un file descriptor al binario destino, no una dirección en memoria. El kernel reemplaza el `exe_file` del `mm_struct` por el `struct file` asociado al FD (cambio en una estructura vinculada al proceso a nivel del kernel).
 
@@ -235,7 +235,7 @@ struct vm_area_struct {
 
 ### VMAs file-backed vs VMAs anónimas
 
-#### VMAs file-backed
+#### **VMAs file-backed**
 
 Se crean explícitamente cuando el kernel mapea un fichero en memoria — ya sea porque un programa solicita mapear un fichero con `mmap` pasando un file descriptor, o implícitamente durante `execve`, cuando el kernel carga los segmentos `PT_LOAD` del binario ELF en el espacio de direcciones del nuevo proceso. En ambos casos, la VMA resultante mantiene una referencia al fichero original a través de su campo `vm_file`.
 
@@ -252,7 +252,7 @@ En `/proc/PID/maps` se muestra la siguiente información:
 └───────────────└─ rango de direcciones virtuales
 ```
 
-#### VMAs anónimas
+#### **VMAs anónimas**
 
 Creadas por el kernel para el stack y el heap, o explícitamente con `mmap(MAP_ANONYMOUS)`. El campo `vm_file` de la VMA es NULL.
 
@@ -272,7 +272,7 @@ En `/proc/PID/maps` no se muestra la ruta:
 
 Un proceso no puede reservar memoria, liberarla, moverla ni cambiar sus permisos sin pasar por el kernel. Las cuatro syscalls que lo permiten son `mmap` (reservar), `munmap` (liberar), `mremap` (mover o redimensionar) y `mprotect` (cambiar permisos).
 
-#### `MMAP`
+#### **`MMAP`**
 
 Permite crear un nuevo mapping en el espacio de direcciones virtuales del proceso.
 
@@ -293,6 +293,8 @@ r9  = offset     ; Offset dentro del archivo (múltiplo del tamaño de la págin
 | `MAP_FIXED` | `0x10` | Fuerza el uso de la dirección establecida en `addr`. Desmapea silenciosamente lo que hubiera en ese rango. |
 | `MAP_ANONYMOUS` | `0x20` | Sin fichero asociado. `fd` debe ser `-1`. La memoria se inicializa a cero. |
 
+La combinación `MAP_PRIVATE | MAP_ANONYMOUS` (`0x22`) es el caso de uso principal para reservar memoria anónima. El resultado son páginas inicializadas a cero, sin ruta visible en `/proc/PID/maps` y con escrituras aisladas al proceso que las creó.
+
 | Permiso | Valor | Acceso |
 |---|---|---|
 | `PROT_NONE` | `0x0` | Sin acceso |
@@ -300,9 +302,7 @@ r9  = offset     ; Offset dentro del archivo (múltiplo del tamaño de la págin
 | `PROT_WRITE` | `0x2` | Escritura |
 | `PROT_EXEC` | `0x4` | Ejecución |
 
-La combinación `MAP_PRIVATE | MAP_ANONYMOUS` (`0x22`) es el caso de uso principal para reservar memoria anónima. El resultado son páginas inicializadas a cero, sin ruta visible en `/proc/PID/maps` y con escrituras aisladas al proceso que las creó.
-
-#### `MREMAP`
+#### **`MREMAP`**
 
 Permite **redimensionar, mover o reubicar un mapping existente** dentro del espacio de memoria virtual del proceso. Preserva los permisos de protección del mapping original y su tipo.
 
@@ -321,7 +321,7 @@ r8  = new_address ; Dirección destino (solo si flags incluye MREMAP_FIXED)
 | `MREMAP_FIXED` | `0x02` | Obliga a colocar el mapping en la dirección indicada por `r8` (`new_address`). Requiere `MREMAP_MAYMOVE` o devuelve `EINVAL`. |
 | `MREMAP_DONTUNMAP` | `0x04` | Mueve las PTEs (entradas de tabla de páginas) a `new_address` sin destruir el VMA original, desde `old_address` queda un VMA vacío (sin páginas detrás). Solo válido en mappings anónimos `MAP_PRIVATE`. |
 
-#### `MPROTECT`
+#### **`MPROTECT`**
 
 Permite **cambiar las protecciones (lectura/escritura/ejecución) de una región de memoria** ya mapeada por el proceso.
 
@@ -340,7 +340,7 @@ rdx = prot       ; Máscara de permisos (PROT_*) (combinables mediante la operac
 | `PROT_EXEC` | `0x4` | Ejecución |
 | `PROT_READ \| PROT_WRITE \| PROT_EXEC` | `0x7` | Lectura + Escritura + Ejecución |
 
-#### `MUNMAP`
+#### **`MUNMAP`**
 
 **Elimina un mapping del espacio de direcciones virtual del proceso**. Tras la llamada, cualquier acceso a las direcciones del rango desmapeado generará `SIGSEGV`.
 
@@ -356,10 +356,10 @@ No es necesario que `length` coincida exactamente con el tamaño original del ma
 
 **La anonimización de VMAs es el proceso de reemplazar las VMAs file-backed por VMAs anónimas con contenido idéntico**. El resultado es un proceso que sigue ejecutando el mismo código en las mismas direcciones, con los mismos permisos, pero sin ninguna VMA referenciando al binario original. En `/proc/PID/maps`, las VMAs pasan de mostrar la ruta del ejecutable a mostrar device `00:00` e inode `0`.
 
-!!! abstract ""
+!!! note ""
     Al realizar este proceso sobre todas las VMAs file-backed, la ejecución de `PR_SET_MM_EXE_FILE` con la capability `CAP_SYS_RESOURCE` tiene éxito, permitiendo el spoofing de `/proc/PID/exe`.
 
-#### Procedimiento de anonimización
+#### **Procedimiento de anonimización**
 
 Para cada segmento del binario:
 
@@ -385,7 +385,7 @@ Después (anónimas):
 00405000-00407000 rw-p 00000000 00:00 0
 ```
 
-#### El problema del segmento `.text`
+#### **El problema del segmento `.text`**
 
 El segmento `.text` contiene el código ejecutable (RIP apunta a direcciones dentro de este segmento). Desmapearlo con `munmap` mientras se ejecuta código desde él destruye la página donde reside la siguiente instrucción a ejecutar, provocando un fallo de segmentación inmediato.
 
@@ -411,6 +411,8 @@ La anonimización de todos los segmentos junto con la creación del trampoline r
 
 ## Agradecimientos
 
-Gracias a los revisores que han contribuido con correcciones y sugerencias técnicas a este artículo. Gracias también a la comunidad de seguridad ofensiva hispanohablante por el interés continuo en contenido técnico de bajo nivel.
+Gracias por llegar hasta aquí.
 
-Si encuentras errores o tienes sugerencias, puedes contactarme a través de [GitHub](https://github.com/0x574R) o [LinkedIn](https://linkedin.com/in/0x574R).
+Si encuentras errores o quieres mejorar/ampliar el artículo, el contenido del blog está abierto a Pull Requests. Toda contribución es bienvenida.
+
+¡Nos vemos en el próximo artículo! ;)
