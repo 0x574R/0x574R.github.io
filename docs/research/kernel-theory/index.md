@@ -32,4 +32,16 @@ Teoría subyacente del kernel Linux desde una perspectiva ofensiva.
   </div>
 </a>
 
+<a href="process-identity/" class="razor-card">
+  <div class="razor-card__image">
+    <img src="../../assets/images/process-identity-hero.svg" alt="Process Identity">
+  </div>
+  <span class="razor-card__title">Visible Identity of a Process</span>
+  <span class="razor-card__desc">Qué información expone Linux sobre sus procesos, dónde reside y cómo se manipula</span>
+  <div class="razor-card__meta">
+    <span class="razor-card__tag">Kernel</span>
+    <span class="razor-card__time"><span class="razor-card__star">★</span> 60 min</span>
+  </div>
+</a>
+
 </div>

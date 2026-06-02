@@ -5,7 +5,7 @@ description: Fuentes de identidad visible de un proceso Linux, mecanismos de man
 
 <div class="article-header">
 <h1>Visible Identity of a Process</h1>
-<span class="article-meta">03/06/2026 · 50 min</span>
+<span class="article-meta">03/06/2026 · 60 min</span>
 </div>
 
 Qué información expone Linux sobre sus procesos, dónde reside y cómo se manipula

@@ -657,23 +657,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Analizando el directorio /proc/&lt;PID&gt;/">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#fuentes-de-identidad-y-sus-mecanismos-de-manipulacion-en-procpid" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Fuentes de identidad y sus mecanismos de manipulación en /proc/&lt;PID&gt;/
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
         
       </ul>
@@ -986,7 +969,8 @@
 <p>No es una propiedad alojada internamente por el kernel, sino un dato en la memoria del propio proceso (<code>[rsp+8]</code> con respecto al entry point). Sobrescribirlo es una escritura a una dirección conocida, sin syscalls intermedias.</p>
 <h3 id="analizando-el-directorio-procpid">Analizando el directorio <code>/proc/&lt;PID&gt;/</code><a class="headerlink" href="#analizando-el-directorio-procpid" title="Permanent link">&para;</a></h3>
 <p>Cada proceso tiene un directorio en <code>/proc/</code> determinado por su PID. Los ficheros dentro de ese directorio no existen en disco, sino que pertenecen a <strong><code>procfs</code></strong>, un filesystem virtual donde cada operación de lectura invoca a una función del kernel que genera el contenido dinámicamente a partir de las estructuras internas del proceso.</p>
-<h4 id="fuentes-de-identidad-y-sus-mecanismos-de-manipulacion-en-procpid"><strong>Fuentes de identidad y sus mecanismos de manipulación en <code>/proc/&lt;PID&gt;/</code></strong><a class="headerlink" href="#fuentes-de-identidad-y-sus-mecanismos-de-manipulacion-en-procpid" title="Permanent link">&para;</a></h4>
+<h4 style="font-size: 1.15em; font-weight: normal;">Fuentes de identidad y sus mecanismos de manipulación en <code>/proc/&lt;PID&gt;/</code></h4>
+
 <p>Cada valor consultable tiene origen en las estructuras internas del kernel vinculadas al proceso.</p>
 <table>
 <thead>
