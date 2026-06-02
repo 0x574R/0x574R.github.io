@@ -34,7 +34,7 @@ Teoría subyacente del kernel Linux desde una perspectiva ofensiva.
 
 <a href="process-identity/" class="razor-card">
   <div class="razor-card__image">
-    <img src="../../assets/images/process-identity-hero.svg" alt="Process Identity">
+    <img src="../../assets/images/process-id-hero.svg" alt="Process Identity Spoofing">
   </div>
   <span class="razor-card__title">Process Identity Spoofing: What Linux Exposes and How to Fake It</span>
   <span class="razor-card__desc">Qué información expone Linux sobre sus procesos, dónde reside y cómo se manipula</span>
