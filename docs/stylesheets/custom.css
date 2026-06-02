@@ -1555,20 +1555,3 @@ div.tables-centered td {
   border-radius: 12px 12px 0 0;
 }
 
-/* Small series badge inside card meta */
-.razor-card__series-badge {
-  font-size: 0.65rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: #7c3aed;
-  background: rgba(124, 58, 237, 0.08);
-  border: 1px solid rgba(124, 58, 237, 0.2);
-  border-radius: 4px;
-  padding: 1px 5px;
-}
-
-[data-md-color-scheme="default"] .razor-card__series-badge {
-  background: rgba(124, 58, 237, 0.06);
-  border-color: rgba(124, 58, 237, 0.18);
-}
