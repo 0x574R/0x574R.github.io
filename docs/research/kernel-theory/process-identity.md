@@ -76,9 +76,9 @@ Principalmente, las fuentes se manipulan a través de dos mecanismos:
 
 **Vía syscalls de gestión de memoria**
 
-- Mapa de memoria virtual del proceso (`/proc/PID/maps`) → `mmap`, `munmap`, `mremap`, `mprotect`
+- Mapa de memoria virtual del proceso (`/proc/PID/maps`) → `mmap`, `munmap`, `mremap` y `mprotect`
 
-#### La Interfaz de Gestión del Proceso
+## La Interfaz de Gestión del Proceso
 
 A diferencia de syscalls especializadas como `setresuid` (que solo maneja UIDs) o `capset` (que solo maneja capabilities), `prctl` es una llamada al sistema que permite realizar multitud de operaciones de gestión sobre el proceso que la invoca.
 
@@ -288,9 +288,9 @@ r9  = offset     ; Offset dentro del archivo (múltiplo del tamaño de la págin
 
 | Flag | Valor | Descripción |
 |---|---|---|
-| `MAP_SHARED` | `0x01` | El mapping es compartido: las escrituras se propagan al fichero y son visibles para otros procesos que lo tengan mapeado. |
-| `MAP_PRIVATE` | `0x02` | Copia privada. Las escrituras no se propagan. |
-| `MAP_FIXED` | `0x10` | Fuerza la dirección exacta indicada en `addr`. Desmapea silenciosamente lo que hubiera en ese rango. |
+| `MAP_SHARED` | `0x01` | Las modificaciones en memoria se escriben al fichero compartido y las modificaciones de otros procesos sobre el mismo fichero repercuten en el mapping. |
+| `MAP_PRIVATE` | `0x02` | Copia privada. Los cambios no se propagan. |
+| `MAP_FIXED` | `0x10` | Fuerza el uso de la dirección establecida en `addr`. Desmapea silenciosamente lo que hubiera en ese rango. |
 | `MAP_ANONYMOUS` | `0x20` | Sin fichero asociado. `fd` debe ser `-1`. La memoria se inicializa a cero. |
 
 | Permiso | Valor | Acceso |
@@ -304,7 +304,7 @@ La combinación `MAP_PRIVATE | MAP_ANONYMOUS` (`0x22`) es el caso de uso princip
 
 #### `MREMAP`
 
-Redimensiona, mueve o reubica un mapping existente dentro del espacio de memoria virtual del proceso. Preserva los permisos de protección del mapping original y su tipo.
+Permite **redimensionar, mover o reubicar un mapping existente** dentro del espacio de memoria virtual del proceso. Preserva los permisos de protección del mapping original y su tipo.
 
 ```asm
 rax = 25          ; Número de syscall (mremap)
@@ -317,24 +317,32 @@ r8  = new_address ; Dirección destino (solo si flags incluye MREMAP_FIXED)
 
 | Flag | Valor | Descripción |
 |---|---|---|
-| `MREMAP_MAYMOVE` | `0x01` | Autoriza al kernel a mover el mapping a una dirección virtual distinta si no hay espacio contiguo. |
-| `MREMAP_FIXED` | `0x02` | Obliga a colocar el mapping en la dirección indicada por `r8` (`new_address`). Requiere `MREMAP_MAYMOVE`. |
-| `MREMAP_DONTUNMAP` | `0x04` | Mueve las PTEs a `new_address` sin destruir el VMA original. Solo válido en mappings anónimos `MAP_PRIVATE`. |
+| `MREMAP_MAYMOVE` | `0x01` | Autoriza al kernel a mover el mapping a una dirección virtual distinta si no hay espacio contiguo. Sin este flag, cualquier crecimiento que requiera reubicación falla con `ENOMEM`. En la práctica es casi obligatorio para expandir regiones. |
+| `MREMAP_FIXED` | `0x02` | Obliga a colocar el mapping en la dirección indicada por `r8` (`new_address`). Requiere `MREMAP_MAYMOVE` o devuelve `EINVAL`. |
+| `MREMAP_DONTUNMAP` | `0x04` | Mueve las PTEs (entradas de tabla de páginas) a `new_address` sin destruir el VMA original, desde `old_address` queda un VMA vacío (sin páginas detrás). Solo válido en mappings anónimos `MAP_PRIVATE`. |
 
 #### `MPROTECT`
 
-Permite cambiar las protecciones (lectura/escritura/ejecución) de una región de memoria ya mapeada por el proceso.
+Permite **cambiar las protecciones (lectura/escritura/ejecución) de una región de memoria** ya mapeada por el proceso.
 
 ```asm
 rax = 10         ; Número de syscall (mprotect)
-rdi = addr       ; Dirección base de la región (se redondea a página)
-rsi = len        ; Longitud en bytes (se redondea a páginas)
-rdx = prot       ; Máscara de permisos (PROT_*) combinables con OR
+rdi = addr       ; Dirección base de la región (se redondea hacia abajo a la página)
+rsi = len        ; Longitud en bytes (se redondea hacia arriba a páginas)
+rdx = prot       ; Máscara de permisos (PROT_*) (combinables mediante la operación OR)
 ```
+
+| Flag | Valor | Permiso |
+|---|---|---|
+| `PROT_NONE` | `0x0` | Ningún permiso |
+| `PROT_READ` | `0x1` | Lectura |
+| `PROT_WRITE` | `0x2` | Escritura |
+| `PROT_EXEC` | `0x4` | Ejecución |
+| `PROT_READ \| PROT_WRITE \| PROT_EXEC` | `0x7` | Lectura + Escritura + Ejecución |
 
 #### `MUNMAP`
 
-Elimina un mapping del espacio de direcciones virtual del proceso. Tras la llamada, cualquier acceso a las direcciones del rango desmapeado generará `SIGSEGV`.
+**Elimina un mapping del espacio de direcciones virtual del proceso**. Tras la llamada, cualquier acceso a las direcciones del rango desmapeado generará `SIGSEGV`.
 
 ```asm
 rax = 11            ; Número de syscall (munmap)
