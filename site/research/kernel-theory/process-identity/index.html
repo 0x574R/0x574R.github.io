@@ -966,7 +966,7 @@
 <hr />
 <div class="admonition note">
 <p class="admonition-title">Contexto</p>
-<p>Este artículo cubre la información que el sistema operativo expone sobre cada proceso y cómo puede modificarse desde userspace. Es el tercer artículo de la serie DARKCLOAK y asume conocimiento previo del modelo de credenciales y capabilities (artículo 1) y del formato ELF (artículo 2).</p>
+<p>Este artículo cubre la información que el sistema operativo expone sobre cada proceso y cómo puede modificarse desde userspace. Es el tercer artículo de la serie DARKCLOAK y asume conocimiento previo del <a href="../identity-model/">modelo de credenciales y capabilities</a> (artículo 1) y del <a href="../elf-internals/">formato ELF</a> (artículo 2).</p>
 </div>
 <h2 id="introduccion">Introducción<a class="headerlink" href="#introduccion" title="Permanent link">&para;</a></h2>
 <p>En un sistema Linux, se podría decir que cada proceso tiene dos identidades distintas. Una es la <strong>identidad interna</strong>, conformada por los UIDs, GIDs y las capabilities almacenadas en la estructura <code>cred</code>, que determinan de quién es el proceso y qué puede hacer. Y la otra, es la <strong>identidad visible</strong>, es decir, la información que el sistema operativo expone sobre el proceso a cualquier observador, ya sea otro proceso o un usuario del sistema.</p>
@@ -1088,7 +1088,9 @@
 <h3 id="pr_set_mm"><code>PR_SET_MM</code><a class="headerlink" href="#pr_set_mm" title="Permanent link">&para;</a></h3>
 <p>El <code>mm_struct</code> de un proceso contiene los campos que el kernel consulta para generar <code>/proc/PID/cmdline</code>(argumentos con los que se lanzó el proceso <code>argv[0] \0 argv[1] \0 ...</code>), <code>/proc/PID/environ</code> (variables de entorno del proceso <code>KEY1=VALUE1 \0 KEY2=VALUE2 \0 ...</code>) y <code>/proc/PID/exe</code> (symlink que apunta al binario que el kernel cargó cuando ejecutó <code>execve</code>).</p>
 <p><code>PR_SET_MM</code> permite modificar directamente estos campos, alterando lo que el kernel lee cuando un observador los consulta.</p>
+<div class="admonition danger">
 <p>El uso de esta opción requiere la capability <code>CAP_SYS_RESOURCE</code> (bit 24) en el effective set.</p>
+</div>
 <h4 id="pr_set_mm_arg_start-pr_set_mm_arg_end"><strong><code>PR_SET_MM_ARG_START</code> / <code>PR_SET_MM_ARG_END</code></strong><a class="headerlink" href="#pr_set_mm_arg_start-pr_set_mm_arg_end" title="Permanent link">&para;</a></h4>
 <p>Permiten modificar <code>arg_start</code> y <code>arg_end</code>. Cualquier lectura posterior de <code>/proc/PID/cmdline</code> lee la memoria entre estas dos direcciones.</p>
 <div class="language-asm highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="w">    </span><span class="c1">; --- PR_SET_MM_ARG_START ---</span>
@@ -1418,7 +1420,7 @@
 <p><strong>Desmapear la página temporal</strong> (<code>munmap</code>): la página utilizada para el trampoline ya no es necesaria y se puede eliminar.</p>
 </li>
 </ol>
-<p>La anonimización de todos los segmentos junto con la creación del trampoline reubicable se puede consultar en el código de DARKCLOAK, presente en el siguiente artículo.</p>
+<p>La anonimización de todos los segmentos junto con la creación del trampoline reubicable se puede consultar en el código de DARKCLOAK, presente en el siguiente artículo (17 de junio).</p>
 <hr />
 <h2 id="agradecimientos">Agradecimientos<a class="headerlink" href="#agradecimientos" title="Permanent link">&para;</a></h2>
 <p>Gracias por llegar hasta aquí.</p>

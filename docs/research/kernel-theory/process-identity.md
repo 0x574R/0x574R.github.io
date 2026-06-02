@@ -47,7 +47,7 @@ No es una propiedad alojada internamente por el kernel, sino un dato en la memor
 
 Cada proceso tiene un directorio en `/proc/` determinado por su PID. Los ficheros dentro de ese directorio no existen en disco, sino que pertenecen a **`procfs`**, un filesystem virtual donde cada operación de lectura invoca a una función del kernel que genera el contenido dinámicamente a partir de las estructuras internas del proceso.
 
-#### **Fuentes de identidad y sus mecanismos de manipulación en `/proc/<PID>/`**
+<h4 style="font-size: 1.15em; font-weight: normal;">Fuentes de identidad y sus mecanismos de manipulación en <code>/proc/&lt;PID&gt;/</code></h4>
 
 Cada valor consultable tiene origen en las estructuras internas del kernel vinculadas al proceso.
 
