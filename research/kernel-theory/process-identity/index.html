@@ -671,7 +671,17 @@
   
 </li>
         
-          <li class="md-nav__item">
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#la-interfaz-de-gestion-del-proceso" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -680,12 +690,8 @@
     </span>
   </a>
   
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
+    <nav class="md-nav" aria-label="La Interfaz de Gestión del Proceso">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#pr_set_name" class="md-nav__link">
@@ -1046,9 +1052,9 @@
 </ul>
 <p><strong>Vía syscalls de gestión de memoria</strong></p>
 <ul>
-<li>Mapa de memoria virtual del proceso (<code>/proc/PID/maps</code>) → <code>mmap</code>, <code>munmap</code>, <code>mremap</code>, <code>mprotect</code></li>
+<li>Mapa de memoria virtual del proceso (<code>/proc/PID/maps</code>) → <code>mmap</code>, <code>munmap</code>, <code>mremap</code> y <code>mprotect</code></li>
 </ul>
-<h4 id="la-interfaz-de-gestion-del-proceso">La Interfaz de Gestión del Proceso<a class="headerlink" href="#la-interfaz-de-gestion-del-proceso" title="Permanent link">&para;</a></h4>
+<h2 id="la-interfaz-de-gestion-del-proceso">La Interfaz de Gestión del Proceso<a class="headerlink" href="#la-interfaz-de-gestion-del-proceso" title="Permanent link">&para;</a></h2>
 <p>A diferencia de syscalls especializadas como <code>setresuid</code> (que solo maneja UIDs) o <code>capset</code> (que solo maneja capabilities), <code>prctl</code> es una llamada al sistema que permite realizar multitud de operaciones de gestión sobre el proceso que la invoca.</p>
 <p>Desde la perspectiva ofensiva, <code>prctl</code> concentra la mayoría de las operaciones que modifican la identidad visible del proceso sin alterar su ejecución. Es por ello, que la monitorización defensiva de <code>prctl</code> (via auditd o eBPF) es un punto de detección crítico.</p>
 <p>A continuación, se detallan aquellas operaciones que son valiosas desde el punto de vista ofensivo:</p>
@@ -1216,17 +1222,17 @@
 <tr>
 <td><code>MAP_SHARED</code></td>
 <td><code>0x01</code></td>
-<td>El mapping es compartido: las escrituras se propagan al fichero y son visibles para otros procesos que lo tengan mapeado.</td>
+<td>Las modificaciones en memoria se escriben al fichero compartido y las modificaciones de otros procesos sobre el mismo fichero repercuten en el mapping.</td>
 </tr>
 <tr>
 <td><code>MAP_PRIVATE</code></td>
 <td><code>0x02</code></td>
-<td>Copia privada. Las escrituras no se propagan.</td>
+<td>Copia privada. Los cambios no se propagan.</td>
 </tr>
 <tr>
 <td><code>MAP_FIXED</code></td>
 <td><code>0x10</code></td>
-<td>Fuerza la dirección exacta indicada en <code>addr</code>. Desmapea silenciosamente lo que hubiera en ese rango.</td>
+<td>Fuerza el uso de la dirección establecida en <code>addr</code>. Desmapea silenciosamente lo que hubiera en ese rango.</td>
 </tr>
 <tr>
 <td><code>MAP_ANONYMOUS</code></td>
@@ -1268,7 +1274,7 @@
 </table>
 <p>La combinación <code>MAP_PRIVATE | MAP_ANONYMOUS</code> (<code>0x22</code>) es el caso de uso principal para reservar memoria anónima. El resultado son páginas inicializadas a cero, sin ruta visible en <code>/proc/PID/maps</code> y con escrituras aisladas al proceso que las creó.</p>
 <h4 id="mremap"><code>MREMAP</code><a class="headerlink" href="#mremap" title="Permanent link">&para;</a></h4>
-<p>Redimensiona, mueve o reubica un mapping existente dentro del espacio de memoria virtual del proceso. Preserva los permisos de protección del mapping original y su tipo.</p>
+<p>Permite <strong>redimensionar, mover o reubicar un mapping existente</strong> dentro del espacio de memoria virtual del proceso. Preserva los permisos de protección del mapping original y su tipo.</p>
 <div class="language-asm highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">25</span><span class="w">          </span><span class="c1">; Número de syscall (mremap)</span>
 </span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nf">rdi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="no">old_address</span><span class="w"> </span><span class="c1">; Dirección base del mapping existente (alineada a página)</span>
 </span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="nf">rsi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="no">old_size</span><span class="w">    </span><span class="c1">; Tamaño actual del mapping en bytes</span>
@@ -1288,29 +1294,65 @@
 <tr>
 <td><code>MREMAP_MAYMOVE</code></td>
 <td><code>0x01</code></td>
-<td>Autoriza al kernel a mover el mapping a una dirección virtual distinta si no hay espacio contiguo.</td>
+<td>Autoriza al kernel a mover el mapping a una dirección virtual distinta si no hay espacio contiguo. Sin este flag, cualquier crecimiento que requiera reubicación falla con <code>ENOMEM</code>. En la práctica es casi obligatorio para expandir regiones.</td>
 </tr>
 <tr>
 <td><code>MREMAP_FIXED</code></td>
 <td><code>0x02</code></td>
-<td>Obliga a colocar el mapping en la dirección indicada por <code>r8</code> (<code>new_address</code>). Requiere <code>MREMAP_MAYMOVE</code>.</td>
+<td>Obliga a colocar el mapping en la dirección indicada por <code>r8</code> (<code>new_address</code>). Requiere <code>MREMAP_MAYMOVE</code> o devuelve <code>EINVAL</code>.</td>
 </tr>
 <tr>
 <td><code>MREMAP_DONTUNMAP</code></td>
 <td><code>0x04</code></td>
-<td>Mueve las PTEs a <code>new_address</code> sin destruir el VMA original. Solo válido en mappings anónimos <code>MAP_PRIVATE</code>.</td>
+<td>Mueve las PTEs (entradas de tabla de páginas) a <code>new_address</code> sin destruir el VMA original, desde <code>old_address</code> queda un VMA vacío (sin páginas detrás). Solo válido en mappings anónimos <code>MAP_PRIVATE</code>.</td>
 </tr>
 </tbody>
 </table>
 <h4 id="mprotect"><code>MPROTECT</code><a class="headerlink" href="#mprotect" title="Permanent link">&para;</a></h4>
-<p>Permite cambiar las protecciones (lectura/escritura/ejecución) de una región de memoria ya mapeada por el proceso.</p>
+<p>Permite <strong>cambiar las protecciones (lectura/escritura/ejecución) de una región de memoria</strong> ya mapeada por el proceso.</p>
 <div class="language-asm highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">10</span><span class="w">         </span><span class="c1">; Número de syscall (mprotect)</span>
-</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nf">rdi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="no">addr</span><span class="w">       </span><span class="c1">; Dirección base de la región (se redondea a página)</span>
-</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="nf">rsi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="no">len</span><span class="w">        </span><span class="c1">; Longitud en bytes (se redondea a páginas)</span>
-</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="nf">rdx</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="no">prot</span><span class="w">       </span><span class="c1">; Máscara de permisos (PROT_*) combinables con OR</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nf">rdi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="no">addr</span><span class="w">       </span><span class="c1">; Dirección base de la región (se redondea hacia abajo a la página)</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="nf">rsi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="no">len</span><span class="w">        </span><span class="c1">; Longitud en bytes (se redondea hacia arriba a páginas)</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="nf">rdx</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="no">prot</span><span class="w">       </span><span class="c1">; Máscara de permisos (PROT_*) (combinables mediante la operación OR)</span>
 </span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Valor</th>
+<th>Permiso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PROT_NONE</code></td>
+<td><code>0x0</code></td>
+<td>Ningún permiso</td>
+</tr>
+<tr>
+<td><code>PROT_READ</code></td>
+<td><code>0x1</code></td>
+<td>Lectura</td>
+</tr>
+<tr>
+<td><code>PROT_WRITE</code></td>
+<td><code>0x2</code></td>
+<td>Escritura</td>
+</tr>
+<tr>
+<td><code>PROT_EXEC</code></td>
+<td><code>0x4</code></td>
+<td>Ejecución</td>
+</tr>
+<tr>
+<td><code>PROT_READ \| PROT_WRITE \| PROT_EXEC</code></td>
+<td><code>0x7</code></td>
+<td>Lectura + Escritura + Ejecución</td>
+</tr>
+</tbody>
+</table>
 <h4 id="munmap"><code>MUNMAP</code><a class="headerlink" href="#munmap" title="Permanent link">&para;</a></h4>
-<p>Elimina un mapping del espacio de direcciones virtual del proceso. Tras la llamada, cualquier acceso a las direcciones del rango desmapeado generará <code>SIGSEGV</code>.</p>
+<p><strong>Elimina un mapping del espacio de direcciones virtual del proceso</strong>. Tras la llamada, cualquier acceso a las direcciones del rango desmapeado generará <code>SIGSEGV</code>.</p>
 <div class="language-asm highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">11</span><span class="w">            </span><span class="c1">; Número de syscall (munmap)</span>
 </span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nf">rdi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="no">addr</span><span class="w">          </span><span class="c1">; Dirección base del mapping a eliminar</span>
 </span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="nf">rsi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="no">length</span><span class="w">        </span><span class="c1">; Tamaño en bytes a desmapear</span>
