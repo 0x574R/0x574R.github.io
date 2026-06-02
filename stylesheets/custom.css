@@ -1495,3 +1495,80 @@ div.tables-centered td {
 }
 /* Restaurar bullets en listas anidadas dentro de field-list */
 /* (eliminado: usamos divs con padding para bullets explícitos) */
+
+/* ── Serie DARKCLOAK ───────────────────────────────────────── */
+
+.razor-series-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.razor-series-header__dot {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+
+.razor-series-header__dot span {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #7c3aed;
+}
+
+.razor-series-header__dot span:nth-child(2) { opacity: 0.65; }
+.razor-series-header__dot span:nth-child(3) { opacity: 0.35; }
+
+.razor-series-header__title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #7c3aed;
+}
+
+.razor-series-header__count {
+  font-size: 0.75rem;
+  color: var(--md-default-fg-color--light);
+  margin-left: auto;
+  letter-spacing: 0.02em;
+}
+
+/* Accent bar + subtle tint on series cards */
+.razor-card--series {
+  position: relative;
+  overflow: hidden;
+}
+
+.razor-card--series::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #7c3aed 0%, rgba(124, 58, 237, 0.3) 100%);
+  border-radius: 12px 12px 0 0;
+}
+
+/* Small series badge inside card meta */
+.razor-card__series-badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #7c3aed;
+  background: rgba(124, 58, 237, 0.08);
+  border: 1px solid rgba(124, 58, 237, 0.2);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+[data-md-color-scheme="default"] .razor-card__series-badge {
+  background: rgba(124, 58, 237, 0.06);
+  border-color: rgba(124, 58, 237, 0.18);
+}
