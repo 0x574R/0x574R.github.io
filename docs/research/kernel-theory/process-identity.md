@@ -13,7 +13,7 @@ Qué información expone Linux sobre sus procesos, dónde reside y cómo se mani
 ---
 
 !!! note "Contexto"
-    Este artículo cubre la información que el sistema operativo expone sobre cada proceso y cómo puede modificarse desde userspace. Es el tercer artículo de la serie DARKCLOAK y asume conocimiento previo del modelo de credenciales y capabilities (artículo 1) y del formato ELF (artículo 2).
+    Este artículo cubre la información que el sistema operativo expone sobre cada proceso y cómo puede modificarse desde userspace. Es el tercer artículo de la serie DARKCLOAK y asume conocimiento previo del [modelo de credenciales y capabilities](identity-model.md) (artículo 1) y del [formato ELF](elf-internals.md) (artículo 2).
 
 ## Introducción
 
@@ -128,7 +128,8 @@ El `mm_struct` de un proceso contiene los campos que el kernel consulta para gen
 
 `PR_SET_MM` permite modificar directamente estos campos, alterando lo que el kernel lee cuando un observador los consulta.
 
-El uso de esta opción requiere la capability `CAP_SYS_RESOURCE` (bit 24) en el effective set.
+!!! danger ""
+    El uso de esta opción requiere la capability `CAP_SYS_RESOURCE` (bit 24) en el effective set.
 
 #### **`PR_SET_MM_ARG_START` / `PR_SET_MM_ARG_END`**
 
@@ -405,7 +406,7 @@ La solución es ejecutar el código de anonimización **desde fuera** de los seg
 
 7. **Desmapear la página temporal** (`munmap`): la página utilizada para el trampoline ya no es necesaria y se puede eliminar.
 
-La anonimización de todos los segmentos junto con la creación del trampoline reubicable se puede consultar en el código de DARKCLOAK, presente en el siguiente artículo.
+La anonimización de todos los segmentos junto con la creación del trampoline reubicable se puede consultar en el código de DARKCLOAK, presente en el siguiente artículo (17 de junio).
 
 ---
 

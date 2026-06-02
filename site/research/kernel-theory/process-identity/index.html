@@ -964,7 +964,7 @@
 
 <p>Qué información expone Linux sobre sus procesos, dónde reside y cómo se manipula</p>
 <hr />
-<div class="admonition info">
+<div class="admonition note">
 <p class="admonition-title">Contexto</p>
 <p>Este artículo cubre la información que el sistema operativo expone sobre cada proceso y cómo puede modificarse desde userspace. Es el tercer artículo de la serie DARKCLOAK y asume conocimiento previo del modelo de credenciales y capabilities (artículo 1) y del formato ELF (artículo 2).</p>
 </div>
@@ -986,7 +986,7 @@
 <p>No es una propiedad alojada internamente por el kernel, sino un dato en la memoria del propio proceso (<code>[rsp+8]</code> con respecto al entry point). Sobrescribirlo es una escritura a una dirección conocida, sin syscalls intermedias.</p>
 <h3 id="analizando-el-directorio-procpid">Analizando el directorio <code>/proc/&lt;PID&gt;/</code><a class="headerlink" href="#analizando-el-directorio-procpid" title="Permanent link">&para;</a></h3>
 <p>Cada proceso tiene un directorio en <code>/proc/</code> determinado por su PID. Los ficheros dentro de ese directorio no existen en disco, sino que pertenecen a <strong><code>procfs</code></strong>, un filesystem virtual donde cada operación de lectura invoca a una función del kernel que genera el contenido dinámicamente a partir de las estructuras internas del proceso.</p>
-<h4 id="fuentes-de-identidad-y-sus-mecanismos-de-manipulacion-en-procpid">Fuentes de identidad y sus mecanismos de manipulación en <code>/proc/&lt;PID&gt;/</code><a class="headerlink" href="#fuentes-de-identidad-y-sus-mecanismos-de-manipulacion-en-procpid" title="Permanent link">&para;</a></h4>
+<h4 id="fuentes-de-identidad-y-sus-mecanismos-de-manipulacion-en-procpid"><strong>Fuentes de identidad y sus mecanismos de manipulación en <code>/proc/&lt;PID&gt;/</code></strong><a class="headerlink" href="#fuentes-de-identidad-y-sus-mecanismos-de-manipulacion-en-procpid" title="Permanent link">&para;</a></h4>
 <p>Cada valor consultable tiene origen en las estructuras internas del kernel vinculadas al proceso.</p>
 <table>
 <thead>
@@ -1065,7 +1065,7 @@
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nf">lea</span><span class="w"> </span><span class="no">rsi</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="no">rel</span><span class="w"> </span><span class="no">new_name</span><span class="p">]</span><span class="w">     </span><span class="c1">; puntero al buffer con el nuevo nombre</span>
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nf">syscall</span>
 </span></code></pre></div>
-<div class="admonition tip">
+<div class="admonition note">
 <p>Los nombres entre corchetes (<code>[kworker/0:1]</code>, <code>[migration/0]</code>) son por convención hilos del kernel, por lo que un proceso en userspace puede adoptar uno de estos para mimetizarse con procesos legítimos del sistema.</p>
 </div>
 <h3 id="pr_set_dumpable"><code>PR_SET_DUMPABLE</code><a class="headerlink" href="#pr_set_dumpable" title="Permanent link">&para;</a></h3>
@@ -1089,7 +1089,7 @@
 <p>El <code>mm_struct</code> de un proceso contiene los campos que el kernel consulta para generar <code>/proc/PID/cmdline</code>(argumentos con los que se lanzó el proceso <code>argv[0] \0 argv[1] \0 ...</code>), <code>/proc/PID/environ</code> (variables de entorno del proceso <code>KEY1=VALUE1 \0 KEY2=VALUE2 \0 ...</code>) y <code>/proc/PID/exe</code> (symlink que apunta al binario que el kernel cargó cuando ejecutó <code>execve</code>).</p>
 <p><code>PR_SET_MM</code> permite modificar directamente estos campos, alterando lo que el kernel lee cuando un observador los consulta.</p>
 <p>El uso de esta opción requiere la capability <code>CAP_SYS_RESOURCE</code> (bit 24) en el effective set.</p>
-<h4 id="pr_set_mm_arg_start-pr_set_mm_arg_end"><code>PR_SET_MM_ARG_START</code> / <code>PR_SET_MM_ARG_END</code><a class="headerlink" href="#pr_set_mm_arg_start-pr_set_mm_arg_end" title="Permanent link">&para;</a></h4>
+<h4 id="pr_set_mm_arg_start-pr_set_mm_arg_end"><strong><code>PR_SET_MM_ARG_START</code> / <code>PR_SET_MM_ARG_END</code></strong><a class="headerlink" href="#pr_set_mm_arg_start-pr_set_mm_arg_end" title="Permanent link">&para;</a></h4>
 <p>Permiten modificar <code>arg_start</code> y <code>arg_end</code>. Cualquier lectura posterior de <code>/proc/PID/cmdline</code> lee la memoria entre estas dos direcciones.</p>
 <div class="language-asm highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="w">    </span><span class="c1">; --- PR_SET_MM_ARG_START ---</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">rax</span><span class="p">,</span><span class="w"> </span><span class="mi">157</span><span class="w">                </span><span class="c1">; PRCTL</span>
@@ -1113,7 +1113,7 @@
 <div class="admonition note">
 <p>Existe una relación entre <code>/proc/PID/cmdline</code> y <code>argv[0]</code>: por defecto, <code>arg_start</code> apunta al área del stack donde reside <code>argv[0]</code>, por lo que ambos comparten la misma región de memoria. Mientras esa relación no se altere, sobrescribir <code>argv[0]</code> cambia también lo que <code>cmdline</code> devuelve, porque el kernel lee el contenido a partir de esa dirección, no una copia almacenada por separado. Si <code>arg_start</code> se redirige a otro buffer vía <code>PR_SET_MM</code>, las dos fuentes se desacoplan: <code>cmdline</code> lee del nuevo buffer y la sobrescritura de <code>argv[0]</code> solo afecta a herramientas que acceden directamente al stack del proceso.</p>
 </div>
-<h4 id="pr_set_mm_env_start-pr_set_mm_env_end"><code>PR_SET_MM_ENV_START</code> / <code>PR_SET_MM_ENV_END</code><a class="headerlink" href="#pr_set_mm_env_start-pr_set_mm_env_end" title="Permanent link">&para;</a></h4>
+<h4 id="pr_set_mm_env_start-pr_set_mm_env_end"><strong><code>PR_SET_MM_ENV_START</code> / <code>PR_SET_MM_ENV_END</code></strong><a class="headerlink" href="#pr_set_mm_env_start-pr_set_mm_env_end" title="Permanent link">&para;</a></h4>
 <p>Equivalente para <code>/proc/PID/environ</code>.</p>
 <div class="language-asm highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="w">    </span><span class="c1">; --- PR_SET_MM_ENV_START ---</span>
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">rax</span><span class="p">,</span><span class="w"> </span><span class="mi">157</span><span class="w">                </span><span class="c1">; PRCTL</span>
@@ -1134,7 +1134,7 @@
 </span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">    </span><span class="nf">xor</span><span class="w"> </span><span class="no">r8d</span><span class="p">,</span><span class="w"> </span><span class="no">r8d</span>
 </span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="w">    </span><span class="nf">syscall</span>
 </span></code></pre></div>
-<h4 id="pr_set_mm_exe_file"><code>PR_SET_MM_EXE_FILE</code><a class="headerlink" href="#pr_set_mm_exe_file" title="Permanent link">&para;</a></h4>
+<h4 id="pr_set_mm_exe_file"><strong><code>PR_SET_MM_EXE_FILE</code></strong><a class="headerlink" href="#pr_set_mm_exe_file" title="Permanent link">&para;</a></h4>
 <p>Permite modificar el symlink <code>/proc/PID/exe</code>. A diferencia de los anteriores, recibe un file descriptor al binario destino, no una dirección en memoria. El kernel reemplaza el <code>exe_file</code> del <code>mm_struct</code> por el <code>struct file</code> asociado al FD (cambio en una estructura vinculada al proceso a nivel del kernel).</p>
 <div class="language-asm highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="w">    </span><span class="c1">; --- Obtener FD del binario objetivo ---</span>
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">rax</span><span class="p">,</span><span class="w"> </span><span class="mi">257</span><span class="w">                </span><span class="c1">; OPENAT</span>
@@ -1175,7 +1175,7 @@
 <p>Las flags <code>VM_READ</code>, <code>VM_WRITE</code>, <code>VM_EXEC</code> determinan los permisos que aparecen en <code>/proc/PID/maps</code> (<code>r</code>, <code>w</code>, <code>x</code>). El flag <code>VM_SHARED</code> distingue el mapping <code>MAP_SHARED</code> (<code>s</code>) del mapping <code>MAP_PRIVATE</code> (<code>p</code>).</p>
 </div>
 <h3 id="vmas-file-backed-vs-vmas-anonimas">VMAs file-backed vs VMAs anónimas<a class="headerlink" href="#vmas-file-backed-vs-vmas-anonimas" title="Permanent link">&para;</a></h3>
-<h4 id="vmas-file-backed">VMAs file-backed<a class="headerlink" href="#vmas-file-backed" title="Permanent link">&para;</a></h4>
+<h4 id="vmas-file-backed"><strong>VMAs file-backed</strong><a class="headerlink" href="#vmas-file-backed" title="Permanent link">&para;</a></h4>
 <p>Se crean explícitamente cuando el kernel mapea un fichero en memoria — ya sea porque un programa solicita mapear un fichero con <code>mmap</code> pasando un file descriptor, o implícitamente durante <code>execve</code>, cuando el kernel carga los segmentos <code>PT_LOAD</code> del binario ELF en el espacio de direcciones del nuevo proceso. En ambos casos, la VMA resultante mantiene una referencia al fichero original a través de su campo <code>vm_file</code>.</p>
 <p>En <code>/proc/PID/maps</code> se muestra la siguiente información:</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>00400000-00402000 r--p 00000000 08:01 1234567  /path/to/binary
@@ -1187,7 +1187,7 @@
 </span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>│               │ └─ permisos: r=read, w=write, x=execute
 </span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>└───────────────└─ rango de direcciones virtuales
 </span></code></pre></div>
-<h4 id="vmas-anonimas">VMAs anónimas<a class="headerlink" href="#vmas-anonimas" title="Permanent link">&para;</a></h4>
+<h4 id="vmas-anonimas"><strong>VMAs anónimas</strong><a class="headerlink" href="#vmas-anonimas" title="Permanent link">&para;</a></h4>
 <p>Creadas por el kernel para el stack y el heap, o explícitamente con <code>mmap(MAP_ANONYMOUS)</code>. El campo <code>vm_file</code> de la VMA es NULL.</p>
 <p>En <code>/proc/PID/maps</code> no se muestra la ruta:</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>7f8a00000000-7f8a00004000 rw-p 00000000 00:00 0
@@ -1200,7 +1200,7 @@
 </span></code></pre></div>
 <h3 id="primitivas-de-gestion-de-la-memoria-virtual">Primitivas de gestión de la Memoria Virtual<a class="headerlink" href="#primitivas-de-gestion-de-la-memoria-virtual" title="Permanent link">&para;</a></h3>
 <p>Un proceso no puede reservar memoria, liberarla, moverla ni cambiar sus permisos sin pasar por el kernel. Las cuatro syscalls que lo permiten son <code>mmap</code> (reservar), <code>munmap</code> (liberar), <code>mremap</code> (mover o redimensionar) y <code>mprotect</code> (cambiar permisos).</p>
-<h4 id="mmap"><code>MMAP</code><a class="headerlink" href="#mmap" title="Permanent link">&para;</a></h4>
+<h4 id="mmap"><strong><code>MMAP</code></strong><a class="headerlink" href="#mmap" title="Permanent link">&para;</a></h4>
 <p>Permite crear un nuevo mapping en el espacio de direcciones virtuales del proceso.</p>
 <div class="language-asm highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">9</span><span class="w">          </span><span class="c1">; Número de syscall (mmap)</span>
 </span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nf">rdi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="no">addr</span><span class="w">       </span><span class="c1">; Dirección sugerida (0 para que el kernel la elija)</span>
@@ -1241,6 +1241,7 @@
 </tr>
 </tbody>
 </table>
+<p>La combinación <code>MAP_PRIVATE | MAP_ANONYMOUS</code> (<code>0x22</code>) es el caso de uso principal para reservar memoria anónima. El resultado son páginas inicializadas a cero, sin ruta visible en <code>/proc/PID/maps</code> y con escrituras aisladas al proceso que las creó.</p>
 <table>
 <thead>
 <tr>
@@ -1272,8 +1273,7 @@
 </tr>
 </tbody>
 </table>
-<p>La combinación <code>MAP_PRIVATE | MAP_ANONYMOUS</code> (<code>0x22</code>) es el caso de uso principal para reservar memoria anónima. El resultado son páginas inicializadas a cero, sin ruta visible en <code>/proc/PID/maps</code> y con escrituras aisladas al proceso que las creó.</p>
-<h4 id="mremap"><code>MREMAP</code><a class="headerlink" href="#mremap" title="Permanent link">&para;</a></h4>
+<h4 id="mremap"><strong><code>MREMAP</code></strong><a class="headerlink" href="#mremap" title="Permanent link">&para;</a></h4>
 <p>Permite <strong>redimensionar, mover o reubicar un mapping existente</strong> dentro del espacio de memoria virtual del proceso. Preserva los permisos de protección del mapping original y su tipo.</p>
 <div class="language-asm highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">25</span><span class="w">          </span><span class="c1">; Número de syscall (mremap)</span>
 </span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nf">rdi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="no">old_address</span><span class="w"> </span><span class="c1">; Dirección base del mapping existente (alineada a página)</span>
@@ -1308,7 +1308,7 @@
 </tr>
 </tbody>
 </table>
-<h4 id="mprotect"><code>MPROTECT</code><a class="headerlink" href="#mprotect" title="Permanent link">&para;</a></h4>
+<h4 id="mprotect"><strong><code>MPROTECT</code></strong><a class="headerlink" href="#mprotect" title="Permanent link">&para;</a></h4>
 <p>Permite <strong>cambiar las protecciones (lectura/escritura/ejecución) de una región de memoria</strong> ya mapeada por el proceso.</p>
 <div class="language-asm highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">10</span><span class="w">         </span><span class="c1">; Número de syscall (mprotect)</span>
 </span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nf">rdi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="no">addr</span><span class="w">       </span><span class="c1">; Dirección base de la región (se redondea hacia abajo a la página)</span>
@@ -1351,7 +1351,7 @@
 </tr>
 </tbody>
 </table>
-<h4 id="munmap"><code>MUNMAP</code><a class="headerlink" href="#munmap" title="Permanent link">&para;</a></h4>
+<h4 id="munmap"><strong><code>MUNMAP</code></strong><a class="headerlink" href="#munmap" title="Permanent link">&para;</a></h4>
 <p><strong>Elimina un mapping del espacio de direcciones virtual del proceso</strong>. Tras la llamada, cualquier acceso a las direcciones del rango desmapeado generará <code>SIGSEGV</code>.</p>
 <div class="language-asm highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">11</span><span class="w">            </span><span class="c1">; Número de syscall (munmap)</span>
 </span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nf">rdi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="no">addr</span><span class="w">          </span><span class="c1">; Dirección base del mapping a eliminar</span>
@@ -1360,10 +1360,10 @@
 <p>No es necesario que <code>length</code> coincida exactamente con el tamaño original del mapping. Se puede desmapear una porción de un mapping existente.</p>
 <h3 id="anonimizacion-de-vmas">Anonimización de VMAs<a class="headerlink" href="#anonimizacion-de-vmas" title="Permanent link">&para;</a></h3>
 <p><strong>La anonimización de VMAs es el proceso de reemplazar las VMAs file-backed por VMAs anónimas con contenido idéntico</strong>. El resultado es un proceso que sigue ejecutando el mismo código en las mismas direcciones, con los mismos permisos, pero sin ninguna VMA referenciando al binario original. En <code>/proc/PID/maps</code>, las VMAs pasan de mostrar la ruta del ejecutable a mostrar device <code>00:00</code> e inode <code>0</code>.</p>
-<div class="admonition abstract">
+<div class="admonition note">
 <p>Al realizar este proceso sobre todas las VMAs file-backed, la ejecución de <code>PR_SET_MM_EXE_FILE</code> con la capability <code>CAP_SYS_RESOURCE</code> tiene éxito, permitiendo el spoofing de <code>/proc/PID/exe</code>.</p>
 </div>
-<h4 id="procedimiento-de-anonimizacion">Procedimiento de anonimización<a class="headerlink" href="#procedimiento-de-anonimizacion" title="Permanent link">&para;</a></h4>
+<h4 id="procedimiento-de-anonimizacion"><strong>Procedimiento de anonimización</strong><a class="headerlink" href="#procedimiento-de-anonimizacion" title="Permanent link">&para;</a></h4>
 <p>Para cada segmento del binario:</p>
 <ol>
 <li>
@@ -1392,7 +1392,7 @@
 </span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>00402000-00405000 r-xp 00000000 00:00 0
 </span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>00405000-00407000 rw-p 00000000 00:00 0
 </span></code></pre></div>
-<h4 id="el-problema-del-segmento-text">El problema del segmento <code>.text</code><a class="headerlink" href="#el-problema-del-segmento-text" title="Permanent link">&para;</a></h4>
+<h4 id="el-problema-del-segmento-text"><strong>El problema del segmento <code>.text</code></strong><a class="headerlink" href="#el-problema-del-segmento-text" title="Permanent link">&para;</a></h4>
 <p>El segmento <code>.text</code> contiene el código ejecutable (RIP apunta a direcciones dentro de este segmento). Desmapearlo con <code>munmap</code> mientras se ejecuta código desde él destruye la página donde reside la siguiente instrucción a ejecutar, provocando un fallo de segmentación inmediato.</p>
 <p>La solución es ejecutar el código de anonimización <strong>desde fuera</strong> de los segmentos ejecutables iniciales del binario. Para ello, se construye un trampoline:</p>
 <ol>
@@ -1421,8 +1421,9 @@
 <p>La anonimización de todos los segmentos junto con la creación del trampoline reubicable se puede consultar en el código de DARKCLOAK, presente en el siguiente artículo.</p>
 <hr />
 <h2 id="agradecimientos">Agradecimientos<a class="headerlink" href="#agradecimientos" title="Permanent link">&para;</a></h2>
-<p>Gracias a los revisores que han contribuido con correcciones y sugerencias técnicas a este artículo. Gracias también a la comunidad de seguridad ofensiva hispanohablante por el interés continuo en contenido técnico de bajo nivel.</p>
-<p>Si encuentras errores o tienes sugerencias, puedes contactarme a través de <a href="https://github.com/0x574R">GitHub</a> o <a href="https://linkedin.com/in/0x574R">LinkedIn</a>.</p>
+<p>Gracias por llegar hasta aquí.</p>
+<p>Si encuentras errores o quieres mejorar/ampliar el artículo, el contenido del blog está abierto a Pull Requests. Toda contribución es bienvenida.</p>
+<p>¡Nos vemos en el próximo artículo! ;)</p>
 
 
 
