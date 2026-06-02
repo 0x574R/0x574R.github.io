@@ -8,12 +8,12 @@ description: Fuentes de identidad visible de un proceso Linux, mecanismos de man
 <span class="article-meta">03/06/2026 · 50 min</span>
 </div>
 
-Fuentes de identidad visible, mecanismos de manipulación y anonimización de VMAs
+Qué información expone Linux sobre sus procesos, dónde reside y cómo se manipula
 
 ---
 
 !!! info "Contexto"
-    Este artículo cubre la información que el sistema operativo expone sobre cada proceso y cómo puede modificarse desde userspace. Es el tercer artículo de la serie DARKCLOAK, y asume conocimiento previo del modelo de credenciales y capabilities (artículo 1) y del formato ELF (artículo 2).
+    Este artículo cubre la información que el sistema operativo expone sobre cada proceso y cómo puede modificarse desde userspace. Es el tercer artículo de la serie DARKCLOAK y asume conocimiento previo del modelo de credenciales y capabilities (artículo 1) y del formato ELF (artículo 2).
 
 ## Introducción
 
@@ -29,16 +29,16 @@ Cada fuente de identidad visible opera de forma independiente y cada una tiene s
 
 Quizás la herramienta más utilizada y por defecto establecida en la mayoría de distribuciones Linux es `ps`, la cual obtiene su información de `/proc/PID/stat`, `/proc/PID/status` (nombre, estado, UIDs, capabilities), `/proc/PID/cmdline` (línea de comandos) y `/proc/PID/exe` (ruta del binario). Un proceso que modifique estas fuentes en `/proc` altera lo que `ps` muestra.
 
-### Consultando directamente el contenido en la memoria del proceso
+### Consultando directamente el contenido alojado en la memoria del proceso
 
 `argv[0]` contiene el primer elemento del array de argumentos que un proceso recibe al iniciar.
 
-```bash
-# Ejecución directa → argv[0] = "./darkcloak"
-./darkcloak
+```c
+# Ejecución directa
+argv[0] = "./darkcloak"
 
-# Ejecución usando la ruta completa → argv[0] = "/home/user/darkcloak"
-/home/user/darkcloak
+# Ejecución usando la ruta completa
+argv[0] = "/home/user/darkcloak"
 ```
 
 No es una propiedad alojada internamente por el kernel, sino un dato en la memoria del propio proceso (`[rsp+8]` con respecto al entry point). Sobrescribirlo es una escritura a una dirección conocida, sin syscalls intermedias.
@@ -47,11 +47,11 @@ No es una propiedad alojada internamente por el kernel, sino un dato en la memor
 
 Cada proceso tiene un directorio en `/proc/` determinado por su PID. Los ficheros dentro de ese directorio no existen en disco, sino que pertenecen a **`procfs`**, un filesystem virtual donde cada operación de lectura invoca a una función del kernel que genera el contenido dinámicamente a partir de las estructuras internas del proceso.
 
-#### Fuentes de identidad y sus mecanismos de manipulación
+#### Fuentes de identidad y sus mecanismos de manipulación en `/proc/<PID>/`
 
 Cada valor consultable tiene origen en las estructuras internas del kernel vinculadas al proceso.
 
-| Fuente en `/proc` | Estructura | Campo |
+| Fuente en `/proc` | Estructura involucrada | Campo |
 |---|---|---|
 | `/proc/PID/comm` | `task_struct` | `comm[16]` |
 | `/proc/PID/cmdline` | `mm_struct` | `arg_start` → `arg_end` |
@@ -67,25 +67,24 @@ Cada valor consultable tiene origen en las estructuras internas del kernel vincu
 
 Principalmente, las fuentes se manipulan a través de dos mecanismos:
 
-**Vía `prctl`** (syscall multipropósito):
+**Vía syscall de gestión de procesos**
 
 - Nombre del proceso (`/proc/PID/comm`) → `prctl(PR_SET_NAME)`
 - Línea de comandos (`/proc/PID/cmdline`) → `prctl(PR_SET_MM, ARG_START/ARG_END)`
 - Variables de entorno (`/proc/PID/environ`) → `prctl(PR_SET_MM, ENV_START/ENV_END)`
 - Enlace al ejecutable (`/proc/PID/exe`) → `prctl(PR_SET_MM, EXE_FILE)`
-- Permisos de acceso a `/proc/PID/*` → `prctl(PR_SET_DUMPABLE)`
 
 **Vía syscalls de gestión de memoria**
 
-- Mapa de memoria (`/proc/PID/maps`) → `mmap`, `munmap`, `mremap`, `mprotect`
+- Mapa de memoria virtual del proceso (`/proc/PID/maps`) → `mmap`, `munmap`, `mremap`, `mprotect`
 
-## `prctl`: La Interfaz de Gestión del Proceso
+#### La Interfaz de Gestión del Proceso
 
-`prctl` es una llamada al sistema que permite realizar multitud de operaciones de gestión sobre el proceso que la invoca. A diferencia de syscalls especializadas como `setresuid` (que solo maneja UIDs) o `capset` (que solo maneja capabilities), `prctl` es un contenedor de operaciones diversas.
+A diferencia de syscalls especializadas como `setresuid` (que solo maneja UIDs) o `capset` (que solo maneja capabilities), `prctl` es una llamada al sistema que permite realizar multitud de operaciones de gestión sobre el proceso que la invoca.
 
-Desde la perspectiva ofensiva, `prctl` concentra la mayoría de las operaciones que modifican la identidad visible del proceso sin alterar su ejecución. Es por ello que la monitorización defensiva de `prctl` (vía auditd o eBPF) es un punto de detección crítico.
+Desde la perspectiva ofensiva, `prctl` concentra la mayoría de las operaciones que modifican la identidad visible del proceso sin alterar su ejecución. Es por ello, que la monitorización defensiva de `prctl` (via auditd o eBPF) es un punto de detección crítico.
 
-A continuación, se detallan aquellas operaciones valiosas desde el punto de vista ofensivo:
+A continuación, se detallan aquellas operaciones que son valiosas desde el punto de vista ofensivo:
 
 ### `PR_SET_NAME`
 
@@ -108,7 +107,7 @@ Cada proceso tiene un atributo `dumpable` que controla si el kernel permite a ot
 ```asm
     mov rax, 157                ; PRCTL
     mov rdi, 4                  ; PR_SET_DUMPABLE
-    xor esi, esi                ; DUMPABLE = 0 (por defecto DUMPABLE = 1)
+    xor esi, esi                ; DUMPABLE = 0 (POR DEFECTO, DUMPABLE = 1)
     syscall
 ```
 
@@ -125,9 +124,9 @@ Sigue visible en `/proc/PID/stat`, `/proc/PID/status`, `/proc/PID/comm`, `/proc/
 
 ### `PR_SET_MM`
 
-El `mm_struct` de un proceso contiene los campos que el kernel consulta para generar `/proc/PID/cmdline` (argumentos con los que se lanzó el proceso), `/proc/PID/environ` (variables de entorno del proceso) y `/proc/PID/exe` (symlink que apunta al binario que el kernel cargó cuando se ejecutó `execve`).
+El `mm_struct` de un proceso contiene los campos que el kernel consulta para generar `/proc/PID/cmdline`(argumentos con los que se lanzó el proceso `argv[0] \0 argv[1] \0 ...`), `/proc/PID/environ` (variables de entorno del proceso `KEY1=VALUE1 \0 KEY2=VALUE2 \0 ...`) y `/proc/PID/exe` (symlink que apunta al binario que el kernel cargó cuando ejecutó `execve`).
 
-`PR_SET_MM` permite modificar directamente estos campos, alterando lo que el kernel lee cuando cualquier observador los consulta.
+`PR_SET_MM` permite modificar directamente estos campos, alterando lo que el kernel lee cuando un observador los consulta.
 
 El uso de esta opción requiere la capability `CAP_SYS_RESOURCE` (bit 24) en el effective set.
 
@@ -275,16 +274,16 @@ Un proceso no puede reservar memoria, liberarla, moverla ni cambiar sus permisos
 
 #### `MMAP`
 
-Permite al proceso reservar nuevas regiones de memoria virtual, ya sea anónimas (sin respaldo en disco) o respaldadas por un fichero.
+Permite crear un nuevo mapping en el espacio de direcciones virtuales del proceso.
 
 ```asm
 rax = 9          ; Número de syscall (mmap)
-rdi = addr       ; Dirección sugerida (0 = kernel elige)
-rsi = length     ; Tamaño en bytes (redondeado a página)
-rdx = prot       ; Permisos de protección (PROT_*)
+rdi = addr       ; Dirección sugerida (0 para que el kernel la elija)
+rsi = length     ; Tamaño en bytes a reservar (ej. 4096 = 1 página)
+rdx = prot       ; Permisos de protección (flags PROT_*)
 r10 = flags      ; Opciones de mapeo (MAP_*)
-r8  = fd         ; File descriptor (-1 si anónimo)
-r9  = offset     ; Offset dentro del fichero (0 si anónimo)
+r8  = fd         ; File descriptor (para mapeo de archivo; -1 si no aplica)
+r9  = offset     ; Offset dentro del archivo (múltiplo del tamaño de la página)
 ```
 
 | Flag | Valor | Descripción |
@@ -301,8 +300,7 @@ r9  = offset     ; Offset dentro del fichero (0 si anónimo)
 | `PROT_WRITE` | `0x2` | Escritura |
 | `PROT_EXEC` | `0x4` | Ejecución |
 
-!!! note ""
-    `MAP_PRIVATE | MAP_ANONYMOUS` (`0x22`) es la combinación habitual para reservar memoria anónima, dando lugar a páginas desvinculadas del filesystem, sin ruta visible en `/proc/PID/maps`, inicializadas a cero y con escrituras privadas al proceso.
+La combinación `MAP_PRIVATE | MAP_ANONYMOUS` (`0x22`) es el caso de uso principal para reservar memoria anónima. El resultado son páginas inicializadas a cero, sin ruta visible en `/proc/PID/maps` y con escrituras aisladas al proceso que las creó.
 
 #### `MREMAP`
 
@@ -400,3 +398,11 @@ La solución es ejecutar el código de anonimización **desde fuera** de los seg
 7. **Desmapear la página temporal** (`munmap`): la página utilizada para el trampoline ya no es necesaria y se puede eliminar.
 
 La anonimización de todos los segmentos junto con la creación del trampoline reubicable se puede consultar en el código de DARKCLOAK, presente en el siguiente artículo.
+
+---
+
+## Agradecimientos
+
+Gracias a los revisores que han contribuido con correcciones y sugerencias técnicas a este artículo. Gracias también a la comunidad de seguridad ofensiva hispanohablante por el interés continuo en contenido técnico de bajo nivel.
+
+Si encuentras errores o tienes sugerencias, puedes contactarme a través de [GitHub](https://github.com/0x574R) o [LinkedIn](https://linkedin.com/in/0x574R).
