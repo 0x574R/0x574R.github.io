@@ -41,7 +41,13 @@ argv[0] = "./darkcloak"
 argv[0] = "/home/user/darkcloak"
 ```
 
-No es una propiedad alojada internamente por el kernel, sino un dato en la memoria del propio proceso (`[rsp+8]` con respecto al entry point). Sobrescribirlo es una escritura a una dirección conocida, sin syscalls intermedias.
+No es una propiedad alojada internamente por el kernel, sino un dato en la memoria del propio proceso (`[rsp+8]` con respecto al entry point). Sobrescribirlo es una escritura a una dirección conocida, sin syscalls intermedias:
+
+```asm
+    mov r12, [rsp+8]                   ; r12 = dirección de la cadena original argv[0] en el stack
+    mov r13, [rel mimic_argv]          ; r13 = contenido de la cadena de reemplazo (ej. "./sshd\0")
+    mov [r12], r13                     ; se sobrescribe la cadena original con la de reemplazo
+```
 
 ### Analizando el directorio `/proc/<PID>/`
 
