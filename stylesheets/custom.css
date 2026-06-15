@@ -1587,18 +1587,12 @@ div.tables-centered td {
 /* === FLOWCHART CON SCROLL HORIZONTAL === */
 .md-typeset img.flowchart-img {
   display: block;
-  height: 280px;
+  height: 420px;
   width: auto;
   max-width: none;
   border: 1px solid var(--md-default-fg-color--lightest);
   border-radius: 6px;
   cursor: grab;
-  overflow-x: auto;
-}
-
-/* Wrap generado por MkDocs alrededor de la imagen */
-.md-typeset .flowchart-img {
-  overflow-x: auto;
 }
 
 /* El <p> que envuelve la imagen necesita overflow */
@@ -1628,13 +1622,11 @@ div.tables-centered td {
   overflow: visible;
 }
 
-/* span inline dentro de pre: solo color, sin layout */
+/* solo color, sin nada más */
 .stack-layout pre .hl-orange {
   color: #c96a00;
-  background: transparent;
 }
 
 [data-md-color-scheme="slate"] .stack-layout pre .hl-orange {
   color: #ffab40;
-  background: transparent;
 }
