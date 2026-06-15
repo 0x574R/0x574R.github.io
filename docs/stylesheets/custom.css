@@ -1582,3 +1582,26 @@ div.tables-centered td {
   margin-left: auto;
   margin-right: auto;
 }
+
+/* === FLOWCHART CON SCROLL HORIZONTAL === */
+.flowchart-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 6px;
+  padding: 0.5rem 0;
+  margin: 1.2rem 0;
+  cursor: grab;
+}
+
+.flowchart-scroll:active {
+  cursor: grabbing;
+}
+
+.flowchart-scroll img {
+  display: block;
+  height: 280px;
+  width: auto;
+  max-width: none;
+}
