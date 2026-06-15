@@ -1609,27 +1609,40 @@ div.tables-centered td {
 /* === STACK LAYOUT CON FILAS RESALTADAS === */
 .stack-layout {
   margin: 1.2rem 0;
-}
-
-.stack-layout pre {
   background: var(--md-code-bg-color);
   border-radius: 6px;
-  padding: 0.8rem 1rem;
-  font-size: 0.78rem;
-  line-height: 1.55;
   overflow-x: auto;
-  margin: 0;
-}
-
-.stack-layout .hl-orange {
   display: block;
-  background: rgba(255, 140, 0, 0.12);
-  color: #e07b00;
-  margin: 0 -1rem;
-  padding: 0 1rem;
 }
 
-[data-md-color-scheme="slate"] .stack-layout .hl-orange {
-  background: rgba(255, 160, 30, 0.12);
+.stack-layout table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0;
+  padding: 0.8rem 1rem;
+  display: table;
+}
+
+.stack-layout tr {
+  line-height: 1;
+}
+
+.stack-layout td {
+  font-family: var(--md-code-font, "Roboto Mono"), monospace;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  white-space: pre;
+  padding: 0 1rem;
+  border: none;
+  color: var(--md-code-fg-color);
+}
+
+.stack-layout tr.hl-orange td {
+  background: rgba(255, 140, 0, 0.13);
+  color: #d4720a;
+}
+
+[data-md-color-scheme="slate"] .stack-layout tr.hl-orange td {
+  background: rgba(255, 160, 30, 0.13);
   color: #ffab40;
 }
