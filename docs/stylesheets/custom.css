@@ -1587,7 +1587,7 @@ div.tables-centered td {
 /* === FLOWCHART CON SCROLL HORIZONTAL === */
 .md-typeset img.flowchart-img {
   display: block;
-  height: 520px;
+  height: 680px;
   width: auto;
   max-width: none;
   border: 1px solid var(--md-default-fg-color--lightest);
