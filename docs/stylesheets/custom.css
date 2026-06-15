@@ -1556,3 +1556,22 @@ div.tables-centered td {
   border-radius: 12px 12px 0 0;
 }
 
+/* === ADMONITION SIN ICONO (tipo "scope") === */
+.md-typeset .admonition.scope,
+.md-typeset details.scope {
+  border-color: var(--razor-accent);
+}
+
+.md-typeset .scope > .admonition-title,
+.md-typeset .scope > summary {
+  background-color: rgba(var(--razor-accent-rgb), 0.10);
+}
+
+.md-typeset .scope > .admonition-title::before,
+.md-typeset .scope > summary::before {
+  display: none !important;
+}
+
+.md-typeset .scope > .admonition-title {
+  padding-left: 0.8rem;
+}
