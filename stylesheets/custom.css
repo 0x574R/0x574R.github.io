@@ -1560,11 +1560,14 @@ div.tables-centered td {
 .md-typeset .admonition.scope,
 .md-typeset details.scope {
   border-color: var(--razor-accent);
+  border-left-width: 4px;
 }
 
 .md-typeset .scope > .admonition-title,
 .md-typeset .scope > summary {
-  background-color: rgba(var(--razor-accent-rgb), 0.10);
+  background-color: rgba(var(--razor-accent-rgb), 0.15);
+  color: var(--razor-accent);
+  font-weight: 700;
 }
 
 .md-typeset .scope > .admonition-title::before,
@@ -1587,7 +1590,7 @@ div.tables-centered td {
 /* === FLOWCHART CON SCROLL HORIZONTAL === */
 .md-typeset img.flowchart-img {
   display: block;
-  height: 680px;
+  height: 850px;
   width: auto;
   max-width: none;
   border: 1px solid var(--md-default-fg-color--lightest);
