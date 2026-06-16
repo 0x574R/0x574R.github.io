@@ -94,7 +94,7 @@ description: Blog de seguridad ofensiva. Técnicas de bajo nivel en ensamblador 
   </div>
 </a>
 
-<div class="razor-card razor-card--series razor-card--upcoming">
+<a href="research/malware-dev/darkcloak/" class="razor-card razor-card--series">
   <div class="razor-card__image">
     <img src="assets/images/darkcloak-hero.svg" alt="DARKCLOAK">
   </div>
@@ -102,9 +102,9 @@ description: Blog de seguridad ofensiva. Técnicas de bajo nivel en ensamblador 
   <span class="razor-card__desc">Pipeline completo de suplantación de identidad de procesos en Linux</span>
   <div class="razor-card__meta">
     <span class="razor-card__tag">Assembly</span>
-    <span class="razor-card__time">17 junio</span>
+    <span class="razor-card__time"><span class="razor-card__star">★</span> 90 min</span>
   </div>
-</div>
+</a>
 
 </div>
 

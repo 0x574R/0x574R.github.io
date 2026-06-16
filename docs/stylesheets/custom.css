@@ -1559,29 +1559,42 @@ div.tables-centered td {
 /* === ADMONITION SIN ICONO (tipo "scope") — fondo verde === */
 .md-typeset .admonition.scope,
 .md-typeset details.scope {
-  border-color: #2e7d32;
-  border-left-width: 1px;
-  background-color: rgba(46, 125, 50, 0.06);
+  border-color: #2e7d32 !important;
+  border-left-width: 1px !important;
+  background-color: rgba(46, 125, 50, 0.06) !important;
   overflow: hidden;
 }
 
 .md-typeset .scope > .admonition-title,
 .md-typeset .scope > summary {
-  background-color: rgba(46, 125, 50, 0.14);
-  color: #1b5e20;
+  background-color: rgba(46, 125, 50, 0.14) !important;
+  color: #1b5e20 !important;
   font-weight: 700;
 }
 
 [data-md-color-scheme="slate"] .md-typeset .admonition.scope,
 [data-md-color-scheme="slate"] .md-typeset details.scope {
-  border-color: #4caf50;
-  background-color: rgba(76, 175, 80, 0.08);
+  border-color: #4caf50 !important;
+  background-color: rgba(76, 175, 80, 0.08) !important;
 }
 
 [data-md-color-scheme="slate"] .md-typeset .scope > .admonition-title,
 [data-md-color-scheme="slate"] .md-typeset .scope > summary {
-  background-color: rgba(76, 175, 80, 0.18);
-  color: #81c784;
+  background-color: rgba(76, 175, 80, 0.18) !important;
+  color: #81c784 !important;
+}
+
+/* === HIGHLIGHT (==texto==) SUAVIZADO === */
+.md-typeset mark {
+  background-color: rgba(255, 220, 50, 0.25);
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+[data-md-color-scheme="slate"] .md-typeset mark {
+  background-color: rgba(255, 220, 50, 0.18);
+  color: inherit;
 }
 
 .md-typeset .scope > .admonition-title::before,
