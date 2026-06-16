@@ -1437,35 +1437,35 @@ div.tables-centered td {
    TABLAS CENTRADAS POR DEFECTO
    ============================================================ */
 
-/* Centrar el contenedor scrollwrap que Material MkDocs crea */
+/* Centrar tablas en todos los artículos */
 .md-typeset__scrollwrap {
-  display: flex !important;
-  justify-content: center !important;
+  text-align: center !important;
 }
 
 .md-typeset__table {
-  width: auto !important;
-  max-width: fit-content !important;
+  display: inline-block !important;
+  text-align: left !important;
 }
 
-.md-typeset table:not(.tables-centered table) {
+.md-typeset table {
   margin-left: auto !important;
   margin-right: auto !important;
   width: auto !important;
 }
 
-.md-typeset table:not(.tables-centered table) th,
-.md-typeset table:not(.tables-centered table) td {
+.md-typeset table th,
+.md-typeset table td {
   text-align: center !important;
 }
 
-/* Primera columna más ancha */
-.md-typeset table:not(.tables-centered table) th:first-child,
-.md-typeset table:not(.tables-centered table) td:first-child {
-  min-width: 200px !important;
+/* Primera columna con ancho mínimo para legibilidad */
+.md-typeset table th:first-child,
+.md-typeset table td:first-child {
+  min-width: 180px !important;
+  text-align: left !important;
 }
 
-/* Tablas dentro de listas: compensar indentación para centrar al reader */
+/* Tablas dentro de listas: compensar indentación */
 .md-typeset li > .md-typeset__scrollwrap {
   margin-left: -0.625em !important;
   width: calc(100% + 0.625em) !important;
@@ -1556,3 +1556,123 @@ div.tables-centered td {
   border-radius: 12px 12px 0 0;
 }
 
+/* === ADMONITION SIN ICONO (tipo "scope") === */
+.md-typeset .admonition.scope,
+.md-typeset details.scope {
+  border-color: var(--razor-accent);
+  border-left-width: 4px;
+}
+
+.md-typeset .scope > .admonition-title,
+.md-typeset .scope > summary {
+  background-color: rgba(var(--razor-accent-rgb), 0.15);
+  color: var(--razor-accent);
+  font-weight: 700;
+}
+
+.md-typeset .scope > .admonition-title::before,
+.md-typeset .scope > summary::before {
+  display: none !important;
+}
+
+.md-typeset .scope > .admonition-title {
+  padding-left: 0.8rem;
+}
+
+/* === IMÁGENES CENTRADAS === */
+.md-typeset img.img-centered {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2.4rem;
+  margin-bottom: 2.4rem;
+}
+
+/* === FLOWCHART CON SCROLL HORIZONTAL === */
+.md-typeset img.flowchart-img {
+  display: block;
+  height: 935px;
+  width: auto;
+  max-width: none;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 6px;
+  cursor: grab;
+  margin-top: 2.4rem;
+  margin-bottom: 2.4rem;
+}
+
+/* El <p> que envuelve la imagen necesita overflow */
+.md-typeset p:has(img.flowchart-img) {
+  overflow-x: auto;
+  max-width: 100%;
+  cursor: grab;
+}
+
+/* === Variables adicionales para modo oscuro === */
+[data-md-color-scheme="slate"] {
+  --md-code-fg-color: rgba(255, 255, 255, 0.86);
+  --md-default-fg-color--lightest: rgba(255, 255, 255, 0.12);
+}
+
+[data-md-color-scheme="default"] {
+  --md-code-fg-color: rgba(15, 23, 42, 0.86);
+  --md-default-fg-color--lightest: rgba(15, 23, 42, 0.12);
+}
+
+/* === Dark mode syntax highlighting === */
+[data-md-color-scheme="slate"] .highlight .c  { color: #8b949e } /* Comment */
+[data-md-color-scheme="slate"] .highlight .k  { color: #ff7b72 } /* Keyword */
+[data-md-color-scheme="slate"] .highlight .o  { color: #79c0ff } /* Operator */
+[data-md-color-scheme="slate"] .highlight .cm { color: #8b949e } /* Comment.Multiline */
+[data-md-color-scheme="slate"] .highlight .cp { color: #ff7b72 } /* Comment.Preproc */
+[data-md-color-scheme="slate"] .highlight .c1 { color: #8b949e } /* Comment.Single */
+[data-md-color-scheme="slate"] .highlight .cs { color: #8b949e } /* Comment.Special */
+[data-md-color-scheme="slate"] .highlight .kc { color: #ff7b72 } /* Keyword.Constant */
+[data-md-color-scheme="slate"] .highlight .kd { color: #ff7b72 } /* Keyword.Declaration */
+[data-md-color-scheme="slate"] .highlight .kn { color: #ff7b72 } /* Keyword.Namespace */
+[data-md-color-scheme="slate"] .highlight .kp { color: #ff7b72 } /* Keyword.Pseudo */
+[data-md-color-scheme="slate"] .highlight .kr { color: #ff7b72 } /* Keyword.Reserved */
+[data-md-color-scheme="slate"] .highlight .kt { color: #d2a8ff } /* Keyword.Type */
+[data-md-color-scheme="slate"] .highlight .m  { color: #79c0ff } /* Literal.Number */
+[data-md-color-scheme="slate"] .highlight .s  { color: #a5d6ff } /* Literal.String */
+[data-md-color-scheme="slate"] .highlight .na { color: #d2a8ff } /* Name.Attribute */
+[data-md-color-scheme="slate"] .highlight .nb { color: #79c0ff } /* Name.Builtin */
+[data-md-color-scheme="slate"] .highlight .nc { color: #d2a8ff } /* Name.Class */
+[data-md-color-scheme="slate"] .highlight .no { color: #79c0ff } /* Name.Constant */
+[data-md-color-scheme="slate"] .highlight .nd { color: #d2a8ff } /* Name.Decorator */
+[data-md-color-scheme="slate"] .highlight .nf { color: #d2a8ff } /* Name.Function */
+[data-md-color-scheme="slate"] .highlight .nt { color: #7ee787 } /* Name.Tag */
+[data-md-color-scheme="slate"] .highlight .nv { color: #ffa657 } /* Name.Variable */
+[data-md-color-scheme="slate"] .highlight .ow { color: #ff7b72 } /* Operator.Word */
+[data-md-color-scheme="slate"] .highlight .mf { color: #79c0ff } /* Literal.Number.Float */
+[data-md-color-scheme="slate"] .highlight .mh { color: #79c0ff } /* Literal.Number.Hex */
+[data-md-color-scheme="slate"] .highlight .mi { color: #79c0ff } /* Literal.Number.Integer */
+[data-md-color-scheme="slate"] .highlight .s2 { color: #a5d6ff } /* Literal.String.Double */
+[data-md-color-scheme="slate"] .highlight .s1 { color: #a5d6ff } /* Literal.String.Single */
+.stack-layout {
+  margin: 1.2rem 0;
+  background: var(--md-code-bg-color);
+  border-radius: 6px;
+  overflow-x: auto;
+  padding: 0.75rem 1rem;
+}
+
+.stack-layout pre {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  font-size: 0.76rem;
+  line-height: 1.6;
+  overflow: visible;
+}
+
+/* solo color, sin nada más */
+.stack-layout pre .hl-orange {
+  color: #c96a00;
+}
+
+[data-md-color-scheme="slate"] .stack-layout pre .hl-orange {
+  color: #ffab40;
+}
