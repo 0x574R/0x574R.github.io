@@ -2,42 +2,38 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://0x574r.github.io/</loc>
-         <lastmod>2026-06-16</lastmod>
+         <lastmod>2026-06-02</lastmod>
     </url>
     <url>
          <loc>https://0x574r.github.io/research/kernel-theory/</loc>
-         <lastmod>2026-06-16</lastmod>
+         <lastmod>2026-06-02</lastmod>
     </url>
     <url>
          <loc>https://0x574r.github.io/research/kernel-theory/elf-internals/</loc>
-         <lastmod>2026-06-16</lastmod>
+         <lastmod>2026-06-02</lastmod>
     </url>
     <url>
          <loc>https://0x574r.github.io/research/kernel-theory/identity-model/</loc>
-         <lastmod>2026-06-16</lastmod>
+         <lastmod>2026-06-02</lastmod>
     </url>
     <url>
          <loc>https://0x574r.github.io/research/kernel-theory/process-identity/</loc>
-         <lastmod>2026-06-16</lastmod>
+         <lastmod>2026-06-02</lastmod>
     </url>
     <url>
          <loc>https://0x574r.github.io/research/malware-dev/</loc>
-         <lastmod>2026-06-16</lastmod>
-    </url>
-    <url>
-         <loc>https://0x574r.github.io/research/malware-dev/darkcloak/</loc>
-         <lastmod>2026-06-16</lastmod>
+         <lastmod>2026-06-02</lastmod>
     </url>
     <url>
          <loc>https://0x574r.github.io/research/malware-dev/fileless-loader/</loc>
-         <lastmod>2026-06-16</lastmod>
+         <lastmod>2026-06-02</lastmod>
     </url>
     <url>
          <loc>https://0x574r.github.io/research/malware-dev/ptrace-injection/</loc>
-         <lastmod>2026-06-16</lastmod>
+         <lastmod>2026-06-02</lastmod>
     </url>
     <url>
          <loc>https://0x574r.github.io/research/malware-dev/reverse-shell/</loc>
-         <lastmod>2026-06-16</lastmod>
+         <lastmod>2026-06-02</lastmod>
     </url>
 </urlset>
