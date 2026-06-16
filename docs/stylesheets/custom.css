@@ -1559,15 +1559,15 @@ div.tables-centered td {
 /* === ADMONITION SIN ICONO (tipo "scope") — fondo dorado === */
 .md-typeset .admonition.scope,
 .md-typeset details.scope {
-  border-color: rgba(212, 175, 55, 0.35);
+  border-color: #d4a017;
   border-left-width: 1px;
-  background-color: rgba(212, 175, 55, 0.10);
+  background-color: rgba(212, 175, 55, 0.06);
 }
 
 .md-typeset .scope > .admonition-title,
 .md-typeset .scope > summary {
-  background-color: rgba(212, 175, 55, 0.20);
-  color: #8a6200;
+  background-color: rgba(212, 175, 55, 0.14);
+  color: #a07800;
   font-weight: 700;
 }
 
