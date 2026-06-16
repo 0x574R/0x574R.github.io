@@ -1559,16 +1559,16 @@ div.tables-centered td {
 /* === ADMONITION SIN ICONO (tipo "scope") — fondo verde === */
 .md-typeset .admonition.scope,
 .md-typeset details.scope {
-  border-color: #2e7d32 !important;
+  border-color: #81c784 !important;
   border-left-width: 1px !important;
-  background-color: rgba(46, 125, 50, 0.06) !important;
+  background-color: rgba(46, 125, 50, 0.04) !important;
   overflow: hidden;
 }
 
 .md-typeset .scope > .admonition-title,
 .md-typeset .scope > summary {
-  background-color: rgba(46, 125, 50, 0.14) !important;
-  color: #1b5e20 !important;
+  background-color: rgba(46, 125, 50, 0.10) !important;
+  color: #2e7d32 !important;
   font-weight: 700;
 }
 
