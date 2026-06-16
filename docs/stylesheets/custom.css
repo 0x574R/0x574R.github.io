@@ -1584,8 +1584,8 @@ div.tables-centered td {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 1.8rem;
-  margin-bottom: 1.8rem;
+  margin-top: 2.4rem;
+  margin-bottom: 2.4rem;
 }
 
 /* === FLOWCHART CON SCROLL HORIZONTAL === */
@@ -1597,8 +1597,8 @@ div.tables-centered td {
   border: 1px solid var(--md-default-fg-color--lightest);
   border-radius: 6px;
   cursor: grab;
-  margin-top: 1.8rem;
-  margin-bottom: 1.8rem;
+  margin-top: 2.4rem;
+  margin-bottom: 2.4rem;
 }
 
 /* El <p> que envuelve la imagen necesita overflow */
