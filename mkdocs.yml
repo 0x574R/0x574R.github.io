@@ -84,6 +84,7 @@ nav:
       - Fileless Loader: research/malware-dev/fileless-loader.md
       - Reverse TCP Shell: research/malware-dev/reverse-shell.md
       - Process Injection via Ptrace: research/malware-dev/ptrace-injection.md
+      - DARKCLOAK: Novel Flow for Process Masquerading: research/malware-dev/darkcloak.md
   - Kernel Theory:
       - ELF Internals: research/kernel-theory/elf-internals.md
       - Identity and Privileges of a Process: research/kernel-theory/identity-model.md

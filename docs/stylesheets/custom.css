@@ -1556,31 +1556,32 @@ div.tables-centered td {
   border-radius: 12px 12px 0 0;
 }
 
-/* === ADMONITION SIN ICONO (tipo "scope") — fondo dorado === */
+/* === ADMONITION SIN ICONO (tipo "scope") — fondo verde === */
 .md-typeset .admonition.scope,
 .md-typeset details.scope {
-  border-color: #d4a017;
+  border-color: #2e7d32;
   border-left-width: 1px;
-  background-color: rgba(212, 175, 55, 0.06);
+  background-color: rgba(46, 125, 50, 0.06);
+  overflow: hidden;
 }
 
 .md-typeset .scope > .admonition-title,
 .md-typeset .scope > summary {
-  background-color: rgba(212, 175, 55, 0.14);
-  color: #a07800;
+  background-color: rgba(46, 125, 50, 0.14);
+  color: #1b5e20;
   font-weight: 700;
 }
 
 [data-md-color-scheme="slate"] .md-typeset .admonition.scope,
 [data-md-color-scheme="slate"] .md-typeset details.scope {
-  border-color: #d4a017;
-  background-color: rgba(212, 175, 55, 0.08);
+  border-color: #4caf50;
+  background-color: rgba(76, 175, 80, 0.08);
 }
 
 [data-md-color-scheme="slate"] .md-typeset .scope > .admonition-title,
 [data-md-color-scheme="slate"] .md-typeset .scope > summary {
-  background-color: rgba(212, 175, 55, 0.18);
-  color: #e8c84a;
+  background-color: rgba(76, 175, 80, 0.18);
+  color: #81c784;
 }
 
 .md-typeset .scope > .admonition-title::before,
