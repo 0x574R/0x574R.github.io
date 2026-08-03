@@ -1705,58 +1705,52 @@ div.tables-centered td {
 }
 
 /* ============================================================
-   LANGUAGE TOGGLE BUTTON
+   LANGUAGE TOGGLE  (overrides/partials/alternate.html)
    ============================================================
 
-   The button uses "md-header__button" from Material (gives it the
-   correct flex frame, margin, and ripple behaviour) plus our own
-   "lang-toggle" class for sizing/alignment overrides.
+   Material renders .md-header__option > button.lang-toggle via our
+   overridden alternate.html partial.  The SVG flag is inlined in
+   the template, so there are NO emoji and NO bitmap images.
 
-   Flag SVGs are inline vector graphics, NOT emoji:
-   – No OS-dependent rendering, no bitmap blur at non-integer sizes.
-   – The SVG element has explicit width/height attributes (20×14 px
-     for Spain, 20×10 px for UK) so aspect ratios are always correct.
+   Button: fixed 2.4 rem square, flex-centered, same frame as every
+   other .md-header__button in the header.
 
-   Centering: the button is a 2.4rem square flex container; the SVG
-   sits in the centre via align-items/justify-content.              */
+   SVG .lang-flag: fixed height, auto width — the two flags have
+   different aspect ratios (UK 2:1, Spain 3:2) so we use height as the
+   controlling dimension and let width follow the viewBox.           */
 
 .lang-toggle {
-  /* Fixed square matching Material's icon buttons */
-  width:            2.4rem;
-  height:           2.4rem;
-  padding:          0;
-  /* Flex-center the SVG inside the button frame */
-  display:          inline-flex  !important;
-  align-items:      center       !important;
-  justify-content:  center       !important;
-  /* Reset anything Material might set differently */
-  background:       transparent;
-  border:           none;
-  cursor:           pointer;
-  flex-shrink:      0;
-  /* Subtle fade matching the other header icons */
-  opacity:          0.82;
-  transition:       opacity 0.15s ease, transform 0.12s ease;
+  /* Same footprint as Material's palette/search/repo buttons */
+  width:           2.4rem;
+  height:          2.4rem;
+  padding:         0;
+  /* Flex-centre the SVG inside the square button frame */
+  display:         inline-flex  !important;
+  align-items:     center       !important;
+  justify-content: center       !important;
+  background:      transparent;
+  border:          none;
+  cursor:          pointer;
+  flex-shrink:     0;
+  /* Slight fade to match the other header icons at rest */
+  opacity:         0.82;
+  transition:      opacity 0.15s ease, transform 0.12s ease;
 }
 
-.lang-toggle:hover  { opacity: 1; transform: scale(1.12); }
+.lang-toggle:hover  { opacity: 1;   transform: scale(1.12); }
 .lang-toggle:active { opacity: 0.9; transform: scale(0.94); }
 
-/* The inline SVG inside the button */
-.lang-toggle svg {
-  /* Let the SVG's own width/height attributes control the size;
-     we only ensure it renders as a block (no baseline gap). */
-  display:        block;
-  /* A 2px radius softens the hard flag corners at small size */
-  border-radius:  2px;
-  /* Never let it grow beyond the button's padding area */
-  max-width:      1.6rem;
-  max-height:     1.2rem;
-  /* Preserve the viewBox aspect ratio */
-  overflow:       hidden;
+/* The inline SVG flag itself */
+.lang-flag {
+  display:       block;       /* remove inline baseline gap         */
+  height:        1.0rem;      /* controlling dimension              */
+  width:         auto;        /* follows viewBox aspect ratio       */
+  max-width:     1.8rem;      /* prevent an over-wide flag          */
+  border-radius: 2px;         /* softens hard corners at small size */
+  overflow:      hidden;
 }
 
 @media screen and (max-width: 30em) {
-  .lang-toggle         { width: 2rem; height: 2rem; }
-  .lang-toggle svg     { max-width: 1.3rem; max-height: 1rem; }
+  .lang-toggle { width: 2rem; height: 2rem; }
+  .lang-flag   { height: 0.85rem; }
 }

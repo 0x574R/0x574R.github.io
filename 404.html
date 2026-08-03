@@ -14,6 +14,10 @@
       
       
         
+          <link rel="alternate" href="/es/" hreflang="es">
+        
+          <link rel="alternate" href="/en/" hreflang="en">
+        
       
       
       <link rel="icon" href="/es/assets/favicon.png">
@@ -102,30 +106,28 @@
     
 <!-- Favicons -->
 <link rel="apple-touch-icon" sizes="180x180" href="https://0x574r.github.io/es/assets/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="https://0x574r.github.io/es/assets/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="https://0x574r.github.io/es/assets/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32"  href="https://0x574r.github.io/es/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16"  href="https://0x574r.github.io/es/assets/favicon-16x16.png">
 
 <!-- Open Graph -->
 
 
 
 
-
-<meta property="og:type" content="article">
-<meta property="og:title" content="RAZOR">
+<meta property="og:type"        content="article">
+<meta property="og:title"       content="RAZOR">
 <meta property="og:description" content="Offensive security blog">
-<meta property="og:image" content="https://0x574r.github.io/es/assets/og-image.png">
+<meta property="og:image"       content="https://0x574r.github.io/es/assets/og-image.png">
 <meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:url" content="https://0x574r.github.io/es/">
-<meta property="og:site_name" content="RAZOR">
-<meta property="og:locale" content="es_ES">
-
+<meta property="og:image:height"content="630">
+<meta property="og:url"         content="https://0x574r.github.io/es/">
+<meta property="og:site_name"   content="RAZOR">
+<meta property="og:locale"      content="es_ES">
 <!-- Twitter Card -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="RAZOR">
-<meta name="twitter:description" content="Offensive security blog">
-<meta name="twitter:image" content="https://0x574r.github.io/es/assets/og-image.png">
+<meta name="twitter:card"       content="summary_large_image">
+<meta name="twitter:title"      content="RAZOR">
+<meta name="twitter:description"content="Offensive security blog">
+<meta name="twitter:image"      content="https://0x574r.github.io/es/assets/og-image.png">
 
   </head>
   
@@ -212,6 +214,27 @@
     
       <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
+    
+      <div class="md-header__option">
+    <button
+      class="md-header__button lang-toggle"
+      type="button"
+      title="Switch to English"
+      aria-label="Switch to English"
+      data-target="en"
+    ><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30"
+             class="lang-flag" aria-hidden="true" focusable="false">
+          <rect width="60" height="30" fill="#012169"/>
+          <path d="M0 0 L60 30 M60 0 L0 30"
+                stroke="#fff" stroke-width="9" stroke-linecap="square"/>
+          <path d="M0 0 L60 30 M60 0 L0 30"
+                stroke="#C8102E" stroke-width="5" stroke-linecap="square"/>
+          <path d="M30 0 V30 M0 15 H60"
+                stroke="#fff" stroke-width="10" stroke-linecap="square"/>
+          <path d="M30 0 V30 M0 15 H60"
+                stroke="#C8102E" stroke-width="6" stroke-linecap="square"/>
+        </svg></button>
+  </div>
     
     
       
@@ -713,100 +736,54 @@
       
     
 <script>
+/*
+ * Language-toggle click handler.
+ *
+ * WHY NOT AT DOMContentLoaded?
+ *   navigation.instant changes window.location without a page reload.
+ *   Reading the path at load time means the button would always navigate
+ *   from the first URL visited, not the current one.
+ *
+ * HOW IT WORKS:
+ *   overrides/partials/alternate.html embeds data-target="en" or "es"
+ *   on the button at BUILD TIME (Jinja2, config.theme.language).
+ *   Here we only attach the click listener; the target path is computed
+ *   from window.location.pathname at the moment of the click.
+ */
 (function () {
   'use strict';
 
-  // ── URL helpers ─────────────────────────────────────────────────
-  // Spanish  → /es/research/malware-dev/fileless-loader/
-  // English  → /en/research/malware-dev/fileless-loader/
-
-  var path      = window.location.pathname;
-  var isEnglish = /^\/en(\/|$)/.test(path);
-
-  function targetPath() {
-    if (isEnglish) {
-      // /en/research/… → /es/research/…
-      return path.replace(/^\/en/, '/es') || '/es/';
-    } else {
-      // /es/research/… → /en/research/…
-      return path.replace(/^\/es/, '/en') || '/en/';
-    }
-  }
-
-  // ── Inline SVG flags (vector – no emoji, no resolution issues) ──
-  //
-  // Both flags are wrapped in a fixed 20×14 px viewBox so they render
-  // at identical pixel dimensions inside the button regardless of
-  // aspect ratio differences (Spain 3:2, UK 2:1).
-
-  // Spain – red/gold/red horizontal stripes, correct Pantone colours
-  var SVG_ES = [
-    '<svg xmlns="http://www.w3.org/2000/svg"',
-    '     viewBox="0 0 30 20" width="20" height="14"',
-    '     style="display:block;border-radius:2px;overflow:hidden"',
-    '     aria-label="Bandera de España">',
-    '  <rect width="30" height="20" fill="#AA151B"/>',
-    '  <rect y="5" width="30" height="10" fill="#F1BF00"/>',
-    '</svg>'
-  ].join('');
-
-  // UK – Union Jack (simplified but accurate colours and structure)
-  var SVG_EN = [
-    '<svg xmlns="http://www.w3.org/2000/svg"',
-    '     viewBox="0 0 60 30" width="20" height="10"',
-    '     style="display:block;border-radius:2px;overflow:hidden"',
-    '     aria-label="UK flag">',
-    // Blue field
-    '  <rect width="60" height="30" fill="#012169"/>',
-    // White diagonal bars (St Andrew's saltire)
-    '  <path d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" stroke-width="9"/>',
-    // Red diagonal bars (St Patrick's saltire, simplified – no counterchange at icon size)
-    '  <path d="M0 0 L60 30 M60 0 L0 30" stroke="#C8102E" stroke-width="5"/>',
-    // White cross (St George's outer)
-    '  <path d="M30 0 V30 M0 15 H60" stroke="#fff" stroke-width="10"/>',
-    // Red cross (St George's inner)
-    '  <path d="M30 0 V30 M0 15 H60" stroke="#C8102E" stroke-width="6"/>',
-    '</svg>'
-  ].join('');
-
-  // ── Button insertion ────────────────────────────────────────────
-  function insertButton() {
-    // Guard: don't add a second button on instant-navigation re-renders
-    if (document.querySelector('.lang-toggle')) return;
-
-    var inner = document.querySelector('.md-header__inner');
-    if (!inner) return;
-
-    var btn = document.createElement('button');
-    btn.type      = 'button';
-    // !! Do NOT include "md-icon" – that class targets <svg> children
-    // inside buttons and would collapse the button to 1.2rem × 1.2rem.
-    // "md-header__button" alone gives us the correct flex frame.
-    btn.className = 'md-header__button lang-toggle';
-    btn.title     = isEnglish ? 'Cambiar a Español' : 'Switch to English';
-    btn.setAttribute('aria-label', btn.title);
-
-    // Show the flag of the language you SWITCH TO
-    btn.innerHTML = isEnglish ? SVG_ES : SVG_EN;
+  function attachToggle(btn) {
+    if (btn.dataset.ready) return;   // don't double-bind
+    btn.dataset.ready = '1';
 
     btn.addEventListener('click', function () {
-      window.location.href = targetPath();
-    });
+      var target = btn.dataset.target;  // 'en' or 'es' — set server-side
+      var p      = window.location.pathname;
 
-    // Insert just before .md-header__source (right-side icons: GitHub + palette)
-    var anchor = inner.querySelector('.md-header__source');
-    if (anchor) {
-      inner.insertBefore(btn, anchor);
-    } else {
-      inner.appendChild(btn);
-    }
+      // Replace /es/…  ↔  /en/…
+      // Regex: match exactly /es/ or /en/ at the start of the path
+      var next = p.replace(/^\/(es|en)(\/|$)/, '/' + target + '$2');
+
+      // Fallback if the path had no language prefix
+      if (next === p) next = '/' + target + '/';
+
+      window.location.href = next;
+    });
   }
 
-  document.addEventListener('DOMContentLoaded', insertButton);
-  // MkDocs Material instant navigation fires this after each page swap
-  document.addEventListener('DOMContentMutated', insertButton);
+  function init() {
+    document.querySelectorAll('button.lang-toggle[data-target]')
+            .forEach(attachToggle);
+  }
 
-})();
+  // Initial load
+  document.addEventListener('DOMContentLoaded', init);
+
+  // MkDocs Material instant navigation fires this after each page swap
+  document.addEventListener('DOMContentMutated', init);
+
+}());
 </script>
 
   </body>
