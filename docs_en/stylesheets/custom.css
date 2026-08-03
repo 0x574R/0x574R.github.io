@@ -1706,45 +1706,57 @@ div.tables-centered td {
 
 /* ============================================================
    LANGUAGE TOGGLE BUTTON
-   ============================================================ */
+   ============================================================
 
-/* The flag emoji button that sits in the header next to the
-   theme toggle. Uses md-header__button for sizing consistency
-   with the rest of the Material header icons. */
+   Uses only "md-header__button" (NOT "md-icon").
+   md-icon is Material's class for <svg> elements; applying it
+   to emoji/text forces a 1.2 rem × 1.2 rem box that breaks
+   the emoji layout entirely.
+
+   Font-size calibration:
+     Material SVG icons render at 1.2 rem.
+     Flag emoji at the same CSS size appear ~50 % larger
+     visually because of their colour, detail and design target.
+     0.95 rem gives a flag that matches the visual weight of
+     the 1.2 rem SVG icons (search, GitHub, palette toggle).    */
 
 .lang-toggle {
-  display:          inline-flex;
-  align-items:      center;
-  justify-content:  center;
-  background:       transparent;
-  border:           none;
-  cursor:           pointer;
-  font-size:        1.25rem;
-  line-height:      1;
-  padding:          0 0.3rem;
-  height:           2.4rem;
-  width:            auto;
-  border-radius:    0.25rem;
-  opacity:          0.82;
-  transition:       opacity 0.15s ease, transform 0.12s ease;
-  /* Make sure it does not shrink when header is narrow */
-  flex-shrink:      0;
+  /* Let Material's md-header__button handle the frame/margin;
+     we only need to control the emoji itself. */
+  font-size:    0.95rem;
+  line-height:  1;
+  /* padding overrides the default md-header__button value so
+     the total button footprint stays proportional */
+  padding:      0.4rem !important;
+  background:   transparent;
+  border:       none;
+  cursor:       pointer;
+  /* Match the slight transparency of the palette / GitHub icons */
+  color:        var(--md-primary-bg-color);
+  opacity:      0.8;
+  transition:   opacity 0.15s ease, transform 0.12s ease;
+  flex-shrink:  0;
+  display:      inline-flex;
+  align-items:  center;
+  justify-content: center;
+  /* Prevent any inherited text-decoration */
+  text-decoration: none;
 }
 
 .lang-toggle:hover {
-  opacity:   1;
-  transform: scale(1.18);
+  opacity: 1;
+  transform: scale(1.12);
 }
 
 .lang-toggle:active {
-  transform: scale(0.96);
+  transform: scale(0.94);
+  opacity: 0.9;
 }
 
-/* On very small screens, keep the button visible but compact */
+/* On very narrow screens keep the button from disappearing */
 @media screen and (max-width: 30em) {
   .lang-toggle {
-    font-size: 1.1rem;
-    padding:   0 0.15rem;
+    font-size: 0.9rem;
+    padding:   0.25rem !important;
   }
 }
-
