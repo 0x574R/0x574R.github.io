@@ -7,6 +7,8 @@
     to inject <link rel="alternate" hreflang="…"> in <head> (SEO).
   • Here we replace the visual widget with a single flag button whose
     target language is known at BUILD TIME (config.theme.language).
+  • The flag shown is the flag of the CURRENT language (not the target),
+    so it acts as a language indicator the user can click to switch.
   • data-target is read by the JavaScript in main.html at CLICK TIME
     (not at page-load), which fixes the navigation.instant bug where
     window.location changes without a reload.
@@ -30,7 +32,14 @@
       data-target="{{ t_lang }}"
     >
       {%- if config.theme.language == 'es' -%}
-        {#- Show UK flag → clicking switches TO English -#}
+        {#- Show Spain flag → this is the Spanish site -#}
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"
+             class="lang-flag" aria-hidden="true" focusable="false">
+          <rect width="3" height="2" fill="#AA151B"/>
+          <rect y=".5" width="3" height="1" fill="#F1BF00"/>
+        </svg>
+      {%- else -%}
+        {#- Show UK flag → this is the English site -#}
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30"
              class="lang-flag" aria-hidden="true" focusable="false">
           <rect width="60" height="30" fill="#012169"/>
@@ -42,13 +51,6 @@
                 stroke="#fff" stroke-width="10" stroke-linecap="square"/>
           <path d="M30 0 V30 M0 15 H60"
                 stroke="#C8102E" stroke-width="6" stroke-linecap="square"/>
-        </svg>
-      {%- else -%}
-        {#- Show Spain flag → clicking switches TO Spanish -#}
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"
-             class="lang-flag" aria-hidden="true" focusable="false">
-          <rect width="3" height="2" fill="#AA151B"/>
-          <rect y=".5" width="3" height="1" fill="#F1BF00"/>
         </svg>
       {%- endif -%}
     </button>
