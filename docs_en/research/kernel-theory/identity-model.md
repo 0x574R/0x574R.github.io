@@ -13,7 +13,7 @@ How the Linux kernel manages the identity and privileges of a process
 ---
 
 !!! info "Context"
- This article covers the theory underlying offensive techniques that manipulate process credentials. Understanding the kernel's identity and privilege model is a fundamental prerequisite before implementing tools that operate on `struct cred`.
+    This article covers the theory underlying offensive techniques that manipulate process credentials. Understanding the kernel's identity and privilege model is a fundamental prerequisite before implementing tools that operate on `struct cred`.
 
 ## Introduction
 
@@ -32,7 +32,7 @@ const struct cred __rcu *cred;       // Subjective context (active identity)
 - The **objective context** (`*real_cred`) is what the kernel checks when **other processes act on this one**: sending it signals, attaching via `ptrace`.
 
 !!! note ""
- Generally, both pointers reference the same `struct cred` instance.
+    Generally, both pointers reference the same `struct cred` instance.
 
 `struct cred` contains all the identity and privilege information for the process:
 
@@ -59,15 +59,15 @@ struct cred {
 ```
 
 !!! note "File permission evaluation"
- File permission evaluation follows a strict hierarchy: first it checks whether the process's effective UID matches the file owner's UID, in which case owner permissions apply. If not, it checks whether any of the process's GIDs (effective or supplementary) match the file's GID, applying group permissions. If there are no matches, other permissions apply.
+    File permission evaluation follows a strict hierarchy: first it checks whether the process's effective UID matches the file owner's UID, in which case owner permissions apply. If not, it checks whether any of the process's GIDs (effective or supplementary) match the file's GID, applying group permissions. If there are no matches, other permissions apply.
 
 !!! info ""
- Supplementary groups are additional groups associated with a user that allow a process to belong to multiple groups simultaneously.
+    Supplementary groups are additional groups associated with a user that allow a process to belong to multiple groups simultaneously.
 
 When a process wants to change a UID, the process enters kernel mode through a syscall (for example, `setuid`), triggering a CPU transition from **ring 3 (user mode) to ring 0 (kernel mode)**. Once in kernel mode, the syscall handler checks whether the process has permission to make the change based on the current UID values and its capabilities. If the operation is viable, the kernel enters its credentials subsystem and applies a safe update pattern: first it calls `prepare_creds` to clone the process's current `struct cred`, then modifies the relevant fields (UID, EUID, GID or capabilities as appropriate), and finally executes `commit_creds` to atomically replace the process's active credentials.
 
 !!! danger ""
- From an offensive perspective, `prepare_kernel_cred(NULL)` generates a `struct cred` with UIDs set to 0 and capabilities at maximum. The combination `commit_creds(prepare_kernel_cred(NULL))` is the standard privilege escalation pattern in kernel exploits.
+    From an offensive perspective, `prepare_kernel_cred(NULL)` generates a `struct cred` with UIDs set to 0 and capabilities at maximum. The combination `commit_creds(prepare_kernel_cred(NULL))` is the standard privilege escalation pattern in kernel exploits.
 
 ## UIDs
 
@@ -80,7 +80,7 @@ Each running process maintains a set of UID-related identities. This is because 
 - **Saved Set-User-ID (SUID)**: Acts as a storage slot for a previously held EUID. Its purpose is to allow a process to temporarily drop its privileges (by changing the EUID to an unprivileged value) and recover them later (by restoring the EUID to the value preserved in SUID).
 
 !!! note ""
- When the kernel loads an executable with the setuid bit set, it sets the EUID and SUID to the UID of the file owner, keeping the RUID as that of the original user.
+    When the kernel loads an executable with the setuid bit set, it sets the EUID and SUID to the UID of the file owner, keeping the RUID as that of the original user.
 
 ### Query Syscalls
 
@@ -128,7 +128,7 @@ rdx = suid           ; new saved set-user-ID (or -1 to leave unchanged)
 ```
 
 !!! note ""
- Without `CAP_SETUID`, each argument must be -1 or a value already present in one of the three current process IDs (they can be redistributed across positions and repeated), but no new values can be introduced. With `CAP_SETUID` there is no restriction.
+    Without `CAP_SETUID`, each argument must be -1 or a value already present in one of the three current process IDs (they can be redistributed across positions and repeated), but no new values can be introduced. With `CAP_SETUID` there is no restriction.
 
 **Return values**
 
@@ -199,7 +199,7 @@ rdx = sgid  ; new saved set-group-ID  (-1 to leave unchanged)
 ```
 
 !!! note ""
- Without `CAP_SETGID`, each argument must be -1 or a value already present in one of the three current GIDs of the process (they can be redistributed across positions and repeated), but no new values can be introduced. With `CAP_SETGID` there is no restriction.
+    Without `CAP_SETGID`, each argument must be -1 or a value already present in one of the three current GIDs of the process (they can be redistributed across positions and repeated), but no new values can be introduced. With `CAP_SETGID` there is no restriction.
 
 **Return values**
 
@@ -464,7 +464,7 @@ syscall
  - 1 → capabilities in the permitted set are preserved after the UID transition. The effective and ambient sets are still cleared (`PR_SET_KEEPCAPS` only protects the permitted set). Capabilities can be recovered afterward, from permitted to effective using the `capset` syscall and from permitted to ambient using `PR_CAP_AMBIENT_RAISE` (requires the capability to also be in inheritable).
 
 !!! danger ""
- A process that starts as root can call `prctl(PR_SET_KEEPCAPS, 1)`, then `setuid(1000)` to appear as a normal user while retaining critical capabilities such as `CAP_NET_RAW`, `CAP_DAC_READ_SEARCH` or `CAP_SYS_PTRACE` in its permitted set. From there, it can elevate them to the effective set or propagate them via ambient capabilities. Tools that only alert on processes running as root will not detect a process with UID 1000 that retains privileged capabilities.
+    A process that starts as root can call `prctl(PR_SET_KEEPCAPS, 1)`, then `setuid(1000)` to appear as a normal user while retaining critical capabilities such as `CAP_NET_RAW`, `CAP_DAC_READ_SEARCH` or `CAP_SYS_PTRACE` in its permitted set. From there, it can elevate them to the effective set or propagate them via ambient capabilities. Tools that only alert on processes running as root will not detect a process with UID 1000 that retains privileged capabilities.
 
 #### **PR_SET_SECUREBITS (`prctl` option 28)**
 

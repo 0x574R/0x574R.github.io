@@ -13,7 +13,7 @@ What information Linux exposes about its processes, where it resides, and how it
 ---
 
 !!! note "Context"
- This article covers the information the operating system exposes about each process and how it can be modified from user space. It is the third article in the DARKCLOAK series and assumes prior knowledge of the [credential and capabilities model](identity-model.md) (article 1) and the [ELF format](elf-internals.md) (article 2).
+    This article covers the information the operating system exposes about each process and how it can be modified from userspace. It is the third article in the DARKCLOAK series and assumes prior knowledge of the [credential and capabilities model](identity-model.md) (article 1) and the [ELF format](elf-internals.md) (article 2).
 
 ## Introduction
 
@@ -69,7 +69,7 @@ Every queryable value originates from the kernel's internal structures linked to
 | `/proc/PID/status` (Caps) | `cred` | `cap_*` |
 
 !!! note ""
- The `struct cred` sources (UIDs, GIDs and capabilities) were covered in the [first article](identity-model.md) of this series.
+    The `struct cred` sources (UIDs, GIDs and capabilities) were covered in the [first article](identity-model.md) of this series.
 
 These sources are primarily manipulated through two mechanisms:
 
@@ -104,7 +104,7 @@ The `comm` field in `task_struct` is a 16-byte array (15 usable characters + NUL
 ```
 
 !!! note ""
- Names in brackets (`[kworker/0:1]`, `[migration/0]`) are by convention kernel threads, so a user-space process can adopt one of these to blend in with legitimate system processes.
+    Names in brackets (`[kworker/0:1]`, `[migration/0]`) are by convention kernel threads, so a user-space process can adopt one of these to blend in with legitimate system processes.
 
 ### `PR_SET_DUMPABLE`
 
@@ -118,7 +118,7 @@ Each process has a `dumpable` attribute that controls whether the kernel allows 
 ```
 
 !!! note ""
- This attribute is automatically disabled when the process executes a `setuid` or `setgid` binary.
+    This attribute is automatically disabled when the process executes a `setuid` or `setgid` binary.
 
 Setting `dumpable` to 0:
 
@@ -135,7 +135,7 @@ A process's `mm_struct` contains the fields the kernel consults to generate `/pr
 `PR_SET_MM` allows directly modifying these fields, altering what the kernel reads when an observer queries them.
 
 !!! danger ""
- Using this option requires the `CAP_SYS_RESOURCE` capability (bit 24) in the effective set.
+    Using this option requires the `CAP_SYS_RESOURCE` capability (bit 24) in the effective set.
 
 #### **`PR_SET_MM_ARG_START` / `PR_SET_MM_ARG_END`**
 
@@ -163,7 +163,7 @@ Allow modifying `arg_start` and `arg_end`. Any subsequent read of `/proc/PID/cmd
 ```
 
 !!! note ""
- There is a relationship between `/proc/PID/cmdline` and `argv[0]`: by default, `arg_start` points to the stack area where `argv[0]` resides, so both share the same memory region. As long as that relationship is not altered, overwriting `argv[0]` also changes what `cmdline` returns, because the kernel reads the content from that address rather than from a separately stored copy. If `arg_start` is redirected to another buffer via `PR_SET_MM`, the two sources decouple: `cmdline` reads from the new buffer and the `argv[0]` overwrite only affects tools that access the process's stack directly.
+    There is a relationship between `/proc/PID/cmdline` and `argv[0]`: by default, `arg_start` points to the stack area where `argv[0]` resides, so both share the same memory region. As long as that relationship is not altered, overwriting `argv[0]` also changes what `cmdline` returns, because the kernel reads the content from that address rather than from a separately stored copy. If `arg_start` is redirected to another buffer via `PR_SET_MM`, the two sources decouple: `cmdline` reads from the new buffer and the `argv[0]` overwrite only affects tools that access the process's stack directly.
 
 #### **`PR_SET_MM_ENV_START` / `PR_SET_MM_ENV_END`**
 
@@ -215,7 +215,7 @@ Allows modifying the `/proc/PID/exe` symlink. Unlike the previous ones, it recei
 ```
 
 !!! danger ""
- **This operation fails with `EBUSY` if the process has VMAs whose `vm_file` points to the original executable. All initial file-backed VMAs must be replaced before the call, which leads directly to the VMA anonymization block.**
+    **This operation fails with `EBUSY` if the process has VMAs whose `vm_file` points to the original executable. All initial file-backed VMAs must be replaced before the call, which leads directly to the VMA anonymization block.**
 
 ## Virtual Memory and VMAs
 
@@ -238,7 +238,7 @@ struct vm_area_struct {
 ```
 
 !!! note ""
- The flags `VM_READ`, `VM_WRITE`, `VM_EXEC` determine the permissions shown in `/proc/PID/maps` (`r`, `w`, `x`). The flag `VM_SHARED` distinguishes `MAP_SHARED` mapping (`s`) from `MAP_PRIVATE` mapping (`p`).
+    The flags `VM_READ`, `VM_WRITE`, `VM_EXEC` determine the permissions shown in `/proc/PID/maps` (`r`, `w`, `x`). The flag `VM_SHARED` distinguishes `MAP_SHARED` mapping (`s`) from `MAP_PRIVATE` mapping (`p`).
 
 ### File-backed VMAs vs Anonymous VMAs
 
@@ -364,7 +364,7 @@ rsi = length        ; size in bytes to unmap
 **VMA anonymization is the process of replacing file-backed VMAs with anonymous VMAs of identical content.** The result is a process that continues executing the same code at the same addresses with the same permissions, but with no VMA referencing the original binary. In `/proc/PID/maps`, the VMAs change from showing the executable path to showing device `00:00` and inode `0`.
 
 !!! note ""
- Performing this process on all file-backed VMAs makes `PR_SET_MM_EXE_FILE` with the `CAP_SYS_RESOURCE` capability succeed, enabling `/proc/PID/exe` spoofing.
+    Performing this process on all file-backed VMAs makes `PR_SET_MM_EXE_FILE` with the `CAP_SYS_RESOURCE` capability succeed, enabling `/proc/PID/exe` spoofing.
 
 #### **Anonymization procedure**
 

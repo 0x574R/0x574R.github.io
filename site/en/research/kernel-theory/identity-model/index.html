@@ -1542,8 +1542,8 @@
 <hr />
 <div class="admonition info">
 <p class="admonition-title">Context</p>
-</div>
 <p>This article covers the theory underlying offensive techniques that manipulate process credentials. Understanding the kernel's identity and privilege model is a fundamental prerequisite before implementing tools that operate on <code>struct cred</code>.</p>
+</div>
 <h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
 <p>The Linux kernel concentrates all identity and privilege information for a process in a single structure: <code>struct cred</code>. Within it coexist two complementary systems, <strong>UIDs/GIDs</strong> (who the process belongs to) and <strong>capabilities</strong> (which privileged operations it can perform). Both are closely related: modifications to UIDs trigger automatic changes in capabilities, and certain capabilities are required to freely modify UIDs. This article covers both systems jointly for a deeper understanding of how the system operates with processes.</p>
 <h2 id="location-of-credentials-in-the-kernel">Location of Credentials in the Kernel<a class="headerlink" href="#location-of-credentials-in-the-kernel" title="Permanent link">&para;</a></h2>
@@ -1555,8 +1555,9 @@
 <li>The <strong>subjective context</strong> (<code>*cred</code>) is what the kernel checks when the process acts <strong>on other objects</strong>: opening files, sending signals, accessing IPC.</li>
 <li>The <strong>objective context</strong> (<code>*real_cred</code>) is what the kernel checks when <strong>other processes act on this one</strong>: sending it signals, attaching via <code>ptrace</code>.</li>
 </ul>
-<div class="admonition note"></div>
+<div class="admonition note">
 <p>Generally, both pointers reference the same <code>struct cred</code> instance.</p>
+</div>
 <p><code>struct cred</code> contains all the identity and privilege information for the process:</p>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">cred</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="c1">// ...</span>
@@ -1580,13 +1581,15 @@
 </span></code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">File permission evaluation</p>
-</div>
 <p>File permission evaluation follows a strict hierarchy: first it checks whether the process's effective UID matches the file owner's UID, in which case owner permissions apply. If not, it checks whether any of the process's GIDs (effective or supplementary) match the file's GID, applying group permissions. If there are no matches, other permissions apply.</p>
-<div class="admonition info"></div>
+</div>
+<div class="admonition info">
 <p>Supplementary groups are additional groups associated with a user that allow a process to belong to multiple groups simultaneously.</p>
+</div>
 <p>When a process wants to change a UID, the process enters kernel mode through a syscall (for example, <code>setuid</code>), triggering a CPU transition from <strong>ring 3 (user mode) to ring 0 (kernel mode)</strong>. Once in kernel mode, the syscall handler checks whether the process has permission to make the change based on the current UID values and its capabilities. If the operation is viable, the kernel enters its credentials subsystem and applies a safe update pattern: first it calls <code>prepare_creds</code> to clone the process's current <code>struct cred</code>, then modifies the relevant fields (UID, EUID, GID or capabilities as appropriate), and finally executes <code>commit_creds</code> to atomically replace the process's active credentials.</p>
-<div class="admonition danger"></div>
+<div class="admonition danger">
 <p>From an offensive perspective, <code>prepare_kernel_cred(NULL)</code> generates a <code>struct cred</code> with UIDs set to 0 and capabilities at maximum. The combination <code>commit_creds(prepare_kernel_cred(NULL))</code> is the standard privilege escalation pattern in kernel exploits.</p>
+</div>
 <h2 id="uids">UIDs<a class="headerlink" href="#uids" title="Permanent link">&para;</a></h2>
 <p>When a user runs a program, the operating system does not use the username directly but instead relies on a numeric identifier called a UID. This UID represents the user's identity within the system and is associated with all processes that user runs. The kernel uses this identifier to enforce permission policies and access control.</p>
 <p>Each running process maintains a set of UID-related identities. This is because in certain situations (especially when elevated privileges are involved), a process may need to operate under different identities depending on the context. For this reason, the system distinguishes between several types of UID:</p>
@@ -1595,8 +1598,9 @@
 <li><strong>Effective UID (EUID)</strong>: The identifier the kernel checks during access control decisions.</li>
 <li><strong>Saved Set-User-ID (SUID)</strong>: Acts as a storage slot for a previously held EUID. Its purpose is to allow a process to temporarily drop its privileges (by changing the EUID to an unprivileged value) and recover them later (by restoring the EUID to the value preserved in SUID).</li>
 </ul>
-<div class="admonition note"></div>
+<div class="admonition note">
 <p>When the kernel loads an executable with the setuid bit set, it sets the EUID and SUID to the UID of the file owner, keeping the RUID as that of the original user.</p>
+</div>
 <h3 id="query-syscalls">Query Syscalls<a class="headerlink" href="#query-syscalls" title="Permanent link">&para;</a></h3>
 <h4 id="getresuid-no-118"><strong>GETRESUID (no. 118)</strong><a class="headerlink" href="#getresuid-no-118" title="Permanent link">&para;</a></h4>
 <p><code>getresuid</code> is a system call that <strong>simultaneously returns the three UIDs associated with the process</strong> and writes them into three user-space buffers.</p>
@@ -1628,8 +1632,9 @@
 </span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nf">rsi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">euid</span><span class="w">           </span><span class="c1">; new effective UID (or -1 to leave unchanged)</span>
 </span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="nf">rdx</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">suid</span><span class="w">           </span><span class="c1">; new saved set-user-ID (or -1 to leave unchanged)</span>
 </span></code></pre></div>
-<div class="admonition note"></div>
+<div class="admonition note">
 <p>Without <code>CAP_SETUID</code>, each argument must be -1 or a value already present in one of the three current process IDs (they can be redistributed across positions and repeated), but no new values can be introduced. With <code>CAP_SETUID</code> there is no restriction.</p>
+</div>
 <p><strong>Return values</strong></p>
 <div class="language-nasm highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">0</span><span class="w">              </span><span class="c1">; success</span>
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nf">rax</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w">              </span><span class="c1">; error (all-or-nothing semantics)</span>
@@ -1676,8 +1681,9 @@
 </span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="nf">rsi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">egid</span><span class="w">  </span><span class="c1">; new effective GID  (-1 to leave unchanged)</span>
 </span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="nf">rdx</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">sgid</span><span class="w">  </span><span class="c1">; new saved set-group-ID  (-1 to leave unchanged)</span>
 </span></code></pre></div>
-<div class="admonition note"></div>
+<div class="admonition note">
 <p>Without <code>CAP_SETGID</code>, each argument must be -1 or a value already present in one of the three current GIDs of the process (they can be redistributed across positions and repeated), but no new values can be introduced. With <code>CAP_SETGID</code> there is no restriction.</p>
+</div>
 <p><strong>Return values</strong></p>
 <div class="language-nasm highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">0</span><span class="w">              </span><span class="c1">; success</span>
 </span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nf">rax</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w">              </span><span class="c1">; error (all-or-nothing semantics)</span>
@@ -2048,8 +2054,9 @@ datap (RSI) ──→ ┌──────────────────�
 <li>0 → default behavior: when a process with UID 0 (root) transitions all its UIDs (real, effective, saved) to non-zero values (e.g. <code>setresuid(1000, 1000, 1000)</code>), the kernel clears the permitted, effective and ambient sets.</li>
 <li>1 → capabilities in the permitted set are preserved after the UID transition. The effective and ambient sets are still cleared (<code>PR_SET_KEEPCAPS</code> only protects the permitted set). Capabilities can be recovered afterward, from permitted to effective using the <code>capset</code> syscall and from permitted to ambient using <code>PR_CAP_AMBIENT_RAISE</code> (requires the capability to also be in inheritable).</li>
 </ul>
-<div class="admonition danger"></div>
+<div class="admonition danger">
 <p>A process that starts as root can call <code>prctl(PR_SET_KEEPCAPS, 1)</code>, then <code>setuid(1000)</code> to appear as a normal user while retaining critical capabilities such as <code>CAP_NET_RAW</code>, <code>CAP_DAC_READ_SEARCH</code> or <code>CAP_SYS_PTRACE</code> in its permitted set. From there, it can elevate them to the effective set or propagate them via ambient capabilities. Tools that only alert on processes running as root will not detect a process with UID 1000 that retains privileged capabilities.</p>
+</div>
 <h4 id="pr_set_securebits-prctl-option-28"><strong>PR_SET_SECUREBITS (<code>prctl</code> option 28)</strong><a class="headerlink" href="#pr_set_securebits-prctl-option-28" title="Permanent link">&para;</a></h4>
 <p>Sets the secure bits for the process. Securebits control in a granular way how the kernel handles capabilities during UID transitions and <code>execve</code>. <strong>Requires <code>CAP_SETPCAP</code> in the effective set.</strong></p>
 <div class="language-nasm highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="nf">mov</span><span class="w"> </span><span class="nb">rax</span><span class="p">,</span><span class="w"> </span><span class="mi">157</span>

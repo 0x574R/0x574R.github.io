@@ -13,7 +13,7 @@ What an ELF binary contains and how the kernel interprets it to turn it into a p
 ---
 
 !!! info "Context"
- This article covers the internal structure of Linux's native binary format. Understanding how the kernel interprets and loads an ELF is a prerequisite for any offensive technique that manipulates binaries, injects code or implements custom loaders.
+    This article covers the internal structure of Linux's native binary format. Understanding how the kernel interprets and loads an ELF is a prerequisite for any offensive technique that manipulates binaries, injects code or implements custom loaders.
 
 ## Introduction
 
@@ -70,7 +70,7 @@ typedef struct elf64_hdr {
 ```
 
 !!! note ""
- The data types used in the 64-bit variant are: `Elf64_Half` = `__u16` (2 bytes), `Elf64_Word` = `__u32` (4 bytes), `Elf64_Addr` = `__u64` (8 bytes), `Elf64_Off` = `__u64` (8 bytes).
+    The data types used in the 64-bit variant are: `Elf64_Half` = `__u16` (2 bytes), `Elf64_Word` = `__u32` (4 bytes), `Elf64_Addr` = `__u64` (8 bytes), `Elf64_Off` = `__u64` (8 bytes).
 
 To inspect the ELF header fields:
 
@@ -177,7 +177,7 @@ typedef struct elf64_phdr {
 ```
 
 !!! note ""
- Entry N is located at: `e_phoff + (N × 56)`. In memory (via `auxv`): `AT_PHDR + (N × AT_PHENT)`.
+    Entry N is located at: `e_phoff + (N × 56)`. In memory (via `auxv`): `AT_PHDR + (N × AT_PHENT)`.
 
 To inspect the PHT data of an ELF file:
 
@@ -270,7 +270,7 @@ Once validation passes, the kernel iterates the PHT looking for two segment type
 
 ## Auxiliary Vector
 
-After mapping the segments, the kernel builds the process's initial stack, placing `argc`, `argv[]` pointers, `envp[]` pointers and the auxiliary vector on it. The `auxv` is an array of key-value pairs that conveys to user space the information the kernel knows at load time: the address of the PHT in memory (`AT_PHDR`), the size of each entry (`AT_PHENT`), the number of entries (`AT_PHNUM`), the program's entry point (`AT_ENTRY`) and the interpreter's base address (`AT_BASE`).
+After mapping the segments, the kernel builds the process's initial stack, placing `argc`, `argv[]` pointers, `envp[]` pointers and the auxiliary vector on it. The `auxv` is an array of key-value pairs that conveys to userspace the information the kernel knows at load time: the address of the PHT in memory (`AT_PHDR`), the size of each entry (`AT_PHENT`), the number of entries (`AT_PHNUM`), the program's entry point (`AT_ENTRY`) and the interpreter's base address (`AT_BASE`).
 
 **These values allow the dynamic interpreter (and the process itself) to locate the binary's structures without accessing the file on disk. Without them, the interpreter would have no way to locate the PHT of the program it must process.**
 
@@ -331,7 +331,7 @@ The array terminates when `a_type == AT_NULL`.
 | 33 | `AT_SYSINFO_EHDR` | Address of the vDSO mapped in the process |
 
 !!! note ""
- The kernel generates exactly one entry per `a_type`, with no duplicates. The `auxv` is not optional. The kernel generates it unconditionally for every ELF process, static or dynamic.
+    The kernel generates exactly one entry per `a_type`, with no duplicates. The `auxv` is not optional. The kernel generates it unconditionally for every ELF process, static or dynamic.
 
 ### Introspection via `auxv`
 
