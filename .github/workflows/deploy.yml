@@ -1,0 +1,84 @@
+# RAZOR Blog — GitHub Pages deployment
+#
+# Uses the OFFICIAL GitHub Pages Actions pipeline (upload-pages-artifact +
+# deploy-pages). This avoids the git-push/credential issues that affect
+# ghp-import inside CI.
+#
+# ONE-TIME SETUP (do this in your repo settings before first run):
+#   Settings → Pages → Source → "GitHub Actions"  ← select this
+#
+# After that, every push to main deploys both language versions automatically.
+
+name: Deploy RAZOR Blog
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Required by actions/deploy-pages
+permissions:
+  contents:  read
+  pages:     write
+  id-token:  write
+
+# Only one deployment at a time; don't cancel a running deploy
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    # Exposes the deployment URL in the Actions summary
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install MkDocs and dependencies
+        run: pip install -r requirements.txt
+
+      # ── Build Spanish → site/ (root) ──────────────────────────────
+      - name: Build Spanish (root /)
+        run: mkdocs build --clean
+
+      # ── Build English → site/en/ (alongside Spanish) ──────────────
+      - name: Build English (/en/)
+        run: mkdocs build -f mkdocs_en.yml
+
+      # ── Guard: fail loudly if English build produced nothing ───────
+      - name: Verify site structure
+        run: |
+          echo "=== site/ contents ==="
+          ls site/
+          echo ""
+          if [ ! -f site/en/index.html ]; then
+            echo "ERROR: site/en/index.html is missing."
+            echo "       Check that docs_en/ and mkdocs_en.yml are committed to the repo."
+            exit 1
+          fi
+          echo "site/en/index.html  ✓"
+          echo "site/index.html     ✓"
+
+      # ── Upload the combined site/ as a Pages artifact ─────────────
+      # This is the modern GitHub Pages deploy path — no git push needed.
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/
+
+      # ── Deploy the artifact to GitHub Pages ───────────────────────
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4
