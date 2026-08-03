@@ -1,10 +1,8 @@
 # RAZOR - Security Blog
 site_name: RAZOR
-site_url: https://0x574r.github.io/es/
+site_url: https://0x574r.github.io/
 site_description: Offensive security blog
 
-docs_dir: docs
-site_dir: site/es
 
 repo_name: 0x574R
 repo_url: https://github.com/0x574R
