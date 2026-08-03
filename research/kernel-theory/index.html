@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://0x574r.github.io/research/kernel-theory/">
+        <link rel="canonical" href="https://0x574r.github.io/es/research/kernel-theory/">
       
       
       
@@ -103,9 +103,9 @@
     
     
 <!-- Favicons -->
-<link rel="apple-touch-icon" sizes="180x180" href="https://0x574r.github.io/assets/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="https://0x574r.github.io/assets/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="https://0x574r.github.io/assets/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://0x574r.github.io/es/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://0x574r.github.io/es/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://0x574r.github.io/es/assets/favicon-16x16.png">
 
 <!-- Open Graph -->
 
@@ -116,10 +116,10 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kernel Theory — RAZOR">
 <meta property="og:description" content="Offensive security blog">
-<meta property="og:image" content="https://0x574r.github.io/assets/og-image.png">
+<meta property="og:image" content="https://0x574r.github.io/es/assets/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:url" content="https://0x574r.github.io/research/kernel-theory/">
+<meta property="og:url" content="https://0x574r.github.io/es/research/kernel-theory/">
 <meta property="og:site_name" content="RAZOR">
 <meta property="og:locale" content="es_ES">
 
@@ -127,7 +127,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Kernel Theory — RAZOR">
 <meta name="twitter:description" content="Offensive security blog">
-<meta name="twitter:image" content="https://0x574r.github.io/assets/og-image.png">
+<meta name="twitter:image" content="https://0x574r.github.io/es/assets/og-image.png">
 
   </head>
   
@@ -805,62 +805,94 @@
 (function () {
   'use strict';
 
-  // Spanish lives at /       e.g.  /research/malware-dev/fileless-loader/
-  // English  lives at /en/   e.g.  /en/research/malware-dev/fileless-loader/
+  // ── URL helpers ─────────────────────────────────────────────────
+  // Spanish  → /es/research/malware-dev/fileless-loader/
+  // English  → /en/research/malware-dev/fileless-loader/
 
   var path      = window.location.pathname;
   var isEnglish = /^\/en(\/|$)/.test(path);
 
   function targetPath() {
     if (isEnglish) {
-      // Remove /en prefix → go to Spanish
-      return path.replace(/^\/en/, '') || '/';
+      // /en/research/… → /es/research/…
+      return path.replace(/^\/en/, '/es') || '/es/';
     } else {
-      // Add /en prefix → go to English
-      return '/en' + path;
+      // /es/research/… → /en/research/…
+      return path.replace(/^\/es/, '/en') || '/en/';
     }
   }
 
+  // ── Inline SVG flags (vector – no emoji, no resolution issues) ──
+  //
+  // Both flags are wrapped in a fixed 20×14 px viewBox so they render
+  // at identical pixel dimensions inside the button regardless of
+  // aspect ratio differences (Spain 3:2, UK 2:1).
+
+  // Spain – red/gold/red horizontal stripes, correct Pantone colours
+  var SVG_ES = [
+    '<svg xmlns="http://www.w3.org/2000/svg"',
+    '     viewBox="0 0 30 20" width="20" height="14"',
+    '     style="display:block;border-radius:2px;overflow:hidden"',
+    '     aria-label="Bandera de España">',
+    '  <rect width="30" height="20" fill="#AA151B"/>',
+    '  <rect y="5" width="30" height="10" fill="#F1BF00"/>',
+    '</svg>'
+  ].join('');
+
+  // UK – Union Jack (simplified but accurate colours and structure)
+  var SVG_EN = [
+    '<svg xmlns="http://www.w3.org/2000/svg"',
+    '     viewBox="0 0 60 30" width="20" height="10"',
+    '     style="display:block;border-radius:2px;overflow:hidden"',
+    '     aria-label="UK flag">',
+    // Blue field
+    '  <rect width="60" height="30" fill="#012169"/>',
+    // White diagonal bars (St Andrew's saltire)
+    '  <path d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" stroke-width="9"/>',
+    // Red diagonal bars (St Patrick's saltire, simplified – no counterchange at icon size)
+    '  <path d="M0 0 L60 30 M60 0 L0 30" stroke="#C8102E" stroke-width="5"/>',
+    // White cross (St George's outer)
+    '  <path d="M30 0 V30 M0 15 H60" stroke="#fff" stroke-width="10"/>',
+    // Red cross (St George's inner)
+    '  <path d="M30 0 V30 M0 15 H60" stroke="#C8102E" stroke-width="6"/>',
+    '</svg>'
+  ].join('');
+
+  // ── Button insertion ────────────────────────────────────────────
   function insertButton() {
-    // Avoid duplicate buttons on instant-navigation re-renders
+    // Guard: don't add a second button on instant-navigation re-renders
     if (document.querySelector('.lang-toggle')) return;
 
     var inner = document.querySelector('.md-header__inner');
     if (!inner) return;
 
     var btn = document.createElement('button');
-    btn.type = 'button';
-
-    // ── KEY FIX: do NOT add "md-icon" ──────────────────────────────
-    // md-icon is MkDocs Material's class for <svg> elements inside buttons.
-    // Applying it to a text/emoji element makes Material force 1.2rem×1.2rem
-    // on the container, which breaks the emoji proportions.
-    // "md-header__button" alone gives us the correct button frame.
+    btn.type      = 'button';
+    // !! Do NOT include "md-icon" – that class targets <svg> children
+    // inside buttons and would collapse the button to 1.2rem × 1.2rem.
+    // "md-header__button" alone gives us the correct flex frame.
     btn.className = 'md-header__button lang-toggle';
-
-    btn.title = isEnglish ? 'Cambiar a Español' : 'Switch to English';
+    btn.title     = isEnglish ? 'Cambiar a Español' : 'Switch to English';
     btn.setAttribute('aria-label', btn.title);
 
-    // Show the flag of the language you will SWITCH TO
-    btn.textContent = isEnglish ? '🇪🇸' : '🇬🇧';
+    // Show the flag of the language you SWITCH TO
+    btn.innerHTML = isEnglish ? SVG_ES : SVG_EN;
 
     btn.addEventListener('click', function () {
       window.location.href = targetPath();
     });
 
-    // Place it just before .md-header__source (right side: GitHub link + palette toggle)
-    var source = inner.querySelector('.md-header__source');
-    if (source) {
-      inner.insertBefore(btn, source);
+    // Insert just before .md-header__source (right-side icons: GitHub + palette)
+    var anchor = inner.querySelector('.md-header__source');
+    if (anchor) {
+      inner.insertBefore(btn, anchor);
     } else {
       inner.appendChild(btn);
     }
   }
 
-  // Initial render
   document.addEventListener('DOMContentLoaded', insertButton);
-
-  // MkDocs Material instant navigation fires a custom event after each page swap
+  // MkDocs Material instant navigation fires this after each page swap
   document.addEventListener('DOMContentMutated', insertButton);
 
 })();
