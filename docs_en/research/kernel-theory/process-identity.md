@@ -8,16 +8,16 @@ description: Visible identity sources of a Linux process, manipulation mechanism
 <span class="article-meta">03/06/2026 · 60 min</span>
 </div>
 
-What information Linux exposes about its processes, where it lives and how it is manipulated
+What information Linux exposes about its processes, where it resides, and how it can be manipulated
 
 ---
 
 !!! note "Context"
-    This article covers the information the operating system exposes about each process and how it can be modified from user space. It is the third article in the DARKCLOAK series and assumes prior knowledge of the [credential and capabilities model](identity-model.md) (article 1) and the [ELF format](elf-internals.md) (article 2).
+ This article covers the information the operating system exposes about each process and how it can be modified from user space. It is the third article in the DARKCLOAK series and assumes prior knowledge of the [credential and capabilities model](identity-model.md) (article 1) and the [ELF format](elf-internals.md) (article 2).
 
 ## Introduction
 
-On a Linux system, every process can be said to have two distinct identities. One is the **internal identity**, made up of the UIDs, GIDs and capabilities stored in the `cred` structure, which determine who the process belongs to and what it can do. The other is the **visible identity** — the information the operating system exposes about the process to any observer, whether another process or a system user.
+On a Linux system, every process can be said to have two distinct identities. One is the **internal identity**, made up of the UIDs, GIDs and capabilities stored in the `cred` structure, which determine who the process belongs to and what it can do. The other is the **visible identity**. The information the operating system exposes about the process to any observer, whether another process or a system user.
 
 The internal identity and the visible identity are not tightly coupled. A process can have UID 1000 in its credentials but show UID 0 in `/proc/PID/status` if the appropriate fields are manipulated. It can execute the code of its binary while `/proc/PID/exe` points to a completely different one.
 
@@ -27,7 +27,7 @@ Each visible identity source operates independently, and each has its own query 
 
 ### Through tools such as `ps`
 
-Perhaps the most commonly used tool, available by default on most Linux distributions, is `ps`. It obtains its information from `/proc/PID/stat`, `/proc/PID/status` (name, state, UIDs, capabilities), `/proc/PID/cmdline` (command line) and `/proc/PID/exe` (binary path). A process that modifies these sources in `/proc` alters what `ps` displays.
+Perhaps the most commonly used tool, available by default on most Linux distributions, is `ps`. It reads its data from `/proc/PID/stat`, `/proc/PID/status` (name, state, UIDs, capabilities), `/proc/PID/cmdline` (command line) and `/proc/PID/exe` (binary path). A process that modifies these sources in `/proc` alters what `ps` displays.
 
 ### Querying the process's own memory directly
 
@@ -41,7 +41,7 @@ argv[0] = "./darkcloak"
 argv[0] = "/home/user/darkcloak"
 ```
 
-This is not a property stored internally by the kernel but data in the process's own memory (`[rsp+8]` relative to the entry point). Overwriting it is a direct write to a known address — no intermediate syscalls required:
+This value is not stored by the kernel. It lives in the process's own memory (`[rsp+8]` relative to the entry point). Overwriting it is a direct write to a known address. No intermediate syscalls required:
 
 ```asm
     mov r12, [rsp+8]                   ; r12 = address of the original argv[0] string on the stack
@@ -51,7 +51,7 @@ This is not a property stored internally by the kernel but data in the process's
 
 ### Inspecting the `/proc/<PID>/` directory
 
-Every process has a directory in `/proc/` determined by its PID. The files inside that directory do not exist on disk — they belong to **`procfs`**, a virtual filesystem where each read operation invokes a kernel function that generates the content dynamically from the process's internal structures.
+Every process has a directory in `/proc/` determined by its PID. The files inside that directory do not exist on disk. They belong to **`procfs`**, a virtual filesystem where each read operation invokes a kernel function that generates the content dynamically from the process's internal structures.
 
 <h4 style="font-size: 1.15em; font-weight: normal;">Identity sources and their manipulation mechanisms in <code>/proc/&lt;PID&gt;/</code></h4>
 
@@ -69,7 +69,7 @@ Every queryable value originates from the kernel's internal structures linked to
 | `/proc/PID/status` (Caps) | `cred` | `cap_*` |
 
 !!! note ""
-    The `struct cred` sources (UIDs, GIDs and capabilities) were covered in the [first article](identity-model.md) of this series.
+ The `struct cred` sources (UIDs, GIDs and capabilities) were covered in the [first article](identity-model.md) of this series.
 
 These sources are primarily manipulated through two mechanisms:
 
@@ -90,7 +90,7 @@ Unlike specialized syscalls such as `setresuid` (which only handles UIDs) or `ca
 
 From an offensive perspective, `prctl` concentrates most of the operations that modify the process's visible identity without altering its execution. For this reason, defensive monitoring of `prctl` (via auditd or eBPF) is a critical detection point.
 
-The following details those operations that are valuable from an offensive standpoint:
+The sections below cover the operations most relevant from an offensive standpoint:
 
 ### `PR_SET_NAME`
 
@@ -104,7 +104,7 @@ The `comm` field in `task_struct` is a 16-byte array (15 usable characters + NUL
 ```
 
 !!! note ""
-    Names in brackets (`[kworker/0:1]`, `[migration/0]`) are by convention kernel threads, so a user-space process can adopt one of these to blend in with legitimate system processes.
+ Names in brackets (`[kworker/0:1]`, `[migration/0]`) are by convention kernel threads, so a user-space process can adopt one of these to blend in with legitimate system processes.
 
 ### `PR_SET_DUMPABLE`
 
@@ -118,7 +118,7 @@ Each process has a `dumpable` attribute that controls whether the kernel allows 
 ```
 
 !!! note ""
-    This attribute is automatically disabled when the process executes a `setuid` or `setgid` binary.
+ This attribute is automatically disabled when the process executes a `setuid` or `setgid` binary.
 
 Setting `dumpable` to 0:
 
@@ -130,12 +130,12 @@ It remains visible in `/proc/PID/stat`, `/proc/PID/status`, `/proc/PID/comm`, `/
 
 ### `PR_SET_MM`
 
-A process's `mm_struct` contains the fields the kernel consults to generate `/proc/PID/cmdline` (arguments with which the process was launched: `argv[0] \0 argv[1] \0 ...`), `/proc/PID/environ` (process environment variables: `KEY1=VALUE1 \0 KEY2=VALUE2 \0 ...`) and `/proc/PID/exe` (symlink pointing to the binary the kernel loaded when `execve` was called).
+A process's `mm_struct` contains the fields the kernel consults to generate `/proc/PID/cmdline` (arguments with which the process was launched: `argv[0] \0 argv[1] \0...`), `/proc/PID/environ` (process environment variables: `KEY1=VALUE1 \0 KEY2=VALUE2 \0...`) and `/proc/PID/exe` (symlink pointing to the binary the kernel loaded when `execve` was called).
 
 `PR_SET_MM` allows directly modifying these fields, altering what the kernel reads when an observer queries them.
 
 !!! danger ""
-    Using this option requires the `CAP_SYS_RESOURCE` capability (bit 24) in the effective set.
+ Using this option requires the `CAP_SYS_RESOURCE` capability (bit 24) in the effective set.
 
 #### **`PR_SET_MM_ARG_START` / `PR_SET_MM_ARG_END`**
 
@@ -163,7 +163,7 @@ Allow modifying `arg_start` and `arg_end`. Any subsequent read of `/proc/PID/cmd
 ```
 
 !!! note ""
-    There is a relationship between `/proc/PID/cmdline` and `argv[0]`: by default, `arg_start` points to the stack area where `argv[0]` resides, so both share the same memory region. As long as that relationship is not altered, overwriting `argv[0]` also changes what `cmdline` returns, because the kernel reads the content from that address rather than from a separately stored copy. If `arg_start` is redirected to another buffer via `PR_SET_MM`, the two sources decouple: `cmdline` reads from the new buffer and the `argv[0]` overwrite only affects tools that access the process's stack directly.
+ There is a relationship between `/proc/PID/cmdline` and `argv[0]`: by default, `arg_start` points to the stack area where `argv[0]` resides, so both share the same memory region. As long as that relationship is not altered, overwriting `argv[0]` also changes what `cmdline` returns, because the kernel reads the content from that address rather than from a separately stored copy. If `arg_start` is redirected to another buffer via `PR_SET_MM`, the two sources decouple: `cmdline` reads from the new buffer and the `argv[0]` overwrite only affects tools that access the process's stack directly.
 
 #### **`PR_SET_MM_ENV_START` / `PR_SET_MM_ENV_END`**
 
@@ -215,13 +215,13 @@ Allows modifying the `/proc/PID/exe` symlink. Unlike the previous ones, it recei
 ```
 
 !!! danger ""
-    **This operation fails with `EBUSY` if the process has VMAs whose `vm_file` points to the original executable. All initial file-backed VMAs must be replaced before the call, which leads directly to the VMA anonymization block.**
+ **This operation fails with `EBUSY` if the process has VMAs whose `vm_file` points to the original executable. All initial file-backed VMAs must be replaced before the call, which leads directly to the VMA anonymization block.**
 
 ## Virtual Memory and VMAs
 
-Every process on Linux operates on a virtual address space that the **MMU (Memory Management Unit)** translates to physical addresses. That is, the process does not access RAM directly but accesses virtual addresses that the hardware transparently translates to physical ones.
+Every process on Linux operates on a virtual address space that the **MMU (Memory Management Unit)** translates to physical addresses. The process never touches RAM directly: it works with virtual addresses that the hardware transparently maps to physical ones.
 
-**That virtual address space is not fully mapped from the start but is mapped as regions as the process needs them** (the binary's code, its data, the stack, the heap, shared libraries and any explicit mappings the process requests). Each of these regions is internally represented by a **VMA (Virtual Memory Area)**, a `vm_area_struct` structure within the process's `mm_struct`.
+**That virtual address space is not fully mapped from the start but is mapped in regions as the process needs them** (the binary's code, its data, the stack, the heap, shared libraries and any explicit mappings the process requests). Each of these regions is internally represented by a **VMA (Virtual Memory Area)**, a `vm_area_struct` structure within the process's `mm_struct`.
 
 The entries that appear in `/proc/PID/maps` are the process's VMAs.
 
@@ -238,13 +238,13 @@ struct vm_area_struct {
 ```
 
 !!! note ""
-    The flags `VM_READ`, `VM_WRITE`, `VM_EXEC` determine the permissions shown in `/proc/PID/maps` (`r`, `w`, `x`). The flag `VM_SHARED` distinguishes `MAP_SHARED` mapping (`s`) from `MAP_PRIVATE` mapping (`p`).
+ The flags `VM_READ`, `VM_WRITE`, `VM_EXEC` determine the permissions shown in `/proc/PID/maps` (`r`, `w`, `x`). The flag `VM_SHARED` distinguishes `MAP_SHARED` mapping (`s`) from `MAP_PRIVATE` mapping (`p`).
 
 ### File-backed VMAs vs Anonymous VMAs
 
 #### **File-backed VMAs**
 
-Created explicitly when the kernel maps a file into memory — either because a program requests a file mapping via `mmap` with a file descriptor, or implicitly during `execve`, when the kernel loads the `PT_LOAD` segments of the ELF binary into the new process's address space. In both cases, the resulting VMA holds a reference to the original file through its `vm_file` field.
+Created explicitly when the kernel maps a file into memory, either because a program requests a file mapping via `mmap` with a file descriptor, or implicitly during `execve`, when the kernel loads the `PT_LOAD` segments of the ELF binary into the new process's address space. In both cases, the resulting VMA holds a reference to the original file through its `vm_file` field.
 
 In `/proc/PID/maps` the following information is shown:
 
@@ -364,7 +364,7 @@ rsi = length        ; size in bytes to unmap
 **VMA anonymization is the process of replacing file-backed VMAs with anonymous VMAs of identical content.** The result is a process that continues executing the same code at the same addresses with the same permissions, but with no VMA referencing the original binary. In `/proc/PID/maps`, the VMAs change from showing the executable path to showing device `00:00` and inode `0`.
 
 !!! note ""
-    Performing this process on all file-backed VMAs makes `PR_SET_MM_EXE_FILE` with the `CAP_SYS_RESOURCE` capability succeed, enabling `/proc/PID/exe` spoofing.
+ Performing this process on all file-backed VMAs makes `PR_SET_MM_EXE_FILE` with the `CAP_SYS_RESOURCE` capability succeed, enabling `/proc/PID/exe` spoofing.
 
 #### **Anonymization procedure**
 
@@ -376,7 +376,7 @@ For each binary segment:
 
 3. **Remove the original mapping** (`munmap`): unmap the file-backed region, removing the reference to the binary on disk. From this point, accessing the original segment's addresses causes a segmentation fault.
 
-4. **Relocate the copy** (`mremap` with `MREMAP_MAYMOVE | MREMAP_FIXED`): move the anonymous region to the address range previously occupied by the original segment. The content is identical, the addresses are the same; in practical terms, only the VMA type changed.
+4. **Relocate the copy** (`mremap` with `MREMAP_MAYMOVE | MREMAP_FIXED`): move the anonymous region to the address range previously occupied by the original segment. The content is identical, the addresses are the same, in practical terms, only the VMA type changed.
 
 5. **Restore permissions** (`mprotect`): apply the original segment permissions to the new memory region (R for headers, RX for code, RW for data).
 
@@ -402,7 +402,7 @@ The solution is to execute the anonymization code **from outside** the binary's 
 
 2. **Copy the anonymization code** (`rep movsb`): copy to the temporary page the block of instructions that executes the `mmap`→`movsb`→`munmap`→`mremap`→`mprotect` sequence for each segment, along with the data the syscalls need (start/end addresses, permissions and return addresses).
 
-3. **Make the page executable** (`mprotect` with `PROT_READ | PROT_EXEC`): the page must be created with RW permissions to copy data; once copied, it is changed to RX to allow transferring execution flow to it.
+3. **Make the page executable** (`mprotect` with `PROT_READ | PROT_EXEC`): the page must be created with RW permissions to copy data, once copied, it is changed to RX to allow transferring execution flow to it.
 
 4. **Jump to the temporary page** (`jmp`): the binary's execution flow must leave the `.text` segment and jump to the anonymous page. From this point, RIP points to the temporary page and it is safe to unmap any binary segment.
 

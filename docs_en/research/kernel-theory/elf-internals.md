@@ -13,7 +13,7 @@ What an ELF binary contains and how the kernel interprets it to turn it into a p
 ---
 
 !!! info "Context"
-    This article covers the internal structure of Linux's native binary format. Understanding how the kernel interprets and loads an ELF is a prerequisite for any offensive technique that manipulates binaries, injects code or implements custom loaders.
+ This article covers the internal structure of Linux's native binary format. Understanding how the kernel interprets and loads an ELF is a prerequisite for any offensive technique that manipulates binaries, injects code or implements custom loaders.
 
 ## Introduction
 
@@ -21,13 +21,13 @@ The **Executable and Linkable Format (ELF)** is the native binary format of the 
 
 ## Segment/Section Duality
 
-The ELF architecture presents a fundamental duality — the same file can be described simultaneously through two complementary views:
+The ELF architecture presents a fundamental duality. The same file can be described simultaneously through two complementary views:
 
 - The **execution view** organizes content into **segments** (described by the Program Header Table). Segments represent how the kernel maps the binary into virtual memory when the program runs.
 - The **linking view** organizes content into **sections** (described by the Section Header Table). Sections are logical units with specific semantics used by the linker during the ELF binary build process and by static analysis tools.
 
-    !!! note ""
-        The Section Header Table is dispensable at runtime.
+ !!! note ""
+ The Section Header Table is dispensable at runtime.
 
 Both views are ways of interpreting the same ELF at different phases of the program's lifecycle (construction (linking) and execution (loading)).
 
@@ -70,7 +70,7 @@ typedef struct elf64_hdr {
 ```
 
 !!! note ""
-    The data types used in the 64-bit variant are: `Elf64_Half` = `__u16` (2 bytes), `Elf64_Word` = `__u32` (4 bytes), `Elf64_Addr` = `__u64` (8 bytes), `Elf64_Off` = `__u64` (8 bytes).
+ The data types used in the 64-bit variant are: `Elf64_Half` = `__u16` (2 bytes), `Elf64_Word` = `__u32` (4 bytes), `Elf64_Addr` = `__u64` (8 bytes), `Elf64_Off` = `__u64` (8 bytes).
 
 To inspect the ELF header fields:
 
@@ -86,7 +86,7 @@ readelf -h <program>
 
 - **`e_ident`**
 
-    The first 16 bytes encode the binary's identification and fundamental properties:
+ The first 16 bytes encode the binary's identification and fundamental properties:
 
     | Index | Constant | x86-64 value | Meaning |
     |--------|-----------|--------------|---------|
@@ -100,44 +100,44 @@ readelf -h <program>
     | 7 | `EI_OSABI` | `0 (ELFOSABI_NONE)` | OS ABI |
     | 8 | `EI_PAD` | `0` | Padding (bytes 8–15 set to zero) |
 
-    !!! note ""
-        The kernel performs the following validations with the ELF Header data: magic bytes = `\177ELF` (`0x7f 0x45 0x4c 0x46`), `e_type` ∈ {`ET_EXEC`, `ET_DYN`}, `e_machine` compatible with the architecture (`EM_X86_64` = 62 on x86-64), and `e_phentsize` = 56. If any check fails, it returns `-ENOEXEC`.
+ !!! note ""
+ The kernel performs the following validations with the ELF Header data: magic bytes = `\177ELF` (`0x7f 0x45 0x4c 0x46`), `e_type` ∈ {`ET_EXEC`, `ET_DYN`}, `e_machine` compatible with the architecture (`EM_X86_64` = 62 on x86-64), and `e_phentsize` = 56. If any check fails, it returns `-ENOEXEC`.
 
 - **`e_type`**
 
-    Nature of the file. `ET_REL` (1) = relocatable object (.o), `ET_EXEC` (2) = executable with absolute addresses, `ET_DYN` (3) = shared object / PIE executable, `ET_CORE` (4) = core dump.
+ Nature of the file. `ET_REL` (1) = relocatable object (.o), `ET_EXEC` (2) = executable with absolute addresses, `ET_DYN` (3) = shared object / PIE executable, `ET_CORE` (4) = core dump.
 
 - **`e_machine`**
 
-    Architecture. For x86-64: `62` (`EM_X86_64`).
+ Architecture. For x86-64: `62` (`EM_X86_64`).
 
 - **`e_entry`**
 
-    Virtual address of the entry point (`_start`). In non-PIE binaries (`ET_EXEC`), this is a fixed absolute address. In PIE binaries (`ET_DYN`), it is an offset relative to the load base, which the kernel adds to the base address established by ASLR.
+ Virtual address of the entry point (`_start`). In non-PIE binaries (`ET_EXEC`), this is a fixed absolute address. In PIE binaries (`ET_DYN`), it is an offset relative to the load base, which the kernel adds to the base address established by ASLR.
 
 - **`e_phoff`** and **`e_shoff`**
 
-    Byte offsets of the PHT and SHT within the file.
+ Byte offsets of the PHT and SHT within the file.
 
 - **`e_phentsize`**
 
-    Size of each PHT entry (56 bytes for ELF64).
+ Size of each PHT entry (56 bytes for ELF64).
 
 - **`e_shentsize`**
 
-    Size of each SHT entry (64 bytes for ELF64).
+ Size of each SHT entry (64 bytes for ELF64).
 
 - **`e_phnum`**
 
-    Number of entries in the PHT.
+ Number of entries in the PHT.
 
 - **`e_shnum`**
 
-    Number of sections in the SHT.
+ Number of sections in the SHT.
 
 - **`e_shstrndx`**
 
-    Index of the `.shstrtab` section (contains section names as null-terminated strings).
+ Index of the `.shstrtab` section (contains section names as null-terminated strings).
 
     ```asm
     ; .shstrtab
@@ -147,17 +147,17 @@ readelf -h <program>
     2e 64 61 74 61 00                      ; ".data"               
     2e 62 73 73 00                         ; ".bss"                
     2e 73 68 73 74 72 74 61 62 00          ; ".shstrtab"    
-    ```
+ ```
 
 - **`e_flags`**
 
-    Architecture-specific flags. On x86-64, always `0`.
+ Architecture-specific flags. On x86-64, always `0`.
 
 </div>
 
 ## Program Headers
 
-Having established the ELF Header as the interpretive entry point, the next critical structure for loading into memory is the Program Header Table (PHT). This table describes the binary's segments — contiguous blocks of data that the kernel maps directly into the process's virtual address space.
+With the ELF Header covered, the next critical structure for loading the binary into memory is the Program Header Table (PHT). This table describes the binary's segments, contiguous blocks of data that the kernel maps directly into the process's virtual address space.
 
 ### `Elf64_Phdr` Structure
 
@@ -177,7 +177,7 @@ typedef struct elf64_phdr {
 ```
 
 !!! note ""
-    Entry N is located at: `e_phoff + (N × 56)`. In memory (via `auxv`): `AT_PHDR + (N × AT_PHENT)`.
+ Entry N is located at: `e_phoff + (N × 56)`. In memory (via `auxv`): `AT_PHDR + (N × AT_PHENT)`.
 
 To inspect the PHT data of an ELF file:
 
@@ -193,29 +193,29 @@ readelf -l <program>
 
 - **Segment types (`p_type`)**
 
-    - **`PT_LOAD`**
+ - **`PT_LOAD`**
 
-        Loadable segment. Each `PT_LOAD` defines a region that the kernel maps into the process's virtual address space via `mmap`. A typical binary contains two or three `PT_LOAD` segments: one for code (RX), one for data (RW) and optionally one for read-only constants (R).
+ Loadable segment. Each `PT_LOAD` defines a region that the kernel maps into the process's virtual address space via `mmap`. A typical binary contains two or three `PT_LOAD` segments: one for code (RX), one for data (RW) and optionally one for read-only constants (R).
 
-    - **`PT_DYNAMIC`**
+ - **`PT_DYNAMIC`**
 
-        Points to the information needed for dynamic linking. It typically contains the `.dynamic` section, which consists of an array of `Elf64_Dyn` structures and serves as the main table used by the dynamic linker (usually `ld-linux.so`).
+ Points to the information needed for dynamic linking. It typically contains the `.dynamic` section, which consists of an array of `Elf64_Dyn` structures and serves as the main table used by the dynamic linker (usually `ld-linux.so`).
 
-    - **`PT_INTERP`**
+ - **`PT_INTERP`**
 
-        Path to the ELF interpreter (dynamic linker). The kernel reads this path and loads the interpreter as a second ELF binary before transferring control. A statically linked executable lacks this segment.
+ Path to the ELF interpreter (dynamic linker). The kernel reads this path and loads the interpreter as a second ELF binary before transferring control. A statically linked executable lacks this segment.
 
-    - **`PT_PHDR`**
+ - **`PT_PHDR`**
 
-        Indicates where the PHT itself is loaded in memory. This allows the ELF interpreter to directly locate the segment table during dynamic loading of the executable, without needing to re-read the ELF Header from disk.
+ Indicates where the PHT itself is loaded in memory. This allows the ELF interpreter to directly locate the segment table during dynamic loading of the executable, without needing to re-read the ELF Header from disk.
 
-    - **`PT_NOTE`**
+ - **`PT_NOTE`**
 
-        Auxiliary information (notes).
+ Auxiliary information (notes).
 
-    - **`PT_TLS`**
+ - **`PT_TLS`**
 
-        Template for Thread-Local Storage. Defines the data block that each thread receives as a private copy.
+ Template for Thread-Local Storage. Defines the data block that each thread receives as a private copy.
 
 - **Permissions (`p_flags`)**
 
@@ -223,9 +223,9 @@ readelf -l <program>
     #define PF_X  0x1   /* Execute */
     #define PF_W  0x2   /* Write   */
     #define PF_R  0x4   /* Read    */
-    ```
+ ```
 
-    The kernel translates these flags to page protections (minimum granularity):
+ The kernel translates these flags to page protections (minimum granularity):
 
     | ELF combination (`p_flags`) | Page protection | Use | Relevant sections |
     |---|---|---|---|
@@ -247,7 +247,7 @@ The `mmap`, `munmap`, `mremap` and `mprotect` syscalls operate at page granulari
 
 ## Loading an ELF Binary by the Kernel
 
-When a process invokes the `execve` syscall, the kernel does not know in advance what format the binary to execute has. Linux supports multiple binary formats, each linked to a handler in a linked list. The kernel iterates that list and passes the file to each handler until one accepts it.
+When a process invokes the `execve` syscall, the kernel does not know in advance what format the binary has. Linux supports multiple binary formats, each linked to a handler in a linked list. The kernel iterates that list and passes the file to each handler until one accepts it.
 
 For ELF, the handler is `load_elf_binary`. The function begins by validating the ELF Header (magic bytes, `e_type`, `e_machine`, `e_phentsize`). If validation fails, it returns `-ENOEXEC` and the kernel continues trying the next handler in the list.
 
@@ -255,18 +255,18 @@ Once validation passes, the kernel iterates the PHT looking for two segment type
 
 - **Detection of `PT_INTERP`**<br>If the PHT contains a `PT_INTERP` segment, the kernel reads the dynamic interpreter's path and maps it into the new address space alongside the main binary's segments. A statically linked binary has no `PT_INTERP`, so the kernel transfers control directly to its entry point.
 
-    !!! note ""
-        `execve` does not create a new process — it replaces the image of the process that invokes it. The PID remains the same. The kernel discards the invoking process's address space and builds a new one where it maps the segments of the binary to execute.
+ !!! note ""
+ `execve` does not create a new process. It replaces the image of the process that invokes it. The PID remains the same. The kernel discards the invoking process's address space and builds a new one where it maps the segments of the binary to execute.
 
-- **Mapping `PT_LOAD` segments**<br>Each `PT_LOAD` segment in the PHT describes a byte range of the ELF file (`p_offset`, `p_filesz`), the address in virtual memory where those bytes should be placed (`p_vaddr`) and the permissions for that region (`p_flags`). If the segment requires more memory than it occupies in the file (`p_memsz > p_filesz`), the kernel extends the region with zero-initialized memory — this difference corresponds to the `.bss` region, global variables with no initial value.
+- **Mapping `PT_LOAD` segments**<br>Each `PT_LOAD` segment in the PHT describes a byte range of the ELF file (`p_offset`, `p_filesz`), the address in virtual memory where those bytes should be placed (`p_vaddr`) and the permissions for that region (`p_flags`). If the segment requires more memory than it occupies in the file (`p_memsz > p_filesz`), the kernel extends the region with zero-initialized memory. This difference corresponds to the `.bss` region, global variables with no initial value.
 
-    !!! note ""
-        Each `PT_LOAD` generates one or more VMAs in the process's `mm_struct`.
+ !!! note ""
+ Each `PT_LOAD` generates one or more VMAs in the process's `mm_struct`.
 
-    The address calculation depends on the binary type:
+ The address calculation depends on the binary type:
 
-    - In `ET_EXEC` (non-PIE): `p_vaddr` is an absolute virtual address. The kernel maps the segment exactly at that address. Each execution produces the same memory layout.
-    - In `ET_DYN` (PIE): the kernel selects a random base address (due to ASLR) and adds `p_vaddr` as an offset. Each execution produces a different layout. The randomization makes attacks that depend on knowing code or data addresses harder.
+ - In `ET_EXEC` (non-PIE): `p_vaddr` is an absolute virtual address. The kernel maps the segment exactly at that address. Each execution produces the same memory layout.
+ - In `ET_DYN` (PIE): the kernel selects a random base address (due to ASLR) and adds `p_vaddr` as an offset. Each execution produces a different layout. The randomization makes attacks that depend on knowing code or data addresses harder.
 
 ## Auxiliary Vector
 
@@ -331,13 +331,13 @@ The array terminates when `a_type == AT_NULL`.
 | 33 | `AT_SYSINFO_EHDR` | Address of the vDSO mapped in the process |
 
 !!! note ""
-    The kernel generates exactly one entry per `a_type`, with no duplicates. The `auxv` is not optional — the kernel generates it unconditionally for every ELF process, static or dynamic.
+ The kernel generates exactly one entry per `a_type`, with no duplicates. The `auxv` is not optional. The kernel generates it unconditionally for every ELF process, static or dynamic.
 
 ### Introspection via `auxv`
 
 With the values of `AT_PHDR`, `AT_PHENT` and `AT_PHNUM`, the process can traverse its own PHT in memory and locate any segment.
 
-In a PIE binary, the `p_vaddr` addresses of each segment are offsets relative to a load base that the kernel chooses randomly (ASLR). The `auxv` does not contain that base directly, but it can be derived — `AT_PHDR` indicates where the PHT ended up in memory after loading, and `p_offset` of the first segment indicates how far from the start of the file the PHT was. Since the kernel maps the file from the base, the relationship is `base = AT_PHDR - p_offset`. With the base known, the real address of any segment is `base + p_vaddr`. In non-PIE binaries (`ET_EXEC`), `p_vaddr` addresses are absolute and this calculation is not needed.
+In a PIE binary, the `p_vaddr` addresses of each segment are offsets relative to a load base that the kernel chooses randomly (ASLR). The `auxv` does not contain that base directly, but it can be derived, `AT_PHDR` indicates where the PHT ended up in memory after loading, and `p_offset` of the first segment indicates how far from the start of the file the PHT was. Since the kernel maps the file from the base, the relationship is `base = AT_PHDR - p_offset`. With the base known, the real address of any segment is `base + p_vaddr`. In non-PIE binaries (`ET_EXEC`), `p_vaddr` addresses are absolute and this calculation is not needed.
 
 This mechanism allows code to resolve the process's memory layout without accessing `/proc/self/maps`, avoiding the `openat`/`read`/`close` syscalls that a security monitor might detect. The `auxv` data is already on the process's stack, so accessing it is a simple memory read, invisible to any syscall-level tracing mechanism.
 
@@ -404,7 +404,7 @@ readelf -S <program>
     | `0x20` | `SHF_STRINGS` | Contains null-terminated strings |
     | `0x400` | `SHF_TLS` | Thread-local data |
 
-    Kernel-specific flags: `SHF_RELA_LIVEPATCH` (`0x00100000`) marks relocation sections for live patching; `SHF_RO_AFTER_INIT` (`0x00200000`) marks sections that become read-only after kernel initialization.
+ Kernel-specific flags: `SHF_RELA_LIVEPATCH` (`0x00100000`) marks relocation sections for live patching, `SHF_RO_AFTER_INIT` (`0x00200000`) marks sections that become read-only after kernel initialization.
 
 </div>
 
@@ -463,7 +463,7 @@ readelf -S <program>
 - **Segment:** `PT_LOAD` with permissions `PF_R | PF_W`
 - The GOT is the central structure for dynamic linking when accessing external data and functions.
 
-    On x86-64 it is split into:
+ On x86-64 it is split into:
 
 </div>
 
@@ -471,11 +471,11 @@ readelf -S <program>
 
 - **`.got`**
 
-    Entries for imported global variables and addresses resolved via eager binding.
+ Entries for imported global variables and addresses resolved via eager binding.
 
 - **`.got.plt`**
 
-    Entries for imported functions, resolved via lazy binding.
+ Entries for imported functions, resolved via lazy binding.
 
 </div>
 
@@ -494,15 +494,15 @@ readelf -S <program>
 
 - **`.plt`**
 
-    Fallback stubs for lazy binding (not called directly by program code).
+ Fallback stubs for lazy binding (not called directly by program code).
 
 - **`.plt.sec`**
 
-    Stubs that program code calls directly when invoking an imported function.
+ Stubs that program code calls directly when invoking an imported function.
 
 - **`.plt.got`**
 
-    Stubs for imported functions whose address is stored in a variable (function pointer) rather than called directly.
+ Stubs for imported functions whose address is stored in a variable (function pointer) rather than called directly.
 
 </div>
 
@@ -529,11 +529,11 @@ A binary can contain two distinct tables:
 
 - **`.symtab`** (type `SHT_SYMTAB`)
 
-    Contains all symbols: local functions, static variables, internal labels…
+ Contains all symbols: local functions, static variables, internal labels…
 
 - **`.dynsym`** (type `SHT_DYNSYM`)
 
-    Contains only the symbols needed for dynamic linking: imported/exported functions and variables.
+ Contains only the symbols needed for dynamic linking: imported/exported functions and variables.
 
 ## Acknowledgements
 

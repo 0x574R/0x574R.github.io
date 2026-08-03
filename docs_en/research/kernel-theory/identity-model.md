@@ -13,11 +13,11 @@ How the Linux kernel manages the identity and privileges of a process
 ---
 
 !!! info "Context"
-    This article covers the theory underlying offensive techniques that manipulate process credentials. Understanding the kernel's identity and privilege model is a fundamental prerequisite before implementing tools that operate on `struct cred`.
+ This article covers the theory underlying offensive techniques that manipulate process credentials. Understanding the kernel's identity and privilege model is a fundamental prerequisite before implementing tools that operate on `struct cred`.
 
 ## Introduction
 
-The Linux kernel concentrates all identity and privilege information for a process in a single structure: `struct cred`. Within it coexist two complementary systems — **UIDs/GIDs** (who the process belongs to) and **capabilities** (which privileged operations it can perform). Both are closely related: modifications to UIDs trigger automatic changes in capabilities, and certain capabilities are required to freely modify UIDs. This article covers both systems jointly for a deeper understanding of how the system operates with processes.
+The Linux kernel concentrates all identity and privilege information for a process in a single structure: `struct cred`. Within it coexist two complementary systems, **UIDs/GIDs** (who the process belongs to) and **capabilities** (which privileged operations it can perform). Both are closely related: modifications to UIDs trigger automatic changes in capabilities, and certain capabilities are required to freely modify UIDs. This article covers both systems jointly for a deeper understanding of how the system operates with processes.
 
 ## Location of Credentials in the Kernel
 
@@ -32,7 +32,7 @@ const struct cred __rcu *cred;       // Subjective context (active identity)
 - The **objective context** (`*real_cred`) is what the kernel checks when **other processes act on this one**: sending it signals, attaching via `ptrace`.
 
 !!! note ""
-    Generally, both pointers reference the same `struct cred` instance.
+ Generally, both pointers reference the same `struct cred` instance.
 
 `struct cred` contains all the identity and privilege information for the process:
 
@@ -59,28 +59,28 @@ struct cred {
 ```
 
 !!! note "File permission evaluation"
-    File permission evaluation follows a strict hierarchy: first it checks whether the process's effective UID matches the file owner's UID, in which case owner permissions apply; if not, it checks whether any of the process's GIDs (effective or supplementary) match the file's GID, applying group permissions; and if there are no matches, other permissions apply.
+ File permission evaluation follows a strict hierarchy: first it checks whether the process's effective UID matches the file owner's UID, in which case owner permissions apply. If not, it checks whether any of the process's GIDs (effective or supplementary) match the file's GID, applying group permissions. If there are no matches, other permissions apply.
 
 !!! info ""
-    Supplementary groups are additional groups associated with a user that allow a process to belong to multiple groups simultaneously.
+ Supplementary groups are additional groups associated with a user that allow a process to belong to multiple groups simultaneously.
 
-When a process wants to change a UID, the operation is performed by entering kernel mode through a syscall (for example, `setuid`), triggering a CPU transition from **ring 3 (user mode) to ring 0 (kernel mode)**. Once in kernel mode, the syscall handler checks whether the process has permission to make the change based on the current UID values and its capabilities. If the operation is viable, the kernel enters its credentials subsystem and applies a safe update pattern: first it calls `prepare_creds` to clone the process's current `struct cred`, then modifies the relevant fields (UID, EUID, GID or capabilities as appropriate), and finally executes `commit_creds` to atomically replace the process's active credentials.
+When a process wants to change a UID, the process enters kernel mode through a syscall (for example, `setuid`), triggering a CPU transition from **ring 3 (user mode) to ring 0 (kernel mode)**. Once in kernel mode, the syscall handler checks whether the process has permission to make the change based on the current UID values and its capabilities. If the operation is viable, the kernel enters its credentials subsystem and applies a safe update pattern: first it calls `prepare_creds` to clone the process's current `struct cred`, then modifies the relevant fields (UID, EUID, GID or capabilities as appropriate), and finally executes `commit_creds` to atomically replace the process's active credentials.
 
 !!! danger ""
-    From an offensive perspective, `prepare_kernel_cred(NULL)` generates a `struct cred` with UIDs set to 0 and capabilities at maximum. The combination `commit_creds(prepare_kernel_cred(NULL))` is the standard privilege escalation pattern in kernel exploits.
+ From an offensive perspective, `prepare_kernel_cred(NULL)` generates a `struct cred` with UIDs set to 0 and capabilities at maximum. The combination `commit_creds(prepare_kernel_cred(NULL))` is the standard privilege escalation pattern in kernel exploits.
 
 ## UIDs
 
-When a user runs a program, the operating system does not use the username directly but instead makes use of a numeric identifier called a UID. This UID represents the user's identity within the system and is associated with all processes that user runs. The kernel uses this identifier to enforce permission policies and access control.
+When a user runs a program, the operating system does not use the username directly but instead relies on a numeric identifier called a UID. This UID represents the user's identity within the system and is associated with all processes that user runs. The kernel uses this identifier to enforce permission policies and access control.
 
-Each running process maintains a set of UID-related identities. This is because in certain situations (especially when elevated privileges are involved), a process may need to behave with different identities depending on the context. For this reason, the system distinguishes between several types of UID:
+Each running process maintains a set of UID-related identities. This is because in certain situations (especially when elevated privileges are involved), a process may need to operate under different identities depending on the context. For this reason, the system distinguishes between several types of UID:
 
 - **Real UID (RUID)**: Identifies the user who originally created the process. The RUID is what the kernel consults when applying resource limits (`RLIMIT_NPROC`) and what determines the process owner for signal delivery.
 - **Effective UID (EUID)**: The identifier the kernel checks during access control decisions.
 - **Saved Set-User-ID (SUID)**: Acts as a storage slot for a previously held EUID. Its purpose is to allow a process to temporarily drop its privileges (by changing the EUID to an unprivileged value) and recover them later (by restoring the EUID to the value preserved in SUID).
 
 !!! note ""
-    When the kernel loads an executable with the setuid bit set, it establishes the EUID and SUID to the UID of the file owner, keeping the RUID as that of the original user.
+ When the kernel loads an executable with the setuid bit set, it sets the EUID and SUID to the UID of the file owner, keeping the RUID as that of the original user.
 
 ### Query Syscalls
 
@@ -97,9 +97,9 @@ rsi = euid          ; pointer to uid_t where the effective UID will be written
 rdx = suid          ; pointer to uid_t where the saved set-user-ID will be written
 ```
 
-- `ruid` (RDI) — Pointer to a writable memory region of at least 4 bytes (`uid_t` = 32 bits). The kernel writes the current **real UID** here.
-- `euid` (RSI) — Pointer to a writable memory region of at least 4 bytes (`uid_t` = 32 bits). The kernel writes the current **effective UID** here.
-- `suid` (RDX) — Pointer to a writable memory region of at least 4 bytes (`uid_t` = 32 bits). The kernel writes the current **saved set-user-ID** here.
+- `ruid` (RDI): pointer to a writable memory region of at least 4 bytes (`uid_t` = 32 bits). The kernel writes the current **real UID** here.
+- `euid` (RSI): pointer to a writable memory region of at least 4 bytes (`uid_t` = 32 bits). The kernel writes the current **effective UID** here.
+- `suid` (RDX): pointer to a writable memory region of at least 4 bytes (`uid_t` = 32 bits). The kernel writes the current **saved set-user-ID** here.
 
 **Return values**
 
@@ -128,7 +128,7 @@ rdx = suid           ; new saved set-user-ID (or -1 to leave unchanged)
 ```
 
 !!! note ""
-    Without `CAP_SETUID`, each argument must be -1 or a value already present in one of the three current process IDs (they can be redistributed across positions and repeated), but no new values can be introduced. With `CAP_SETUID` there is no restriction.
+ Without `CAP_SETUID`, each argument must be -1 or a value already present in one of the three current process IDs (they can be redistributed across positions and repeated), but no new values can be introduced. With `CAP_SETUID` there is no restriction.
 
 **Return values**
 
@@ -145,7 +145,7 @@ Common errors:
 
 ## GIDs
 
-The GID model — Real GID (RGID), Effective GID (EGID) and Saved set-group-ID (SGID) — follows the same semantics, but applied to group-based access control.
+The GID model (comprising the Real GID, Effective GID and Saved set-group-ID) follows the same semantics, applied to group-based access control.
 
 ---
 
@@ -166,9 +166,9 @@ rsi = egid  ; pointer to gid_t where the effective GID will be written (4 bytes)
 rdx = sgid  ; pointer to gid_t where the saved set-group-ID will be written (4 bytes)
 ```
 
-- `rgid` (RDI) — Address where the kernel will write the process's **real GID** as a `gid_t` (4 bytes, unsigned integer). The real GID represents the group of the user who originally launched the process.
-- `egid` (RSI) — Address where the kernel will write the **effective GID**, which is what the kernel actually uses for DAC permission checks on files, SysV IPC, signals, etc.
-- `sgid` (RDX) — Address where the kernel will write the **saved set-group-ID**. Its purpose is to allow the process to recover a previous EGID.
+- `rgid` (RDI): address where the kernel will write the process's **real GID** as a `gid_t` (4 bytes, unsigned integer). The real GID represents the group of the user who originally launched the process.
+- `egid` (RSI): address where the kernel will write the **effective GID**, which is what the kernel actually uses for DAC permission checks on files, SysV IPC, signals, etc.
+- `sgid` (RDX): address where the kernel will write the **saved set-group-ID**. Its purpose is to allow the process to recover a previous EGID.
 
 **Return values**
 
@@ -199,7 +199,7 @@ rdx = sgid  ; new saved set-group-ID  (-1 to leave unchanged)
 ```
 
 !!! note ""
-    Without `CAP_SETGID`, each argument must be -1 or a value already present in one of the three current GIDs of the process (they can be redistributed across positions and repeated), but no new values can be introduced. With `CAP_SETGID` there is no restriction.
+ Without `CAP_SETGID`, each argument must be -1 or a value already present in one of the three current GIDs of the process (they can be redistributed across positions and repeated), but no new values can be introduced. With `CAP_SETGID` there is no restriction.
 
 **Return values**
 
@@ -216,12 +216,12 @@ Common errors:
 
 ## Capabilities
 
-The traditional Unix model is binary — EUID=0 grants all privileges, any other EUID grants none. Capabilities decompose that monolithic power into 41 independent bits (from `CAP_CHOWN=0` to `CAP_CHECKPOINT_RESTORE=40`), each controlling a subset of operations. This allows assigning to a process only those privileges necessary for its operation.
+The traditional Unix model is binary: EUID=0 grants all privileges, any other EUID grants none. Capabilities decompose that monolithic power into 41 independent bits (from `CAP_CHOWN=0` to `CAP_CHECKPOINT_RESTORE=40`), each controlling a subset of operations. This allows assigning to a process only those privileges necessary for its operation.
 
 ### The Five Sets
 
 - **Permitted (P)**: The complete set of privileges for the process. It can only shrink, never grow. No other set can have a bit that is not in P (except bounding, which is independent).
-- **Effective (E)**: The set the kernel checks on every privileged action. A process can have `CAP_SYS_RESOURCE` in P without having it in E — this privilege has no effect until it is activated by setting the corresponding bit to 1 in the effective set.
+- **Effective (E)**: The set the kernel checks on every privileged action. A process can have `CAP_SYS_RESOURCE` in P without having it in E. This privilege has no effect until it is activated by setting the corresponding bit to 1 in the effective set.
 - **Inheritable (I)**: Controls which capabilities can propagate across `execve` when the binary has [file capabilities](https://man7.org/linux/man-pages/man7/capabilities.7.html). To activate a bit, it must be in P and in B (or the process must have `CAP_SETPCAP` in E).
 - **Bounding set (B)**: Upper bound on what can be acquired during `execve`. Can only be reduced (`PR_CAPBSET_DROP`).
 - **Ambient (A)**: Allows specifying which capabilities propagate across `execve` when the binary has no special privileges (file capabilities or setuid/setgid).
@@ -240,22 +240,22 @@ rdi = hdrp           ; pointer to struct __user_cap_header_struct
 rsi = datap          ; pointer to struct __user_cap_data_struct[2] (or NULL)
 ```
 
-- `hdrp` (RDI) — Pointer to the header.
+- `hdrp` (RDI): pointer to the header.
 
-    Pointer to a `__user_cap_header_struct` structure that specifies the capabilities protocol version and the target thread. Cannot be NULL.
+ Pointer to a `__user_cap_header_struct` structure that specifies the capabilities protocol version and the target thread. Cannot be NULL.
 
     ```c
     struct __user_cap_header_struct {
         __u32 version;    // Protocol version   (4 bytes)
         int   pid;        // TID/PID of target (0 = current)  (4 bytes)
     };
-    ```
+ ```
 
-    - `version` must be `_LINUX_CAPABILITY_VERSION_3` (`0x20080522`). This is the only current version and supports up to 64 capabilities (represented in two `u32`, one per 32-bit half).
+ - `version` must be `_LINUX_CAPABILITY_VERSION_3` (`0x20080522`). This is the only current version and supports up to 64 capabilities (represented in two `u32`, one per 32-bit half).
 
-- `datap` (RSI) — Pointer to the output buffer.
+- `datap` (RSI): pointer to the output buffer.
 
-    Pointer to an array of two contiguous `__user_cap_data_struct` structures in memory where the kernel will write the target's capabilities. `datap[0]` receives bits for capabilities 0–31 and `datap[1]` for capabilities 32–63.
+ Pointer to an array of two contiguous `__user_cap_data_struct` structures in memory where the kernel will write the target's capabilities. `datap[0]` receives bits for capabilities 0–31 and `datap[1]` for capabilities 32–63.
 
     ```c
     struct __user_cap_data_struct {
@@ -263,9 +263,9 @@ rsi = datap          ; pointer to struct __user_cap_data_struct[2] (or NULL)
         __u32 permitted;     // Ceiling: superset of effective and inheritable
         __u32 inheritable;   // Capabilities propagable across execve
     };
-    ```
+ ```
 
-    **Memory layout after a successful `capget` (version 3):**
+ **Memory layout after a successful `capget` (version 3):**
 
     ```nasm
     datap (RSI) ──→ ┌──────────────────────────────────────┐
@@ -278,7 +278,7 @@ rsi = datap          ; pointer to struct __user_cap_data_struct[2] (or NULL)
                     │ datap[1].inheritable   (caps 32–63)  │ offset +20  ← kernel writes
                     └──────────────────────────────────────┘
                              Total: 24 bytes
-    ```
+ ```
 
 **Return values**
 
@@ -297,7 +297,7 @@ Common errors:
 
 #### **CAPSET (no. 126)**
 
-`capset` is the kernel interface that allows **setting the capabilities** of the invoking thread. Capabilities are Linux's mechanism for decomposing superuser privileges into discrete units — instead of being root or not, a process can possess specific subsets of privileges (opening raw sockets, mounting filesystems, using `ptrace`, etc.).
+`capset` is the kernel interface that allows **setting the capabilities** of the invoking thread. Capabilities are Linux's mechanism for decomposing superuser privileges into discrete units, instead of being root or not, a process can possess specific subsets of privileges (opening raw sockets, mounting filesystems, using `ptrace`, etc.).
 
 **Inputs (syscall arguments)**
 
@@ -307,13 +307,13 @@ rdi = hdrp           ; pointer to struct __user_cap_header_struct
 rsi = datap          ; pointer to struct __user_cap_data_struct[2]
 ```
 
-- `hdrp` (RDI) — Pointer to the header (same structure as in `capget`). `version` must be `0x20080522`. `pid` only allows `0` or the thread's own TID on modern kernels.
+- `hdrp` (RDI): pointer to the header (same structure as in `capget`). `version` must be `0x20080522`. `pid` only allows `0` or the thread's own TID on modern kernels.
 
-- `datap` (RSI) — Pointer to the capabilities data.
+- `datap` (RSI): pointer to the capabilities data.
 
-    Pointer to an **array of two** contiguous `__user_cap_data_struct` structures in memory. `datap[0]` contains bits for capabilities 0–31 and `datap[1]` for capabilities 32–63.
+ Pointer to an **array of two** contiguous `__user_cap_data_struct` structures in memory. `datap[0]` contains bits for capabilities 0–31 and `datap[1]` for capabilities 32–63.
 
-    **Memory layout (version 3):**
+ **Memory layout (version 3):**
 
     ```nasm
     datap (RSI) ──→ ┌──────────────────────────────────────┐
@@ -326,7 +326,7 @@ rsi = datap          ; pointer to struct __user_cap_data_struct[2]
                     │ datap[1].inheritable   (caps 32–63)  │ offset +20
                     └──────────────────────────────────────┘
                              Total: 24 bytes
-    ```
+ ```
 
 **Return values**
 
@@ -339,7 +339,7 @@ Common errors:
 
 - `14` → `EFAULT`: `hdrp` or `datap` point to inaccessible memory. `hdrp` can never be NULL.
 - `22` → `EINVAL`: the `version` field in the header is not a recognized version. The kernel overwrites `version` with the preferred version (`0x20080522`), which allows probing the supported version.
-- `1` → `EPERM`: an attempt was made to add a capability to the **permitted** set (permitted can only shrink); to activate in **effective** a capability not in **permitted**; to add to **inheritable** a capability not in the **bounding set** or not in **permitted** while the process lacks `CAP_SETPCAP` in effective; or to modify capabilities of a thread other than the current one.
+- `1` → `EPERM`: an attempt was made to add a capability to the **permitted** set (permitted can only shrink), to activate in **effective** a capability not in **permitted**, to add to **inheritable** a capability not in the **bounding set** or not in **permitted** while the process lacks `CAP_SETPCAP` in effective, or to modify capabilities of a thread other than the current one.
 - `3` → `ESRCH`: the specified PID/TID does not exist (only occurs when a non-zero pid different from one's own is passed on kernels that allow it).
 
 ### Capabilities Relevant from an Offensive Perspective
@@ -386,7 +386,7 @@ Common errors:
 
 The design premise is: if a process ceases to be root, the capabilities it held by virtue of being root should disappear. Otherwise, a process with UID 1000 and `CAP_SYS_ADMIN` would be as dangerous as root yet invisible to tools that only check the UID.
 
-UID fixup is the mechanism that implements this premise. Every time a process modifies its UIDs (via `setresuid`, `setreuid` or `setuid`), the kernel evaluates whether the transition implies a change in privilege level and adjusts the capability sets accordingly. The adjustment works in both directions — a process dropping root loses capabilities, and a process that gains EUID=0 recovers capabilities from its permitted set.
+UID fixup is the mechanism that implements this premise. Every time a process modifies its UIDs (via `setresuid`, `setreuid` or `setuid`), the kernel evaluates whether the transition implies a change in privilege level and adjusts the capability sets accordingly. The adjustment works in both directions. A process dropping root loses capabilities, and a process that gains EUID=0 recovers capabilities from its permitted set.
 
 Fixup prevents a process from degrading its UID to evade detection while retaining full privileges. But it also creates a problem for any tool that legitimately needs to operate with unprivileged UIDs and active capabilities. The retention mechanisms (`SECURE_KEEP_CAPS` and securebits, covered below) exist precisely for cases where the fixup's default behavior is too aggressive.
 
@@ -460,11 +460,11 @@ syscall
 ```
 
 - `value` (RSI):
-    - 0 → default behavior: when a process with UID 0 (root) transitions all its UIDs (real, effective, saved) to non-zero values (e.g. `setresuid(1000, 1000, 1000)`), the kernel clears the permitted, effective and ambient sets.
-    - 1 → capabilities in the permitted set are preserved after the UID transition. The effective and ambient sets are still cleared (`PR_SET_KEEPCAPS` only protects the permitted set). Capabilities can be recovered afterward, from permitted to effective using the `capset` syscall and from permitted to ambient using `PR_CAP_AMBIENT_RAISE` (requires the capability to also be in inheritable).
+ - 0 → default behavior: when a process with UID 0 (root) transitions all its UIDs (real, effective, saved) to non-zero values (e.g. `setresuid(1000, 1000, 1000)`), the kernel clears the permitted, effective and ambient sets.
+ - 1 → capabilities in the permitted set are preserved after the UID transition. The effective and ambient sets are still cleared (`PR_SET_KEEPCAPS` only protects the permitted set). Capabilities can be recovered afterward, from permitted to effective using the `capset` syscall and from permitted to ambient using `PR_CAP_AMBIENT_RAISE` (requires the capability to also be in inheritable).
 
 !!! danger ""
-    A process that starts as root can call `prctl(PR_SET_KEEPCAPS, 1)`, then `setuid(1000)` to appear as a normal user while retaining critical capabilities such as `CAP_NET_RAW`, `CAP_DAC_READ_SEARCH` or `CAP_SYS_PTRACE` in its permitted set. From there, it can elevate them to the effective set or propagate them via ambient capabilities. Tools that only alert on processes running as root will not detect a process with UID 1000 that retains privileged capabilities.
+ A process that starts as root can call `prctl(PR_SET_KEEPCAPS, 1)`, then `setuid(1000)` to appear as a normal user while retaining critical capabilities such as `CAP_NET_RAW`, `CAP_DAC_READ_SEARCH` or `CAP_SYS_PTRACE` in its permitted set. From there, it can elevate them to the effective set or propagate them via ambient capabilities. Tools that only alert on processes running as root will not detect a process with UID 1000 that retains privileged capabilities.
 
 #### **PR_SET_SECUREBITS (`prctl` option 28)**
 
@@ -477,9 +477,9 @@ mov rsi, flags          ; bitmask of securebits
 syscall
 ```
 
-`flags` (RSI) — OR-combinable bitmask:
+`flags` (RSI): OR-combinable bitmask:
 
-- `SECBIT_NOROOT` = `0x01` → Disables the special treatment of UID 0 in `execve`. Normally, if a process with UID 0 calls `execve`, the kernel grants it full capabilities. With `NOROOT`, UID 0 no longer receives automatic capabilities; it only gets them if the binary has explicit file capabilities.
+- `SECBIT_NOROOT` = `0x01` → Disables the special treatment of UID 0 in `execve`. Normally, if a process with UID 0 calls `execve`, the kernel grants it full capabilities. With `NOROOT`, UID 0 no longer receives automatic capabilities, it only gets them if the binary has explicit file capabilities.
 - `SECBIT_NOROOT_LOCKED` = `0x02` → Locks `SECBIT_NOROOT` so it cannot be disabled.
 - `SECBIT_NO_SETUID_FIXUP` = `0x04` → Disables all automatic capability adjustment when UIDs change. Neither permitted, effective, nor ambient sets are modified. If this bit is set, `KEEP_CAPS` is redundant (it is a subset). Unlike `KEEP_CAPS`, it is not cleared on `execve`.
 - `SECBIT_NO_SETUID_FIXUP_LOCKED` = `0x08` → Locks `SECBIT_NO_SETUID_FIXUP` so it cannot be disabled.

@@ -1,6 +1,6 @@
 # Kernel Theory
 
-Underlying Linux kernel theory from an offensive perspective.
+Linux kernel theory, approached from an offensive angle.
 
 ---
 
