@@ -25,7 +25,7 @@
       
       
       <link rel="icon" href="../../../assets/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -1381,19 +1381,19 @@
 <span class="article-meta">03/06/2026 · 60 min</span>
 </div>
 
-<p>What information Linux exposes about its processes, where it lives and how it is manipulated</p>
+<p>What information Linux exposes about its processes, where it resides, and how it can be manipulated</p>
 <hr />
 <div class="admonition note">
 <p class="admonition-title">Context</p>
-<p>This article covers the information the operating system exposes about each process and how it can be modified from user space. It is the third article in the DARKCLOAK series and assumes prior knowledge of the <a href="../identity-model/">credential and capabilities model</a> (article 1) and the <a href="../elf-internals/">ELF format</a> (article 2).</p>
 </div>
+<p>This article covers the information the operating system exposes about each process and how it can be modified from user space. It is the third article in the DARKCLOAK series and assumes prior knowledge of the <a href="../identity-model/">credential and capabilities model</a> (article 1) and the <a href="../elf-internals/">ELF format</a> (article 2).</p>
 <h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
-<p>On a Linux system, every process can be said to have two distinct identities. One is the <strong>internal identity</strong>, made up of the UIDs, GIDs and capabilities stored in the <code>cred</code> structure, which determine who the process belongs to and what it can do. The other is the <strong>visible identity</strong> — the information the operating system exposes about the process to any observer, whether another process or a system user.</p>
+<p>On a Linux system, every process can be said to have two distinct identities. One is the <strong>internal identity</strong>, made up of the UIDs, GIDs and capabilities stored in the <code>cred</code> structure, which determine who the process belongs to and what it can do. The other is the <strong>visible identity</strong>. The information the operating system exposes about the process to any observer, whether another process or a system user.</p>
 <p>The internal identity and the visible identity are not tightly coupled. A process can have UID 1000 in its credentials but show UID 0 in <code>/proc/PID/status</code> if the appropriate fields are manipulated. It can execute the code of its binary while <code>/proc/PID/exe</code> points to a completely different one.</p>
 <p>Each visible identity source operates independently, and each has its own query mechanism and its own manipulation path.</p>
 <h2 id="where-to-query-a-processs-identity">Where to Query a Process's Identity<a class="headerlink" href="#where-to-query-a-processs-identity" title="Permanent link">&para;</a></h2>
 <h3 id="through-tools-such-as-ps">Through tools such as <code>ps</code><a class="headerlink" href="#through-tools-such-as-ps" title="Permanent link">&para;</a></h3>
-<p>Perhaps the most commonly used tool, available by default on most Linux distributions, is <code>ps</code>. It obtains its information from <code>/proc/PID/stat</code>, <code>/proc/PID/status</code> (name, state, UIDs, capabilities), <code>/proc/PID/cmdline</code> (command line) and <code>/proc/PID/exe</code> (binary path). A process that modifies these sources in <code>/proc</code> alters what <code>ps</code> displays.</p>
+<p>Perhaps the most commonly used tool, available by default on most Linux distributions, is <code>ps</code>. It reads its data from <code>/proc/PID/stat</code>, <code>/proc/PID/status</code> (name, state, UIDs, capabilities), <code>/proc/PID/cmdline</code> (command line) and <code>/proc/PID/exe</code> (binary path). A process that modifies these sources in <code>/proc</code> alters what <code>ps</code> displays.</p>
 <h3 id="querying-the-processs-own-memory-directly">Querying the process's own memory directly<a class="headerlink" href="#querying-the-processs-own-memory-directly" title="Permanent link">&para;</a></h3>
 <p><code>argv[0]</code> contains the first element of the argument array a process receives at startup.</p>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="cp"># Direct execution</span>
@@ -1402,13 +1402,13 @@
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="cp"># Execution using the full path</span>
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/home/user/darkcloak&quot;</span>
 </span></code></pre></div>
-<p>This is not a property stored internally by the kernel but data in the process's own memory (<code>[rsp+8]</code> relative to the entry point). Overwriting it is a direct write to a known address — no intermediate syscalls required:</p>
+<p>This value is not stored by the kernel. It lives in the process's own memory (<code>[rsp+8]</code> relative to the entry point). Overwriting it is a direct write to a known address. No intermediate syscalls required:</p>
 <div class="language-asm highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">r12</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="no">rsp</span><span class="err">+</span><span class="mi">8</span><span class="p">]</span><span class="w">                   </span><span class="c1">; r12 = address of the original argv[0] string on the stack</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">r13</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="no">rel</span><span class="w"> </span><span class="no">mimic_argv</span><span class="p">]</span><span class="w">          </span><span class="c1">; r13 = content of the replacement string (e.g. &quot;./sshd\0&quot;)</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="p">[</span><span class="no">r12</span><span class="p">],</span><span class="w"> </span><span class="no">r13</span><span class="w">                     </span><span class="c1">; overwrite the original string with the replacement</span>
 </span></code></pre></div>
 <h3 id="inspecting-the-procpid-directory">Inspecting the <code>/proc/&lt;PID&gt;/</code> directory<a class="headerlink" href="#inspecting-the-procpid-directory" title="Permanent link">&para;</a></h3>
-<p>Every process has a directory in <code>/proc/</code> determined by its PID. The files inside that directory do not exist on disk — they belong to <strong><code>procfs</code></strong>, a virtual filesystem where each read operation invokes a kernel function that generates the content dynamically from the process's internal structures.</p>
+<p>Every process has a directory in <code>/proc/</code> determined by its PID. The files inside that directory do not exist on disk. They belong to <strong><code>procfs</code></strong>, a virtual filesystem where each read operation invokes a kernel function that generates the content dynamically from the process's internal structures.</p>
 <h4 style="font-size: 1.15em; font-weight: normal;">Identity sources and their manipulation mechanisms in <code>/proc/&lt;PID&gt;/</code></h4>
 
 <p>Every queryable value originates from the kernel's internal structures linked to the process.</p>
@@ -1463,9 +1463,8 @@
 </tr>
 </tbody>
 </table>
-<div class="admonition note">
+<div class="admonition note"></div>
 <p>The <code>struct cred</code> sources (UIDs, GIDs and capabilities) were covered in the <a href="../identity-model/">first article</a> of this series.</p>
-</div>
 <p>These sources are primarily manipulated through two mechanisms:</p>
 <p><strong>Via process management syscall</strong></p>
 <ul>
@@ -1481,7 +1480,7 @@
 <h2 id="the-process-management-interface">The Process Management Interface<a class="headerlink" href="#the-process-management-interface" title="Permanent link">&para;</a></h2>
 <p>Unlike specialized syscalls such as <code>setresuid</code> (which only handles UIDs) or <code>capset</code> (which only handles capabilities), <code>prctl</code> is a system call that allows performing a multitude of management operations on the invoking process.</p>
 <p>From an offensive perspective, <code>prctl</code> concentrates most of the operations that modify the process's visible identity without altering its execution. For this reason, defensive monitoring of <code>prctl</code> (via auditd or eBPF) is a critical detection point.</p>
-<p>The following details those operations that are valuable from an offensive standpoint:</p>
+<p>The sections below cover the operations most relevant from an offensive standpoint:</p>
 <h3 id="pr_set_name"><code>PR_SET_NAME</code><a class="headerlink" href="#pr_set_name" title="Permanent link">&para;</a></h3>
 <p>The <code>comm</code> field in <code>task_struct</code> is a 16-byte array (15 usable characters + NULL). It is what tools such as <code>ps -o comm</code> display when reading <code>/proc/PID/comm</code>. Modifying this value does not require any capabilities.</p>
 <div class="language-asm highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">rax</span><span class="p">,</span><span class="w"> </span><span class="mi">157</span><span class="w">                </span><span class="c1">; PRCTL</span>
@@ -1489,9 +1488,8 @@
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nf">lea</span><span class="w"> </span><span class="no">rsi</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="no">rel</span><span class="w"> </span><span class="no">new_name</span><span class="p">]</span><span class="w">     </span><span class="c1">; pointer to buffer with the new name</span>
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="nf">syscall</span>
 </span></code></pre></div>
-<div class="admonition note">
+<div class="admonition note"></div>
 <p>Names in brackets (<code>[kworker/0:1]</code>, <code>[migration/0]</code>) are by convention kernel threads, so a user-space process can adopt one of these to blend in with legitimate system processes.</p>
-</div>
 <h3 id="pr_set_dumpable"><code>PR_SET_DUMPABLE</code><a class="headerlink" href="#pr_set_dumpable" title="Permanent link">&para;</a></h3>
 <p>Each process has a <code>dumpable</code> attribute that controls whether the kernel allows other processes of the same user to inspect its memory and attach a debugger.</p>
 <div class="language-asm highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">rax</span><span class="p">,</span><span class="w"> </span><span class="mi">157</span><span class="w">                </span><span class="c1">; PRCTL</span>
@@ -1499,9 +1497,8 @@
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="nf">xor</span><span class="w"> </span><span class="no">esi</span><span class="p">,</span><span class="w"> </span><span class="no">esi</span><span class="w">                </span><span class="c1">; DUMPABLE = 0 (DEFAULT IS DUMPABLE = 1)</span>
 </span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="nf">syscall</span>
 </span></code></pre></div>
-<div class="admonition note">
+<div class="admonition note"></div>
 <p>This attribute is automatically disabled when the process executes a <code>setuid</code> or <code>setgid</code> binary.</p>
-</div>
 <p>Setting <code>dumpable</code> to 0:</p>
 <ul>
 <li><code>/proc/PID/maps</code>, <code>/proc/PID/mem</code>, <code>/proc/PID/environ</code>, <code>/proc/PID/auxv</code> become owned by <code>root:root</code>. Processes of the same user cannot read them without <code>CAP_SYS_PTRACE</code>.</li>
@@ -1510,11 +1507,10 @@
 </ul>
 <p>It remains visible in <code>/proc/PID/stat</code>, <code>/proc/PID/status</code>, <code>/proc/PID/comm</code>, <code>/proc/PID/cmdline</code> and <code>/proc/PID/exe</code>. <strong>Therefore, this operation acts only as an anti-debugging and anti-dumping barrier.</strong></p>
 <h3 id="pr_set_mm"><code>PR_SET_MM</code><a class="headerlink" href="#pr_set_mm" title="Permanent link">&para;</a></h3>
-<p>A process's <code>mm_struct</code> contains the fields the kernel consults to generate <code>/proc/PID/cmdline</code> (arguments with which the process was launched: <code>argv[0] \0 argv[1] \0 ...</code>), <code>/proc/PID/environ</code> (process environment variables: <code>KEY1=VALUE1 \0 KEY2=VALUE2 \0 ...</code>) and <code>/proc/PID/exe</code> (symlink pointing to the binary the kernel loaded when <code>execve</code> was called).</p>
+<p>A process's <code>mm_struct</code> contains the fields the kernel consults to generate <code>/proc/PID/cmdline</code> (arguments with which the process was launched: <code>argv[0] \0 argv[1] \0...</code>), <code>/proc/PID/environ</code> (process environment variables: <code>KEY1=VALUE1 \0 KEY2=VALUE2 \0...</code>) and <code>/proc/PID/exe</code> (symlink pointing to the binary the kernel loaded when <code>execve</code> was called).</p>
 <p><code>PR_SET_MM</code> allows directly modifying these fields, altering what the kernel reads when an observer queries them.</p>
-<div class="admonition danger">
+<div class="admonition danger"></div>
 <p>Using this option requires the <code>CAP_SYS_RESOURCE</code> capability (bit 24) in the effective set.</p>
-</div>
 <h4 id="pr_set_mm_arg_start-pr_set_mm_arg_end"><strong><code>PR_SET_MM_ARG_START</code> / <code>PR_SET_MM_ARG_END</code></strong><a class="headerlink" href="#pr_set_mm_arg_start-pr_set_mm_arg_end" title="Permanent link">&para;</a></h4>
 <p>Allow modifying <code>arg_start</code> and <code>arg_end</code>. Any subsequent read of <code>/proc/PID/cmdline</code> reads the memory between these two addresses.</p>
 <div class="language-asm highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="w">    </span><span class="c1">; --- PR_SET_MM_ARG_START ---</span>
@@ -1536,9 +1532,8 @@
 </span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">    </span><span class="nf">xor</span><span class="w"> </span><span class="no">r8d</span><span class="p">,</span><span class="w"> </span><span class="no">r8d</span>
 </span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="w">    </span><span class="nf">syscall</span>
 </span></code></pre></div>
-<div class="admonition note">
+<div class="admonition note"></div>
 <p>There is a relationship between <code>/proc/PID/cmdline</code> and <code>argv[0]</code>: by default, <code>arg_start</code> points to the stack area where <code>argv[0]</code> resides, so both share the same memory region. As long as that relationship is not altered, overwriting <code>argv[0]</code> also changes what <code>cmdline</code> returns, because the kernel reads the content from that address rather than from a separately stored copy. If <code>arg_start</code> is redirected to another buffer via <code>PR_SET_MM</code>, the two sources decouple: <code>cmdline</code> reads from the new buffer and the <code>argv[0]</code> overwrite only affects tools that access the process's stack directly.</p>
-</div>
 <h4 id="pr_set_mm_env_start-pr_set_mm_env_end"><strong><code>PR_SET_MM_ENV_START</code> / <code>PR_SET_MM_ENV_END</code></strong><a class="headerlink" href="#pr_set_mm_env_start-pr_set_mm_env_end" title="Permanent link">&para;</a></h4>
 <p>Equivalent for <code>/proc/PID/environ</code>.</p>
 <div class="language-asm highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="w">    </span><span class="c1">; --- PR_SET_MM_ENV_START ---</span>
@@ -1580,12 +1575,11 @@
 </span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="w">    </span><span class="nf">xor</span><span class="w"> </span><span class="no">r8d</span><span class="p">,</span><span class="w"> </span><span class="no">r8d</span>
 </span><span id="__span-6-17"><a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="w">    </span><span class="nf">syscall</span>
 </span></code></pre></div>
-<div class="admonition danger">
+<div class="admonition danger"></div>
 <p><strong>This operation fails with <code>EBUSY</code> if the process has VMAs whose <code>vm_file</code> points to the original executable. All initial file-backed VMAs must be replaced before the call, which leads directly to the VMA anonymization block.</strong></p>
-</div>
 <h2 id="virtual-memory-and-vmas">Virtual Memory and VMAs<a class="headerlink" href="#virtual-memory-and-vmas" title="Permanent link">&para;</a></h2>
-<p>Every process on Linux operates on a virtual address space that the <strong>MMU (Memory Management Unit)</strong> translates to physical addresses. That is, the process does not access RAM directly but accesses virtual addresses that the hardware transparently translates to physical ones.</p>
-<p><strong>That virtual address space is not fully mapped from the start but is mapped as regions as the process needs them</strong> (the binary's code, its data, the stack, the heap, shared libraries and any explicit mappings the process requests). Each of these regions is internally represented by a <strong>VMA (Virtual Memory Area)</strong>, a <code>vm_area_struct</code> structure within the process's <code>mm_struct</code>.</p>
+<p>Every process on Linux operates on a virtual address space that the <strong>MMU (Memory Management Unit)</strong> translates to physical addresses. The process never touches RAM directly: it works with virtual addresses that the hardware transparently maps to physical ones.</p>
+<p><strong>That virtual address space is not fully mapped from the start but is mapped in regions as the process needs them</strong> (the binary's code, its data, the stack, the heap, shared libraries and any explicit mappings the process requests). Each of these regions is internally represented by a <strong>VMA (Virtual Memory Area)</strong>, a <code>vm_area_struct</code> structure within the process's <code>mm_struct</code>.</p>
 <p>The entries that appear in <code>/proc/PID/maps</code> are the process's VMAs.</p>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">vm_area_struct</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">vm_start</span><span class="p">;</span><span class="w">      </span><span class="c1">// Start address</span>
@@ -1597,12 +1591,11 @@
 </span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">    </span><span class="c1">// ...</span>
 </span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="p">};</span>
 </span></code></pre></div>
-<div class="admonition note">
+<div class="admonition note"></div>
 <p>The flags <code>VM_READ</code>, <code>VM_WRITE</code>, <code>VM_EXEC</code> determine the permissions shown in <code>/proc/PID/maps</code> (<code>r</code>, <code>w</code>, <code>x</code>). The flag <code>VM_SHARED</code> distinguishes <code>MAP_SHARED</code> mapping (<code>s</code>) from <code>MAP_PRIVATE</code> mapping (<code>p</code>).</p>
-</div>
 <h3 id="file-backed-vmas-vs-anonymous-vmas">File-backed VMAs vs Anonymous VMAs<a class="headerlink" href="#file-backed-vmas-vs-anonymous-vmas" title="Permanent link">&para;</a></h3>
 <h4 id="file-backed-vmas"><strong>File-backed VMAs</strong><a class="headerlink" href="#file-backed-vmas" title="Permanent link">&para;</a></h4>
-<p>Created explicitly when the kernel maps a file into memory — either because a program requests a file mapping via <code>mmap</code> with a file descriptor, or implicitly during <code>execve</code>, when the kernel loads the <code>PT_LOAD</code> segments of the ELF binary into the new process's address space. In both cases, the resulting VMA holds a reference to the original file through its <code>vm_file</code> field.</p>
+<p>Created explicitly when the kernel maps a file into memory, either because a program requests a file mapping via <code>mmap</code> with a file descriptor, or implicitly during <code>execve</code>, when the kernel loads the <code>PT_LOAD</code> segments of the ELF binary into the new process's address space. In both cases, the resulting VMA holds a reference to the original file through its <code>vm_file</code> field.</p>
 <p>In <code>/proc/PID/maps</code> the following information is shown:</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>00400000-00402000 r--p 00000000 08:01 1234567  /path/to/binary
 </span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>│               │ │  │ │        │     │        └─ path of the mapped file
@@ -1786,9 +1779,8 @@
 <p><code>length</code> need not match the original size of the mapping exactly. A portion of an existing mapping can be unmapped.</p>
 <h3 id="vma-anonymization">VMA Anonymization<a class="headerlink" href="#vma-anonymization" title="Permanent link">&para;</a></h3>
 <p><strong>VMA anonymization is the process of replacing file-backed VMAs with anonymous VMAs of identical content.</strong> The result is a process that continues executing the same code at the same addresses with the same permissions, but with no VMA referencing the original binary. In <code>/proc/PID/maps</code>, the VMAs change from showing the executable path to showing device <code>00:00</code> and inode <code>0</code>.</p>
-<div class="admonition note">
+<div class="admonition note"></div>
 <p>Performing this process on all file-backed VMAs makes <code>PR_SET_MM_EXE_FILE</code> with the <code>CAP_SYS_RESOURCE</code> capability succeed, enabling <code>/proc/PID/exe</code> spoofing.</p>
-</div>
 <h4 id="anonymization-procedure"><strong>Anonymization procedure</strong><a class="headerlink" href="#anonymization-procedure" title="Permanent link">&para;</a></h4>
 <p>For each binary segment:</p>
 <ol>
@@ -1802,7 +1794,7 @@
 <p><strong>Remove the original mapping</strong> (<code>munmap</code>): unmap the file-backed region, removing the reference to the binary on disk. From this point, accessing the original segment's addresses causes a segmentation fault.</p>
 </li>
 <li>
-<p><strong>Relocate the copy</strong> (<code>mremap</code> with <code>MREMAP_MAYMOVE | MREMAP_FIXED</code>): move the anonymous region to the address range previously occupied by the original segment. The content is identical, the addresses are the same; in practical terms, only the VMA type changed.</p>
+<p><strong>Relocate the copy</strong> (<code>mremap</code> with <code>MREMAP_MAYMOVE | MREMAP_FIXED</code>): move the anonymous region to the address range previously occupied by the original segment. The content is identical, the addresses are the same, in practical terms, only the VMA type changed.</p>
 </li>
 <li>
 <p><strong>Restore permissions</strong> (<code>mprotect</code>): apply the original segment permissions to the new memory region (R for headers, RX for code, RW for data).</p>
@@ -1829,7 +1821,7 @@
 <p><strong>Copy the anonymization code</strong> (<code>rep movsb</code>): copy to the temporary page the block of instructions that executes the <code>mmap</code>→<code>movsb</code>→<code>munmap</code>→<code>mremap</code>→<code>mprotect</code> sequence for each segment, along with the data the syscalls need (start/end addresses, permissions and return addresses).</p>
 </li>
 <li>
-<p><strong>Make the page executable</strong> (<code>mprotect</code> with <code>PROT_READ | PROT_EXEC</code>): the page must be created with RW permissions to copy data; once copied, it is changed to RX to allow transferring execution flow to it.</p>
+<p><strong>Make the page executable</strong> (<code>mprotect</code> with <code>PROT_READ | PROT_EXEC</code>): the page must be created with RW permissions to copy data, once copied, it is changed to RX to allow transferring execution flow to it.</p>
 </li>
 <li>
 <p><strong>Jump to the temporary page</strong> (<code>jmp</code>): the binary's execution flow must leave the <code>.text</code> segment and jump to the anonymous page. From this point, RIP points to the temporary page and it is safe to unmap any binary segment.</p>
