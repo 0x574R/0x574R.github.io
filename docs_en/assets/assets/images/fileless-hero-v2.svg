@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 180" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#08080c"/>
+      <stop offset="100%" style="stop-color:#0f0a18"/>
+    </linearGradient>
+    <filter id="glow2">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  
+  <rect width="560" height="180" fill="url(#bg2)"/>
+  
+  <!-- Panel 1: Network recv -->
+  <g transform="translate(15, 12)">
+    <rect width="120" height="130" rx="5" fill="#0d0d14" stroke="#00b4d8" stroke-width="1"/>
+    <rect width="120" height="22" rx="5" fill="#0d2030"/>
+    <rect y="18" width="120" height="4" fill="#0d2030"/>
+    <text x="60" y="15" fill="#00b4d8" font-family="monospace" font-size="9" text-anchor="middle">RECV</text>
+    
+    <g font-family="monospace" font-size="7.5">
+      <text x="10" y="38" fill="#4a6a8a">socket()</text>
+      <text x="10" y="52" fill="#4a6a8a">bind()</text>
+      <text x="10" y="66" fill="#4a6a8a">listen()</text>
+      <text x="10" y="80" fill="#00b4d8">accept()</text>
+      <text x="10" y="94" fill="#48cae4">recvfrom(size)</text>
+      <text x="10" y="108" fill="#48cae4">recvfrom(elf)</text>
+    </g>
+    <text x="60" y="126" fill="#0d3050" font-family="monospace" font-size="6" text-anchor="middle">TCP :4444</text>
+  </g>
+  
+  <!-- Arrow 1→2 -->
+  <g filter="url(#glow2)">
+    <line x1="140" y1="77" x2="160" y2="77" stroke="#00d4ff" stroke-width="1.5" stroke-dasharray="4,2">
+      <animate attributeName="stroke-dashoffset" values="6;0" dur="0.6s" repeatCount="indefinite"/>
+    </line>
+    <polygon points="160,77 155,74 155,80" fill="#00d4ff"/>
+  </g>
+  
+  <!-- Panel 2: memfd + mmap -->
+  <g transform="translate(165, 12)">
+    <rect width="120" height="130" rx="5" fill="#0a0f14" stroke="#10b981" stroke-width="1"/>
+    <rect width="120" height="22" rx="5" fill="#0f1a16"/>
+    <rect y="18" width="120" height="4" fill="#0f1a16"/>
+    <text x="60" y="15" fill="#10b981" font-family="monospace" font-size="9" text-anchor="middle">MEMORY</text>
+    
+    <g font-family="monospace" font-size="7.5">
+      <rect x="8" y="28" width="104" height="16" rx="2" fill="#0f2a1f" stroke="#10b981" stroke-width="0.8">
+        <animate attributeName="opacity" values="0.6;1;0.6" dur="1.5s" repeatCount="indefinite"/>
+      </rect>
+      <text x="60" y="40" fill="#10b981" text-anchor="middle">memfd_create()</text>
+      
+      <rect x="8" y="50" width="104" height="16" rx="2" fill="#1a1a0f" stroke="#eab308" stroke-width="0.8"/>
+      <text x="60" y="62" fill="#eab308" text-anchor="middle">ftruncate(size)</text>
+      
+      <rect x="8" y="72" width="104" height="16" rx="2" fill="#1a1a0f" stroke="#eab308" stroke-width="0.8"/>
+      <text x="60" y="84" fill="#facc15" text-anchor="middle">mmap(SHARED)</text>
+      
+      <rect x="8" y="94" width="104" height="16" rx="2" fill="#0f1a16" stroke="#10b981" stroke-width="0.8"/>
+      <text x="60" y="106" fill="#10b981" text-anchor="middle">munmap()</text>
+    </g>
+    <text x="60" y="126" fill="#1e4a3a" font-family="monospace" font-size="6" text-anchor="middle">anon file in tmpfs</text>
+  </g>
+  
+  <!-- Arrow 2→3 -->
+  <g filter="url(#glow2)">
+    <line x1="290" y1="77" x2="310" y2="77" stroke="#ff00ff" stroke-width="1.5" stroke-dasharray="4,2">
+      <animate attributeName="stroke-dashoffset" values="6;0" dur="0.6s" repeatCount="indefinite"/>
+    </line>
+    <polygon points="310,77 305,74 305,80" fill="#ff00ff"/>
+  </g>
+  
+  <!-- Panel 3: Exec -->
+  <g transform="translate(315, 12)">
+    <rect width="110" height="130" rx="5" fill="#140a1a" stroke="#a855f7" stroke-width="1.5"/>
+    <rect width="110" height="22" rx="5" fill="#2d1640"/>
+    <rect y="18" width="110" height="4" fill="#2d1640"/>
+    <text x="55" y="15" fill="#c084fc" font-family="monospace" font-size="9" text-anchor="middle">EXEC</text>
+    
+    <g font-family="monospace" font-size="7.5">
+      <text x="10" y="40" fill="#6b4d9a">clone3()</text>
+      <text x="10" y="56" fill="#6b4d9a">setsid()</text>
+      <text x="10" y="72" fill="#a855f7">dup3(0,1,2)</text>
+      
+      <rect x="8" y="80" width="94" height="22" rx="3" fill="#2d0a3d" stroke="#ff00ff" stroke-width="1.5" filter="url(#glow2)">
+        <animate attributeName="opacity" values="0.8;1;0.8" dur="1s" repeatCount="indefinite"/>
+      </rect>
+      <text x="55" y="95" fill="#ff00ff" font-size="8" text-anchor="middle" font-weight="bold">execveat(fd)</text>
+    </g>
+    <text x="55" y="126" fill="#4a3060" font-family="monospace" font-size="6" text-anchor="middle">AT_EMPTY_PATH</text>
+  </g>
+  
+  <!-- Arrow 3→4 -->
+  <g filter="url(#glow2)">
+    <line x1="430" y1="77" x2="450" y2="77" stroke="#ff5f56" stroke-width="1.5" stroke-dasharray="4,2">
+      <animate attributeName="stroke-dashoffset" values="6;0" dur="0.6s" repeatCount="indefinite"/>
+    </line>
+    <polygon points="450,77 445,74 445,80" fill="#ff5f56"/>
+  </g>
+  
+  <!-- Panel 4: Result -->
+  <g transform="translate(455, 12)">
+    <rect width="90" height="130" rx="5" fill="#140808" stroke="#ff5f56" stroke-width="1"/>
+    <rect width="90" height="22" rx="5" fill="#2d1010"/>
+    <rect y="18" width="90" height="4" fill="#2d1010"/>
+    <text x="45" y="15" fill="#ff5f56" font-family="monospace" font-size="9" text-anchor="middle">RESULT</text>
+    
+    <g font-family="monospace" font-size="7">
+      <text x="45" y="42" fill="#ff5f56" text-anchor="middle">∅ filesystem</text>
+      <text x="45" y="58" fill="#ff5f56" text-anchor="middle">∅ signatures</text>
+      <text x="45" y="74" fill="#ff5f56" text-anchor="middle">∅ scanning</text>
+      
+      <rect x="8" y="84" width="74" height="22" rx="3" fill="#0a1a0a" stroke="#00ff88" stroke-width="1">
+        <animate attributeName="opacity" values="0.7;1;0.7" dur="1.2s" repeatCount="indefinite"/>
+      </rect>
+      <text x="45" y="99" fill="#00ff88" font-size="8" text-anchor="middle">RUNNING</text>
+    </g>
+    <text x="45" y="126" fill="#3d1010" font-family="monospace" font-size="6" text-anchor="middle">in-memory only</text>
+  </g>
+  
+  <!-- Footer -->
+  <text x="280" y="156" fill="#2a2a4a" font-family="monospace" font-size="7" text-anchor="middle">recv → memfd_create → ftruncate → mmap(SHARED) → recvfrom → execveat(fd, AT_EMPTY_PATH)</text>
+</svg>

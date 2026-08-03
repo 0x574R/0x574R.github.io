@@ -1,7 +1,13 @@
-# RAZOR - Security Blog
+# RAZOR - Security Blog (English build)
+# Build command: mkdocs build -f mkdocs_en.yml
+# Output: site/en/ (served at /en/ on GitHub Pages)
+
 site_name: RAZOR
-site_url: https://0x574r.github.io/
+site_url: https://0x574r.github.io/en/
 site_description: Offensive security blog
+
+docs_dir: docs_en
+site_dir: site/en
 
 repo_name: 0x574R
 repo_url: https://github.com/0x574R
@@ -11,11 +17,10 @@ copyright: "© 2026 0x574R"
 theme:
   name: material
   custom_dir: overrides
-  language: es
+  language: en
   logo: assets/logo.png
   favicon: assets/favicon.png
 
-  # Light/Dark toggle
   palette:
     - scheme: default
       primary: blue grey
@@ -59,7 +64,6 @@ plugins:
 extra_css:
   - stylesheets/custom.css
 
-# Syntax highlighting con Pygments + extensiones
 markdown_extensions:
   - admonition
   - toc:

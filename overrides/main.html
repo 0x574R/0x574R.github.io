@@ -20,11 +20,73 @@
 <meta property="og:image:height" content="630">
 <meta property="og:url" content="{{ og_url }}">
 <meta property="og:site_name" content="{{ config.site_name }}">
-<meta property="og:locale" content="es_ES">
+<meta property="og:locale" content="{{ 'en_US' if config.theme.language == 'en' else 'es_ES' }}">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{{ og_title }}">
 <meta name="twitter:description" content="{{ og_description }}">
 <meta name="twitter:image" content="{{ og_image }}">
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+(function () {
+  'use strict';
+
+  // ── URL helpers ────────────────────────────────────────────────
+  // Spanish lives at /           e.g.  /research/malware-dev/
+  // English lives at /en/        e.g.  /en/research/malware-dev/
+
+  var path = window.location.pathname;
+
+  // Normalise trailing slash for root comparisons
+  var isEnglish = /^\/en(\/|$)/.test(path);
+
+  function targetPath() {
+    if (isEnglish) {
+      // Strip /en prefix → Spanish
+      var stripped = path.replace(/^\/en/, '') || '/';
+      return stripped;
+    } else {
+      // Prepend /en → English
+      return '/en' + path;
+    }
+  }
+
+  // ── Build the button ───────────────────────────────────────────
+  function insertButton() {
+    var inner = document.querySelector('.md-header__inner');
+    if (!inner) return;
+
+    var btn = document.createElement('button');
+    btn.type        = 'button';
+    btn.className   = 'md-header__button md-icon lang-toggle';
+    btn.title       = isEnglish ? 'Cambiar a Español' : 'Switch to English';
+    btn.setAttribute('aria-label', btn.title);
+
+    // Flag emoji: show the FLAG of the language you will SWITCH TO
+    btn.textContent = isEnglish ? '🇪🇸' : '🇬🇧';
+
+    btn.addEventListener('click', function () {
+      window.location.href = targetPath();
+    });
+
+    // Insert just before .md-header__source (theme/social icons) so it
+    // slots naturally into the right side of the header.
+    var source = inner.querySelector('.md-header__source');
+    if (source) {
+      inner.insertBefore(btn, source);
+    } else {
+      inner.appendChild(btn);
+    }
+  }
+
+  // MkDocs Material uses instant navigation — re-inject on every nav event
+  document.addEventListener('DOMContentLoaded', insertButton);
+  document.addEventListener('DOMContentMutated', insertButton);    // Material v8+
+
+})();
+</script>
 {% endblock %}
