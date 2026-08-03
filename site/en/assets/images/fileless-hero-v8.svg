@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 180" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="bg8" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#06060a"/>
+      <stop offset="100%" style="stop-color:#0c0816"/>
+    </linearGradient>
+    <filter id="glow8">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  
+  <rect width="560" height="180" fill="url(#bg8)"/>
+  
+  <!-- Full-width terminal -->
+  <rect x="15" y="10" width="530" height="160" rx="8" fill="#0b0b14" stroke="#2d2d4a" stroke-width="1.5"/>
+  <rect x="15" y="10" width="530" height="26" rx="8" fill="#1a1a2e"/>
+  <rect x="15" y="32" width="530" height="4" fill="#1a1a2e"/>
+  <circle cx="32" cy="23" r="5" fill="#ff5f56"/>
+  <circle cx="48" cy="23" r="5" fill="#ffbd2e"/>
+  <circle cx="64" cy="23" r="5" fill="#27ca40"/>
+  <text x="280" y="27" fill="#4a4a6a" font-family="monospace" font-size="9" text-anchor="middle">fileless_loader — 0x574R</text>
+  
+  <!-- Two-column layout inside terminal -->
+  <g font-family="monospace" font-size="9">
+    
+    <!-- Left column: loader on victim -->
+    <text x="30" y="52" fill="#4a4a6a" font-size="7">── VICTIM ──────────────────────────</text>
+    
+    <text x="30" y="68" fill="#00b4d8">$</text>
+    <text x="40" y="68" fill="#48cae4"> ./loader</text>
+    <text x="30" y="82" fill="#6b4d9a">[*] socket(41)    → fd:3</text>
+    <text x="30" y="96" fill="#6b4d9a">[*] bind(49)      → 0.0.0.0:4444</text>
+    <text x="30" y="110" fill="#6b4d9a">[*] listen(50)    → ready</text>
+    <text x="30" y="124" fill="#00ff88">[+] accept(43)    → client fd:4</text>
+    <text x="30" y="138" fill="#a855f7">[*] clone3(435)   → child</text>
+    <text x="30" y="152" fill="#6b4d9a">[*] setsid(112)   → detached</text>
+    <text x="30" y="162" fill="#6b4d9a">[*] recvfrom(45)  → 8.2MB</text>
+    
+    <!-- Right column: memory ops + execution -->
+    <text x="295" y="52" fill="#4a4a6a" font-size="7">── CHILD PROCESS ───────────────────</text>
+    
+    <text x="295" y="68" fill="#10b981">[*] memfd_create(319) → fd:5</text>
+    <text x="295" y="82" fill="#10b981">    flags: MFD_EXEC</text>
+    <text x="295" y="96" fill="#eab308">[*] ftruncate(77)  → 8.2MB</text>
+    <text x="295" y="110" fill="#eab308">[*] mmap(9)        → MAP_SHARED</text>
+    <text x="295" y="124" fill="#6b4d9a">[*] recvfrom → mmap region</text>
+    <text x="295" y="138" fill="#a855f7">[*] dup3(292)      → 0,1,2→sock</text>
+    
+    <!-- execveat highlighted -->
+    <rect x="290" y="146" width="238" height="16" rx="2" fill="#2d0a3d" opacity="0.5" filter="url(#glow8)">
+      <animate attributeName="opacity" values="0.3;0.6;0.3" dur="1.2s" repeatCount="indefinite"/>
+    </rect>
+    <text x="295" y="158" fill="#ff00ff" font-weight="bold">[+] execveat(322) → ELF RUNNING</text>
+  </g>
+  
+  <!-- Blinking cursor -->
+  <rect x="505" y="148" width="7" height="12" fill="#ff00ff">
+    <animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite"/>
+  </rect>
+</svg>

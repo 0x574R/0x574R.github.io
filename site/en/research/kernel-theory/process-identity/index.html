@@ -1,0 +1,1974 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Visible identity sources of a Linux process, manipulation mechanisms via prctl and PR_SET_MM, virtual memory, VMAs and anonymization.">
+      
+      
+      
+        <link rel="canonical" href="https://0x574r.github.io/en/research/kernel-theory/process-identity/">
+      
+      
+        <link rel="prev" href="../identity-model/">
+      
+      
+      
+        
+          <link rel="alternate" href="/es/" hreflang="es">
+        
+          <link rel="alternate" href="/en/" hreflang="en">
+        
+      
+      
+      <link rel="icon" href="../../../assets/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Process Identity Spoofing - RAZOR</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20448%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.1.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20d%3D%22M64%20480c-35.3%200-64-28.7-64-64V96c0-35.3%2028.7-64%2064-64h320c35.3%200%2064%2028.7%2064%2064v213.5c0%2017-6.7%2033.3-18.7%2045.3L322.7%20461.3c-12%2012-28.3%2018.7-45.3%2018.7zm325.5-176H296c-13.3%200-24%2010.7-24%2024v93.5z%22/%3E%3C/svg%3E');--md-admonition-icon--tip:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20384%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.1.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20d%3D%22M292.9%20384c7.3-22.3%2021.9-42.5%2038.4-59.9C364%20289.7%20384%20243.2%20384%20192%20384%2086%20298%200%20192%200S0%2086%200%20192c0%2051.2%2020%2097.7%2052.7%20132.1%2016.5%2017.4%2031.2%2037.6%2038.4%2059.9h201.7zm-4.9%2048H96v16c0%2044.2%2035.8%2080%2080%2080h32c44.2%200%2080-35.8%2080-80zM184%20112c-39.8%200-72%2032.2-72%2072%200%2013.3-10.7%2024-24%2024s-24-10.7-24-24c0-66.3%2053.7-120%20120-120%2013.3%200%2024%2010.7%2024%2024s-10.7%2024-24%2024%22/%3E%3C/svg%3E');--md-admonition-icon--warning:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20512%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.1.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20d%3D%22M256%200c14.7%200%2028.2%208.1%2035.2%2021l216%20400c6.7%2012.4%206.4%2027.4-.8%2039.5S486.1%20480%20472%20480H40c-14.1%200-27.2-7.4-34.4-19.5s-7.5-27.1-.8-39.5l216-400c7-12.9%2020.5-21%2035.2-21m0%20352a32%2032%200%201%200%200%2064%2032%2032%200%201%200%200-64m0-192c-18.2%200-32.7%2015.5-31.4%2033.7l7.4%20104c.9%2012.5%2011.4%2022.3%2023.9%2022.3%2012.6%200%2023-9.7%2023.9-22.3l7.4-104c1.3-18.2-13.1-33.7-31.4-33.7z%22/%3E%3C/svg%3E');--md-admonition-icon--danger:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20448%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.1.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20d%3D%22M384%20144C384%2064.5%20312.4%200%20224%200S64%2064.5%2064%20144c0%2047.1%2025.1%2088.9%2064%20115.2V288c0%2017.7%2014.3%2032%2032%2032h128c17.7%200%2032-14.3%2032-32v-28.8c38.9-26.3%2064-68.1%2064-115.2m-224-16a32%2032%200%201%201%200%2064%2032%2032%200%201%201%200-64m96%2032a32%2032%200%201%201%2064%200%2032%2032%200%201%201-64%200m189.5%20179.7c-6.8-16.3-25.5-24-41.8-17.2L224%20397.3%2044.3%20322.5c-16.3-6.8-35%20.9-41.8%2017.2s.9%2035%2017.2%2041.8L140.8%20432%2019.7%20482.5c-16.3%206.8-24%2025.5-17.2%2041.8s25.5%2024%2041.8%2017.2L224%20466.7l179.7%2074.8c16.3%206.8%2035-.9%2041.8-17.2s-.9-35-17.2-41.8L307.2%20432l121.1-50.5c16.3-6.8%2024-25.5%2017.2-41.8%22/%3E%3C/svg%3E');--md-admonition-icon--info:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20512%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.1.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20d%3D%22M256%20512a256%20256%200%201%200%200-512%20256%20256%200%201%200%200%20512m-32-352a32%2032%200%201%201%2064%200%2032%2032%200%201%201-64%200m-8%2064h48c13.3%200%2024%2010.7%2024%2024v88h8c13.3%200%2024%2010.7%2024%2024s-10.7%2024-24%2024h-80c-13.3%200-24-10.7-24-24s10.7-24%2024-24h24v-64h-24c-13.3%200-24-10.7-24-24s10.7-24%2024-24%22/%3E%3C/svg%3E');--md-admonition-icon--abstract:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20448%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.1.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20d%3D%22M384%20512H96c-53%200-96-43-96-96V96C0%2043%2043%200%2096%200h304c26.5%200%2048%2021.5%2048%2048v288c0%2020.9-13.4%2038.7-32%2045.3V448c17.7%200%2032%2014.3%2032%2032s-14.3%2032-32%2032zM96%20384c-17.7%200-32%2014.3-32%2032s14.3%2032%2032%2032h256v-64zm32-232c0%2013.3%2010.7%2024%2024%2024h176c13.3%200%2024-10.7%2024-24s-10.7-24-24-24H152c-13.3%200-24%2010.7-24%2024m24%2072c-13.3%200-24%2010.7-24%2024s10.7%2024%2024%2024h176c13.3%200%2024-10.7%2024-24s-10.7-24-24-24z%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20448%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.1.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20d%3D%22M288%200H128c-17.7%200-32%2014.3-32%2032s14.3%2032%2032%2032v151.5L7.5%20426.3C2.6%20435%200%20444.7%200%20454.7%200%20486.4%2025.6%20512%2057.3%20512h333.4c31.6%200%2057.3-25.6%2057.3-57.3%200-10-2.6-19.8-7.5-28.4L320%20215.5V64c17.7%200%2032-14.3%2032-32S337.7%200%20320%200zm-96%20215.5V64h64v151.5c0%2011.1%202.9%2022.1%208.4%2031.8L306%20320H142l41.6-72.7c5.5-9.7%208.4-20.6%208.4-31.8%22/%3E%3C/svg%3E');--md-admonition-icon--quote:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20448%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.1.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20d%3D%22M0%20216C0%20149.7%2053.7%2096%20120%2096h8c17.7%200%2032%2014.3%2032%2032s-14.3%2032-32%2032h-8c-30.9%200-56%2025.1-56%2056v8h64c35.3%200%2064%2028.7%2064%2064v64c0%2035.3-28.7%2064-64%2064H64c-35.3%200-64-28.7-64-64zm256%200c0-66.3%2053.7-120%20120-120h8c17.7%200%2032%2014.3%2032%2032s-14.3%2032-32%2032h-8c-30.9%200-56%2025.1-56%2056v8h64c35.3%200%2064%2028.7%2064%2064v64c0%2035.3-28.7%2064-64%2064h-64c-35.3%200-64-28.7-64-64z%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"IBM Plex Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/custom.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+<!-- Favicons -->
+<link rel="apple-touch-icon" sizes="180x180" href="https://0x574r.github.io/en/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32"  href="https://0x574r.github.io/en/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16"  href="https://0x574r.github.io/en/assets/favicon-16x16.png">
+
+<!-- Open Graph -->
+
+
+
+
+<meta property="og:type"        content="article">
+<meta property="og:title"       content="Process Identity Spoofing — RAZOR">
+<meta property="og:description" content="Visible identity sources of a Linux process, manipulation mechanisms via prctl and PR_SET_MM, virtual memory, VMAs and anonymization.">
+<meta property="og:image"       content="https://0x574r.github.io/en/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height"content="630">
+<meta property="og:url"         content="https://0x574r.github.io/en/research/kernel-theory/process-identity/">
+<meta property="og:site_name"   content="RAZOR">
+<meta property="og:locale"      content="en_US">
+<!-- Twitter Card -->
+<meta name="twitter:card"       content="summary_large_image">
+<meta name="twitter:title"      content="Process Identity Spoofing — RAZOR">
+<meta name="twitter:description"content="Visible identity sources of a Linux process, manipulation mechanisms via prctl and PR_SET_MM, virtual memory, VMAs and anonymization.">
+<meta name="twitter:image"      content="https://0x574r.github.io/en/assets/og-image.png">
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#introduction" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="RAZOR" class="md-header__button md-logo" aria-label="RAZOR" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            RAZOR
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Process Identity Spoofing
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+    <button
+      class="md-header__button lang-toggle"
+      type="button"
+      title="Cambiar a Español"
+      aria-label="Cambiar a Español"
+      data-target="es"
+    ><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"
+             class="lang-flag" aria-hidden="true" focusable="false">
+          <rect width="3" height="2" fill="#AA151B"/>
+          <rect y=".5" width="3" height="1" fill="#F1BF00"/>
+        </svg></button>
+  </div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/0x574R" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    0x574R
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="RAZOR" class="md-nav__button md-logo" aria-label="RAZOR" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    RAZOR
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/0x574R" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    0x574R
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Malware Dev
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Malware Dev
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../malware-dev/fileless-loader/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fileless Loader
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../malware-dev/reverse-shell/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reverse TCP Shell
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../malware-dev/ptrace-injection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Process Injection via Ptrace
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../malware-dev/darkcloak/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DARKCLOAK: Novel Flow for Process Masquerading
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kernel Theory
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Kernel Theory
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../elf-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ELF Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../identity-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity and Privileges of a Process
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Process Identity Spoofing
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Process Identity Spoofing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-to-query-a-processs-identity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where to Query a Process's Identity
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Where to Query a Process&#39;s Identity">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#through-tools-such-as-ps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Through tools such as ps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#querying-the-processs-own-memory-directly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Querying the process's own memory directly
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inspecting-the-procpid-directory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inspecting the /proc/&lt;PID&gt;/ directory
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-process-management-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Process Management Interface
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Process Management Interface">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pr_set_name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PR_SET_NAME
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pr_set_dumpable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PR_SET_DUMPABLE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pr_set_mm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PR_SET_MM
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PR_SET_MM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pr_set_mm_arg_start-pr_set_mm_arg_end" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PR_SET_MM_ARG_START / PR_SET_MM_ARG_END
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pr_set_mm_env_start-pr_set_mm_env_end" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PR_SET_MM_ENV_START / PR_SET_MM_ENV_END
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pr_set_mm_exe_file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PR_SET_MM_EXE_FILE
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#virtual-memory-and-vmas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Virtual Memory and VMAs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Virtual Memory and VMAs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#file-backed-vmas-vs-anonymous-vmas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File-backed VMAs vs Anonymous VMAs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="File-backed VMAs vs Anonymous VMAs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#file-backed-vmas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File-backed VMAs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#anonymous-vmas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anonymous VMAs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#virtual-memory-management-primitives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Virtual Memory Management Primitives
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Virtual Memory Management Primitives">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MMAP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mremap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MREMAP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mprotect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MPROTECT
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#munmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MUNMAP
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vma-anonymization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VMA Anonymization
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="VMA Anonymization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#anonymization-procedure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anonymization procedure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-text-segment-problem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The .text segment problem
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#acknowledgements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Acknowledgements
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-to-query-a-processs-identity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where to Query a Process's Identity
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Where to Query a Process&#39;s Identity">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#through-tools-such-as-ps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Through tools such as ps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#querying-the-processs-own-memory-directly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Querying the process's own memory directly
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inspecting-the-procpid-directory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inspecting the /proc/&lt;PID&gt;/ directory
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-process-management-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Process Management Interface
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Process Management Interface">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pr_set_name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PR_SET_NAME
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pr_set_dumpable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PR_SET_DUMPABLE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pr_set_mm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PR_SET_MM
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PR_SET_MM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pr_set_mm_arg_start-pr_set_mm_arg_end" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PR_SET_MM_ARG_START / PR_SET_MM_ARG_END
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pr_set_mm_env_start-pr_set_mm_env_end" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PR_SET_MM_ENV_START / PR_SET_MM_ENV_END
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pr_set_mm_exe_file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PR_SET_MM_EXE_FILE
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#virtual-memory-and-vmas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Virtual Memory and VMAs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Virtual Memory and VMAs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#file-backed-vmas-vs-anonymous-vmas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File-backed VMAs vs Anonymous VMAs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="File-backed VMAs vs Anonymous VMAs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#file-backed-vmas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File-backed VMAs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#anonymous-vmas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anonymous VMAs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#virtual-memory-management-primitives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Virtual Memory Management Primitives
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Virtual Memory Management Primitives">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MMAP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mremap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MREMAP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mprotect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MPROTECT
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#munmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MUNMAP
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vma-anonymization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VMA Anonymization
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="VMA Anonymization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#anonymization-procedure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anonymization procedure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-text-segment-problem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The .text segment problem
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#acknowledgements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Acknowledgements
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<div class="article-header">
+<h1>Process Identity Spoofing: What Linux Exposes and How to Fake It</h1>
+<span class="article-meta">03/06/2026 · 60 min</span>
+</div>
+
+<p>What information Linux exposes about its processes, where it lives and how it is manipulated</p>
+<hr />
+<div class="admonition note">
+<p class="admonition-title">Context</p>
+<p>This article covers the information the operating system exposes about each process and how it can be modified from user space. It is the third article in the DARKCLOAK series and assumes prior knowledge of the <a href="../identity-model/">credential and capabilities model</a> (article 1) and the <a href="../elf-internals/">ELF format</a> (article 2).</p>
+</div>
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
+<p>On a Linux system, every process can be said to have two distinct identities. One is the <strong>internal identity</strong>, made up of the UIDs, GIDs and capabilities stored in the <code>cred</code> structure, which determine who the process belongs to and what it can do. The other is the <strong>visible identity</strong> — the information the operating system exposes about the process to any observer, whether another process or a system user.</p>
+<p>The internal identity and the visible identity are not tightly coupled. A process can have UID 1000 in its credentials but show UID 0 in <code>/proc/PID/status</code> if the appropriate fields are manipulated. It can execute the code of its binary while <code>/proc/PID/exe</code> points to a completely different one.</p>
+<p>Each visible identity source operates independently, and each has its own query mechanism and its own manipulation path.</p>
+<h2 id="where-to-query-a-processs-identity">Where to Query a Process's Identity<a class="headerlink" href="#where-to-query-a-processs-identity" title="Permanent link">&para;</a></h2>
+<h3 id="through-tools-such-as-ps">Through tools such as <code>ps</code><a class="headerlink" href="#through-tools-such-as-ps" title="Permanent link">&para;</a></h3>
+<p>Perhaps the most commonly used tool, available by default on most Linux distributions, is <code>ps</code>. It obtains its information from <code>/proc/PID/stat</code>, <code>/proc/PID/status</code> (name, state, UIDs, capabilities), <code>/proc/PID/cmdline</code> (command line) and <code>/proc/PID/exe</code> (binary path). A process that modifies these sources in <code>/proc</code> alters what <code>ps</code> displays.</p>
+<h3 id="querying-the-processs-own-memory-directly">Querying the process's own memory directly<a class="headerlink" href="#querying-the-processs-own-memory-directly" title="Permanent link">&para;</a></h3>
+<p><code>argv[0]</code> contains the first element of the argument array a process receives at startup.</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="cp"># Direct execution</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;./darkcloak&quot;</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="cp"># Execution using the full path</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/home/user/darkcloak&quot;</span>
+</span></code></pre></div>
+<p>This is not a property stored internally by the kernel but data in the process's own memory (<code>[rsp+8]</code> relative to the entry point). Overwriting it is a direct write to a known address — no intermediate syscalls required:</p>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">r12</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="no">rsp</span><span class="err">+</span><span class="mi">8</span><span class="p">]</span><span class="w">                   </span><span class="c1">; r12 = address of the original argv[0] string on the stack</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">r13</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="no">rel</span><span class="w"> </span><span class="no">mimic_argv</span><span class="p">]</span><span class="w">          </span><span class="c1">; r13 = content of the replacement string (e.g. &quot;./sshd\0&quot;)</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="p">[</span><span class="no">r12</span><span class="p">],</span><span class="w"> </span><span class="no">r13</span><span class="w">                     </span><span class="c1">; overwrite the original string with the replacement</span>
+</span></code></pre></div>
+<h3 id="inspecting-the-procpid-directory">Inspecting the <code>/proc/&lt;PID&gt;/</code> directory<a class="headerlink" href="#inspecting-the-procpid-directory" title="Permanent link">&para;</a></h3>
+<p>Every process has a directory in <code>/proc/</code> determined by its PID. The files inside that directory do not exist on disk — they belong to <strong><code>procfs</code></strong>, a virtual filesystem where each read operation invokes a kernel function that generates the content dynamically from the process's internal structures.</p>
+<h4 style="font-size: 1.15em; font-weight: normal;">Identity sources and their manipulation mechanisms in <code>/proc/&lt;PID&gt;/</code></h4>
+
+<p>Every queryable value originates from the kernel's internal structures linked to the process.</p>
+<table>
+<thead>
+<tr>
+<th>Source in <code>/proc</code></th>
+<th>Involved structure</th>
+<th>Field</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/proc/PID/comm</code></td>
+<td><code>task_struct</code></td>
+<td><code>comm[16]</code></td>
+</tr>
+<tr>
+<td><code>/proc/PID/cmdline</code></td>
+<td><code>mm_struct</code></td>
+<td><code>arg_start</code> → <code>arg_end</code></td>
+</tr>
+<tr>
+<td><code>/proc/PID/environ</code></td>
+<td><code>mm_struct</code></td>
+<td><code>env_start</code> → <code>env_end</code></td>
+</tr>
+<tr>
+<td><code>/proc/PID/exe</code></td>
+<td><code>mm_struct</code></td>
+<td><code>exe_file</code></td>
+</tr>
+<tr>
+<td><code>/proc/PID/maps</code></td>
+<td><code>mm_struct</code></td>
+<td><code>vm_area_struct</code> (VMAs)</td>
+</tr>
+<tr>
+<td><code>/proc/PID/status</code> (User)</td>
+<td><code>cred</code></td>
+<td><code>euid</code></td>
+</tr>
+<tr>
+<td><code>/proc/PID/status</code> (Group)</td>
+<td><code>cred</code></td>
+<td><code>egid</code></td>
+</tr>
+<tr>
+<td><code>/proc/PID/status</code> (Caps)</td>
+<td><code>cred</code></td>
+<td><code>cap_*</code></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p>The <code>struct cred</code> sources (UIDs, GIDs and capabilities) were covered in the <a href="../identity-model/">first article</a> of this series.</p>
+</div>
+<p>These sources are primarily manipulated through two mechanisms:</p>
+<p><strong>Via process management syscall</strong></p>
+<ul>
+<li>Process name (<code>/proc/PID/comm</code>) → <code>prctl(PR_SET_NAME)</code></li>
+<li>Command line (<code>/proc/PID/cmdline</code>) → <code>prctl(PR_SET_MM, ARG_START/ARG_END)</code></li>
+<li>Environment variables (<code>/proc/PID/environ</code>) → <code>prctl(PR_SET_MM, ENV_START/ENV_END)</code></li>
+<li>Executable link (<code>/proc/PID/exe</code>) → <code>prctl(PR_SET_MM, EXE_FILE)</code></li>
+</ul>
+<p><strong>Via memory management syscalls</strong></p>
+<ul>
+<li>Virtual memory map of the process (<code>/proc/PID/maps</code>) → <code>mmap</code>, <code>munmap</code>, <code>mremap</code> and <code>mprotect</code></li>
+</ul>
+<h2 id="the-process-management-interface">The Process Management Interface<a class="headerlink" href="#the-process-management-interface" title="Permanent link">&para;</a></h2>
+<p>Unlike specialized syscalls such as <code>setresuid</code> (which only handles UIDs) or <code>capset</code> (which only handles capabilities), <code>prctl</code> is a system call that allows performing a multitude of management operations on the invoking process.</p>
+<p>From an offensive perspective, <code>prctl</code> concentrates most of the operations that modify the process's visible identity without altering its execution. For this reason, defensive monitoring of <code>prctl</code> (via auditd or eBPF) is a critical detection point.</p>
+<p>The following details those operations that are valuable from an offensive standpoint:</p>
+<h3 id="pr_set_name"><code>PR_SET_NAME</code><a class="headerlink" href="#pr_set_name" title="Permanent link">&para;</a></h3>
+<p>The <code>comm</code> field in <code>task_struct</code> is a 16-byte array (15 usable characters + NULL). It is what tools such as <code>ps -o comm</code> display when reading <code>/proc/PID/comm</code>. Modifying this value does not require any capabilities.</p>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">rax</span><span class="p">,</span><span class="w"> </span><span class="mi">157</span><span class="w">                </span><span class="c1">; PRCTL</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">rdi</span><span class="p">,</span><span class="w"> </span><span class="mi">15</span><span class="w">                 </span><span class="c1">; PR_SET_NAME</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nf">lea</span><span class="w"> </span><span class="no">rsi</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="no">rel</span><span class="w"> </span><span class="no">new_name</span><span class="p">]</span><span class="w">     </span><span class="c1">; pointer to buffer with the new name</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="nf">syscall</span>
+</span></code></pre></div>
+<div class="admonition note">
+<p>Names in brackets (<code>[kworker/0:1]</code>, <code>[migration/0]</code>) are by convention kernel threads, so a user-space process can adopt one of these to blend in with legitimate system processes.</p>
+</div>
+<h3 id="pr_set_dumpable"><code>PR_SET_DUMPABLE</code><a class="headerlink" href="#pr_set_dumpable" title="Permanent link">&para;</a></h3>
+<p>Each process has a <code>dumpable</code> attribute that controls whether the kernel allows other processes of the same user to inspect its memory and attach a debugger.</p>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">rax</span><span class="p">,</span><span class="w"> </span><span class="mi">157</span><span class="w">                </span><span class="c1">; PRCTL</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">rdi</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="w">                  </span><span class="c1">; PR_SET_DUMPABLE</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="nf">xor</span><span class="w"> </span><span class="no">esi</span><span class="p">,</span><span class="w"> </span><span class="no">esi</span><span class="w">                </span><span class="c1">; DUMPABLE = 0 (DEFAULT IS DUMPABLE = 1)</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="nf">syscall</span>
+</span></code></pre></div>
+<div class="admonition note">
+<p>This attribute is automatically disabled when the process executes a <code>setuid</code> or <code>setgid</code> binary.</p>
+</div>
+<p>Setting <code>dumpable</code> to 0:</p>
+<ul>
+<li><code>/proc/PID/maps</code>, <code>/proc/PID/mem</code>, <code>/proc/PID/environ</code>, <code>/proc/PID/auxv</code> become owned by <code>root:root</code>. Processes of the same user cannot read them without <code>CAP_SYS_PTRACE</code>.</li>
+<li><code>ptrace(PTRACE_ATTACH)</code> from processes with the same UID fails with <code>EPERM</code>.</li>
+<li>Core dumps are not generated.</li>
+</ul>
+<p>It remains visible in <code>/proc/PID/stat</code>, <code>/proc/PID/status</code>, <code>/proc/PID/comm</code>, <code>/proc/PID/cmdline</code> and <code>/proc/PID/exe</code>. <strong>Therefore, this operation acts only as an anti-debugging and anti-dumping barrier.</strong></p>
+<h3 id="pr_set_mm"><code>PR_SET_MM</code><a class="headerlink" href="#pr_set_mm" title="Permanent link">&para;</a></h3>
+<p>A process's <code>mm_struct</code> contains the fields the kernel consults to generate <code>/proc/PID/cmdline</code> (arguments with which the process was launched: <code>argv[0] \0 argv[1] \0 ...</code>), <code>/proc/PID/environ</code> (process environment variables: <code>KEY1=VALUE1 \0 KEY2=VALUE2 \0 ...</code>) and <code>/proc/PID/exe</code> (symlink pointing to the binary the kernel loaded when <code>execve</code> was called).</p>
+<p><code>PR_SET_MM</code> allows directly modifying these fields, altering what the kernel reads when an observer queries them.</p>
+<div class="admonition danger">
+<p>Using this option requires the <code>CAP_SYS_RESOURCE</code> capability (bit 24) in the effective set.</p>
+</div>
+<h4 id="pr_set_mm_arg_start-pr_set_mm_arg_end"><strong><code>PR_SET_MM_ARG_START</code> / <code>PR_SET_MM_ARG_END</code></strong><a class="headerlink" href="#pr_set_mm_arg_start-pr_set_mm_arg_end" title="Permanent link">&para;</a></h4>
+<p>Allow modifying <code>arg_start</code> and <code>arg_end</code>. Any subsequent read of <code>/proc/PID/cmdline</code> reads the memory between these two addresses.</p>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="w">    </span><span class="c1">; --- PR_SET_MM_ARG_START ---</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">rax</span><span class="p">,</span><span class="w"> </span><span class="mi">157</span><span class="w">                </span><span class="c1">; PRCTL</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">rdi</span><span class="p">,</span><span class="w"> </span><span class="mi">35</span><span class="w">                 </span><span class="c1">; PR_SET_MM</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">rsi</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="w">                  </span><span class="c1">; PR_SET_MM_ARG_START</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="nf">lea</span><span class="w"> </span><span class="no">rdx</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="no">rel</span><span class="w"> </span><span class="no">fake_cmdline</span><span class="p">]</span><span class="w"> </span><span class="c1">; pointer to the start of the buffer</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="nf">xor</span><span class="w"> </span><span class="no">r10d</span><span class="p">,</span><span class="w"> </span><span class="no">r10d</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="nf">xor</span><span class="w"> </span><span class="no">r8d</span><span class="p">,</span><span class="w"> </span><span class="no">r8d</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">    </span><span class="nf">syscall</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">    </span><span class="c1">; --- PR_SET_MM_ARG_END ---</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">rax</span><span class="p">,</span><span class="w"> </span><span class="mi">157</span><span class="w">                </span><span class="c1">; PRCTL</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">rdi</span><span class="p">,</span><span class="w"> </span><span class="mi">35</span><span class="w">                 </span><span class="c1">; PR_SET_MM</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">rsi</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="w">                  </span><span class="c1">; PR_SET_MM_ARG_END</span>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">    </span><span class="nf">lea</span><span class="w"> </span><span class="no">rdx</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="no">rel</span><span class="w"> </span><span class="no">fake_cmdline</span><span class="p">]</span>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">    </span><span class="nf">add</span><span class="w"> </span><span class="no">rdx</span><span class="p">,</span><span class="w"> </span><span class="no">fake_cmdline_len</span><span class="w">   </span><span class="c1">; pointer to the end of the buffer</span>
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">    </span><span class="nf">xor</span><span class="w"> </span><span class="no">r10d</span><span class="p">,</span><span class="w"> </span><span class="no">r10d</span>
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">    </span><span class="nf">xor</span><span class="w"> </span><span class="no">r8d</span><span class="p">,</span><span class="w"> </span><span class="no">r8d</span>
+</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="w">    </span><span class="nf">syscall</span>
+</span></code></pre></div>
+<div class="admonition note">
+<p>There is a relationship between <code>/proc/PID/cmdline</code> and <code>argv[0]</code>: by default, <code>arg_start</code> points to the stack area where <code>argv[0]</code> resides, so both share the same memory region. As long as that relationship is not altered, overwriting <code>argv[0]</code> also changes what <code>cmdline</code> returns, because the kernel reads the content from that address rather than from a separately stored copy. If <code>arg_start</code> is redirected to another buffer via <code>PR_SET_MM</code>, the two sources decouple: <code>cmdline</code> reads from the new buffer and the <code>argv[0]</code> overwrite only affects tools that access the process's stack directly.</p>
+</div>
+<h4 id="pr_set_mm_env_start-pr_set_mm_env_end"><strong><code>PR_SET_MM_ENV_START</code> / <code>PR_SET_MM_ENV_END</code></strong><a class="headerlink" href="#pr_set_mm_env_start-pr_set_mm_env_end" title="Permanent link">&para;</a></h4>
+<p>Equivalent for <code>/proc/PID/environ</code>.</p>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="w">    </span><span class="c1">; --- PR_SET_MM_ENV_START ---</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">rax</span><span class="p">,</span><span class="w"> </span><span class="mi">157</span><span class="w">                </span><span class="c1">; PRCTL</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">rdi</span><span class="p">,</span><span class="w"> </span><span class="mi">35</span><span class="w">                 </span><span class="c1">; PR_SET_MM</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">rsi</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="w">                 </span><span class="c1">; PR_SET_MM_ENV_START</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="nf">lea</span><span class="w"> </span><span class="no">rdx</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="no">rel</span><span class="w"> </span><span class="no">fake_environ</span><span class="p">]</span><span class="w"> </span><span class="c1">; pointer to the start of the buffer</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">    </span><span class="nf">xor</span><span class="w"> </span><span class="no">r10d</span><span class="p">,</span><span class="w"> </span><span class="no">r10d</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span><span class="nf">xor</span><span class="w"> </span><span class="no">r8d</span><span class="p">,</span><span class="w"> </span><span class="no">r8d</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">    </span><span class="nf">syscall</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">    </span><span class="c1">; --- PR_SET_MM_ENV_END ---</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">rax</span><span class="p">,</span><span class="w"> </span><span class="mi">157</span><span class="w">                </span><span class="c1">; PRCTL</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">rdi</span><span class="p">,</span><span class="w"> </span><span class="mi">35</span><span class="w">                 </span><span class="c1">; PR_SET_MM</span>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">rsi</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="w">                 </span><span class="c1">; PR_SET_MM_ENV_END</span>
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">    </span><span class="nf">lea</span><span class="w"> </span><span class="no">rdx</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="no">rel</span><span class="w"> </span><span class="no">fake_environ</span><span class="p">]</span>
+</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">    </span><span class="nf">add</span><span class="w"> </span><span class="no">rdx</span><span class="p">,</span><span class="w"> </span><span class="no">fake_environ_len</span><span class="w">   </span><span class="c1">; pointer to the end of the buffer</span>
+</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">    </span><span class="nf">xor</span><span class="w"> </span><span class="no">r10d</span><span class="p">,</span><span class="w"> </span><span class="no">r10d</span>
+</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="w">    </span><span class="nf">xor</span><span class="w"> </span><span class="no">r8d</span><span class="p">,</span><span class="w"> </span><span class="no">r8d</span>
+</span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="w">    </span><span class="nf">syscall</span>
+</span></code></pre></div>
+<h4 id="pr_set_mm_exe_file"><strong><code>PR_SET_MM_EXE_FILE</code></strong><a class="headerlink" href="#pr_set_mm_exe_file" title="Permanent link">&para;</a></h4>
+<p>Allows modifying the <code>/proc/PID/exe</code> symlink. Unlike the previous ones, it receives a file descriptor to the target binary rather than a memory address. The kernel replaces the <code>exe_file</code> in the <code>mm_struct</code> with the <code>struct file</code> associated with the FD (a change in a structure linked to the process at the kernel level).</p>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="w">    </span><span class="c1">; --- Get FD of the target binary ---</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">rax</span><span class="p">,</span><span class="w"> </span><span class="mi">257</span><span class="w">                </span><span class="c1">; OPENAT</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">rdi</span><span class="p">,</span><span class="w"> </span><span class="mi">-100</span><span class="w">               </span><span class="c1">; AT_FDCWD</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="nf">lea</span><span class="w"> </span><span class="no">rsi</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="no">rel</span><span class="w"> </span><span class="no">target_path</span><span class="p">]</span><span class="w">  </span><span class="c1">; pointer to the path of the target binary</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">    </span><span class="nf">xor</span><span class="w"> </span><span class="no">edx</span><span class="p">,</span><span class="w"> </span><span class="no">edx</span><span class="w">                </span><span class="c1">; O_RDONLY</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">    </span><span class="nf">xor</span><span class="w"> </span><span class="no">r10d</span><span class="p">,</span><span class="w"> </span><span class="no">r10d</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">    </span><span class="nf">syscall</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">r14</span><span class="p">,</span><span class="w"> </span><span class="no">rax</span><span class="w">                </span><span class="c1">; save FD in r14</span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">    </span><span class="c1">; --- PR_SET_MM_EXE_FILE ---</span>
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">rax</span><span class="p">,</span><span class="w"> </span><span class="mi">157</span><span class="w">                </span><span class="c1">; PRCTL</span>
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">rdi</span><span class="p">,</span><span class="w"> </span><span class="mi">35</span><span class="w">                 </span><span class="c1">; PR_SET_MM</span>
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">rsi</span><span class="p">,</span><span class="w"> </span><span class="mi">13</span><span class="w">                 </span><span class="c1">; PR_SET_MM_EXE_FILE</span>
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">rdx</span><span class="p">,</span><span class="w"> </span><span class="no">r14</span><span class="w">                </span><span class="c1">; fd of the target binary</span>
+</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="w">    </span><span class="nf">xor</span><span class="w"> </span><span class="no">r10d</span><span class="p">,</span><span class="w"> </span><span class="no">r10d</span>
+</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="w">    </span><span class="nf">xor</span><span class="w"> </span><span class="no">r8d</span><span class="p">,</span><span class="w"> </span><span class="no">r8d</span>
+</span><span id="__span-6-17"><a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="w">    </span><span class="nf">syscall</span>
+</span></code></pre></div>
+<div class="admonition danger">
+<p><strong>This operation fails with <code>EBUSY</code> if the process has VMAs whose <code>vm_file</code> points to the original executable. All initial file-backed VMAs must be replaced before the call, which leads directly to the VMA anonymization block.</strong></p>
+</div>
+<h2 id="virtual-memory-and-vmas">Virtual Memory and VMAs<a class="headerlink" href="#virtual-memory-and-vmas" title="Permanent link">&para;</a></h2>
+<p>Every process on Linux operates on a virtual address space that the <strong>MMU (Memory Management Unit)</strong> translates to physical addresses. That is, the process does not access RAM directly but accesses virtual addresses that the hardware transparently translates to physical ones.</p>
+<p><strong>That virtual address space is not fully mapped from the start but is mapped as regions as the process needs them</strong> (the binary's code, its data, the stack, the heap, shared libraries and any explicit mappings the process requests). Each of these regions is internally represented by a <strong>VMA (Virtual Memory Area)</strong>, a <code>vm_area_struct</code> structure within the process's <code>mm_struct</code>.</p>
+<p>The entries that appear in <code>/proc/PID/maps</code> are the process's VMAs.</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">vm_area_struct</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">vm_start</span><span class="p">;</span><span class="w">      </span><span class="c1">// Start address</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">vm_end</span><span class="p">;</span><span class="w">        </span><span class="c1">// End address</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="n">pgprot_t</span><span class="w"> </span><span class="n">vm_page_prot</span><span class="p">;</span><span class="w">       </span><span class="c1">// Page protection</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">vm_flags</span><span class="p">;</span><span class="w">      </span><span class="c1">// VM_READ, VM_WRITE, VM_EXEC, ...</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">file</span><span class="w"> </span><span class="o">*</span><span class="n">vm_file</span><span class="p">;</span><span class="w">        </span><span class="c1">// Associated file (NULL if anonymous)</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">vm_pgoff</span><span class="p">;</span><span class="w">      </span><span class="c1">// Offset within the file</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">    </span><span class="c1">// ...</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="p">};</span>
+</span></code></pre></div>
+<div class="admonition note">
+<p>The flags <code>VM_READ</code>, <code>VM_WRITE</code>, <code>VM_EXEC</code> determine the permissions shown in <code>/proc/PID/maps</code> (<code>r</code>, <code>w</code>, <code>x</code>). The flag <code>VM_SHARED</code> distinguishes <code>MAP_SHARED</code> mapping (<code>s</code>) from <code>MAP_PRIVATE</code> mapping (<code>p</code>).</p>
+</div>
+<h3 id="file-backed-vmas-vs-anonymous-vmas">File-backed VMAs vs Anonymous VMAs<a class="headerlink" href="#file-backed-vmas-vs-anonymous-vmas" title="Permanent link">&para;</a></h3>
+<h4 id="file-backed-vmas"><strong>File-backed VMAs</strong><a class="headerlink" href="#file-backed-vmas" title="Permanent link">&para;</a></h4>
+<p>Created explicitly when the kernel maps a file into memory — either because a program requests a file mapping via <code>mmap</code> with a file descriptor, or implicitly during <code>execve</code>, when the kernel loads the <code>PT_LOAD</code> segments of the ELF binary into the new process's address space. In both cases, the resulting VMA holds a reference to the original file through its <code>vm_file</code> field.</p>
+<p>In <code>/proc/PID/maps</code> the following information is shown:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>00400000-00402000 r--p 00000000 08:01 1234567  /path/to/binary
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>│               │ │  │ │        │     │        └─ path of the mapped file
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>│               │ │  │ │        │     └─ file inode
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>│               │ │  │ │        └─ device (major:minor)
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>│               │ │  │ └─ offset within the file
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>│               │ │  └─ type: p=private, s=shared
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>│               │ └─ permissions: r=read, w=write, x=execute
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>└───────────────└─ virtual address range
+</span></code></pre></div>
+<h4 id="anonymous-vmas"><strong>Anonymous VMAs</strong><a class="headerlink" href="#anonymous-vmas" title="Permanent link">&para;</a></h4>
+<p>Created by the kernel for the stack and heap, or explicitly with <code>mmap(MAP_ANONYMOUS)</code>. The VMA's <code>vm_file</code> field is NULL.</p>
+<p>In <code>/proc/PID/maps</code> no path is shown:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>7f8a00000000-7f8a00004000 rw-p 00000000 00:00 0
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>│                         │    │        │     │
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>│                         │    │        │     └─ inode 0: no file
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>│                         │    │        └─ device 00:00
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>│                         │    └─ offset 0
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>│                         └─ permissions: read + write, type: private
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>└─ virtual address range
+</span></code></pre></div>
+<h3 id="virtual-memory-management-primitives">Virtual Memory Management Primitives<a class="headerlink" href="#virtual-memory-management-primitives" title="Permanent link">&para;</a></h3>
+<p>A process cannot allocate memory, free it, move it or change its permissions without going through the kernel. The four syscalls that allow this are <code>mmap</code> (allocate), <code>munmap</code> (free), <code>mremap</code> (move or resize) and <code>mprotect</code> (change permissions).</p>
+<h4 id="mmap"><strong><code>MMAP</code></strong><a class="headerlink" href="#mmap" title="Permanent link">&para;</a></h4>
+<p>Creates a new mapping in the process's virtual address space.</p>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">9</span><span class="w">          </span><span class="c1">; syscall number (mmap)</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nf">rdi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="no">addr</span><span class="w">       </span><span class="c1">; suggested address (0 to let the kernel choose)</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="nf">rsi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="no">length</span><span class="w">     </span><span class="c1">; size in bytes to allocate (e.g. 4096 = 1 page)</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="nf">rdx</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="no">prot</span><span class="w">       </span><span class="c1">; protection permissions (PROT_* flags)</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="nf">r10</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="no">flags</span><span class="w">      </span><span class="c1">; mapping options (MAP_*)</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="nf">r8</span><span class="w">  </span><span class="err">=</span><span class="w"> </span><span class="no">fd</span><span class="w">         </span><span class="c1">; file descriptor (for file mapping; -1 if not applicable)</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="nf">r9</span><span class="w">  </span><span class="err">=</span><span class="w"> </span><span class="no">offset</span><span class="w">     </span><span class="c1">; offset within the file (multiple of page size)</span>
+</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MAP_SHARED</code></td>
+<td><code>0x01</code></td>
+<td>Modifications to memory are written to the shared file and modifications by other processes on the same file are reflected in the mapping.</td>
+</tr>
+<tr>
+<td><code>MAP_PRIVATE</code></td>
+<td><code>0x02</code></td>
+<td>Private copy. Changes do not propagate.</td>
+</tr>
+<tr>
+<td><code>MAP_FIXED</code></td>
+<td><code>0x10</code></td>
+<td>Forces use of the address specified in <code>addr</code>. Silently unmaps anything in that range.</td>
+</tr>
+<tr>
+<td><code>MAP_ANONYMOUS</code></td>
+<td><code>0x20</code></td>
+<td>No associated file. <code>fd</code> must be <code>-1</code>. Memory is zero-initialized.</td>
+</tr>
+</tbody>
+</table>
+<p>The combination <code>MAP_PRIVATE | MAP_ANONYMOUS</code> (<code>0x22</code>) is the primary use case for allocating anonymous memory. The result is zero-initialized pages, with no path visible in <code>/proc/PID/maps</code> and writes isolated to the process that created them.</p>
+<table>
+<thead>
+<tr>
+<th>Permission</th>
+<th>Value</th>
+<th>Access</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PROT_NONE</code></td>
+<td><code>0x0</code></td>
+<td>No access</td>
+</tr>
+<tr>
+<td><code>PROT_READ</code></td>
+<td><code>0x1</code></td>
+<td>Read</td>
+</tr>
+<tr>
+<td><code>PROT_WRITE</code></td>
+<td><code>0x2</code></td>
+<td>Write</td>
+</tr>
+<tr>
+<td><code>PROT_EXEC</code></td>
+<td><code>0x4</code></td>
+<td>Execute</td>
+</tr>
+</tbody>
+</table>
+<h4 id="mremap"><strong><code>MREMAP</code></strong><a class="headerlink" href="#mremap" title="Permanent link">&para;</a></h4>
+<p>Allows <strong>resizing, moving or relocating an existing mapping</strong> within the process's virtual memory space. Preserves the protection permissions and type of the original mapping.</p>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">25</span><span class="w">          </span><span class="c1">; syscall number (mremap)</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nf">rdi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="no">old_address</span><span class="w"> </span><span class="c1">; base address of the existing mapping (page-aligned)</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="nf">rsi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="no">old_size</span><span class="w">    </span><span class="c1">; current size of the mapping in bytes</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="nf">rdx</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="no">new_size</span><span class="w">    </span><span class="c1">; new size in bytes</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="nf">r10</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="no">flags</span><span class="w">       </span><span class="c1">; MREMAP_* bitmask (0 if no move desired)</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="nf">r8</span><span class="w">  </span><span class="err">=</span><span class="w"> </span><span class="no">new_address</span><span class="w"> </span><span class="c1">; target address (only if flags includes MREMAP_FIXED)</span>
+</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MREMAP_MAYMOVE</code></td>
+<td><code>0x01</code></td>
+<td>Authorizes the kernel to move the mapping to a different virtual address if no contiguous space is available. Without this flag, any growth that requires relocation fails with <code>ENOMEM</code>. In practice, almost mandatory for expanding regions.</td>
+</tr>
+<tr>
+<td><code>MREMAP_FIXED</code></td>
+<td><code>0x02</code></td>
+<td>Forces placement of the mapping at the address specified by <code>r8</code> (<code>new_address</code>). Requires <code>MREMAP_MAYMOVE</code> or returns <code>EINVAL</code>.</td>
+</tr>
+<tr>
+<td><code>MREMAP_DONTUNMAP</code></td>
+<td><code>0x04</code></td>
+<td>Moves PTEs (page table entries) to <code>new_address</code> without destroying the original VMA; from <code>old_address</code> an empty VMA remains (with no pages behind it). Valid only on <code>MAP_PRIVATE</code> anonymous mappings.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="mprotect"><strong><code>MPROTECT</code></strong><a class="headerlink" href="#mprotect" title="Permanent link">&para;</a></h4>
+<p>Allows <strong>changing the protections (read/write/execute) of an already mapped memory region</strong>.</p>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">10</span><span class="w">         </span><span class="c1">; syscall number (mprotect)</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nf">rdi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="no">addr</span><span class="w">       </span><span class="c1">; base address of the region (rounded down to page)</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="nf">rsi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="no">len</span><span class="w">        </span><span class="c1">; length in bytes (rounded up to pages)</span>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="nf">rdx</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="no">prot</span><span class="w">       </span><span class="c1">; permission mask (PROT_*) (OR-combinable)</span>
+</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Value</th>
+<th>Permission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PROT_NONE</code></td>
+<td><code>0x0</code></td>
+<td>No permission</td>
+</tr>
+<tr>
+<td><code>PROT_READ</code></td>
+<td><code>0x1</code></td>
+<td>Read</td>
+</tr>
+<tr>
+<td><code>PROT_WRITE</code></td>
+<td><code>0x2</code></td>
+<td>Write</td>
+</tr>
+<tr>
+<td><code>PROT_EXEC</code></td>
+<td><code>0x4</code></td>
+<td>Execute</td>
+</tr>
+<tr>
+<td><code>PROT_READ \| PROT_WRITE \| PROT_EXEC</code></td>
+<td><code>0x7</code></td>
+<td>Read + Write + Execute</td>
+</tr>
+</tbody>
+</table>
+<h4 id="munmap"><strong><code>MUNMAP</code></strong><a class="headerlink" href="#munmap" title="Permanent link">&para;</a></h4>
+<p><strong>Removes a mapping from the process's virtual address space.</strong> After the call, any access to addresses in the unmapped range generates <code>SIGSEGV</code>.</p>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">11</span><span class="w">            </span><span class="c1">; syscall number (munmap)</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="nf">rdi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="no">addr</span><span class="w">          </span><span class="c1">; base address of the mapping to remove</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="nf">rsi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="no">length</span><span class="w">        </span><span class="c1">; size in bytes to unmap</span>
+</span></code></pre></div>
+<p><code>length</code> need not match the original size of the mapping exactly. A portion of an existing mapping can be unmapped.</p>
+<h3 id="vma-anonymization">VMA Anonymization<a class="headerlink" href="#vma-anonymization" title="Permanent link">&para;</a></h3>
+<p><strong>VMA anonymization is the process of replacing file-backed VMAs with anonymous VMAs of identical content.</strong> The result is a process that continues executing the same code at the same addresses with the same permissions, but with no VMA referencing the original binary. In <code>/proc/PID/maps</code>, the VMAs change from showing the executable path to showing device <code>00:00</code> and inode <code>0</code>.</p>
+<div class="admonition note">
+<p>Performing this process on all file-backed VMAs makes <code>PR_SET_MM_EXE_FILE</code> with the <code>CAP_SYS_RESOURCE</code> capability succeed, enabling <code>/proc/PID/exe</code> spoofing.</p>
+</div>
+<h4 id="anonymization-procedure"><strong>Anonymization procedure</strong><a class="headerlink" href="#anonymization-procedure" title="Permanent link">&para;</a></h4>
+<p>For each binary segment:</p>
+<ol>
+<li>
+<p><strong>Create an anonymous region</strong> (<code>mmap</code> with <code>MAP_PRIVATE | MAP_ANONYMOUS</code>): allocate a new anonymous region in memory of the same size as the segment, with read and write permissions (needed to copy data).</p>
+</li>
+<li>
+<p><strong>Copy the content</strong> (<code>rep movsb</code>): transfer the entire segment content byte by byte to the new memory region.</p>
+</li>
+<li>
+<p><strong>Remove the original mapping</strong> (<code>munmap</code>): unmap the file-backed region, removing the reference to the binary on disk. From this point, accessing the original segment's addresses causes a segmentation fault.</p>
+</li>
+<li>
+<p><strong>Relocate the copy</strong> (<code>mremap</code> with <code>MREMAP_MAYMOVE | MREMAP_FIXED</code>): move the anonymous region to the address range previously occupied by the original segment. The content is identical, the addresses are the same; in practical terms, only the VMA type changed.</p>
+</li>
+<li>
+<p><strong>Restore permissions</strong> (<code>mprotect</code>): apply the original segment permissions to the new memory region (R for headers, RX for code, RW for data).</p>
+</li>
+</ol>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>Before (file-backed):
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>00400000-00402000 r--p 00000000 08:01 1234567  /path/to/binary
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>00402000-00405000 r-xp 00002000 08:01 1234567  /path/to/binary
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>00405000-00407000 rw-p 00005000 08:01 1234567  /path/to/binary
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>After (anonymous):
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>00400000-00402000 r--p 00000000 00:00 0
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>00402000-00405000 r-xp 00000000 00:00 0
+</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>00405000-00407000 rw-p 00000000 00:00 0
+</span></code></pre></div>
+<h4 id="the-text-segment-problem"><strong>The <code>.text</code> segment problem</strong><a class="headerlink" href="#the-text-segment-problem" title="Permanent link">&para;</a></h4>
+<p>The <code>.text</code> segment contains the executable code (RIP points to addresses within this segment). Unmapping it with <code>munmap</code> while executing code from it destroys the page holding the next instruction to execute, causing an immediate segmentation fault.</p>
+<p>The solution is to execute the anonymization code <strong>from outside</strong> the binary's initial executable segments. To do this, a trampoline is built:</p>
+<ol>
+<li>
+<p><strong>Allocate a temporary page</strong> (<code>mmap</code> with <code>MAP_PRIVATE | MAP_ANONYMOUS</code>): create an anonymous page to copy the code and data needed for anonymization.</p>
+</li>
+<li>
+<p><strong>Copy the anonymization code</strong> (<code>rep movsb</code>): copy to the temporary page the block of instructions that executes the <code>mmap</code>→<code>movsb</code>→<code>munmap</code>→<code>mremap</code>→<code>mprotect</code> sequence for each segment, along with the data the syscalls need (start/end addresses, permissions and return addresses).</p>
+</li>
+<li>
+<p><strong>Make the page executable</strong> (<code>mprotect</code> with <code>PROT_READ | PROT_EXEC</code>): the page must be created with RW permissions to copy data; once copied, it is changed to RX to allow transferring execution flow to it.</p>
+</li>
+<li>
+<p><strong>Jump to the temporary page</strong> (<code>jmp</code>): the binary's execution flow must leave the <code>.text</code> segment and jump to the anonymous page. From this point, RIP points to the temporary page and it is safe to unmap any binary segment.</p>
+</li>
+<li>
+<p><strong>Anonymize segments</strong>: from the temporary page, execute the full anonymization sequence for each segment (the temporary page must hold the data needed for the anonymization process).</p>
+</li>
+<li>
+<p><strong>Jump back to the anonymized <code>.text</code></strong> (<code>jmp</code> to the return address stored in the temporary page): return execution flow to the anonymized <code>.text</code> segment, which has the same content at the same addresses.</p>
+</li>
+<li>
+<p><strong>Unmap the temporary page</strong> (<code>munmap</code>): the page used for the trampoline is no longer needed and can be removed.</p>
+</li>
+</ol>
+<p>The anonymization of all segments together with the construction of the relocatable trampoline can be found in the DARKCLOAK code, present in the next article (June 17).</p>
+<hr />
+<h2 id="acknowledgements">Acknowledgements<a class="headerlink" href="#acknowledgements" title="Permanent link">&para;</a></h2>
+<p>Thanks for making it this far.</p>
+<p>If you find errors or want to improve/extend the article, the blog content is open to Pull Requests. All contributions are welcome.</p>
+<p>See you in the next article! ;)</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      © 2026 0x574R
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.sections", "navigation.top", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+<script>
+/*
+ * Language-toggle click handler.
+ *
+ * WHY NOT AT DOMContentLoaded?
+ *   navigation.instant changes window.location without a page reload.
+ *   Reading the path at load time means the button would always navigate
+ *   from the first URL visited, not the current one.
+ *
+ * HOW IT WORKS:
+ *   overrides/partials/alternate.html embeds data-target="en" or "es"
+ *   on the button at BUILD TIME (Jinja2, config.theme.language).
+ *   Here we only attach the click listener; the target path is computed
+ *   from window.location.pathname at the moment of the click.
+ */
+(function () {
+  'use strict';
+
+  function attachToggle(btn) {
+    if (btn.dataset.ready) return;   // don't double-bind
+    btn.dataset.ready = '1';
+
+    btn.addEventListener('click', function () {
+      var target = btn.dataset.target;  // 'en' or 'es' — set server-side
+      var p      = window.location.pathname;
+
+      // Replace /es/…  ↔  /en/…
+      // Regex: match exactly /es/ or /en/ at the start of the path
+      var next = p.replace(/^\/(es|en)(\/|$)/, '/' + target + '$2');
+
+      // Fallback if the path had no language prefix
+      if (next === p) next = '/' + target + '/';
+
+      window.location.href = next;
+    });
+  }
+
+  function init() {
+    document.querySelectorAll('button.lang-toggle[data-target]')
+            .forEach(attachToggle);
+  }
+
+  // Initial load
+  document.addEventListener('DOMContentLoaded', init);
+
+  // MkDocs Material instant navigation fires this after each page swap
+  document.addEventListener('DOMContentMutated', init);
+
+}());
+</script>
+
+  </body>
+</html>

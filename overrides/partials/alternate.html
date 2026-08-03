@@ -1,0 +1,57 @@
+{#-
+  Overrides Material's default language selector (globe icon + dropdown).
+
+  Strategy
+  --------
+  • extra.alternate must be set in both mkdocs configs — Material uses it
+    to inject <link rel="alternate" hreflang="…"> in <head> (SEO).
+  • Here we replace the visual widget with a single flag button whose
+    target language is known at BUILD TIME (config.theme.language).
+  • data-target is read by the JavaScript in main.html at CLICK TIME
+    (not at page-load), which fixes the navigation.instant bug where
+    window.location changes without a reload.
+-#}
+{%- if config.extra.alternate -%}
+
+  {%- if config.theme.language == 'es' -%}
+    {%- set t_label = 'Switch to English' -%}
+    {%- set t_lang  = 'en' -%}
+  {%- else -%}
+    {%- set t_label = 'Cambiar a Español' -%}
+    {%- set t_lang  = 'es' -%}
+  {%- endif -%}
+
+  <div class="md-header__option">
+    <button
+      class="md-header__button lang-toggle"
+      type="button"
+      title="{{ t_label }}"
+      aria-label="{{ t_label }}"
+      data-target="{{ t_lang }}"
+    >
+      {%- if config.theme.language == 'es' -%}
+        {#- Show UK flag → clicking switches TO English -#}
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30"
+             class="lang-flag" aria-hidden="true" focusable="false">
+          <rect width="60" height="30" fill="#012169"/>
+          <path d="M0 0 L60 30 M60 0 L0 30"
+                stroke="#fff" stroke-width="9" stroke-linecap="square"/>
+          <path d="M0 0 L60 30 M60 0 L0 30"
+                stroke="#C8102E" stroke-width="5" stroke-linecap="square"/>
+          <path d="M30 0 V30 M0 15 H60"
+                stroke="#fff" stroke-width="10" stroke-linecap="square"/>
+          <path d="M30 0 V30 M0 15 H60"
+                stroke="#C8102E" stroke-width="6" stroke-linecap="square"/>
+        </svg>
+      {%- else -%}
+        {#- Show Spain flag → clicking switches TO Spanish -#}
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"
+             class="lang-flag" aria-hidden="true" focusable="false">
+          <rect width="3" height="2" fill="#AA151B"/>
+          <rect y=".5" width="3" height="1" fill="#F1BF00"/>
+        </svg>
+      {%- endif -%}
+    </button>
+  </div>
+
+{%- endif -%}

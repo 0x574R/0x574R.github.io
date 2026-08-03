@@ -1,0 +1,2216 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="What an ELF binary contains and how the kernel interprets it to turn it into a process.">
+      
+      
+      
+        <link rel="canonical" href="https://0x574r.github.io/en/research/kernel-theory/elf-internals/">
+      
+      
+        <link rel="prev" href="../../malware-dev/darkcloak/">
+      
+      
+        <link rel="next" href="../identity-model/">
+      
+      
+        
+          <link rel="alternate" href="/es/" hreflang="es">
+        
+          <link rel="alternate" href="/en/" hreflang="en">
+        
+      
+      
+      <link rel="icon" href="../../../assets/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>ELF Internals - RAZOR</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20448%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.1.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20d%3D%22M64%20480c-35.3%200-64-28.7-64-64V96c0-35.3%2028.7-64%2064-64h320c35.3%200%2064%2028.7%2064%2064v213.5c0%2017-6.7%2033.3-18.7%2045.3L322.7%20461.3c-12%2012-28.3%2018.7-45.3%2018.7zm325.5-176H296c-13.3%200-24%2010.7-24%2024v93.5z%22/%3E%3C/svg%3E');--md-admonition-icon--tip:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20384%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.1.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20d%3D%22M292.9%20384c7.3-22.3%2021.9-42.5%2038.4-59.9C364%20289.7%20384%20243.2%20384%20192%20384%2086%20298%200%20192%200S0%2086%200%20192c0%2051.2%2020%2097.7%2052.7%20132.1%2016.5%2017.4%2031.2%2037.6%2038.4%2059.9h201.7zm-4.9%2048H96v16c0%2044.2%2035.8%2080%2080%2080h32c44.2%200%2080-35.8%2080-80zM184%20112c-39.8%200-72%2032.2-72%2072%200%2013.3-10.7%2024-24%2024s-24-10.7-24-24c0-66.3%2053.7-120%20120-120%2013.3%200%2024%2010.7%2024%2024s-10.7%2024-24%2024%22/%3E%3C/svg%3E');--md-admonition-icon--warning:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20512%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.1.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20d%3D%22M256%200c14.7%200%2028.2%208.1%2035.2%2021l216%20400c6.7%2012.4%206.4%2027.4-.8%2039.5S486.1%20480%20472%20480H40c-14.1%200-27.2-7.4-34.4-19.5s-7.5-27.1-.8-39.5l216-400c7-12.9%2020.5-21%2035.2-21m0%20352a32%2032%200%201%200%200%2064%2032%2032%200%201%200%200-64m0-192c-18.2%200-32.7%2015.5-31.4%2033.7l7.4%20104c.9%2012.5%2011.4%2022.3%2023.9%2022.3%2012.6%200%2023-9.7%2023.9-22.3l7.4-104c1.3-18.2-13.1-33.7-31.4-33.7z%22/%3E%3C/svg%3E');--md-admonition-icon--danger:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20448%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.1.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20d%3D%22M384%20144C384%2064.5%20312.4%200%20224%200S64%2064.5%2064%20144c0%2047.1%2025.1%2088.9%2064%20115.2V288c0%2017.7%2014.3%2032%2032%2032h128c17.7%200%2032-14.3%2032-32v-28.8c38.9-26.3%2064-68.1%2064-115.2m-224-16a32%2032%200%201%201%200%2064%2032%2032%200%201%201%200-64m96%2032a32%2032%200%201%201%2064%200%2032%2032%200%201%201-64%200m189.5%20179.7c-6.8-16.3-25.5-24-41.8-17.2L224%20397.3%2044.3%20322.5c-16.3-6.8-35%20.9-41.8%2017.2s.9%2035%2017.2%2041.8L140.8%20432%2019.7%20482.5c-16.3%206.8-24%2025.5-17.2%2041.8s25.5%2024%2041.8%2017.2L224%20466.7l179.7%2074.8c16.3%206.8%2035-.9%2041.8-17.2s-.9-35-17.2-41.8L307.2%20432l121.1-50.5c16.3-6.8%2024-25.5%2017.2-41.8%22/%3E%3C/svg%3E');--md-admonition-icon--info:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20512%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.1.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20d%3D%22M256%20512a256%20256%200%201%200%200-512%20256%20256%200%201%200%200%20512m-32-352a32%2032%200%201%201%2064%200%2032%2032%200%201%201-64%200m-8%2064h48c13.3%200%2024%2010.7%2024%2024v88h8c13.3%200%2024%2010.7%2024%2024s-10.7%2024-24%2024h-80c-13.3%200-24-10.7-24-24s10.7-24%2024-24h24v-64h-24c-13.3%200-24-10.7-24-24s10.7-24%2024-24%22/%3E%3C/svg%3E');--md-admonition-icon--abstract:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20448%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.1.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20d%3D%22M384%20512H96c-53%200-96-43-96-96V96C0%2043%2043%200%2096%200h304c26.5%200%2048%2021.5%2048%2048v288c0%2020.9-13.4%2038.7-32%2045.3V448c17.7%200%2032%2014.3%2032%2032s-14.3%2032-32%2032zM96%20384c-17.7%200-32%2014.3-32%2032s14.3%2032%2032%2032h256v-64zm32-232c0%2013.3%2010.7%2024%2024%2024h176c13.3%200%2024-10.7%2024-24s-10.7-24-24-24H152c-13.3%200-24%2010.7-24%2024m24%2072c-13.3%200-24%2010.7-24%2024s10.7%2024%2024%2024h176c13.3%200%2024-10.7%2024-24s-10.7-24-24-24z%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20448%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.1.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20d%3D%22M288%200H128c-17.7%200-32%2014.3-32%2032s14.3%2032%2032%2032v151.5L7.5%20426.3C2.6%20435%200%20444.7%200%20454.7%200%20486.4%2025.6%20512%2057.3%20512h333.4c31.6%200%2057.3-25.6%2057.3-57.3%200-10-2.6-19.8-7.5-28.4L320%20215.5V64c17.7%200%2032-14.3%2032-32S337.7%200%20320%200zm-96%20215.5V64h64v151.5c0%2011.1%202.9%2022.1%208.4%2031.8L306%20320H142l41.6-72.7c5.5-9.7%208.4-20.6%208.4-31.8%22/%3E%3C/svg%3E');--md-admonition-icon--quote:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20448%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.1.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20d%3D%22M0%20216C0%20149.7%2053.7%2096%20120%2096h8c17.7%200%2032%2014.3%2032%2032s-14.3%2032-32%2032h-8c-30.9%200-56%2025.1-56%2056v8h64c35.3%200%2064%2028.7%2064%2064v64c0%2035.3-28.7%2064-64%2064H64c-35.3%200-64-28.7-64-64zm256%200c0-66.3%2053.7-120%20120-120h8c17.7%200%2032%2014.3%2032%2032s-14.3%2032-32%2032h-8c-30.9%200-56%2025.1-56%2056v8h64c35.3%200%2064%2028.7%2064%2064v64c0%2035.3-28.7%2064-64%2064h-64c-35.3%200-64-28.7-64-64z%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"IBM Plex Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/custom.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+<!-- Favicons -->
+<link rel="apple-touch-icon" sizes="180x180" href="https://0x574r.github.io/en/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32"  href="https://0x574r.github.io/en/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16"  href="https://0x574r.github.io/en/assets/favicon-16x16.png">
+
+<!-- Open Graph -->
+
+
+
+
+<meta property="og:type"        content="article">
+<meta property="og:title"       content="ELF Internals — RAZOR">
+<meta property="og:description" content="What an ELF binary contains and how the kernel interprets it to turn it into a process.">
+<meta property="og:image"       content="https://0x574r.github.io/en/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height"content="630">
+<meta property="og:url"         content="https://0x574r.github.io/en/research/kernel-theory/elf-internals/">
+<meta property="og:site_name"   content="RAZOR">
+<meta property="og:locale"      content="en_US">
+<!-- Twitter Card -->
+<meta name="twitter:card"       content="summary_large_image">
+<meta name="twitter:title"      content="ELF Internals — RAZOR">
+<meta name="twitter:description"content="What an ELF binary contains and how the kernel interprets it to turn it into a process.">
+<meta name="twitter:image"      content="https://0x574r.github.io/en/assets/og-image.png">
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#introduction" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="RAZOR" class="md-header__button md-logo" aria-label="RAZOR" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            RAZOR
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              ELF Internals
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+    <button
+      class="md-header__button lang-toggle"
+      type="button"
+      title="Cambiar a Español"
+      aria-label="Cambiar a Español"
+      data-target="es"
+    ><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"
+             class="lang-flag" aria-hidden="true" focusable="false">
+          <rect width="3" height="2" fill="#AA151B"/>
+          <rect y=".5" width="3" height="1" fill="#F1BF00"/>
+        </svg></button>
+  </div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/0x574R" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    0x574R
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="RAZOR" class="md-nav__button md-logo" aria-label="RAZOR" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    RAZOR
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/0x574R" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    0x574R
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Malware Dev
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Malware Dev
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../malware-dev/fileless-loader/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fileless Loader
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../malware-dev/reverse-shell/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reverse TCP Shell
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../malware-dev/ptrace-injection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Process Injection via Ptrace
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../malware-dev/darkcloak/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DARKCLOAK: Novel Flow for Process Masquerading
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kernel Theory
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Kernel Theory
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ELF Internals
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ELF Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#segmentsection-duality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Segment/Section Duality
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#physical-file-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Physical File Layout
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#elf-header" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ELF Header
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ELF Header">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#elf64_ehdr-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Elf64_Ehdr Structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#relevant-structure-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Relevant Structure Fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#program-headers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Program Headers
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Program Headers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#elf64_phdr-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Elf64_Phdr Structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#relevant-structure-fields_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Relevant Structure Fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alignment-and-range-calculation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alignment and Range Calculation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#loading-an-elf-binary-by-the-kernel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Loading an ELF Binary by the Kernel
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#auxiliary-vector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auxiliary Vector
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Auxiliary Vector">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#initial-stack-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Initial Stack Layout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#relevant-entries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Relevant Entries
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#introspection-via-auxv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introspection via auxv
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#section-headers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Section Headers
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Section Headers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#elf64_shdr-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Elf64_Shdr Structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#relevant-structure-fields_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Relevant Structure Fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fundamental-sections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fundamental Sections
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fundamental Sections">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#executable-code-text" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Executable Code .text
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#read-only-data-rodata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Read-only Data .rodata
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#initialized-data-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Initialized Data .data
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#uninitialized-data-bss" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Uninitialized Data .bss
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#global-offset-table-got-and-gotplt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Global Offset Table .got and .got.plt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#procedure-linkage-table-plt-pltsec-and-pltgot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Procedure Linkage Table .plt, .plt.sec and .plt.got
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#symbol-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Symbol Tables
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Symbol Tables">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#elf64_sym-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Elf64_Sym Structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#acknowledgements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Acknowledgements
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../identity-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity and Privileges of a Process
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../process-identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Process Identity Spoofing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#segmentsection-duality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Segment/Section Duality
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#physical-file-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Physical File Layout
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#elf-header" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ELF Header
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ELF Header">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#elf64_ehdr-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Elf64_Ehdr Structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#relevant-structure-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Relevant Structure Fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#program-headers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Program Headers
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Program Headers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#elf64_phdr-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Elf64_Phdr Structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#relevant-structure-fields_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Relevant Structure Fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alignment-and-range-calculation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alignment and Range Calculation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#loading-an-elf-binary-by-the-kernel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Loading an ELF Binary by the Kernel
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#auxiliary-vector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auxiliary Vector
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Auxiliary Vector">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#initial-stack-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Initial Stack Layout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#relevant-entries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Relevant Entries
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#introspection-via-auxv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introspection via auxv
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#section-headers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Section Headers
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Section Headers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#elf64_shdr-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Elf64_Shdr Structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#relevant-structure-fields_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Relevant Structure Fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fundamental-sections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fundamental Sections
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fundamental Sections">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#executable-code-text" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Executable Code .text
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#read-only-data-rodata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Read-only Data .rodata
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#initialized-data-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Initialized Data .data
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#uninitialized-data-bss" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Uninitialized Data .bss
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#global-offset-table-got-and-gotplt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Global Offset Table .got and .got.plt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#procedure-linkage-table-plt-pltsec-and-pltgot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Procedure Linkage Table .plt, .plt.sec and .plt.got
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#symbol-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Symbol Tables
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Symbol Tables">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#elf64_sym-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Elf64_Sym Structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#acknowledgements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Acknowledgements
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<div class="article-header">
+<h1>ELF Internals</h1>
+<span class="article-meta">27/05/2026 · 60 min</span>
+</div>
+
+<p>What an ELF binary contains and how the kernel interprets it to turn it into a process</p>
+<hr />
+<div class="admonition info">
+<p class="admonition-title">Context</p>
+<p>This article covers the internal structure of Linux's native binary format. Understanding how the kernel interprets and loads an ELF is a prerequisite for any offensive technique that manipulates binaries, injects code or implements custom loaders.</p>
+</div>
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
+<p>The <strong>Executable and Linkable Format (ELF)</strong> is the native binary format of the Linux ecosystem. Every executable binary, shared library and relocatable object on a Linux system is an ELF file.</p>
+<h2 id="segmentsection-duality">Segment/Section Duality<a class="headerlink" href="#segmentsection-duality" title="Permanent link">&para;</a></h2>
+<p>The ELF architecture presents a fundamental duality — the same file can be described simultaneously through two complementary views:</p>
+<ul>
+<li>The <strong>execution view</strong> organizes content into <strong>segments</strong> (described by the Program Header Table). Segments represent how the kernel maps the binary into virtual memory when the program runs.</li>
+<li>
+<p>The <strong>linking view</strong> organizes content into <strong>sections</strong> (described by the Section Header Table). Sections are logical units with specific semantics used by the linker during the ELF binary build process and by static analysis tools.</p>
+<div class="admonition note">
+<p>The Section Header Table is dispensable at runtime.</p>
+</div>
+</li>
+</ul>
+<p>Both views are ways of interpreting the same ELF at different phases of the program's lifecycle (construction (linking) and execution (loading)).</p>
+<h2 id="physical-file-layout">Physical File Layout<a class="headerlink" href="#physical-file-layout" title="Permanent link">&para;</a></h2>
+<p>A 64-bit ELF file has the following canonical physical layout:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Offset 0x00:     ELF Header (64 bytes)
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>Offset e_phoff:  Program Header Table (e_phnum × 56 bytes)
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    [Segment contents: data, code, etc.]
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>Offset e_shoff:  Section Header Table (e_shnum × 64 bytes)
+</span></code></pre></div>
+<p>The ELF Header invariably begins at offset 0 of the file. The Program Header Table is usually placed immediately after the header (offset <code>0x40</code> in 64-bit binaries), although the specification does not impose this constraint. The Section Header Table is conventionally placed at the end of the file, but can equally reside at any valid offset. The actual contents (code, data, symbol tables) occupy the intermediate regions, referenced via offsets from the header tables.</p>
+<h2 id="elf-header">ELF Header<a class="headerlink" href="#elf-header" title="Permanent link">&para;</a></h2>
+<p><strong>The ELF Header is the first structure of every ELF file and acts as the entry point for interpreting the entire binary.</strong> It occupies the first 64 bytes of the file in the 64-bit variant and provides the kernel, linker and analysis tools with all the information needed to locate and decode the rest of the content.</p>
+<h3 id="elf64_ehdr-structure"><code>Elf64_Ehdr</code> Structure<a class="headerlink" href="#elf64_ehdr-structure" title="Permanent link">&para;</a></h3>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">elf64_hdr</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">e_ident</span><span class="p">[</span><span class="n">EI_NIDENT</span><span class="p">];</span><span class="w">   </span><span class="cm">/* ELF &quot;magic number&quot;                 */</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="n">Elf64_Half</span><span class="w">    </span><span class="n">e_type</span><span class="p">;</span><span class="w">               </span><span class="cm">/* File type                          */</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="n">Elf64_Half</span><span class="w">    </span><span class="n">e_machine</span><span class="p">;</span><span class="w">            </span><span class="cm">/* Target architecture                */</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="n">Elf64_Word</span><span class="w">    </span><span class="n">e_version</span><span class="p">;</span><span class="w">            </span><span class="cm">/* ELF format version                 */</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="n">Elf64_Addr</span><span class="w">    </span><span class="n">e_entry</span><span class="p">;</span><span class="w">              </span><span class="cm">/* Entry point virtual address        */</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="n">Elf64_Off</span><span class="w">     </span><span class="n">e_phoff</span><span class="p">;</span><span class="w">              </span><span class="cm">/* Program header table file offset   */</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="n">Elf64_Off</span><span class="w">     </span><span class="n">e_shoff</span><span class="p">;</span><span class="w">              </span><span class="cm">/* Section header table file offset   */</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="n">Elf64_Word</span><span class="w">    </span><span class="n">e_flags</span><span class="p">;</span><span class="w">              </span><span class="cm">/* Architecture-specific flags        */</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="n">Elf64_Half</span><span class="w">    </span><span class="n">e_ehsize</span><span class="p">;</span><span class="w">             </span><span class="cm">/* Size of this header in bytes       */</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="n">Elf64_Half</span><span class="w">    </span><span class="n">e_phentsize</span><span class="p">;</span><span class="w">          </span><span class="cm">/* Size of each program header entry  */</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="n">Elf64_Half</span><span class="w">    </span><span class="n">e_phnum</span><span class="p">;</span><span class="w">              </span><span class="cm">/* Number of program header entries   */</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="n">Elf64_Half</span><span class="w">    </span><span class="n">e_shentsize</span><span class="p">;</span><span class="w">          </span><span class="cm">/* Size of each section header entry  */</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">    </span><span class="n">Elf64_Half</span><span class="w">    </span><span class="n">e_shnum</span><span class="p">;</span><span class="w">              </span><span class="cm">/* Number of section header entries   */</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">    </span><span class="n">Elf64_Half</span><span class="w">    </span><span class="n">e_shstrndx</span><span class="p">;</span><span class="w">           </span><span class="cm">/* Index of the .shstrtab section     */</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="p">}</span><span class="w"> </span><span class="n">Elf64_Ehdr</span><span class="p">;</span>
+</span></code></pre></div>
+<div class="admonition note">
+<p>The data types used in the 64-bit variant are: <code>Elf64_Half</code> = <code>__u16</code> (2 bytes), <code>Elf64_Word</code> = <code>__u32</code> (4 bytes), <code>Elf64_Addr</code> = <code>__u64</code> (8 bytes), <code>Elf64_Off</code> = <code>__u64</code> (8 bytes).</p>
+</div>
+<p>To inspect the ELF header fields:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>readelf<span class="w"> </span>-h<span class="w"> </span>&lt;program&gt;
+</span></code></pre></div>
+<p><img alt="readelf -h output showing ELF Header fields" src="../ELF/readelf_h.png" title="readelf -h output" /></p>
+<h3 id="relevant-structure-fields">Relevant Structure Fields<a class="headerlink" href="#relevant-structure-fields" title="Permanent link">&para;</a></h3>
+<div class="field-list">
+<ul>
+<li>
+<p><strong><code>e_ident</code></strong></p>
+<p>The first 16 bytes encode the binary's identification and fundamental properties:</p>
+<table>
+<thead>
+<tr>
+<th>Index</th>
+<th>Constant</th>
+<th>x86-64 value</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td><code>EI_MAG0</code></td>
+<td><code>0x7f</code></td>
+<td>First byte of the magic number</td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>EI_MAG1</code></td>
+<td><code>0x45 ('E')</code></td>
+<td>Second byte of the magic number</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>EI_MAG2</code></td>
+<td><code>0x4c ('L')</code></td>
+<td>Third byte of the magic number</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>EI_MAG3</code></td>
+<td><code>0x46 ('F')</code></td>
+<td>Fourth byte of the magic number</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>EI_CLASS</code></td>
+<td><code>2 (ELFCLASS64)</code></td>
+<td>Class: 64-bit</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>EI_DATA</code></td>
+<td><code>1 (ELFDATA2LSB)</code></td>
+<td>Endianness: little-endian</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>EI_VERSION</code></td>
+<td><code>1 (EV_CURRENT)</code></td>
+<td>Format version</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>EI_OSABI</code></td>
+<td><code>0 (ELFOSABI_NONE)</code></td>
+<td>OS ABI</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>EI_PAD</code></td>
+<td><code>0</code></td>
+<td>Padding (bytes 8–15 set to zero)</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p>The kernel performs the following validations with the ELF Header data: magic bytes = <code>\177ELF</code> (<code>0x7f 0x45 0x4c 0x46</code>), <code>e_type</code> ∈ {<code>ET_EXEC</code>, <code>ET_DYN</code>}, <code>e_machine</code> compatible with the architecture (<code>EM_X86_64</code> = 62 on x86-64), and <code>e_phentsize</code> = 56. If any check fails, it returns <code>-ENOEXEC</code>.</p>
+</div>
+</li>
+<li>
+<p><strong><code>e_type</code></strong></p>
+<p>Nature of the file. <code>ET_REL</code> (1) = relocatable object (.o), <code>ET_EXEC</code> (2) = executable with absolute addresses, <code>ET_DYN</code> (3) = shared object / PIE executable, <code>ET_CORE</code> (4) = core dump.</p>
+</li>
+<li>
+<p><strong><code>e_machine</code></strong></p>
+<p>Architecture. For x86-64: <code>62</code> (<code>EM_X86_64</code>).</p>
+</li>
+<li>
+<p><strong><code>e_entry</code></strong></p>
+<p>Virtual address of the entry point (<code>_start</code>). In non-PIE binaries (<code>ET_EXEC</code>), this is a fixed absolute address. In PIE binaries (<code>ET_DYN</code>), it is an offset relative to the load base, which the kernel adds to the base address established by ASLR.</p>
+</li>
+<li>
+<p><strong><code>e_phoff</code></strong> and <strong><code>e_shoff</code></strong></p>
+<p>Byte offsets of the PHT and SHT within the file.</p>
+</li>
+<li>
+<p><strong><code>e_phentsize</code></strong></p>
+<p>Size of each PHT entry (56 bytes for ELF64).</p>
+</li>
+<li>
+<p><strong><code>e_shentsize</code></strong></p>
+<p>Size of each SHT entry (64 bytes for ELF64).</p>
+</li>
+<li>
+<p><strong><code>e_phnum</code></strong></p>
+<p>Number of entries in the PHT.</p>
+</li>
+<li>
+<p><strong><code>e_shnum</code></strong></p>
+<p>Number of sections in the SHT.</p>
+</li>
+<li>
+<p><strong><code>e_shstrndx</code></strong></p>
+<p>Index of the <code>.shstrtab</code> section (contains section names as null-terminated strings).</p>
+<div class="language-asm highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1">; .shstrtab</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="err">00</span><span class="w">                                           </span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="err">2</span><span class="nf">e</span><span class="w"> </span><span class="mi">74</span><span class="w"> </span><span class="mi">65</span><span class="w"> </span><span class="mi">78</span><span class="w"> </span><span class="mi">74</span><span class="w"> </span><span class="mi">00</span><span class="w">                      </span><span class="c1">; &quot;.text&quot;               </span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="err">2</span><span class="nf">e</span><span class="w"> </span><span class="mi">64</span><span class="w"> </span><span class="mi">61</span><span class="w"> </span><span class="mi">74</span><span class="w"> </span><span class="mi">61</span><span class="w"> </span><span class="mi">00</span><span class="w">                      </span><span class="c1">; &quot;.data&quot;               </span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="err">2</span><span class="nf">e</span><span class="w"> </span><span class="mi">62</span><span class="w"> </span><span class="mi">73</span><span class="w"> </span><span class="mi">73</span><span class="w"> </span><span class="mi">00</span><span class="w">                         </span><span class="c1">; &quot;.bss&quot;                </span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="err">2</span><span class="nf">e</span><span class="w"> </span><span class="mi">73</span><span class="w"> </span><span class="mi">68</span><span class="w"> </span><span class="mi">73</span><span class="w"> </span><span class="mi">74</span><span class="w"> </span><span class="mi">72</span><span class="w"> </span><span class="mi">74</span><span class="w"> </span><span class="mi">61</span><span class="w"> </span><span class="mi">62</span><span class="w"> </span><span class="mi">00</span><span class="w">          </span><span class="c1">; &quot;.shstrtab&quot;    </span>
+</span></code></pre></div>
+</li>
+<li>
+<p><strong><code>e_flags</code></strong></p>
+<p>Architecture-specific flags. On x86-64, always <code>0</code>.</p>
+</li>
+</ul>
+</div>
+<h2 id="program-headers">Program Headers<a class="headerlink" href="#program-headers" title="Permanent link">&para;</a></h2>
+<p>Having established the ELF Header as the interpretive entry point, the next critical structure for loading into memory is the Program Header Table (PHT). This table describes the binary's segments — contiguous blocks of data that the kernel maps directly into the process's virtual address space.</p>
+<h3 id="elf64_phdr-structure"><code>Elf64_Phdr</code> Structure<a class="headerlink" href="#elf64_phdr-structure" title="Permanent link">&para;</a></h3>
+<p>Each PHT entry is 56 bytes:</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">elf64_phdr</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="n">Elf64_Word</span><span class="w">  </span><span class="n">p_type</span><span class="p">;</span><span class="w">     </span><span class="cm">/* Segment type                            */</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="n">Elf64_Word</span><span class="w">  </span><span class="n">p_flags</span><span class="p">;</span><span class="w">    </span><span class="cm">/* Permission flags (RWX)                  */</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="n">Elf64_Off</span><span class="w">   </span><span class="n">p_offset</span><span class="p">;</span><span class="w">   </span><span class="cm">/* Offset of the segment in the file       */</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="n">Elf64_Addr</span><span class="w">  </span><span class="n">p_vaddr</span><span class="p">;</span><span class="w">    </span><span class="cm">/* Virtual load address                    */</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="n">Elf64_Addr</span><span class="w">  </span><span class="n">p_paddr</span><span class="p">;</span><span class="w">    </span><span class="cm">/* Physical address (unused on Linux)      */</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="n">Elf64_Xword</span><span class="w"> </span><span class="n">p_filesz</span><span class="p">;</span><span class="w">   </span><span class="cm">/* Size of the segment in the file         */</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">    </span><span class="n">Elf64_Xword</span><span class="w"> </span><span class="n">p_memsz</span><span class="p">;</span><span class="w">    </span><span class="cm">/* Size of the segment in memory           */</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="n">Elf64_Xword</span><span class="w"> </span><span class="n">p_align</span><span class="p">;</span><span class="w">    </span><span class="cm">/* Segment alignment                       */</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="p">}</span><span class="w"> </span><span class="n">Elf64_Phdr</span><span class="p">;</span>
+</span></code></pre></div>
+<div class="admonition note">
+<p>Entry N is located at: <code>e_phoff + (N × 56)</code>. In memory (via <code>auxv</code>): <code>AT_PHDR + (N × AT_PHENT)</code>.</p>
+</div>
+<p>To inspect the PHT data of an ELF file:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>readelf<span class="w"> </span>-l<span class="w"> </span>&lt;program&gt;
+</span></code></pre></div>
+<p><img alt="readelf -l output showing program headers and section-to-segment mapping" src="../ELF/readelf_l.png" title="readelf -l output" /></p>
+<h3 id="relevant-structure-fields_1">Relevant Structure Fields<a class="headerlink" href="#relevant-structure-fields_1" title="Permanent link">&para;</a></h3>
+<div class="field-list">
+<ul>
+<li>
+<p><strong>Segment types (<code>p_type</code>)</strong></p>
+<ul>
+<li>
+<p><strong><code>PT_LOAD</code></strong></p>
+<p>Loadable segment. Each <code>PT_LOAD</code> defines a region that the kernel maps into the process's virtual address space via <code>mmap</code>. A typical binary contains two or three <code>PT_LOAD</code> segments: one for code (RX), one for data (RW) and optionally one for read-only constants (R).</p>
+</li>
+<li>
+<p><strong><code>PT_DYNAMIC</code></strong></p>
+<p>Points to the information needed for dynamic linking. It typically contains the <code>.dynamic</code> section, which consists of an array of <code>Elf64_Dyn</code> structures and serves as the main table used by the dynamic linker (usually <code>ld-linux.so</code>).</p>
+</li>
+<li>
+<p><strong><code>PT_INTERP</code></strong></p>
+<p>Path to the ELF interpreter (dynamic linker). The kernel reads this path and loads the interpreter as a second ELF binary before transferring control. A statically linked executable lacks this segment.</p>
+</li>
+<li>
+<p><strong><code>PT_PHDR</code></strong></p>
+<p>Indicates where the PHT itself is loaded in memory. This allows the ELF interpreter to directly locate the segment table during dynamic loading of the executable, without needing to re-read the ELF Header from disk.</p>
+</li>
+<li>
+<p><strong><code>PT_NOTE</code></strong></p>
+<p>Auxiliary information (notes).</p>
+</li>
+<li>
+<p><strong><code>PT_TLS</code></strong></p>
+<p>Template for Thread-Local Storage. Defines the data block that each thread receives as a private copy.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Permissions (<code>p_flags</code>)</strong></p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="cp">#define PF_X  0x1   </span><span class="cm">/* Execute */</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="cp">#define PF_W  0x2   </span><span class="cm">/* Write   */</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="cp">#define PF_R  0x4   </span><span class="cm">/* Read    */</span>
+</span></code></pre></div>
+<p>The kernel translates these flags to page protections (minimum granularity):</p>
+<table>
+<thead>
+<tr>
+<th>ELF combination (<code>p_flags</code>)</th>
+<th>Page protection</th>
+<th>Use</th>
+<th>Relevant sections</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PF_R</code> &#124; <code>PF_X</code></td>
+<td><code>PROT_READ</code> &#124; <code>PROT_EXEC</code></td>
+<td>Executable code</td>
+<td><code>.text</code></td>
+</tr>
+<tr>
+<td><code>PF_R</code> &#124; <code>PF_W</code></td>
+<td><code>PROT_READ</code> &#124; <code>PROT_WRITE</code></td>
+<td>Modifiable data</td>
+<td><code>.data</code> and <code>.bss</code></td>
+</tr>
+<tr>
+<td><code>PF_R</code></td>
+<td><code>PROT_READ</code></td>
+<td>Read-only data</td>
+<td><code>.rodata</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</div>
+<h3 id="alignment-and-range-calculation">Alignment and Range Calculation<a class="headerlink" href="#alignment-and-range-calculation" title="Permanent link">&para;</a></h3>
+<p>The actual memory range of a segment is rounded up to the next multiple of <code>p_align</code>:</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">end</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">p_vaddr</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">p_memsz</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">p_align</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="o">~</span><span class="p">(</span><span class="n">p_align</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+</span></code></pre></div>
+<p>The <code>mmap</code>, <code>munmap</code>, <code>mremap</code> and <code>mprotect</code> syscalls operate at page granularity. Any operation on segment mappings must use aligned ranges.</p>
+<h2 id="loading-an-elf-binary-by-the-kernel">Loading an ELF Binary by the Kernel<a class="headerlink" href="#loading-an-elf-binary-by-the-kernel" title="Permanent link">&para;</a></h2>
+<p>When a process invokes the <code>execve</code> syscall, the kernel does not know in advance what format the binary to execute has. Linux supports multiple binary formats, each linked to a handler in a linked list. The kernel iterates that list and passes the file to each handler until one accepts it.</p>
+<p>For ELF, the handler is <code>load_elf_binary</code>. The function begins by validating the ELF Header (magic bytes, <code>e_type</code>, <code>e_machine</code>, <code>e_phentsize</code>). If validation fails, it returns <code>-ENOEXEC</code> and the kernel continues trying the next handler in the list.</p>
+<p>Once validation passes, the kernel iterates the PHT looking for two segment types:</p>
+<ul>
+<li>
+<p><strong>Detection of <code>PT_INTERP</code></strong><br>If the PHT contains a <code>PT_INTERP</code> segment, the kernel reads the dynamic interpreter's path and maps it into the new address space alongside the main binary's segments. A statically linked binary has no <code>PT_INTERP</code>, so the kernel transfers control directly to its entry point.</p>
+<div class="admonition note">
+<p><code>execve</code> does not create a new process — it replaces the image of the process that invokes it. The PID remains the same. The kernel discards the invoking process's address space and builds a new one where it maps the segments of the binary to execute.</p>
+</div>
+</li>
+<li>
+<p><strong>Mapping <code>PT_LOAD</code> segments</strong><br>Each <code>PT_LOAD</code> segment in the PHT describes a byte range of the ELF file (<code>p_offset</code>, <code>p_filesz</code>), the address in virtual memory where those bytes should be placed (<code>p_vaddr</code>) and the permissions for that region (<code>p_flags</code>). If the segment requires more memory than it occupies in the file (<code>p_memsz &gt; p_filesz</code>), the kernel extends the region with zero-initialized memory — this difference corresponds to the <code>.bss</code> region, global variables with no initial value.</p>
+<div class="admonition note">
+<p>Each <code>PT_LOAD</code> generates one or more VMAs in the process's <code>mm_struct</code>.</p>
+</div>
+<p>The address calculation depends on the binary type:</p>
+<ul>
+<li>In <code>ET_EXEC</code> (non-PIE): <code>p_vaddr</code> is an absolute virtual address. The kernel maps the segment exactly at that address. Each execution produces the same memory layout.</li>
+<li>In <code>ET_DYN</code> (PIE): the kernel selects a random base address (due to ASLR) and adds <code>p_vaddr</code> as an offset. Each execution produces a different layout. The randomization makes attacks that depend on knowing code or data addresses harder.</li>
+</ul>
+</li>
+</ul>
+<h2 id="auxiliary-vector">Auxiliary Vector<a class="headerlink" href="#auxiliary-vector" title="Permanent link">&para;</a></h2>
+<p>After mapping the segments, the kernel builds the process's initial stack, placing <code>argc</code>, <code>argv[]</code> pointers, <code>envp[]</code> pointers and the auxiliary vector on it. The <code>auxv</code> is an array of key-value pairs that conveys to user space the information the kernel knows at load time: the address of the PHT in memory (<code>AT_PHDR</code>), the size of each entry (<code>AT_PHENT</code>), the number of entries (<code>AT_PHNUM</code>), the program's entry point (<code>AT_ENTRY</code>) and the interpreter's base address (<code>AT_BASE</code>).</p>
+<p><strong>These values allow the dynamic interpreter (and the process itself) to locate the binary's structures without accessing the file on disk. Without them, the interpreter would have no way to locate the PHT of the program it must process.</strong></p>
+<h3 id="initial-stack-layout">Initial Stack Layout<a class="headerlink" href="#initial-stack-layout" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>[ high end ]
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>+----------------------------------+
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>| argv, envp, filename strings     |  NULL-terminated bytes
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>+----------------------------------+
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>| alignment padding (16 B)         |
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>+----------------------------------+
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>| AT_NULL  (0x00, 0x00)            |  16-byte NULL: auxv terminator
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>| ...                              |
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>| AT_ENTRY (0x09, address)         |  16 bytes per entry
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>| AT_PHNUM (0x05, value)           |
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>| AT_PHENT (0x04, value)           |
+</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>| AT_PHDR  (0x03, address)         |  start of auxv
+</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>+----------------------------------+
+</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>| NULL                             |  8-byte NULL: envp[] terminator
+</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>| envp[n-1]  (pointer)             |
+</span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>| ...                              |
+</span><span id="__span-8-17"><a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a>| envp[0]    (pointer)             |
+</span><span id="__span-8-18"><a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a>+----------------------------------+
+</span><span id="__span-8-19"><a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a>| NULL                             |  8-byte NULL: argv[] terminator
+</span><span id="__span-8-20"><a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a>| argv[argc-1] (pointer)           |
+</span><span id="__span-8-21"><a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a>| ...                              |
+</span><span id="__span-8-22"><a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a>| argv[0]      (pointer)           |
+</span><span id="__span-8-23"><a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a>+----------------------------------+
+</span><span id="__span-8-24"><a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a>| argc                             |  8 bytes (unsigned long)
+</span><span id="__span-8-25"><a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a>+----------------------------------+
+</span><span id="__span-8-26"><a id="__codelineno-8-26" name="__codelineno-8-26" href="#__codelineno-8-26"></a>↑ RSP points here at the entry point
+</span></code></pre></div>
+<p>Each <code>auxv</code> entry consists of two consecutive <code>unsigned long</code> values (16 bytes):</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">a_type</span><span class="p">;</span><span class="w">    </span><span class="cm">/* AT_PHDR, AT_ENTRY, AT_RANDOM, etc. */</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">a_val</span><span class="p">;</span><span class="w">     </span><span class="cm">/* associated value                    */</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="p">}</span><span class="w"> </span><span class="n">Elf64_auxv_t</span><span class="p">;</span>
+</span></code></pre></div>
+<p>The array terminates when <code>a_type == AT_NULL</code>.</p>
+<h3 id="relevant-entries">Relevant Entries<a class="headerlink" href="#relevant-entries" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th><code>a_type</code></th>
+<th>Constant</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3</td>
+<td><code>AT_PHDR</code></td>
+<td>In-memory address of the executable's PHT</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>AT_PHENT</code></td>
+<td>Size of each <code>Elf64_Phdr</code> (56 bytes)</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>AT_PHNUM</code></td>
+<td>Number of program headers</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>AT_PAGESZ</code></td>
+<td>System page size (4096 bytes)</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>AT_BASE</code></td>
+<td>Load base address of the dynamic interpreter</td>
+</tr>
+<tr>
+<td>9</td>
+<td><code>AT_ENTRY</code></td>
+<td>Entry point of the executable</td>
+</tr>
+<tr>
+<td>23</td>
+<td><code>AT_SECURE</code></td>
+<td><code>1</code> if the binary is <code>setuid/setgid</code></td>
+</tr>
+<tr>
+<td>25</td>
+<td><code>AT_RANDOM</code></td>
+<td>Pointer to 16 random bytes (stack canary seed)</td>
+</tr>
+<tr>
+<td>33</td>
+<td><code>AT_SYSINFO_EHDR</code></td>
+<td>Address of the vDSO mapped in the process</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p>The kernel generates exactly one entry per <code>a_type</code>, with no duplicates. The <code>auxv</code> is not optional — the kernel generates it unconditionally for every ELF process, static or dynamic.</p>
+</div>
+<h3 id="introspection-via-auxv">Introspection via <code>auxv</code><a class="headerlink" href="#introspection-via-auxv" title="Permanent link">&para;</a></h3>
+<p>With the values of <code>AT_PHDR</code>, <code>AT_PHENT</code> and <code>AT_PHNUM</code>, the process can traverse its own PHT in memory and locate any segment.</p>
+<p>In a PIE binary, the <code>p_vaddr</code> addresses of each segment are offsets relative to a load base that the kernel chooses randomly (ASLR). The <code>auxv</code> does not contain that base directly, but it can be derived — <code>AT_PHDR</code> indicates where the PHT ended up in memory after loading, and <code>p_offset</code> of the first segment indicates how far from the start of the file the PHT was. Since the kernel maps the file from the base, the relationship is <code>base = AT_PHDR - p_offset</code>. With the base known, the real address of any segment is <code>base + p_vaddr</code>. In non-PIE binaries (<code>ET_EXEC</code>), <code>p_vaddr</code> addresses are absolute and this calculation is not needed.</p>
+<p>This mechanism allows code to resolve the process's memory layout without accessing <code>/proc/self/maps</code>, avoiding the <code>openat</code>/<code>read</code>/<code>close</code> syscalls that a security monitor might detect. The <code>auxv</code> data is already on the process's stack, so accessing it is a simple memory read, invisible to any syscall-level tracing mechanism.</p>
+<h2 id="section-headers">Section Headers<a class="headerlink" href="#section-headers" title="Permanent link">&para;</a></h2>
+<p>While segments define the execution view, sections provide the linking and analysis view. The SHT is not needed for execution, but is indispensable for linkers, debuggers and static analyzers.</p>
+<h3 id="elf64_shdr-structure"><code>Elf64_Shdr</code> Structure<a class="headerlink" href="#elf64_shdr-structure" title="Permanent link">&para;</a></h3>
+<p>Each entry is 64 bytes:</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">elf64_shdr</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="n">Elf64_Word</span><span class="w">  </span><span class="n">sh_name</span><span class="p">;</span><span class="w">       </span><span class="cm">/* Index in .shstrtab for the name      */</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">  </span><span class="n">Elf64_Word</span><span class="w">  </span><span class="n">sh_type</span><span class="p">;</span><span class="w">       </span><span class="cm">/* Section type                         */</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">  </span><span class="n">Elf64_Xword</span><span class="w"> </span><span class="n">sh_flags</span><span class="p">;</span><span class="w">      </span><span class="cm">/* Section attributes                   */</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">  </span><span class="n">Elf64_Addr</span><span class="w">  </span><span class="n">sh_addr</span><span class="p">;</span><span class="w">       </span><span class="cm">/* Virtual address at execution         */</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">  </span><span class="n">Elf64_Off</span><span class="w">   </span><span class="n">sh_offset</span><span class="p">;</span><span class="w">     </span><span class="cm">/* Offset of the section in the file    */</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">  </span><span class="n">Elf64_Xword</span><span class="w"> </span><span class="n">sh_size</span><span class="p">;</span><span class="w">       </span><span class="cm">/* Size of the section in bytes         */</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">  </span><span class="n">Elf64_Word</span><span class="w">  </span><span class="n">sh_link</span><span class="p">;</span><span class="w">       </span><span class="cm">/* Index of a related section           */</span>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="w">  </span><span class="n">Elf64_Word</span><span class="w">  </span><span class="n">sh_info</span><span class="p">;</span><span class="w">       </span><span class="cm">/* Additional information               */</span>
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="w">  </span><span class="n">Elf64_Xword</span><span class="w"> </span><span class="n">sh_addralign</span><span class="p">;</span><span class="w">  </span><span class="cm">/* Alignment requirement                */</span>
+</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="w">  </span><span class="n">Elf64_Xword</span><span class="w"> </span><span class="n">sh_entsize</span><span class="p">;</span><span class="w">    </span><span class="cm">/* Entry size (if a table)              */</span>
+</span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="p">}</span><span class="w"> </span><span class="n">Elf64_Shdr</span><span class="p">;</span>
+</span></code></pre></div>
+<p>The <code>sh_addr</code> field of the section, when non-zero, indicates the virtual address the section occupies in memory. Comparing with the ranges <code>[p_vaddr, p_vaddr + p_memsz)</code> of each <code>PT_LOAD</code> segment determines which sections belong to which segment.</p>
+<p>To inspect the SHT data of an ELF file:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>readelf<span class="w"> </span>-S<span class="w"> </span>&lt;program&gt;
+</span></code></pre></div>
+<p><img alt="readelf -S output showing section headers" src="../ELF/readelf_S.png" title="readelf -S output" /></p>
+<h3 id="relevant-structure-fields_2">Relevant Structure Fields<a class="headerlink" href="#relevant-structure-fields_2" title="Permanent link">&para;</a></h3>
+<div class="field-list">
+<ul>
+<li>
+<p><strong>Section types (<code>sh_type</code>)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Constant</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td><code>SHT_NULL</code></td>
+<td>Inactive entry</td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>SHT_PROGBITS</code></td>
+<td>Program-defined content (code, data)</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>SHT_SYMTAB</code></td>
+<td>Full symbol table (linking)</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>SHT_STRTAB</code></td>
+<td>String table</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>SHT_RELA</code></td>
+<td>Relocation entries with explicit addend</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>SHT_DYNAMIC</code></td>
+<td>Dynamic linking information</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>SHT_NOTE</code></td>
+<td>Auxiliary information</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>SHT_NOBITS</code></td>
+<td>Section with no file content (<code>.bss</code>)</td>
+</tr>
+<tr>
+<td>9</td>
+<td><code>SHT_REL</code></td>
+<td>Relocation entries without addend</td>
+</tr>
+<tr>
+<td>11</td>
+<td><code>SHT_DYNSYM</code></td>
+<td>Dynamic symbol table</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><strong>Section flags (<code>sh_flags</code>)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Constant</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0x1</code></td>
+<td><code>SHF_WRITE</code></td>
+<td>Writable during execution</td>
+</tr>
+<tr>
+<td><code>0x2</code></td>
+<td><code>SHF_ALLOC</code></td>
+<td>Occupies memory during execution</td>
+</tr>
+<tr>
+<td><code>0x4</code></td>
+<td><code>SHF_EXECINSTR</code></td>
+<td>Contains executable instructions</td>
+</tr>
+<tr>
+<td><code>0x10</code></td>
+<td><code>SHF_MERGE</code></td>
+<td>Can be merged to eliminate duplicates</td>
+</tr>
+<tr>
+<td><code>0x20</code></td>
+<td><code>SHF_STRINGS</code></td>
+<td>Contains null-terminated strings</td>
+</tr>
+<tr>
+<td><code>0x400</code></td>
+<td><code>SHF_TLS</code></td>
+<td>Thread-local data</td>
+</tr>
+</tbody>
+</table>
+<p>Kernel-specific flags: <code>SHF_RELA_LIVEPATCH</code> (<code>0x00100000</code>) marks relocation sections for live patching; <code>SHF_RO_AFTER_INIT</code> (<code>0x00200000</code>) marks sections that become read-only after kernel initialization.</p>
+</li>
+</ul>
+</div>
+<h2 id="fundamental-sections">Fundamental Sections<a class="headerlink" href="#fundamental-sections" title="Permanent link">&para;</a></h2>
+<h3 id="executable-code-text">Executable Code <code>.text</code><a class="headerlink" href="#executable-code-text" title="Permanent link">&para;</a></h3>
+<div class="field-list">
+<ul>
+<li><strong>Type:</strong> <code>SHT_PROGBITS</code></li>
+<li><strong>Attributes:</strong> <code>SHF_ALLOC | SHF_EXECINSTR</code></li>
+<li><strong>Segment:</strong> <code>PT_LOAD</code> with permissions <code>PF_R | PF_X</code></li>
+<li>Contains the program's machine code. The entry point (<code>e_entry</code>) normally points inside <code>.text</code>.</li>
+</ul>
+</div>
+<h3 id="read-only-data-rodata">Read-only Data <code>.rodata</code><a class="headerlink" href="#read-only-data-rodata" title="Permanent link">&para;</a></h3>
+<div class="field-list">
+<ul>
+<li><strong>Type:</strong> <code>SHT_PROGBITS</code></li>
+<li><strong>Attributes:</strong> <code>SHF_ALLOC</code></li>
+<li><strong>Segment:</strong> <code>PT_LOAD</code> with permissions <code>PF_R</code></li>
+<li>Constants: text strings, lookup tables, numeric constants…</li>
+</ul>
+</div>
+<h3 id="initialized-data-data">Initialized Data <code>.data</code><a class="headerlink" href="#initialized-data-data" title="Permanent link">&para;</a></h3>
+<div class="field-list">
+<ul>
+<li><strong>Type:</strong> <code>SHT_PROGBITS</code></li>
+<li><strong>Attributes:</strong> <code>SHF_ALLOC | SHF_WRITE</code></li>
+<li><strong>Segment:</strong> <code>PT_LOAD</code> with permissions <code>PF_R | PF_W</code></li>
+<li>Static and global variables initialized with non-null values. The initial values are copied from the file into the memory mapping during loading.</li>
+</ul>
+</div>
+<h3 id="uninitialized-data-bss">Uninitialized Data <code>.bss</code><a class="headerlink" href="#uninitialized-data-bss" title="Permanent link">&para;</a></h3>
+<div class="field-list">
+<ul>
+<li><strong>Type:</strong> <code>SHT_NOBITS</code></li>
+<li><strong>Attributes:</strong> <code>SHF_ALLOC | SHF_WRITE</code></li>
+<li><strong>Segment:</strong> Located in the data <code>PT_LOAD</code> (<code>PF_R | PF_W</code>)</li>
+<li>Global and static variables initialized to zero or left uninitialized.</li>
+</ul>
+</div>
+<h3 id="global-offset-table-got-and-gotplt">Global Offset Table <code>.got</code> and <code>.got.plt</code><a class="headerlink" href="#global-offset-table-got-and-gotplt" title="Permanent link">&para;</a></h3>
+<div class="field-list">
+<ul>
+<li><strong>Type:</strong> <code>SHT_PROGBITS</code></li>
+<li><strong>Attributes:</strong> <code>SHF_ALLOC | SHF_WRITE</code></li>
+<li><strong>Segment:</strong> <code>PT_LOAD</code> with permissions <code>PF_R | PF_W</code></li>
+<li>
+<p>The GOT is the central structure for dynamic linking when accessing external data and functions.</p>
+<p>On x86-64 it is split into:</p>
+</li>
+</ul>
+</div>
+<div style="padding-left: 1.5em">
+<ul>
+<li>
+<p><strong><code>.got</code></strong></p>
+<p>Entries for imported global variables and addresses resolved via eager binding.</p>
+</li>
+<li>
+<p><strong><code>.got.plt</code></strong></p>
+<p>Entries for imported functions, resolved via lazy binding.</p>
+</li>
+</ul>
+</div>
+<h3 id="procedure-linkage-table-plt-pltsec-and-pltgot">Procedure Linkage Table <code>.plt</code>, <code>.plt.sec</code> and <code>.plt.got</code><a class="headerlink" href="#procedure-linkage-table-plt-pltsec-and-pltgot" title="Permanent link">&para;</a></h3>
+<div class="field-list">
+<ul>
+<li><strong>Type:</strong> <code>SHT_PROGBITS</code></li>
+<li><strong>Attributes:</strong> <code>SHF_ALLOC | SHF_EXECINSTR</code></li>
+<li><strong>Segment:</strong> <code>PT_LOAD</code> with permissions <code>PF_R | PF_X</code></li>
+<li>Code section with trampoline stubs for each imported function:</li>
+</ul>
+</div>
+<div style="padding-left: 1.5em">
+<ul>
+<li>
+<p><strong><code>.plt</code></strong></p>
+<p>Fallback stubs for lazy binding (not called directly by program code).</p>
+</li>
+<li>
+<p><strong><code>.plt.sec</code></strong></p>
+<p>Stubs that program code calls directly when invoking an imported function.</p>
+</li>
+<li>
+<p><strong><code>.plt.got</code></strong></p>
+<p>Stubs for imported functions whose address is stored in a variable (function pointer) rather than called directly.</p>
+</li>
+</ul>
+</div>
+<h3 id="symbol-tables">Symbol Tables<a class="headerlink" href="#symbol-tables" title="Permanent link">&para;</a></h3>
+<p>Symbol tables associate names with addresses, sizes and attributes.</p>
+<h4 id="elf64_sym-structure"><code>Elf64_Sym</code> Structure<a class="headerlink" href="#elf64_sym-structure" title="Permanent link">&para;</a></h4>
+<p>Each entry is 24 bytes:</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">elf64_sym</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span><span class="n">Elf64_Word</span><span class="w">    </span><span class="n">st_name</span><span class="p">;</span><span class="w">    </span><span class="cm">/* Index in the string table     (4 bytes)  */</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">  </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">st_info</span><span class="p">;</span><span class="w">    </span><span class="cm">/* Symbol type and binding       (1 byte)   */</span>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">  </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">st_other</span><span class="p">;</span><span class="w">   </span><span class="cm">/* Visibility                    (1 byte)   */</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">  </span><span class="n">Elf64_Half</span><span class="w">    </span><span class="n">st_shndx</span><span class="p">;</span><span class="w">   </span><span class="cm">/* Index of associated section   (2 bytes)  */</span>
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">  </span><span class="n">Elf64_Addr</span><span class="w">    </span><span class="n">st_value</span><span class="p">;</span><span class="w">   </span><span class="cm">/* Symbol value (address)        (8 bytes)  */</span>
+</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="w">  </span><span class="n">Elf64_Xword</span><span class="w">   </span><span class="n">st_size</span><span class="p">;</span><span class="w">    </span><span class="cm">/* Size of the associated object (8 bytes)  */</span>
+</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="p">}</span><span class="w"> </span><span class="n">Elf64_Sym</span><span class="p">;</span>
+</span></code></pre></div>
+<p>A binary can contain two distinct tables:</p>
+<ul>
+<li>
+<p><strong><code>.symtab</code></strong> (type <code>SHT_SYMTAB</code>)</p>
+<p>Contains all symbols: local functions, static variables, internal labels…</p>
+</li>
+<li>
+<p><strong><code>.dynsym</code></strong> (type <code>SHT_DYNSYM</code>)</p>
+<p>Contains only the symbols needed for dynamic linking: imported/exported functions and variables.</p>
+</li>
+</ul>
+<h2 id="acknowledgements">Acknowledgements<a class="headerlink" href="#acknowledgements" title="Permanent link">&para;</a></h2>
+<p>Thanks for making it this far.</p>
+<p>If you find errors or want to improve/extend the article, the blog content is open to Pull Requests. All contributions are welcome.</p>
+<p>See you in the next article! ;)</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      © 2026 0x574R
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.sections", "navigation.top", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+<script>
+/*
+ * Language-toggle click handler.
+ *
+ * WHY NOT AT DOMContentLoaded?
+ *   navigation.instant changes window.location without a page reload.
+ *   Reading the path at load time means the button would always navigate
+ *   from the first URL visited, not the current one.
+ *
+ * HOW IT WORKS:
+ *   overrides/partials/alternate.html embeds data-target="en" or "es"
+ *   on the button at BUILD TIME (Jinja2, config.theme.language).
+ *   Here we only attach the click listener; the target path is computed
+ *   from window.location.pathname at the moment of the click.
+ */
+(function () {
+  'use strict';
+
+  function attachToggle(btn) {
+    if (btn.dataset.ready) return;   // don't double-bind
+    btn.dataset.ready = '1';
+
+    btn.addEventListener('click', function () {
+      var target = btn.dataset.target;  // 'en' or 'es' — set server-side
+      var p      = window.location.pathname;
+
+      // Replace /es/…  ↔  /en/…
+      // Regex: match exactly /es/ or /en/ at the start of the path
+      var next = p.replace(/^\/(es|en)(\/|$)/, '/' + target + '$2');
+
+      // Fallback if the path had no language prefix
+      if (next === p) next = '/' + target + '/';
+
+      window.location.href = next;
+    });
+  }
+
+  function init() {
+    document.querySelectorAll('button.lang-toggle[data-target]')
+            .forEach(attachToggle);
+  }
+
+  // Initial load
+  document.addEventListener('DOMContentLoaded', init);
+
+  // MkDocs Material instant navigation fires this after each page swap
+  document.addEventListener('DOMContentMutated', init);
+
+}());
+</script>
+
+  </body>
+</html>

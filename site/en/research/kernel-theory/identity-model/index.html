@@ -1,0 +1,2206 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="How the Linux kernel manages the identity and privileges of a process. UIDs, capabilities, securebits and credential structs.">
+      
+      
+      
+        <link rel="canonical" href="https://0x574r.github.io/en/research/kernel-theory/identity-model/">
+      
+      
+        <link rel="prev" href="../elf-internals/">
+      
+      
+        <link rel="next" href="../process-identity/">
+      
+      
+        
+          <link rel="alternate" href="/es/" hreflang="es">
+        
+          <link rel="alternate" href="/en/" hreflang="en">
+        
+      
+      
+      <link rel="icon" href="../../../assets/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Identity and Privileges of a Process - RAZOR</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+  
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20448%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.1.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20d%3D%22M64%20480c-35.3%200-64-28.7-64-64V96c0-35.3%2028.7-64%2064-64h320c35.3%200%2064%2028.7%2064%2064v213.5c0%2017-6.7%2033.3-18.7%2045.3L322.7%20461.3c-12%2012-28.3%2018.7-45.3%2018.7zm325.5-176H296c-13.3%200-24%2010.7-24%2024v93.5z%22/%3E%3C/svg%3E');--md-admonition-icon--tip:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20384%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.1.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20d%3D%22M292.9%20384c7.3-22.3%2021.9-42.5%2038.4-59.9C364%20289.7%20384%20243.2%20384%20192%20384%2086%20298%200%20192%200S0%2086%200%20192c0%2051.2%2020%2097.7%2052.7%20132.1%2016.5%2017.4%2031.2%2037.6%2038.4%2059.9h201.7zm-4.9%2048H96v16c0%2044.2%2035.8%2080%2080%2080h32c44.2%200%2080-35.8%2080-80zM184%20112c-39.8%200-72%2032.2-72%2072%200%2013.3-10.7%2024-24%2024s-24-10.7-24-24c0-66.3%2053.7-120%20120-120%2013.3%200%2024%2010.7%2024%2024s-10.7%2024-24%2024%22/%3E%3C/svg%3E');--md-admonition-icon--warning:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20512%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.1.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20d%3D%22M256%200c14.7%200%2028.2%208.1%2035.2%2021l216%20400c6.7%2012.4%206.4%2027.4-.8%2039.5S486.1%20480%20472%20480H40c-14.1%200-27.2-7.4-34.4-19.5s-7.5-27.1-.8-39.5l216-400c7-12.9%2020.5-21%2035.2-21m0%20352a32%2032%200%201%200%200%2064%2032%2032%200%201%200%200-64m0-192c-18.2%200-32.7%2015.5-31.4%2033.7l7.4%20104c.9%2012.5%2011.4%2022.3%2023.9%2022.3%2012.6%200%2023-9.7%2023.9-22.3l7.4-104c1.3-18.2-13.1-33.7-31.4-33.7z%22/%3E%3C/svg%3E');--md-admonition-icon--danger:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20448%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.1.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20d%3D%22M384%20144C384%2064.5%20312.4%200%20224%200S64%2064.5%2064%20144c0%2047.1%2025.1%2088.9%2064%20115.2V288c0%2017.7%2014.3%2032%2032%2032h128c17.7%200%2032-14.3%2032-32v-28.8c38.9-26.3%2064-68.1%2064-115.2m-224-16a32%2032%200%201%201%200%2064%2032%2032%200%201%201%200-64m96%2032a32%2032%200%201%201%2064%200%2032%2032%200%201%201-64%200m189.5%20179.7c-6.8-16.3-25.5-24-41.8-17.2L224%20397.3%2044.3%20322.5c-16.3-6.8-35%20.9-41.8%2017.2s.9%2035%2017.2%2041.8L140.8%20432%2019.7%20482.5c-16.3%206.8-24%2025.5-17.2%2041.8s25.5%2024%2041.8%2017.2L224%20466.7l179.7%2074.8c16.3%206.8%2035-.9%2041.8-17.2s-.9-35-17.2-41.8L307.2%20432l121.1-50.5c16.3-6.8%2024-25.5%2017.2-41.8%22/%3E%3C/svg%3E');--md-admonition-icon--info:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20512%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.1.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20d%3D%22M256%20512a256%20256%200%201%200%200-512%20256%20256%200%201%200%200%20512m-32-352a32%2032%200%201%201%2064%200%2032%2032%200%201%201-64%200m-8%2064h48c13.3%200%2024%2010.7%2024%2024v88h8c13.3%200%2024%2010.7%2024%2024s-10.7%2024-24%2024h-80c-13.3%200-24-10.7-24-24s10.7-24%2024-24h24v-64h-24c-13.3%200-24-10.7-24-24s10.7-24%2024-24%22/%3E%3C/svg%3E');--md-admonition-icon--abstract:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20448%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.1.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20d%3D%22M384%20512H96c-53%200-96-43-96-96V96C0%2043%2043%200%2096%200h304c26.5%200%2048%2021.5%2048%2048v288c0%2020.9-13.4%2038.7-32%2045.3V448c17.7%200%2032%2014.3%2032%2032s-14.3%2032-32%2032zM96%20384c-17.7%200-32%2014.3-32%2032s14.3%2032%2032%2032h256v-64zm32-232c0%2013.3%2010.7%2024%2024%2024h176c13.3%200%2024-10.7%2024-24s-10.7-24-24-24H152c-13.3%200-24%2010.7-24%2024m24%2072c-13.3%200-24%2010.7-24%2024s10.7%2024%2024%2024h176c13.3%200%2024-10.7%2024-24s-10.7-24-24-24z%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20448%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.1.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20d%3D%22M288%200H128c-17.7%200-32%2014.3-32%2032s14.3%2032%2032%2032v151.5L7.5%20426.3C2.6%20435%200%20444.7%200%20454.7%200%20486.4%2025.6%20512%2057.3%20512h333.4c31.6%200%2057.3-25.6%2057.3-57.3%200-10-2.6-19.8-7.5-28.4L320%20215.5V64c17.7%200%2032-14.3%2032-32S337.7%200%20320%200zm-96%20215.5V64h64v151.5c0%2011.1%202.9%2022.1%208.4%2031.8L306%20320H142l41.6-72.7c5.5-9.7%208.4-20.6%208.4-31.8%22/%3E%3C/svg%3E');--md-admonition-icon--quote:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20448%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.1.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20d%3D%22M0%20216C0%20149.7%2053.7%2096%20120%2096h8c17.7%200%2032%2014.3%2032%2032s-14.3%2032-32%2032h-8c-30.9%200-56%2025.1-56%2056v8h64c35.3%200%2064%2028.7%2064%2064v64c0%2035.3-28.7%2064-64%2064H64c-35.3%200-64-28.7-64-64zm256%200c0-66.3%2053.7-120%20120-120h8c17.7%200%2032%2014.3%2032%2032s-14.3%2032-32%2032h-8c-30.9%200-56%2025.1-56%2056v8h64c35.3%200%2064%2028.7%2064%2064v64c0%2035.3-28.7%2064-64%2064h-64c-35.3%200-64-28.7-64-64z%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"IBM Plex Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/custom.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+<!-- Favicons -->
+<link rel="apple-touch-icon" sizes="180x180" href="https://0x574r.github.io/en/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32"  href="https://0x574r.github.io/en/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16"  href="https://0x574r.github.io/en/assets/favicon-16x16.png">
+
+<!-- Open Graph -->
+
+
+
+
+<meta property="og:type"        content="article">
+<meta property="og:title"       content="Identity and Privileges of a Process — RAZOR">
+<meta property="og:description" content="How the Linux kernel manages the identity and privileges of a process. UIDs, capabilities, securebits and credential structs.">
+<meta property="og:image"       content="https://0x574r.github.io/en/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height"content="630">
+<meta property="og:url"         content="https://0x574r.github.io/en/research/kernel-theory/identity-model/">
+<meta property="og:site_name"   content="RAZOR">
+<meta property="og:locale"      content="en_US">
+<!-- Twitter Card -->
+<meta name="twitter:card"       content="summary_large_image">
+<meta name="twitter:title"      content="Identity and Privileges of a Process — RAZOR">
+<meta name="twitter:description"content="How the Linux kernel manages the identity and privileges of a process. UIDs, capabilities, securebits and credential structs.">
+<meta name="twitter:image"      content="https://0x574r.github.io/en/assets/og-image.png">
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#introduction" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="RAZOR" class="md-header__button md-logo" aria-label="RAZOR" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            RAZOR
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Identity and Privileges of a Process
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+    <button
+      class="md-header__button lang-toggle"
+      type="button"
+      title="Cambiar a Español"
+      aria-label="Cambiar a Español"
+      data-target="es"
+    ><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"
+             class="lang-flag" aria-hidden="true" focusable="false">
+          <rect width="3" height="2" fill="#AA151B"/>
+          <rect y=".5" width="3" height="1" fill="#F1BF00"/>
+        </svg></button>
+  </div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/0x574R" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    0x574R
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="RAZOR" class="md-nav__button md-logo" aria-label="RAZOR" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    RAZOR
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/0x574R" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    0x574R
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Malware Dev
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Malware Dev
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../malware-dev/fileless-loader/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fileless Loader
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../malware-dev/reverse-shell/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reverse TCP Shell
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../malware-dev/ptrace-injection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Process Injection via Ptrace
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../malware-dev/darkcloak/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DARKCLOAK: Novel Flow for Process Masquerading
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kernel Theory
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Kernel Theory
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../elf-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ELF Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity and Privileges of a Process
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identity and Privileges of a Process
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#location-of-credentials-in-the-kernel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Location of Credentials in the Kernel
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#uids" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UIDs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="UIDs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#query-syscalls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Query Syscalls
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Query Syscalls">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#getresuid-no-118" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GETRESUID (no. 118)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modification-syscalls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modification Syscalls
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Modification Syscalls">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setresuid-no-117" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SETRESUID (no. 117)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gids" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GIDs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="GIDs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#query-syscalls_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Query Syscalls
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Query Syscalls">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#getresgid-no-120" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GETRESGID (no. 120)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modification-syscalls_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modification Syscalls
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Modification Syscalls">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setresgid-no-119" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SETRESGID (no. 119)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#capabilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Capabilities
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Capabilities">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-five-sets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Five Sets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#query-syscalls_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Query Syscalls
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Query Syscalls">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#capget-no-125" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CAPGET (no. 125)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modification-syscalls_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modification Syscalls
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Modification Syscalls">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#capset-no-126" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CAPSET (no. 126)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#capabilities-relevant-from-an-offensive-perspective" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Capabilities Relevant from an Offensive Perspective
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#uid-transitions-and-capabilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UID Transitions and Capabilities
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="UID Transitions and Capabilities">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-uid-fixup-concept" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The UID Fixup Concept
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retention-mechanisms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Retention Mechanisms
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Retention Mechanisms">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pr_set_keepcaps-prctl-option-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PR_SET_KEEPCAPS (prctl option 8)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pr_set_securebits-prctl-option-28" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PR_SET_SECUREBITS (prctl option 28)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#credential-inheritance-fork-clone-and-execve" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Credential Inheritance: fork, clone and execve
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Credential Inheritance: fork, clone and execve">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fork-clone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fork / clone
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#execve-and-the-setuid-bit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        execve and the setuid bit
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#credentials-and-user-namespaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Credentials and User Namespaces
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#acknowledgements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Acknowledgements
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../process-identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Process Identity Spoofing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#location-of-credentials-in-the-kernel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Location of Credentials in the Kernel
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#uids" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UIDs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="UIDs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#query-syscalls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Query Syscalls
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Query Syscalls">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#getresuid-no-118" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GETRESUID (no. 118)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modification-syscalls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modification Syscalls
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Modification Syscalls">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setresuid-no-117" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SETRESUID (no. 117)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gids" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GIDs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="GIDs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#query-syscalls_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Query Syscalls
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Query Syscalls">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#getresgid-no-120" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GETRESGID (no. 120)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modification-syscalls_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modification Syscalls
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Modification Syscalls">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setresgid-no-119" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SETRESGID (no. 119)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#capabilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Capabilities
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Capabilities">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-five-sets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Five Sets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#query-syscalls_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Query Syscalls
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Query Syscalls">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#capget-no-125" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CAPGET (no. 125)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modification-syscalls_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modification Syscalls
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Modification Syscalls">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#capset-no-126" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CAPSET (no. 126)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#capabilities-relevant-from-an-offensive-perspective" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Capabilities Relevant from an Offensive Perspective
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#uid-transitions-and-capabilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UID Transitions and Capabilities
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="UID Transitions and Capabilities">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-uid-fixup-concept" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The UID Fixup Concept
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retention-mechanisms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Retention Mechanisms
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Retention Mechanisms">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pr_set_keepcaps-prctl-option-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PR_SET_KEEPCAPS (prctl option 8)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pr_set_securebits-prctl-option-28" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PR_SET_SECUREBITS (prctl option 28)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#credential-inheritance-fork-clone-and-execve" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Credential Inheritance: fork, clone and execve
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Credential Inheritance: fork, clone and execve">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fork-clone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fork / clone
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#execve-and-the-setuid-bit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        execve and the setuid bit
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#credentials-and-user-namespaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Credentials and User Namespaces
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#acknowledgements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Acknowledgements
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<div class="article-header">
+<h1>Identity and Privileges of a Process</h1>
+<span class="article-meta">12/05/2026 · 45 min</span>
+</div>
+
+<p>How the Linux kernel manages the identity and privileges of a process</p>
+<hr />
+<div class="admonition info">
+<p class="admonition-title">Context</p>
+<p>This article covers the theory underlying offensive techniques that manipulate process credentials. Understanding the kernel's identity and privilege model is a fundamental prerequisite before implementing tools that operate on <code>struct cred</code>.</p>
+</div>
+<h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
+<p>The Linux kernel concentrates all identity and privilege information for a process in a single structure: <code>struct cred</code>. Within it coexist two complementary systems — <strong>UIDs/GIDs</strong> (who the process belongs to) and <strong>capabilities</strong> (which privileged operations it can perform). Both are closely related: modifications to UIDs trigger automatic changes in capabilities, and certain capabilities are required to freely modify UIDs. This article covers both systems jointly for a deeper understanding of how the system operates with processes.</p>
+<h2 id="location-of-credentials-in-the-kernel">Location of Credentials in the Kernel<a class="headerlink" href="#location-of-credentials-in-the-kernel" title="Permanent link">&para;</a></h2>
+<p>Credentials are not direct fields of <code>task_struct</code> (the data structure that represents a process in the kernel). Instead, <code>task_struct</code> contains two RCU (<a href="https://handwiki.org/wiki/Read-copy-update">Read-Copy Update</a>)-protected pointers to a separate structure:</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">const</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">cred</span><span class="w"> </span><span class="n">__rcu</span><span class="w"> </span><span class="o">*</span><span class="n">real_cred</span><span class="p">;</span><span class="w">  </span><span class="c1">// Objective context (real identity)</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">const</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">cred</span><span class="w"> </span><span class="n">__rcu</span><span class="w"> </span><span class="o">*</span><span class="n">cred</span><span class="p">;</span><span class="w">       </span><span class="c1">// Subjective context (active identity)</span>
+</span></code></pre></div>
+<ul>
+<li>The <strong>subjective context</strong> (<code>*cred</code>) is what the kernel checks when the process acts <strong>on other objects</strong>: opening files, sending signals, accessing IPC.</li>
+<li>The <strong>objective context</strong> (<code>*real_cred</code>) is what the kernel checks when <strong>other processes act on this one</strong>: sending it signals, attaching via <code>ptrace</code>.</li>
+</ul>
+<div class="admonition note">
+<p>Generally, both pointers reference the same <code>struct cred</code> instance.</p>
+</div>
+<p><code>struct cred</code> contains all the identity and privilege information for the process:</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">cred</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="c1">// ...</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="n">kuid_t</span><span class="w"> </span><span class="n">uid</span><span class="p">;</span><span class="w">     </span><span class="c1">// Real UID</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="n">kgid_t</span><span class="w"> </span><span class="n">gid</span><span class="p">;</span><span class="w">     </span><span class="c1">// Real GID</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="n">kuid_t</span><span class="w"> </span><span class="n">suid</span><span class="p">;</span><span class="w">    </span><span class="c1">// Saved set-user-ID</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="n">kgid_t</span><span class="w"> </span><span class="n">sgid</span><span class="p">;</span><span class="w">    </span><span class="c1">// Saved set-group-ID</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="n">kuid_t</span><span class="w"> </span><span class="n">euid</span><span class="p">;</span><span class="w">    </span><span class="c1">// Effective UID</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="n">kgid_t</span><span class="w"> </span><span class="n">egid</span><span class="p">;</span><span class="w">    </span><span class="c1">// Effective GID</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="n">kuid_t</span><span class="w"> </span><span class="n">fsuid</span><span class="p">;</span><span class="w">   </span><span class="c1">// Filesystem UID</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="n">kgid_t</span><span class="w"> </span><span class="n">fsgid</span><span class="p">;</span><span class="w">   </span><span class="c1">// Filesystem GID</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="n">securebits</span><span class="p">;</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="n">kernel_cap_t</span><span class="w"> </span><span class="n">cap_inheritable</span><span class="p">;</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="n">kernel_cap_t</span><span class="w"> </span><span class="n">cap_permitted</span><span class="p">;</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">    </span><span class="n">kernel_cap_t</span><span class="w"> </span><span class="n">cap_effective</span><span class="p">;</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">    </span><span class="n">kernel_cap_t</span><span class="w"> </span><span class="n">cap_bset</span><span class="p">;</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">    </span><span class="n">kernel_cap_t</span><span class="w"> </span><span class="n">cap_ambient</span><span class="p">;</span>
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">    </span><span class="c1">// ...</span>
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">group_info</span><span class="w"> </span><span class="o">*</span><span class="n">group_info</span><span class="p">;</span><span class="w">   </span><span class="c1">// Contains the supplementary groups</span>
+</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="p">};</span>
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">File permission evaluation</p>
+<p>File permission evaluation follows a strict hierarchy: first it checks whether the process's effective UID matches the file owner's UID, in which case owner permissions apply; if not, it checks whether any of the process's GIDs (effective or supplementary) match the file's GID, applying group permissions; and if there are no matches, other permissions apply.</p>
+</div>
+<div class="admonition info">
+<p>Supplementary groups are additional groups associated with a user that allow a process to belong to multiple groups simultaneously.</p>
+</div>
+<p>When a process wants to change a UID, the operation is performed by entering kernel mode through a syscall (for example, <code>setuid</code>), triggering a CPU transition from <strong>ring 3 (user mode) to ring 0 (kernel mode)</strong>. Once in kernel mode, the syscall handler checks whether the process has permission to make the change based on the current UID values and its capabilities. If the operation is viable, the kernel enters its credentials subsystem and applies a safe update pattern: first it calls <code>prepare_creds</code> to clone the process's current <code>struct cred</code>, then modifies the relevant fields (UID, EUID, GID or capabilities as appropriate), and finally executes <code>commit_creds</code> to atomically replace the process's active credentials.</p>
+<div class="admonition danger">
+<p>From an offensive perspective, <code>prepare_kernel_cred(NULL)</code> generates a <code>struct cred</code> with UIDs set to 0 and capabilities at maximum. The combination <code>commit_creds(prepare_kernel_cred(NULL))</code> is the standard privilege escalation pattern in kernel exploits.</p>
+</div>
+<h2 id="uids">UIDs<a class="headerlink" href="#uids" title="Permanent link">&para;</a></h2>
+<p>When a user runs a program, the operating system does not use the username directly but instead makes use of a numeric identifier called a UID. This UID represents the user's identity within the system and is associated with all processes that user runs. The kernel uses this identifier to enforce permission policies and access control.</p>
+<p>Each running process maintains a set of UID-related identities. This is because in certain situations (especially when elevated privileges are involved), a process may need to behave with different identities depending on the context. For this reason, the system distinguishes between several types of UID:</p>
+<ul>
+<li><strong>Real UID (RUID)</strong>: Identifies the user who originally created the process. The RUID is what the kernel consults when applying resource limits (<code>RLIMIT_NPROC</code>) and what determines the process owner for signal delivery.</li>
+<li><strong>Effective UID (EUID)</strong>: The identifier the kernel checks during access control decisions.</li>
+<li><strong>Saved Set-User-ID (SUID)</strong>: Acts as a storage slot for a previously held EUID. Its purpose is to allow a process to temporarily drop its privileges (by changing the EUID to an unprivileged value) and recover them later (by restoring the EUID to the value preserved in SUID).</li>
+</ul>
+<div class="admonition note">
+<p>When the kernel loads an executable with the setuid bit set, it establishes the EUID and SUID to the UID of the file owner, keeping the RUID as that of the original user.</p>
+</div>
+<h3 id="query-syscalls">Query Syscalls<a class="headerlink" href="#query-syscalls" title="Permanent link">&para;</a></h3>
+<h4 id="getresuid-no-118"><strong>GETRESUID (no. 118)</strong><a class="headerlink" href="#getresuid-no-118" title="Permanent link">&para;</a></h4>
+<p><code>getresuid</code> is a system call that <strong>simultaneously returns the three UIDs associated with the process</strong> and writes them into three user-space buffers.</p>
+<p><strong>Inputs (syscall arguments)</strong></p>
+<div class="language-nasm highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">118</span><span class="w">           </span><span class="c1">; syscall number (getresuid)</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nf">rdi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">ruid</span><span class="w">          </span><span class="c1">; pointer to uid_t where the real UID will be written</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nf">rsi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">euid</span><span class="w">          </span><span class="c1">; pointer to uid_t where the effective UID will be written</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nf">rdx</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">suid</span><span class="w">          </span><span class="c1">; pointer to uid_t where the saved set-user-ID will be written</span>
+</span></code></pre></div>
+<ul>
+<li><code>ruid</code> (RDI) — Pointer to a writable memory region of at least 4 bytes (<code>uid_t</code> = 32 bits). The kernel writes the current <strong>real UID</strong> here.</li>
+<li><code>euid</code> (RSI) — Pointer to a writable memory region of at least 4 bytes (<code>uid_t</code> = 32 bits). The kernel writes the current <strong>effective UID</strong> here.</li>
+<li><code>suid</code> (RDX) — Pointer to a writable memory region of at least 4 bytes (<code>uid_t</code> = 32 bits). The kernel writes the current <strong>saved set-user-ID</strong> here.</li>
+</ul>
+<p><strong>Return values</strong></p>
+<div class="language-nasm highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">0</span><span class="w">              </span><span class="c1">; success</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nf">rax</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w">              </span><span class="c1">; error</span>
+</span></code></pre></div>
+<p>Common errors:</p>
+<ul>
+<li><code>14</code> → <code>EFAULT</code>: one of the three pointers points to inaccessible or non-writable memory.</li>
+</ul>
+<h3 id="modification-syscalls">Modification Syscalls<a class="headerlink" href="#modification-syscalls" title="Permanent link">&para;</a></h3>
+<h4 id="setresuid-no-117"><strong>SETRESUID (no. 117)</strong><a class="headerlink" href="#setresuid-no-117" title="Permanent link">&para;</a></h4>
+<p><code>setresuid</code> atomically and independently sets all three UIDs of the process (real, effective and saved) in a single invocation. Each argument accepts -1 to preserve the current value.</p>
+<p><strong>Inputs (syscall arguments)</strong></p>
+<div class="language-nasm highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">117</span><span class="w">            </span><span class="c1">; syscall number (setresuid)</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nf">rdi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">ruid</span><span class="w">           </span><span class="c1">; new real UID (or -1 to leave unchanged)</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nf">rsi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">euid</span><span class="w">           </span><span class="c1">; new effective UID (or -1 to leave unchanged)</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="nf">rdx</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">suid</span><span class="w">           </span><span class="c1">; new saved set-user-ID (or -1 to leave unchanged)</span>
+</span></code></pre></div>
+<div class="admonition note">
+<p>Without <code>CAP_SETUID</code>, each argument must be -1 or a value already present in one of the three current process IDs (they can be redistributed across positions and repeated), but no new values can be introduced. With <code>CAP_SETUID</code> there is no restriction.</p>
+</div>
+<p><strong>Return values</strong></p>
+<div class="language-nasm highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">0</span><span class="w">              </span><span class="c1">; success</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nf">rax</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w">              </span><span class="c1">; error (all-or-nothing semantics)</span>
+</span></code></pre></div>
+<p>Common errors:</p>
+<ul>
+<li><code>1</code> → <code>EPERM</code>: the process does not have <code>CAP_SETUID</code> and one of the three requested values does not match any of the three current IDs (<code>ruid</code>, <code>euid</code>, <code>suid</code>).</li>
+<li><code>22</code> → <code>EINVAL</code>: one of the UIDs is outside the valid range for the user namespace.</li>
+<li><code>11</code> → <code>EAGAIN</code>: changing <code>ruid</code> would exceed the <code>RLIMIT_NPROC</code> of the target UID.</li>
+</ul>
+<h2 id="gids">GIDs<a class="headerlink" href="#gids" title="Permanent link">&para;</a></h2>
+<p>The GID model — Real GID (RGID), Effective GID (EGID) and Saved set-group-ID (SGID) — follows the same semantics, but applied to group-based access control.</p>
+<hr />
+<p>There is a fourth pair, <strong>FSUID</strong> and <strong>FSGID</strong>, used exclusively for filesystem access checks. In modern kernels, FSUID automatically follows EUID in most scenarios and is rarely manipulated independently. We will not cover it here, but it exists within the same <code>struct cred</code>.</p>
+<h3 id="query-syscalls_1">Query Syscalls<a class="headerlink" href="#query-syscalls_1" title="Permanent link">&para;</a></h3>
+<h4 id="getresgid-no-120"><strong>GETRESGID (no. 120)</strong><a class="headerlink" href="#getresgid-no-120" title="Permanent link">&para;</a></h4>
+<p><code>getresgid</code> is a system call that <strong>simultaneously returns the three GIDs associated with the process</strong> and writes them into three user-space buffers. It is the exact counterpart of <code>getresuid</code> but operating on group identifiers.</p>
+<p><strong>Inputs (syscall arguments)</strong></p>
+<div class="language-nasm highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">120</span><span class="w">   </span><span class="c1">; syscall number (getresgid)</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nf">rdi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">rgid</span><span class="w">  </span><span class="c1">; pointer to gid_t where the real GID will be written (4 bytes)</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="nf">rsi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">egid</span><span class="w">  </span><span class="c1">; pointer to gid_t where the effective GID will be written (4 bytes)</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="nf">rdx</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">sgid</span><span class="w">  </span><span class="c1">; pointer to gid_t where the saved set-group-ID will be written (4 bytes)</span>
+</span></code></pre></div>
+<ul>
+<li><code>rgid</code> (RDI) — Address where the kernel will write the process's <strong>real GID</strong> as a <code>gid_t</code> (4 bytes, unsigned integer). The real GID represents the group of the user who originally launched the process.</li>
+<li><code>egid</code> (RSI) — Address where the kernel will write the <strong>effective GID</strong>, which is what the kernel actually uses for DAC permission checks on files, SysV IPC, signals, etc.</li>
+<li><code>sgid</code> (RDX) — Address where the kernel will write the <strong>saved set-group-ID</strong>. Its purpose is to allow the process to recover a previous EGID.</li>
+</ul>
+<p><strong>Return values</strong></p>
+<div class="language-nasm highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">0</span><span class="w">              </span><span class="c1">; success</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nf">rax</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w">              </span><span class="c1">; error</span>
+</span></code></pre></div>
+<p>Common errors:</p>
+<ul>
+<li><code>14</code> → <code>EFAULT</code>: one of the three pointers (<code>rgid</code>, <code>egid</code>, <code>sgid</code>) points to non-writable, unmapped, or out-of-bounds memory.</li>
+</ul>
+<p>In practice, a <code>getresgid</code> call with valid pointers to the process's own memory <strong>never returns an error</strong>.</p>
+<h3 id="modification-syscalls_1">Modification Syscalls<a class="headerlink" href="#modification-syscalls_1" title="Permanent link">&para;</a></h3>
+<h4 id="setresgid-no-119"><strong>SETRESGID (no. 119)</strong><a class="headerlink" href="#setresgid-no-119" title="Permanent link">&para;</a></h4>
+<p><code>setresgid</code> is a system call that <strong>atomically sets all three GIDs of the process</strong> in a single operation. It is the counterpart of <code>setresuid</code> applied to group identifiers and constitutes the most explicit and predictable way to manipulate GIDs.</p>
+<p><strong>Inputs (syscall arguments)</strong></p>
+<div class="language-nasm highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">119</span><span class="w">   </span><span class="c1">; syscall number (setresgid)</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nf">rdi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">rgid</span><span class="w">  </span><span class="c1">; new real GID       (-1 to leave unchanged)</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="nf">rsi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">egid</span><span class="w">  </span><span class="c1">; new effective GID  (-1 to leave unchanged)</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="nf">rdx</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">sgid</span><span class="w">  </span><span class="c1">; new saved set-group-ID  (-1 to leave unchanged)</span>
+</span></code></pre></div>
+<div class="admonition note">
+<p>Without <code>CAP_SETGID</code>, each argument must be -1 or a value already present in one of the three current GIDs of the process (they can be redistributed across positions and repeated), but no new values can be introduced. With <code>CAP_SETGID</code> there is no restriction.</p>
+</div>
+<p><strong>Return values</strong></p>
+<div class="language-nasm highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">0</span><span class="w">              </span><span class="c1">; success</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nf">rax</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w">              </span><span class="c1">; error (all-or-nothing semantics)</span>
+</span></code></pre></div>
+<p>Common errors:</p>
+<ul>
+<li><code>1</code> → <code>EPERM</code>: the process does not have <code>CAP_SETGID</code> in its user namespace and at least one of the requested values (<code>rgid</code>, <code>egid</code>, or <code>sgid</code>) does not match any of the current GIDs in the triplet.</li>
+<li><code>22</code> → <code>EINVAL</code>: one of the values is not a valid GID in the current user namespace.</li>
+<li><code>11</code> → <code>EAGAIN</code>: the change would cause the number of processes for the new Real GID to exceed <code>RLIMIT_NPROC</code>. Only triggered when <code>rgid</code> is modified.</li>
+</ul>
+<h2 id="capabilities">Capabilities<a class="headerlink" href="#capabilities" title="Permanent link">&para;</a></h2>
+<p>The traditional Unix model is binary — EUID=0 grants all privileges, any other EUID grants none. Capabilities decompose that monolithic power into 41 independent bits (from <code>CAP_CHOWN=0</code> to <code>CAP_CHECKPOINT_RESTORE=40</code>), each controlling a subset of operations. This allows assigning to a process only those privileges necessary for its operation.</p>
+<h3 id="the-five-sets">The Five Sets<a class="headerlink" href="#the-five-sets" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Permitted (P)</strong>: The complete set of privileges for the process. It can only shrink, never grow. No other set can have a bit that is not in P (except bounding, which is independent).</li>
+<li><strong>Effective (E)</strong>: The set the kernel checks on every privileged action. A process can have <code>CAP_SYS_RESOURCE</code> in P without having it in E — this privilege has no effect until it is activated by setting the corresponding bit to 1 in the effective set.</li>
+<li><strong>Inheritable (I)</strong>: Controls which capabilities can propagate across <code>execve</code> when the binary has <a href="https://man7.org/linux/man-pages/man7/capabilities.7.html">file capabilities</a>. To activate a bit, it must be in P and in B (or the process must have <code>CAP_SETPCAP</code> in E).</li>
+<li><strong>Bounding set (B)</strong>: Upper bound on what can be acquired during <code>execve</code>. Can only be reduced (<code>PR_CAPBSET_DROP</code>).</li>
+<li><strong>Ambient (A)</strong>: Allows specifying which capabilities propagate across <code>execve</code> when the binary has no special privileges (file capabilities or setuid/setgid).</li>
+</ul>
+<h3 id="query-syscalls_2">Query Syscalls<a class="headerlink" href="#query-syscalls_2" title="Permanent link">&para;</a></h3>
+<h4 id="capget-no-125"><strong>CAPGET (no. 125)</strong><a class="headerlink" href="#capget-no-125" title="Permanent link">&para;</a></h4>
+<p><code>capget</code> is the kernel interface that allows <strong>reading the capabilities</strong> of a process/thread. Unlike <code>capset</code> (which can only operate on the invoking thread), <code>capget</code> allows querying the capabilities of <strong>any process or thread</strong> in the system by specifying its PID or TID, making it a fundamental reconnaissance tool in post-exploitation phases.</p>
+<p><strong>Inputs (syscall arguments)</strong></p>
+<div class="language-nasm highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">125</span><span class="w">            </span><span class="c1">; syscall number (capget)</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nf">rdi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">hdrp</span><span class="w">           </span><span class="c1">; pointer to struct __user_cap_header_struct</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="nf">rsi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">datap</span><span class="w">          </span><span class="c1">; pointer to struct __user_cap_data_struct[2] (or NULL)</span>
+</span></code></pre></div>
+<ul>
+<li>
+<p><code>hdrp</code> (RDI) — Pointer to the header.</p>
+<p>Pointer to a <code>__user_cap_header_struct</code> structure that specifies the capabilities protocol version and the target thread. Cannot be NULL.</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">__user_cap_header_struct</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">    </span><span class="n">__u32</span><span class="w"> </span><span class="n">version</span><span class="p">;</span><span class="w">    </span><span class="c1">// Protocol version   (4 bytes)</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="kt">int</span><span class="w">   </span><span class="n">pid</span><span class="p">;</span><span class="w">        </span><span class="c1">// TID/PID of target (0 = current)  (4 bytes)</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="p">};</span>
+</span></code></pre></div>
+<ul>
+<li><code>version</code> must be <code>_LINUX_CAPABILITY_VERSION_3</code> (<code>0x20080522</code>). This is the only current version and supports up to 64 capabilities (represented in two <code>u32</code>, one per 32-bit half).</li>
+</ul>
+</li>
+<li>
+<p><code>datap</code> (RSI) — Pointer to the output buffer.</p>
+<p>Pointer to an array of two contiguous <code>__user_cap_data_struct</code> structures in memory where the kernel will write the target's capabilities. <code>datap[0]</code> receives bits for capabilities 0–31 and <code>datap[1]</code> for capabilities 32–63.</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">__user_cap_data_struct</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">    </span><span class="n">__u32</span><span class="w"> </span><span class="n">effective</span><span class="p">;</span><span class="w">     </span><span class="c1">// Active capabilities (those the kernel checks)</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">    </span><span class="n">__u32</span><span class="w"> </span><span class="n">permitted</span><span class="p">;</span><span class="w">     </span><span class="c1">// Ceiling: superset of effective and inheritable</span>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">    </span><span class="n">__u32</span><span class="w"> </span><span class="n">inheritable</span><span class="p">;</span><span class="w">   </span><span class="c1">// Capabilities propagable across execve</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="p">};</span>
+</span></code></pre></div>
+<p><strong>Memory layout after a successful <code>capget</code> (version 3):</strong></p>
+<div class="language-nasm highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nf">datap</span><span class="w"> </span><span class="p">(</span><span class="nb">RSI</span><span class="p">)</span><span class="w"> </span><span class="err">──→</span><span class="w"> </span><span class="err">┌──────────────────────────────────────┐</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">                </span><span class="err">│</span><span class="w"> </span><span class="nf">datap</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="nv">.effective</span><span class="w">     </span><span class="p">(</span><span class="nv">caps</span><span class="w"> </span><span class="mi">0</span><span class="err">–</span><span class="mi">31</span><span class="p">)</span><span class="w">   </span><span class="err">│</span><span class="w"> </span><span class="nv">offset</span><span class="w"> </span><span class="o">+</span><span class="mi">0</span><span class="w">   </span><span class="err">←</span><span class="w"> </span><span class="nv">kernel</span><span class="w"> </span><span class="nv">writes</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">                </span><span class="err">│</span><span class="w"> </span><span class="nf">datap</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="nv">.permitted</span><span class="w">     </span><span class="p">(</span><span class="nv">caps</span><span class="w"> </span><span class="mi">0</span><span class="err">–</span><span class="mi">31</span><span class="p">)</span><span class="w">   </span><span class="err">│</span><span class="w"> </span><span class="nv">offset</span><span class="w"> </span><span class="o">+</span><span class="mi">4</span><span class="w">   </span><span class="err">←</span><span class="w"> </span><span class="nv">kernel</span><span class="w"> </span><span class="nv">writes</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">                </span><span class="err">│</span><span class="w"> </span><span class="nf">datap</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="nv">.inheritable</span><span class="w">   </span><span class="p">(</span><span class="nv">caps</span><span class="w"> </span><span class="mi">0</span><span class="err">–</span><span class="mi">31</span><span class="p">)</span><span class="w">   </span><span class="err">│</span><span class="w"> </span><span class="nv">offset</span><span class="w"> </span><span class="o">+</span><span class="mi">8</span><span class="w">   </span><span class="err">←</span><span class="w"> </span><span class="nv">kernel</span><span class="w"> </span><span class="nv">writes</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">                </span><span class="err">├──────────────────────────────────────┤</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">                </span><span class="err">│</span><span class="w"> </span><span class="nf">datap</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="nv">.effective</span><span class="w">     </span><span class="p">(</span><span class="nv">caps</span><span class="w"> </span><span class="mi">32</span><span class="err">–</span><span class="mi">63</span><span class="p">)</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="nv">offset</span><span class="w"> </span><span class="o">+</span><span class="mi">12</span><span class="w">  </span><span class="err">←</span><span class="w"> </span><span class="nv">kernel</span><span class="w"> </span><span class="nv">writes</span>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="w">                </span><span class="err">│</span><span class="w"> </span><span class="nf">datap</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="nv">.permitted</span><span class="w">     </span><span class="p">(</span><span class="nv">caps</span><span class="w"> </span><span class="mi">32</span><span class="err">–</span><span class="mi">63</span><span class="p">)</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="nv">offset</span><span class="w"> </span><span class="o">+</span><span class="mi">16</span><span class="w">  </span><span class="err">←</span><span class="w"> </span><span class="nv">kernel</span><span class="w"> </span><span class="nv">writes</span>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="w">                </span><span class="err">│</span><span class="w"> </span><span class="nf">datap</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="nv">.inheritable</span><span class="w">   </span><span class="p">(</span><span class="nv">caps</span><span class="w"> </span><span class="mi">32</span><span class="err">–</span><span class="mi">63</span><span class="p">)</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="nv">offset</span><span class="w"> </span><span class="o">+</span><span class="mi">20</span><span class="w">  </span><span class="err">←</span><span class="w"> </span><span class="nv">kernel</span><span class="w"> </span><span class="nv">writes</span>
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="w">                </span><span class="err">└──────────────────────────────────────┘</span>
+</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="w">                         </span><span class="nl">Total:</span><span class="w"> </span><span class="err">24</span><span class="w"> </span><span class="nf">bytes</span>
+</span></code></pre></div>
+</li>
+</ul>
+<p><strong>Return values</strong></p>
+<div class="language-nasm highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">0</span><span class="w">              </span><span class="c1">; success</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="nf">rax</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w">              </span><span class="c1">; error</span>
+</span></code></pre></div>
+<p>Common errors:</p>
+<ul>
+<li><code>14</code> → <code>EFAULT</code>: <code>hdrp</code> points to inaccessible memory (cannot be NULL) or <code>datap</code> points to non-writable memory and is not NULL.</li>
+<li><code>22</code> → <code>EINVAL</code>: the <code>version</code> field in the header is not a recognized version. The kernel overwrites <code>version</code> with the preferred version (<code>0x20080522</code>). This error is expected when using <code>capget</code> to probe the version.</li>
+<li><code>3</code> → <code>ESRCH</code>: no process/thread with the specified PID/TID exists.</li>
+</ul>
+<h3 id="modification-syscalls_2">Modification Syscalls<a class="headerlink" href="#modification-syscalls_2" title="Permanent link">&para;</a></h3>
+<h4 id="capset-no-126"><strong>CAPSET (no. 126)</strong><a class="headerlink" href="#capset-no-126" title="Permanent link">&para;</a></h4>
+<p><code>capset</code> is the kernel interface that allows <strong>setting the capabilities</strong> of the invoking thread. Capabilities are Linux's mechanism for decomposing superuser privileges into discrete units — instead of being root or not, a process can possess specific subsets of privileges (opening raw sockets, mounting filesystems, using <code>ptrace</code>, etc.).</p>
+<p><strong>Inputs (syscall arguments)</strong></p>
+<div class="language-nasm highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">126</span><span class="w">            </span><span class="c1">; syscall number (capset)</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="nf">rdi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">hdrp</span><span class="w">           </span><span class="c1">; pointer to struct __user_cap_header_struct</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="nf">rsi</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">datap</span><span class="w">          </span><span class="c1">; pointer to struct __user_cap_data_struct[2]</span>
+</span></code></pre></div>
+<ul>
+<li>
+<p><code>hdrp</code> (RDI) — Pointer to the header (same structure as in <code>capget</code>). <code>version</code> must be <code>0x20080522</code>. <code>pid</code> only allows <code>0</code> or the thread's own TID on modern kernels.</p>
+</li>
+<li>
+<p><code>datap</code> (RSI) — Pointer to the capabilities data.</p>
+<p>Pointer to an <strong>array of two</strong> contiguous <code>__user_cap_data_struct</code> structures in memory. <code>datap[0]</code> contains bits for capabilities 0–31 and <code>datap[1]</code> for capabilities 32–63.</p>
+<p><strong>Memory layout (version 3):</strong></p>
+<div class="language-nasm highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="nf">datap</span><span class="w"> </span><span class="p">(</span><span class="nb">RSI</span><span class="p">)</span><span class="w"> </span><span class="err">──→</span><span class="w"> </span><span class="err">┌──────────────────────────────────────┐</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">                </span><span class="err">│</span><span class="w"> </span><span class="nf">datap</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="nv">.effective</span><span class="w">     </span><span class="p">(</span><span class="nv">caps</span><span class="w"> </span><span class="mi">0</span><span class="err">–</span><span class="mi">31</span><span class="p">)</span><span class="w">   </span><span class="err">│</span><span class="w"> </span><span class="nv">offset</span><span class="w"> </span><span class="o">+</span><span class="mi">0</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">                </span><span class="err">│</span><span class="w"> </span><span class="nf">datap</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="nv">.permitted</span><span class="w">     </span><span class="p">(</span><span class="nv">caps</span><span class="w"> </span><span class="mi">0</span><span class="err">–</span><span class="mi">31</span><span class="p">)</span><span class="w">   </span><span class="err">│</span><span class="w"> </span><span class="nv">offset</span><span class="w"> </span><span class="o">+</span><span class="mi">4</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">                </span><span class="err">│</span><span class="w"> </span><span class="nf">datap</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="nv">.inheritable</span><span class="w">   </span><span class="p">(</span><span class="nv">caps</span><span class="w"> </span><span class="mi">0</span><span class="err">–</span><span class="mi">31</span><span class="p">)</span><span class="w">   </span><span class="err">│</span><span class="w"> </span><span class="nv">offset</span><span class="w"> </span><span class="o">+</span><span class="mi">8</span>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="w">                </span><span class="err">├──────────────────────────────────────┤</span>
+</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="w">                </span><span class="err">│</span><span class="w"> </span><span class="nf">datap</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="nv">.effective</span><span class="w">     </span><span class="p">(</span><span class="nv">caps</span><span class="w"> </span><span class="mi">32</span><span class="err">–</span><span class="mi">63</span><span class="p">)</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="nv">offset</span><span class="w"> </span><span class="o">+</span><span class="mi">12</span>
+</span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="w">                </span><span class="err">│</span><span class="w"> </span><span class="nf">datap</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="nv">.permitted</span><span class="w">     </span><span class="p">(</span><span class="nv">caps</span><span class="w"> </span><span class="mi">32</span><span class="err">–</span><span class="mi">63</span><span class="p">)</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="nv">offset</span><span class="w"> </span><span class="o">+</span><span class="mi">16</span>
+</span><span id="__span-16-8"><a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="w">                </span><span class="err">│</span><span class="w"> </span><span class="nf">datap</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="nv">.inheritable</span><span class="w">   </span><span class="p">(</span><span class="nv">caps</span><span class="w"> </span><span class="mi">32</span><span class="err">–</span><span class="mi">63</span><span class="p">)</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="nv">offset</span><span class="w"> </span><span class="o">+</span><span class="mi">20</span>
+</span><span id="__span-16-9"><a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="w">                </span><span class="err">└──────────────────────────────────────┘</span>
+</span><span id="__span-16-10"><a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="w">                         </span><span class="nl">Total:</span><span class="w"> </span><span class="err">24</span><span class="w"> </span><span class="nf">bytes</span>
+</span></code></pre></div>
+</li>
+</ul>
+<p><strong>Return values</strong></p>
+<div class="language-nasm highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">0</span><span class="w">              </span><span class="c1">; success</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="nf">rax</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w">              </span><span class="c1">; error</span>
+</span></code></pre></div>
+<p>Common errors:</p>
+<ul>
+<li><code>14</code> → <code>EFAULT</code>: <code>hdrp</code> or <code>datap</code> point to inaccessible memory. <code>hdrp</code> can never be NULL.</li>
+<li><code>22</code> → <code>EINVAL</code>: the <code>version</code> field in the header is not a recognized version. The kernel overwrites <code>version</code> with the preferred version (<code>0x20080522</code>), which allows probing the supported version.</li>
+<li><code>1</code> → <code>EPERM</code>: an attempt was made to add a capability to the <strong>permitted</strong> set (permitted can only shrink); to activate in <strong>effective</strong> a capability not in <strong>permitted</strong>; to add to <strong>inheritable</strong> a capability not in the <strong>bounding set</strong> or not in <strong>permitted</strong> while the process lacks <code>CAP_SETPCAP</code> in effective; or to modify capabilities of a thread other than the current one.</li>
+<li><code>3</code> → <code>ESRCH</code>: the specified PID/TID does not exist (only occurs when a non-zero pid different from one's own is passed on kernels that allow it).</li>
+</ul>
+<h3 id="capabilities-relevant-from-an-offensive-perspective">Capabilities Relevant from an Offensive Perspective<a class="headerlink" href="#capabilities-relevant-from-an-offensive-perspective" title="Permanent link">&para;</a></h3>
+<p><strong>Capabilities 0–31:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Index</th>
+<th>Constant</th>
+<th>Offensive use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td><code>CAP_CHOWN</code></td>
+<td>Change owner of any file</td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>CAP_DAC_OVERRIDE</code></td>
+<td>Full bypass of read/write/execute permissions on files</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>CAP_DAC_READ_SEARCH</code></td>
+<td>Bypass read permissions on files and directory search</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>CAP_FOWNER</code></td>
+<td>Bypass owner checks on file operations</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>CAP_KILL</code></td>
+<td>Send signals to any process (no UID restriction)</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>CAP_SETGID</code></td>
+<td>Manipulate process GIDs (<code>setgid</code>, <code>setregid</code>, <code>setresgid</code>)</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>CAP_SETUID</code></td>
+<td>Manipulate process UIDs (<code>setuid</code>, <code>setreuid</code>, <code>setresuid</code>)</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>CAP_SETPCAP</code></td>
+<td>Modify the inheritable set and bounding set of the process, and manage certain securebits</td>
+</tr>
+<tr>
+<td>10</td>
+<td><code>CAP_NET_BIND_SERVICE</code></td>
+<td>Bind to privileged ports (&lt; 1024)</td>
+</tr>
+<tr>
+<td>12</td>
+<td><code>CAP_NET_ADMIN</code></td>
+<td>Network configuration: interfaces, routes, firewall, promiscuous sniffing</td>
+</tr>
+<tr>
+<td>13</td>
+<td><code>CAP_NET_RAW</code></td>
+<td>Create raw sockets and packet sockets (traffic capture, packet injection)</td>
+</tr>
+<tr>
+<td>16</td>
+<td><code>CAP_SYS_MODULE</code></td>
+<td>Load and unload kernel modules (<code>init_module</code>, <code>delete_module</code>)</td>
+</tr>
+<tr>
+<td>17</td>
+<td><code>CAP_SYS_RAWIO</code></td>
+<td>Direct I/O access: <code>ioperm</code>, <code>iopl</code>, <code>/dev/mem</code>, <code>/dev/kmem</code></td>
+</tr>
+<tr>
+<td>18</td>
+<td><code>CAP_SYS_CHROOT</code></td>
+<td>Invoke chroot (chroot jail escape when combined with other caps)</td>
+</tr>
+<tr>
+<td>19</td>
+<td><code>CAP_SYS_PTRACE</code></td>
+<td><code>ptrace</code> any process</td>
+</tr>
+<tr>
+<td>21</td>
+<td><code>CAP_SYS_ADMIN</code></td>
+<td>Swiss-army capability: mount, umount, namespaces, BPF, CRIU, syslog, etc.</td>
+</tr>
+<tr>
+<td>24</td>
+<td><code>CAP_SYS_RESOURCE</code></td>
+<td>Override resource limits (<code>RLIMIT_*</code>, disk quotas)</td>
+</tr>
+<tr>
+<td>25</td>
+<td><code>CAP_SYS_TIME</code></td>
+<td>Modify the system clock</td>
+</tr>
+<tr>
+<td>27</td>
+<td><code>CAP_MKNOD</code></td>
+<td>Create device nodes (<code>mknod</code>)</td>
+</tr>
+<tr>
+<td>31</td>
+<td><code>CAP_SETFCAP</code></td>
+<td>Set file capabilities on executables</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Capabilities 32–63:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Index</th>
+<th>Constant</th>
+<th>Offensive use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>33</td>
+<td><code>CAP_MAC_ADMIN</code></td>
+<td>Override MAC policies (Smack, AppArmor in certain modes)</td>
+</tr>
+<tr>
+<td>34</td>
+<td><code>CAP_SYSLOG</code></td>
+<td>Read the kernel ring buffer (<code>dmesg</code>), may leak KASLR addresses</td>
+</tr>
+<tr>
+<td>37</td>
+<td><code>CAP_AUDIT_READ</code></td>
+<td>Read audit records via multicast netlink</td>
+</tr>
+<tr>
+<td>38</td>
+<td><code>CAP_PERFMON</code></td>
+<td>Performance monitoring, access to <code>perf_events</code>. Combined with <code>CAP_BPF</code> allows loading BPF tracing programs</td>
+</tr>
+<tr>
+<td>39</td>
+<td><code>CAP_BPF</code></td>
+<td>BPF operations, create maps, load programs, advanced verifier access; with <code>CAP_NET_ADMIN</code> allows network BPF programs</td>
+</tr>
+<tr>
+<td>40</td>
+<td><code>CAP_CHECKPOINT_RESTORE</code></td>
+<td>Checkpoint/restore operations (CRIU)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="uid-transitions-and-capabilities">UID Transitions and Capabilities<a class="headerlink" href="#uid-transitions-and-capabilities" title="Permanent link">&para;</a></h2>
+<h3 id="the-uid-fixup-concept">The UID Fixup Concept<a class="headerlink" href="#the-uid-fixup-concept" title="Permanent link">&para;</a></h3>
+<p>The design premise is: if a process ceases to be root, the capabilities it held by virtue of being root should disappear. Otherwise, a process with UID 1000 and <code>CAP_SYS_ADMIN</code> would be as dangerous as root yet invisible to tools that only check the UID.</p>
+<p>UID fixup is the mechanism that implements this premise. Every time a process modifies its UIDs (via <code>setresuid</code>, <code>setreuid</code> or <code>setuid</code>), the kernel evaluates whether the transition implies a change in privilege level and adjusts the capability sets accordingly. The adjustment works in both directions — a process dropping root loses capabilities, and a process that gains EUID=0 recovers capabilities from its permitted set.</p>
+<p>Fixup prevents a process from degrading its UID to evade detection while retaining full privileges. But it also creates a problem for any tool that legitimately needs to operate with unprivileged UIDs and active capabilities. The retention mechanisms (<code>SECURE_KEEP_CAPS</code> and securebits, covered below) exist precisely for cases where the fixup's default behavior is too aggressive.</p>
+<p><strong>Implementation via <code>cap_emulate_setxuid</code></strong></p>
+<p>The function consists of three independent conditional blocks evaluated sequentially:</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">cap_task_fix_setuid</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">cred</span><span class="w"> </span><span class="o">*</span><span class="n">new</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">cred</span><span class="w"> </span><span class="o">*</span><span class="n">old</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">flags</span><span class="p">)</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="p">{</span>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">flags</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">LSM_SETID_RE</span><span class="p">:</span>
+</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">LSM_SETID_ID</span><span class="p">:</span>
+</span><span id="__span-18-6"><a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">LSM_SETID_RES</span><span class="p">:</span>
+</span><span id="__span-18-7"><a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="w">        </span><span class="cm">/* If SECURE_NO_SETUID_FIXUP is active, no changes are made */</span>
+</span><span id="__span-18-8"><a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">issecure</span><span class="p">(</span><span class="n">SECURE_NO_SETUID_FIXUP</span><span class="p">))</span>
+</span><span id="__span-18-9"><a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a><span class="w">            </span><span class="n">cap_emulate_setxuid</span><span class="p">(</span><span class="n">new</span><span class="p">,</span><span class="w"> </span><span class="n">old</span><span class="p">);</span>
+</span><span id="__span-18-10"><a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a><span class="w">        </span><span class="k">break</span><span class="p">;</span>
+</span><span id="__span-18-11"><a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a><span class="w">    </span><span class="c1">// ...</span>
+</span><span id="__span-18-12"><a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-18-13"><a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-18-14"><a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a><span class="p">}</span>
+</span><span id="__span-18-15"><a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a>
+</span><span id="__span-18-16"><a id="__codelineno-18-16" name="__codelineno-18-16" href="#__codelineno-18-16"></a><span class="k">static</span><span class="w"> </span><span class="kr">inline</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">cap_emulate_setxuid</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">cred</span><span class="w"> </span><span class="o">*</span><span class="n">new</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">cred</span><span class="w"> </span><span class="o">*</span><span class="n">old</span><span class="p">)</span>
+</span><span id="__span-18-17"><a id="__codelineno-18-17" name="__codelineno-18-17" href="#__codelineno-18-17"></a><span class="p">{</span>
+</span><span id="__span-18-18"><a id="__codelineno-18-18" name="__codelineno-18-18" href="#__codelineno-18-18"></a><span class="w">    </span><span class="n">kuid_t</span><span class="w"> </span><span class="n">root_uid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_kuid</span><span class="p">(</span><span class="n">old</span><span class="o">-&gt;</span><span class="n">user_ns</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+</span><span id="__span-18-19"><a id="__codelineno-18-19" name="__codelineno-18-19" href="#__codelineno-18-19"></a>
+</span><span id="__span-18-20"><a id="__codelineno-18-20" name="__codelineno-18-20" href="#__codelineno-18-20"></a><span class="w">    </span><span class="cm">/* Block 1: Complete abandonment of root */</span>
+</span><span id="__span-18-21"><a id="__codelineno-18-21" name="__codelineno-18-21" href="#__codelineno-18-21"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">((</span><span class="n">uid_eq</span><span class="p">(</span><span class="n">old</span><span class="o">-&gt;</span><span class="n">uid</span><span class="p">,</span><span class="w"> </span><span class="n">root_uid</span><span class="p">)</span><span class="w"> </span><span class="o">||</span>
+</span><span id="__span-18-22"><a id="__codelineno-18-22" name="__codelineno-18-22" href="#__codelineno-18-22"></a><span class="w">         </span><span class="n">uid_eq</span><span class="p">(</span><span class="n">old</span><span class="o">-&gt;</span><span class="n">euid</span><span class="p">,</span><span class="w"> </span><span class="n">root_uid</span><span class="p">)</span><span class="w"> </span><span class="o">||</span>
+</span><span id="__span-18-23"><a id="__codelineno-18-23" name="__codelineno-18-23" href="#__codelineno-18-23"></a><span class="w">         </span><span class="n">uid_eq</span><span class="p">(</span><span class="n">old</span><span class="o">-&gt;</span><span class="n">suid</span><span class="p">,</span><span class="w"> </span><span class="n">root_uid</span><span class="p">))</span><span class="w"> </span><span class="o">&amp;&amp;</span>
+</span><span id="__span-18-24"><a id="__codelineno-18-24" name="__codelineno-18-24" href="#__codelineno-18-24"></a><span class="w">        </span><span class="p">(</span><span class="o">!</span><span class="n">uid_eq</span><span class="p">(</span><span class="n">new</span><span class="o">-&gt;</span><span class="n">uid</span><span class="p">,</span><span class="w"> </span><span class="n">root_uid</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span>
+</span><span id="__span-18-25"><a id="__codelineno-18-25" name="__codelineno-18-25" href="#__codelineno-18-25"></a><span class="w">         </span><span class="o">!</span><span class="n">uid_eq</span><span class="p">(</span><span class="n">new</span><span class="o">-&gt;</span><span class="n">euid</span><span class="p">,</span><span class="w"> </span><span class="n">root_uid</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span>
+</span><span id="__span-18-26"><a id="__codelineno-18-26" name="__codelineno-18-26" href="#__codelineno-18-26"></a><span class="w">         </span><span class="o">!</span><span class="n">uid_eq</span><span class="p">(</span><span class="n">new</span><span class="o">-&gt;</span><span class="n">suid</span><span class="p">,</span><span class="w"> </span><span class="n">root_uid</span><span class="p">)))</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-18-27"><a id="__codelineno-18-27" name="__codelineno-18-27" href="#__codelineno-18-27"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">issecure</span><span class="p">(</span><span class="n">SECURE_KEEP_CAPS</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-18-28"><a id="__codelineno-18-28" name="__codelineno-18-28" href="#__codelineno-18-28"></a><span class="w">            </span><span class="n">cap_clear</span><span class="p">(</span><span class="n">new</span><span class="o">-&gt;</span><span class="n">cap_permitted</span><span class="p">);</span>
+</span><span id="__span-18-29"><a id="__codelineno-18-29" name="__codelineno-18-29" href="#__codelineno-18-29"></a><span class="w">            </span><span class="n">cap_clear</span><span class="p">(</span><span class="n">new</span><span class="o">-&gt;</span><span class="n">cap_effective</span><span class="p">);</span>
+</span><span id="__span-18-30"><a id="__codelineno-18-30" name="__codelineno-18-30" href="#__codelineno-18-30"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-18-31"><a id="__codelineno-18-31" name="__codelineno-18-31" href="#__codelineno-18-31"></a><span class="w">        </span><span class="n">cap_clear</span><span class="p">(</span><span class="n">new</span><span class="o">-&gt;</span><span class="n">cap_ambient</span><span class="p">);</span>
+</span><span id="__span-18-32"><a id="__codelineno-18-32" name="__codelineno-18-32" href="#__codelineno-18-32"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-18-33"><a id="__codelineno-18-33" name="__codelineno-18-33" href="#__codelineno-18-33"></a>
+</span><span id="__span-18-34"><a id="__codelineno-18-34" name="__codelineno-18-34" href="#__codelineno-18-34"></a><span class="w">    </span><span class="cm">/* Block 2: Loss of EUID=0 */</span>
+</span><span id="__span-18-35"><a id="__codelineno-18-35" name="__codelineno-18-35" href="#__codelineno-18-35"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">uid_eq</span><span class="p">(</span><span class="n">old</span><span class="o">-&gt;</span><span class="n">euid</span><span class="p">,</span><span class="w"> </span><span class="n">root_uid</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">uid_eq</span><span class="p">(</span><span class="n">new</span><span class="o">-&gt;</span><span class="n">euid</span><span class="p">,</span><span class="w"> </span><span class="n">root_uid</span><span class="p">))</span>
+</span><span id="__span-18-36"><a id="__codelineno-18-36" name="__codelineno-18-36" href="#__codelineno-18-36"></a><span class="w">        </span><span class="n">cap_clear</span><span class="p">(</span><span class="n">new</span><span class="o">-&gt;</span><span class="n">cap_effective</span><span class="p">);</span>
+</span><span id="__span-18-37"><a id="__codelineno-18-37" name="__codelineno-18-37" href="#__codelineno-18-37"></a>
+</span><span id="__span-18-38"><a id="__codelineno-18-38" name="__codelineno-18-38" href="#__codelineno-18-38"></a><span class="w">    </span><span class="cm">/* Block 3: Gain of EUID=0 */</span>
+</span><span id="__span-18-39"><a id="__codelineno-18-39" name="__codelineno-18-39" href="#__codelineno-18-39"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">uid_eq</span><span class="p">(</span><span class="n">old</span><span class="o">-&gt;</span><span class="n">euid</span><span class="p">,</span><span class="w"> </span><span class="n">root_uid</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">uid_eq</span><span class="p">(</span><span class="n">new</span><span class="o">-&gt;</span><span class="n">euid</span><span class="p">,</span><span class="w"> </span><span class="n">root_uid</span><span class="p">))</span>
+</span><span id="__span-18-40"><a id="__codelineno-18-40" name="__codelineno-18-40" href="#__codelineno-18-40"></a><span class="w">        </span><span class="n">new</span><span class="o">-&gt;</span><span class="n">cap_effective</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">new</span><span class="o">-&gt;</span><span class="n">cap_permitted</span><span class="p">;</span>
+</span><span id="__span-18-41"><a id="__codelineno-18-41" name="__codelineno-18-41" href="#__codelineno-18-41"></a><span class="p">}</span>
+</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Block</th>
+<th>Condition</th>
+<th>What happens</th>
+<th>Effect on capabilities</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Block 1</strong></td>
+<td>The process <strong>had at least one UID = 0</strong> (RUID, EUID or SUID) and <strong>afterward none are 0</strong></td>
+<td>The process fully abandons root privileges</td>
+<td>If <code>SECURE_KEEP_CAPS</code> is <strong>not</strong> set, <code>cap_permitted</code> and <code>cap_effective</code> are cleared. <code>cap_ambient</code> is always cleared.</td>
+</tr>
+<tr>
+<td><strong>Block 2</strong></td>
+<td><strong>EUID was 0 and no longer is</strong></td>
+<td>The process loses <strong>root EUID</strong></td>
+<td><code>cap_effective</code> is cleared. This action is independent of <code>SECURE_KEEP_CAPS</code>.</td>
+</tr>
+<tr>
+<td><strong>Block 3</strong></td>
+<td><strong>EUID was not 0 and becomes 0</strong></td>
+<td>The process gains <strong>root EUID</strong></td>
+<td><code>cap_effective</code> is set equal to <code>cap_permitted</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="retention-mechanisms">Retention Mechanisms<a class="headerlink" href="#retention-mechanisms" title="Permanent link">&para;</a></h3>
+<p>To address the problem of UID demotion clearing capabilities, there are two solutions with different properties:</p>
+<h4 id="pr_set_keepcaps-prctl-option-8"><strong>PR_SET_KEEPCAPS (<code>prctl</code> option 8)</strong><a class="headerlink" href="#pr_set_keepcaps-prctl-option-8" title="Permanent link">&para;</a></h4>
+<p>Controls whether the process retains its capabilities in the permitted (P) set when it changes its UIDs.</p>
+<div class="language-nasm highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="nf">mov</span><span class="w"> </span><span class="nb">rax</span><span class="p">,</span><span class="w"> </span><span class="mi">157</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="nf">mov</span><span class="w"> </span><span class="nb">rdi</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="w">              </span><span class="c1">; PR_SET_KEEPCAPS</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="nf">mov</span><span class="w"> </span><span class="nb">rsi</span><span class="p">,</span><span class="w"> </span><span class="nv">value</span><span class="w">           </span><span class="c1">; 1 = enable</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="nf">syscall</span>
+</span></code></pre></div>
+<ul>
+<li><code>value</code> (RSI):<ul>
+<li>0 → default behavior: when a process with UID 0 (root) transitions all its UIDs (real, effective, saved) to non-zero values (e.g. <code>setresuid(1000, 1000, 1000)</code>), the kernel clears the permitted, effective and ambient sets.</li>
+<li>1 → capabilities in the permitted set are preserved after the UID transition. The effective and ambient sets are still cleared (<code>PR_SET_KEEPCAPS</code> only protects the permitted set). Capabilities can be recovered afterward, from permitted to effective using the <code>capset</code> syscall and from permitted to ambient using <code>PR_CAP_AMBIENT_RAISE</code> (requires the capability to also be in inheritable).</li>
+</ul>
+</li>
+</ul>
+<div class="admonition danger">
+<p>A process that starts as root can call <code>prctl(PR_SET_KEEPCAPS, 1)</code>, then <code>setuid(1000)</code> to appear as a normal user while retaining critical capabilities such as <code>CAP_NET_RAW</code>, <code>CAP_DAC_READ_SEARCH</code> or <code>CAP_SYS_PTRACE</code> in its permitted set. From there, it can elevate them to the effective set or propagate them via ambient capabilities. Tools that only alert on processes running as root will not detect a process with UID 1000 that retains privileged capabilities.</p>
+</div>
+<h4 id="pr_set_securebits-prctl-option-28"><strong>PR_SET_SECUREBITS (<code>prctl</code> option 28)</strong><a class="headerlink" href="#pr_set_securebits-prctl-option-28" title="Permanent link">&para;</a></h4>
+<p>Sets the secure bits for the process. Securebits control in a granular way how the kernel handles capabilities during UID transitions and <code>execve</code>. <strong>Requires <code>CAP_SETPCAP</code> in the effective set.</strong></p>
+<div class="language-nasm highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="nf">mov</span><span class="w"> </span><span class="nb">rax</span><span class="p">,</span><span class="w"> </span><span class="mi">157</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="nf">mov</span><span class="w"> </span><span class="nb">rdi</span><span class="p">,</span><span class="w"> </span><span class="mi">28</span><span class="w">             </span><span class="c1">; PR_SET_SECUREBITS</span>
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="nf">mov</span><span class="w"> </span><span class="nb">rsi</span><span class="p">,</span><span class="w"> </span><span class="nv">flags</span><span class="w">          </span><span class="c1">; bitmask of securebits</span>
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="nf">syscall</span>
+</span></code></pre></div>
+<p><code>flags</code> (RSI) — OR-combinable bitmask:</p>
+<ul>
+<li><code>SECBIT_NOROOT</code> = <code>0x01</code> → Disables the special treatment of UID 0 in <code>execve</code>. Normally, if a process with UID 0 calls <code>execve</code>, the kernel grants it full capabilities. With <code>NOROOT</code>, UID 0 no longer receives automatic capabilities; it only gets them if the binary has explicit file capabilities.</li>
+<li><code>SECBIT_NOROOT_LOCKED</code> = <code>0x02</code> → Locks <code>SECBIT_NOROOT</code> so it cannot be disabled.</li>
+<li><code>SECBIT_NO_SETUID_FIXUP</code> = <code>0x04</code> → Disables all automatic capability adjustment when UIDs change. Neither permitted, effective, nor ambient sets are modified. If this bit is set, <code>KEEP_CAPS</code> is redundant (it is a subset). Unlike <code>KEEP_CAPS</code>, it is not cleared on <code>execve</code>.</li>
+<li><code>SECBIT_NO_SETUID_FIXUP_LOCKED</code> = <code>0x08</code> → Locks <code>SECBIT_NO_SETUID_FIXUP</code> so it cannot be disabled.</li>
+<li><code>SECBIT_KEEP_CAPS</code> = <code>0x10</code> → When root drops to a non-zero UID, the kernel does not clear the permitted set. The effective and ambient sets are cleared, but capabilities remain in permitted and can be recovered later. Automatically cleared on each <code>execve</code>.</li>
+<li><code>SECBIT_KEEP_CAPS_LOCKED</code> = <code>0x20</code> → Locks <code>SECBIT_KEEP_CAPS</code> so it cannot be disabled.</li>
+<li><code>SECBIT_NO_CAP_AMBIENT_RAISE</code> = <code>0x40</code> → Prevents using <code>PR_CAP_AMBIENT_RAISE</code>. If set, no one can add capabilities to the ambient set. This closes that propagation path.</li>
+<li><code>SECBIT_NO_CAP_AMBIENT_RAISE_LOCKED</code> = <code>0x80</code> → Locks <code>SECBIT_NO_CAP_AMBIENT_RAISE</code> so it cannot be disabled.</li>
+</ul>
+<p>A process that starts with UID 0 sets <code>SECBIT_NO_SETUID_FIXUP</code> + <code>SECBIT_NO_SETUID_FIXUP_LOCKED</code>, then calls <code>setresuid(1000,1000,1000)</code>. The result is a process that appears to be UID 1000 but retains all its capabilities intact (all sets), and no one (not even root) can revert that configuration because the locked bit is irreversible.</p>
+<h2 id="credential-inheritance-fork-clone-and-execve">Credential Inheritance: <code>fork</code>, <code>clone</code> and <code>execve</code><a class="headerlink" href="#credential-inheritance-fork-clone-and-execve" title="Permanent link">&para;</a></h2>
+<p>The initial credential state of a process depends on how it was created.</p>
+<h3 id="fork-clone"><code>fork</code> / <code>clone</code><a class="headerlink" href="#fork-clone" title="Permanent link">&para;</a></h3>
+<p><code>fork</code> and <code>clone</code> create a new child process with an <strong>exact copy</strong> of the parent's credentials. The three UIDs, three GIDs and five capability sets are duplicated. The child starts with the same <code>struct cred</code> (initially shared by reference, cloned on the first modification thanks to the copy-on-write pattern).</p>
+<p>This means a process that has escalated to root and maximized capabilities before calling <code>fork</code>/<code>clone</code> will produce a child with the same elevated credentials.</p>
+<h3 id="execve-and-the-setuid-bit"><code>execve</code> and the setuid bit<a class="headerlink" href="#execve-and-the-setuid-bit" title="Permanent link">&para;</a></h3>
+<p><code>execve</code> replaces the current process image with the invoked one, <strong>recalculating credentials</strong> according to the properties of the new binary:</p>
+<p><strong>Without setuid bit</strong>: RUID, EUID and SUID remain unchanged. Capabilities are recalculated according to the transition formulas described above.</p>
+<p><strong>With setuid bit set</strong> (<code>chmod u+s</code>): the kernel sets the EUID and SUID to the UID of the executable file's owner. RUID is maintained. The resulting credential state:</p>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="n">Before</span><span class="w"> </span><span class="n">execve</span><span class="o">:</span><span class="w">  </span><span class="n">RUID</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="n">EUID</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="n">SUID</span><span class="o">=</span><span class="mi">1000</span>
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="n">Binary</span><span class="w"> </span><span class="n">with</span><span class="w"> </span><span class="n">setuid</span><span class="w"> </span><span class="n">owned</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="n">root</span><span class="w"> </span><span class="p">(</span><span class="n">uid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="o">+</span><span class="n">s</span><span class="p">)</span>
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="n">After</span><span class="w"> </span><span class="n">execve</span><span class="o">:</span><span class="w"> </span><span class="n">RUID</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="n">EUID</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">SUID</span><span class="o">=</span><span class="mi">0</span>
+</span></code></pre></div>
+<h2 id="credentials-and-user-namespaces">Credentials and User Namespaces<a class="headerlink" href="#credentials-and-user-namespaces" title="Permanent link">&para;</a></h2>
+<p>In a user namespace, UIDs are remapped. A process with UID 0 inside a user namespace does not have root privileges in the parent namespace (UIDs are relative to the namespace). <code>CLONE_NEWUSER</code> creates a user namespace where the process gets full capabilities, but only within that namespace. Operations on the parent namespace remain subject to the original credentials.</p>
+<h2 id="acknowledgements">Acknowledgements<a class="headerlink" href="#acknowledgements" title="Permanent link">&para;</a></h2>
+<p>Thanks for making it this far.</p>
+<p>If you find errors or want to improve/extend the article, the blog content is open to Pull Requests. All contributions are welcome.</p>
+<p>See you in the next article! ;)</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      © 2026 0x574R
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.sections", "navigation.top", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+<script>
+/*
+ * Language-toggle click handler.
+ *
+ * WHY NOT AT DOMContentLoaded?
+ *   navigation.instant changes window.location without a page reload.
+ *   Reading the path at load time means the button would always navigate
+ *   from the first URL visited, not the current one.
+ *
+ * HOW IT WORKS:
+ *   overrides/partials/alternate.html embeds data-target="en" or "es"
+ *   on the button at BUILD TIME (Jinja2, config.theme.language).
+ *   Here we only attach the click listener; the target path is computed
+ *   from window.location.pathname at the moment of the click.
+ */
+(function () {
+  'use strict';
+
+  function attachToggle(btn) {
+    if (btn.dataset.ready) return;   // don't double-bind
+    btn.dataset.ready = '1';
+
+    btn.addEventListener('click', function () {
+      var target = btn.dataset.target;  // 'en' or 'es' — set server-side
+      var p      = window.location.pathname;
+
+      // Replace /es/…  ↔  /en/…
+      // Regex: match exactly /es/ or /en/ at the start of the path
+      var next = p.replace(/^\/(es|en)(\/|$)/, '/' + target + '$2');
+
+      // Fallback if the path had no language prefix
+      if (next === p) next = '/' + target + '/';
+
+      window.location.href = next;
+    });
+  }
+
+  function init() {
+    document.querySelectorAll('button.lang-toggle[data-target]')
+            .forEach(attachToggle);
+  }
+
+  // Initial load
+  document.addEventListener('DOMContentLoaded', init);
+
+  // MkDocs Material instant navigation fires this after each page swap
+  document.addEventListener('DOMContentMutated', init);
+
+}());
+</script>
+
+  </body>
+</html>

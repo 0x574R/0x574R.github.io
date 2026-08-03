@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 180" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="bg4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0014"/>
+      <stop offset="100%" style="stop-color:#1a0033"/>
+    </linearGradient>
+    <filter id="glow4">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  
+  <rect width="560" height="180" fill="url(#bg4)"/>
+  
+  <!-- Kernel space background -->
+  <rect x="155" y="8" width="250" height="164" rx="6" fill="none" stroke="#3d2d5a" stroke-width="1" stroke-dasharray="6,3" opacity="0.5"/>
+  <text x="280" y="22" fill="#3d2d5a" font-family="monospace" font-size="8" text-anchor="middle">KERNEL SPACE</text>
+  
+  <!-- TCP incoming (left) -->
+  <g transform="translate(15, 25)">
+    <rect width="130" height="55" rx="5" fill="#0d0d14" stroke="#00b4d8" stroke-width="1.2"/>
+    <text x="65" y="18" fill="#00b4d8" font-family="monospace" font-size="9" text-anchor="middle">TCP :4444</text>
+    <g font-family="monospace" font-size="7">
+      <text x="10" y="34" fill="#48cae4">← recvfrom(size)</text>
+      <text x="10" y="47" fill="#48cae4">← recvfrom(ELF)</text>
+    </g>
+  </g>
+  
+  <!-- Arrow TCP → memfd -->
+  <g filter="url(#glow4)">
+    <path d="M 145 52 L 145 52 Q 160 52 170 60 L 180 68" stroke="#00b4d8" stroke-width="2" fill="none" stroke-dasharray="6,3">
+      <animate attributeName="stroke-dashoffset" values="9;0" dur="0.5s" repeatCount="indefinite"/>
+    </path>
+    <polygon points="180,68 173,64 176,71" fill="#00b4d8"/>
+  </g>
+  
+  <!-- memfd_create box (center-top in kernel) -->
+  <g transform="translate(185, 32)">
+    <rect width="130" height="50" rx="5" fill="#0a1a10" stroke="#10b981" stroke-width="1.5" filter="url(#glow4)">
+      <animate attributeName="stroke-opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite"/>
+    </rect>
+    <text x="65" y="18" fill="#10b981" font-family="monospace" font-size="9" text-anchor="middle" font-weight="bold">memfd_create()</text>
+    <text x="65" y="32" fill="#0f6a4a" font-family="monospace" font-size="7" text-anchor="middle">MFD_EXEC | anon fd</text>
+    <text x="65" y="44" fill="#0f6a4a" font-family="monospace" font-size="7" text-anchor="middle">tmpfs · RAM-backed</text>
+  </g>
+  
+  <!-- ftruncate + mmap (center-bottom in kernel) -->
+  <g transform="translate(185, 95)">
+    <rect width="60" height="32" rx="4" fill="#1a1a0f" stroke="#eab308" stroke-width="1"/>
+    <text x="30" y="14" fill="#eab308" font-family="monospace" font-size="7" text-anchor="middle">ftruncate</text>
+    <text x="30" y="26" fill="#a08a08" font-family="monospace" font-size="6" text-anchor="middle">expand</text>
+  </g>
+  
+  <!-- Arrow down from memfd to ftruncate -->
+  <line x1="220" y1="82" x2="220" y2="95" stroke="#eab308" stroke-width="1.2"/>
+  <polygon points="220,95 217,90 223,90" fill="#eab308"/>
+  
+  <g transform="translate(255, 95)">
+    <rect width="60" height="32" rx="4" fill="#1a1a0f" stroke="#eab308" stroke-width="1"/>
+    <text x="30" y="14" fill="#eab308" font-family="monospace" font-size="7" text-anchor="middle">mmap</text>
+    <text x="30" y="26" fill="#a08a08" font-family="monospace" font-size="6" text-anchor="middle">SHARED</text>
+  </g>
+  
+  <!-- Arrow ftruncate → mmap -->
+  <line x1="245" y1="111" x2="255" y2="111" stroke="#eab308" stroke-width="1"/>
+  <polygon points="255,111 251,108 251,114" fill="#eab308"/>
+  
+  <!-- Arrow down from memfd to mmap area -->
+  <line x1="280" y1="82" x2="280" y2="95" stroke="#eab308" stroke-width="1.2"/>
+  <polygon points="280,95 277,90 283,90" fill="#eab308"/>
+  
+  <!-- Filesystem crossed out (bottom-left in kernel) -->
+  <g transform="translate(185, 140)">
+    <rect width="130" height="24" rx="4" fill="#1a0808" stroke="#ff5f56" stroke-width="1" opacity="0.6"/>
+    <text x="65" y="16" fill="#ff5f56" font-family="monospace" font-size="8" text-anchor="middle" opacity="0.7">∅ FILESYSTEM</text>
+    <line x1="5" y1="3" x2="125" y2="21" stroke="#ff5f56" stroke-width="1.5" opacity="0.6"/>
+  </g>
+  
+  <!-- Arrow mmap → execveat (going right) -->
+  <g filter="url(#glow4)">
+    <path d="M 315 111 L 340 111 Q 355 111 365 100 L 375 85" stroke="#ff00ff" stroke-width="2" fill="none" stroke-dasharray="6,3">
+      <animate attributeName="stroke-dashoffset" values="9;0" dur="0.5s" repeatCount="indefinite"/>
+    </path>
+    <polygon points="375,85 370,92 378,90" fill="#ff00ff"/>
+  </g>
+  
+  <!-- Exec (right side, userspace) -->
+  <g transform="translate(380, 25)">
+    <rect width="160" height="130" rx="6" fill="#0d0620" stroke="#a855f7" stroke-width="1.5"/>
+    <rect width="160" height="20" rx="6" fill="#2d1640"/>
+    <rect y="17" width="160" height="3" fill="#2d1640"/>
+    <text x="80" y="14" fill="#c084fc" font-family="monospace" font-size="8" text-anchor="middle">USERSPACE</text>
+    
+    <g font-family="monospace" font-size="8">
+      <text x="10" y="36" fill="#6b4d9a">clone3(SIGCHLD)</text>
+      <text x="10" y="50" fill="#6b4d9a">setsid()</text>
+      <text x="10" y="64" fill="#a855f7">dup3(→ socket)</text>
+      
+      <rect x="8" y="70" width="144" height="20" rx="3" fill="#2d0a3d" stroke="#ff00ff" stroke-width="1.5" filter="url(#glow4)">
+        <animate attributeName="opacity" values="0.8;1;0.8" dur="1s" repeatCount="indefinite"/>
+      </rect>
+      <text x="80" y="84" fill="#ff00ff" font-size="9" text-anchor="middle" font-weight="bold">execveat(fd)</text>
+      
+      <text x="80" y="106" fill="#4a3060" font-size="7" text-anchor="middle">AT_EMPTY_PATH</text>
+      
+      <rect x="8" y="110" width="144" height="16" rx="3" fill="#0a1a0a" stroke="#00ff88" stroke-width="1">
+        <animate attributeName="opacity" values="0.6;1;0.6" dur="1.2s" repeatCount="indefinite"/>
+      </rect>
+      <text x="80" y="122" fill="#00ff88" font-size="8" text-anchor="middle">ELF RUNNING IN RAM</text>
+    </g>
+  </g>
+  
+  <!-- Bottom label -->
+  <text x="90" y="172" fill="#2a2a4a" font-family="monospace" font-size="7" text-anchor="middle">USERSPACE</text>
+</svg>

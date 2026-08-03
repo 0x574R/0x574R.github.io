@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 180" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="bg6" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#08080c"/>
+      <stop offset="100%" style="stop-color:#0f0a18"/>
+    </linearGradient>
+    <filter id="glow6">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  
+  <rect width="560" height="180" fill="url(#bg6)"/>
+  
+  <!-- Title area -->
+  <text x="280" y="20" fill="#3d2d5a" font-family="monospace" font-size="8" text-anchor="middle">SYSCALL CHAIN</text>
+  
+  <!-- Row 1: Network phase -->
+  <g transform="translate(20, 30)">
+    <rect width="78" height="38" rx="4" fill="#0d1a28" stroke="#00b4d8" stroke-width="1"/>
+    <text x="39" y="18" fill="#00b4d8" font-family="monospace" font-size="8" text-anchor="middle">socket</text>
+    <text x="39" y="30" fill="#0d3050" font-family="monospace" font-size="6" text-anchor="middle">41</text>
+  </g>
+  <line x1="102" y1="49" x2="112" y2="49" stroke="#00b4d8" stroke-width="1"/>
+  <polygon points="112,49 108,46 108,52" fill="#00b4d8"/>
+  
+  <g transform="translate(116, 30)">
+    <rect width="62" height="38" rx="4" fill="#0d1a28" stroke="#00b4d8" stroke-width="1"/>
+    <text x="31" y="18" fill="#00b4d8" font-family="monospace" font-size="8" text-anchor="middle">bind</text>
+    <text x="31" y="30" fill="#0d3050" font-family="monospace" font-size="6" text-anchor="middle">49</text>
+  </g>
+  <line x1="182" y1="49" x2="192" y2="49" stroke="#00b4d8" stroke-width="1"/>
+  <polygon points="192,49 188,46 188,52" fill="#00b4d8"/>
+  
+  <g transform="translate(196, 30)">
+    <rect width="68" height="38" rx="4" fill="#0d1a28" stroke="#00b4d8" stroke-width="1"/>
+    <text x="34" y="18" fill="#00b4d8" font-family="monospace" font-size="8" text-anchor="middle">listen</text>
+    <text x="34" y="30" fill="#0d3050" font-family="monospace" font-size="6" text-anchor="middle">50</text>
+  </g>
+  <line x1="268" y1="49" x2="278" y2="49" stroke="#00b4d8" stroke-width="1"/>
+  <polygon points="278,49 274,46 274,52" fill="#00b4d8"/>
+
+  <g transform="translate(282, 30)">
+    <rect width="72" height="38" rx="4" fill="#0d1a28" stroke="#00b4d8" stroke-width="1"/>
+    <text x="36" y="18" fill="#00b4d8" font-family="monospace" font-size="8" text-anchor="middle">accept</text>
+    <text x="36" y="30" fill="#0d3050" font-family="monospace" font-size="6" text-anchor="middle">43</text>
+  </g>
+  <line x1="358" y1="49" x2="368" y2="49" stroke="#a855f7" stroke-width="1"/>
+  <polygon points="368,49 364,46 364,52" fill="#a855f7"/>
+  
+  <g transform="translate(372, 30)">
+    <rect width="72" height="38" rx="4" fill="#1a0a2a" stroke="#a855f7" stroke-width="1"/>
+    <text x="36" y="18" fill="#a855f7" font-family="monospace" font-size="8" text-anchor="middle">clone3</text>
+    <text x="36" y="30" fill="#4a3060" font-family="monospace" font-size="6" text-anchor="middle">435</text>
+  </g>
+  <line x1="448" y1="49" x2="458" y2="49" stroke="#a855f7" stroke-width="1"/>
+  <polygon points="458,49 454,46 454,52" fill="#a855f7"/>
+  
+  <g transform="translate(462, 30)">
+    <rect width="78" height="38" rx="4" fill="#1a0a2a" stroke="#a855f7" stroke-width="1"/>
+    <text x="39" y="18" fill="#a855f7" font-family="monospace" font-size="8" text-anchor="middle">recvfrom</text>
+    <text x="39" y="30" fill="#4a3060" font-family="monospace" font-size="6" text-anchor="middle">45</text>
+  </g>
+  
+  <!-- Curved arrow down to row 2 -->
+  <path d="M 501 68 L 501 80 Q 501 86 495 86 L 70 86 Q 64 86 64 92 L 64 96" stroke="#10b981" stroke-width="1.5" fill="none" stroke-dasharray="4,2">
+    <animate attributeName="stroke-dashoffset" values="6;0" dur="0.6s" repeatCount="indefinite"/>
+  </path>
+  <polygon points="64,96 60,91 68,91" fill="#10b981"/>
+  
+  <!-- Row 2: Memory phase -->
+  <g transform="translate(20, 98)">
+    <rect width="100" height="38" rx="4" fill="#0a1a10" stroke="#10b981" stroke-width="1.2" filter="url(#glow6)">
+      <animate attributeName="stroke-opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite"/>
+    </rect>
+    <text x="50" y="18" fill="#10b981" font-family="monospace" font-size="8" text-anchor="middle" font-weight="bold">memfd_create</text>
+    <text x="50" y="30" fill="#0f6a4a" font-family="monospace" font-size="6" text-anchor="middle">319 · MFD_EXEC</text>
+  </g>
+  <line x1="124" y1="117" x2="134" y2="117" stroke="#eab308" stroke-width="1"/>
+  <polygon points="134,117 130,114 130,120" fill="#eab308"/>
+  
+  <g transform="translate(138, 98)">
+    <rect width="86" height="38" rx="4" fill="#1a1a0f" stroke="#eab308" stroke-width="1"/>
+    <text x="43" y="18" fill="#eab308" font-family="monospace" font-size="8" text-anchor="middle">ftruncate</text>
+    <text x="43" y="30" fill="#a08a08" font-family="monospace" font-size="6" text-anchor="middle">77 · expand</text>
+  </g>
+  <line x1="228" y1="117" x2="238" y2="117" stroke="#eab308" stroke-width="1"/>
+  <polygon points="238,117 234,114 234,120" fill="#eab308"/>
+  
+  <g transform="translate(242, 98)">
+    <rect width="88" height="38" rx="4" fill="#1a1a0f" stroke="#eab308" stroke-width="1"/>
+    <text x="44" y="18" fill="#eab308" font-family="monospace" font-size="8" text-anchor="middle">mmap</text>
+    <text x="44" y="30" fill="#a08a08" font-family="monospace" font-size="6" text-anchor="middle">9 · SHARED</text>
+  </g>
+  <line x1="334" y1="117" x2="344" y2="117" stroke="#a855f7" stroke-width="1"/>
+  <polygon points="344,117 340,114 340,120" fill="#a855f7"/>
+  
+  <g transform="translate(348, 98)">
+    <rect width="78" height="38" rx="4" fill="#1a0a2a" stroke="#a855f7" stroke-width="1"/>
+    <text x="39" y="18" fill="#a855f7" font-family="monospace" font-size="8" text-anchor="middle">dup3</text>
+    <text x="39" y="30" fill="#4a3060" font-family="monospace" font-size="6" text-anchor="middle">292 · I/O</text>
+  </g>
+  <line x1="430" y1="117" x2="440" y2="117" stroke="#ff00ff" stroke-width="1.5"/>
+  <polygon points="440,117 436,114 436,120" fill="#ff00ff"/>
+  
+  <g transform="translate(444, 98)">
+    <rect width="100" height="38" rx="4" fill="#2d0a3d" stroke="#ff00ff" stroke-width="1.5" filter="url(#glow6)">
+      <animate attributeName="opacity" values="0.8;1;0.8" dur="1s" repeatCount="indefinite"/>
+    </rect>
+    <text x="50" y="18" fill="#ff00ff" font-family="monospace" font-size="8" text-anchor="middle" font-weight="bold">execveat</text>
+    <text x="50" y="30" fill="#c084fc" font-family="monospace" font-size="6" text-anchor="middle">322 · EMPTY_PATH</text>
+  </g>
+  
+  <!-- Bottom labels -->
+  <rect x="165" y="148" width="230" height="20" rx="4" fill="#0a1a0a" stroke="#00ff88" stroke-width="0.8" opacity="0.7">
+    <animate attributeName="opacity" values="0.5;0.8;0.5" dur="2s" repeatCount="indefinite"/>
+  </rect>
+  <text x="280" y="162" fill="#00ff88" font-family="monospace" font-size="8" text-anchor="middle">ELF running from RAM · ∅ disk</text>
+</svg>
