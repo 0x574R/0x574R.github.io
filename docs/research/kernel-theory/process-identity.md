@@ -244,7 +244,7 @@ struct vm_area_struct {
 
 #### **VMAs file-backed**
 
-Se crean explícitamente cuando el kernel mapea un fichero en memoria — ya sea porque un programa solicita mapear un fichero con `mmap` pasando un file descriptor, o implícitamente durante `execve`, cuando el kernel carga los segmentos `PT_LOAD` del binario ELF en el espacio de direcciones del nuevo proceso. En ambos casos, la VMA resultante mantiene una referencia al fichero original a través de su campo `vm_file`.
+Se crean explícitamente cuando el kernel mapea un fichero en memoria, ya sea porque un programa solicita mapear un fichero con `mmap` pasando un file descriptor, o implícitamente durante `execve`, cuando el kernel carga los segmentos `PT_LOAD` del binario ELF en el espacio de direcciones del nuevo proceso. En ambos casos, la VMA resultante mantiene una referencia al fichero original a través de su campo `vm_file`.
 
 En `/proc/PID/maps` se muestra la siguiente información:
 
@@ -376,7 +376,7 @@ Para cada segmento del binario:
 
 3. **Eliminar el mapping original** (`munmap`): se desmapea la región file-backed, eliminando la referencia al binario en disco. A partir de este punto, acceder a las direcciones del segmento original provoca un fallo de segmentación.
 
-4. **Reubicar la copia** (`mremap` con `MREMAP_MAYMOVE | MREMAP_FIXED`): se mueve la región anónima al rango de direcciones que ocupaba el segmento original. El contenido es idéntico, las direcciones son las mismas; a efectos prácticos, solo se cambió el tipo de VMA.
+4. **Reubicar la copia** (`mremap` con `MREMAP_MAYMOVE | MREMAP_FIXED`): se mueve la región anónima al rango de direcciones que ocupaba el segmento original. El contenido es idéntico y las direcciones son las mismas. En la práctica, solo cambia el tipo de VMA.
 
 5. **Restaurar los permisos** (`mprotect`): se aplican los permisos originales del segmento a la nueva región de memoria (R para headers, RX para código, RW para datos).
 
@@ -402,7 +402,7 @@ La solución es ejecutar el código de anonimización **desde fuera** de los seg
 
 2. **Copiar el código de anonimización** (`rep movsb`): se copia a la página temporal el bloque de instrucciones que ejecuta la secuencia `mmap`→`movsb`→`munmap`→`mremap`→`mprotect` para cada segmento, junto con los datos que necesitan las syscalls (direcciones de inicio/fin, permisos y direcciones de retorno).
 
-3. **Hacer la página ejecutable** (`mprotect` con `PROT_READ | PROT_EXEC`): la página se debe crear con permisos RW para poder copiar los datos; una vez copiados, se cambia a RX para poder transferir el flujo de ejecución a ella.
+3. **Hacer la página ejecutable** (`mprotect` con `PROT_READ | PROT_EXEC`): la página se debe crear con permisos RW para poder copiar los datos. Una vez copiados, se cambia a RX para poder transferir el flujo de ejecución a ella.
 
 4. **Saltar a la página temporal** (`jmp`): el flujo de ejecución del binario debe abandonar el segmento `.text` del binario y saltar a la página anónima. A partir de este punto, el RIP apunta a la página temporal y es seguro desmapear cualquier segmento del binario.
 

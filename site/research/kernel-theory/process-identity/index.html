@@ -1602,7 +1602,7 @@
 </div>
 <h3 id="vmas-file-backed-vs-vmas-anonimas">VMAs file-backed vs VMAs anónimas<a class="headerlink" href="#vmas-file-backed-vs-vmas-anonimas" title="Permanent link">&para;</a></h3>
 <h4 id="vmas-file-backed"><strong>VMAs file-backed</strong><a class="headerlink" href="#vmas-file-backed" title="Permanent link">&para;</a></h4>
-<p>Se crean explícitamente cuando el kernel mapea un fichero en memoria — ya sea porque un programa solicita mapear un fichero con <code>mmap</code> pasando un file descriptor, o implícitamente durante <code>execve</code>, cuando el kernel carga los segmentos <code>PT_LOAD</code> del binario ELF en el espacio de direcciones del nuevo proceso. En ambos casos, la VMA resultante mantiene una referencia al fichero original a través de su campo <code>vm_file</code>.</p>
+<p>Se crean explícitamente cuando el kernel mapea un fichero en memoria, ya sea porque un programa solicita mapear un fichero con <code>mmap</code> pasando un file descriptor, o implícitamente durante <code>execve</code>, cuando el kernel carga los segmentos <code>PT_LOAD</code> del binario ELF en el espacio de direcciones del nuevo proceso. En ambos casos, la VMA resultante mantiene una referencia al fichero original a través de su campo <code>vm_file</code>.</p>
 <p>En <code>/proc/PID/maps</code> se muestra la siguiente información:</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>00400000-00402000 r--p 00000000 08:01 1234567  /path/to/binary
 </span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>│               │ │  │ │        │     │        └─ ruta del fichero mapeado
@@ -1802,7 +1802,7 @@
 <p><strong>Eliminar el mapping original</strong> (<code>munmap</code>): se desmapea la región file-backed, eliminando la referencia al binario en disco. A partir de este punto, acceder a las direcciones del segmento original provoca un fallo de segmentación.</p>
 </li>
 <li>
-<p><strong>Reubicar la copia</strong> (<code>mremap</code> con <code>MREMAP_MAYMOVE | MREMAP_FIXED</code>): se mueve la región anónima al rango de direcciones que ocupaba el segmento original. El contenido es idéntico, las direcciones son las mismas; a efectos prácticos, solo se cambió el tipo de VMA.</p>
+<p><strong>Reubicar la copia</strong> (<code>mremap</code> con <code>MREMAP_MAYMOVE | MREMAP_FIXED</code>): se mueve la región anónima al rango de direcciones que ocupaba el segmento original. El contenido es idéntico y las direcciones son las mismas. En la práctica, solo cambia el tipo de VMA.</p>
 </li>
 <li>
 <p><strong>Restaurar los permisos</strong> (<code>mprotect</code>): se aplican los permisos originales del segmento a la nueva región de memoria (R para headers, RX para código, RW para datos).</p>
@@ -1829,7 +1829,7 @@
 <p><strong>Copiar el código de anonimización</strong> (<code>rep movsb</code>): se copia a la página temporal el bloque de instrucciones que ejecuta la secuencia <code>mmap</code>→<code>movsb</code>→<code>munmap</code>→<code>mremap</code>→<code>mprotect</code> para cada segmento, junto con los datos que necesitan las syscalls (direcciones de inicio/fin, permisos y direcciones de retorno).</p>
 </li>
 <li>
-<p><strong>Hacer la página ejecutable</strong> (<code>mprotect</code> con <code>PROT_READ | PROT_EXEC</code>): la página se debe crear con permisos RW para poder copiar los datos; una vez copiados, se cambia a RX para poder transferir el flujo de ejecución a ella.</p>
+<p><strong>Hacer la página ejecutable</strong> (<code>mprotect</code> con <code>PROT_READ | PROT_EXEC</code>): la página se debe crear con permisos RW para poder copiar los datos. Una vez copiados, se cambia a RX para poder transferir el flujo de ejecución a ella.</p>
 </li>
 <li>
 <p><strong>Saltar a la página temporal</strong> (<code>jmp</code>): el flujo de ejecución del binario debe abandonar el segmento <code>.text</code> del binario y saltar a la página anónima. A partir de este punto, el RIP apunta a la página temporal y es seguro desmapear cualquier segmento del binario.</p>

@@ -1737,7 +1737,7 @@
 <tr>
 <td><code>MREMAP_DONTUNMAP</code></td>
 <td><code>0x04</code></td>
-<td>Moves PTEs (page table entries) to <code>new_address</code> without destroying the original VMA; from <code>old_address</code> an empty VMA remains (with no pages behind it). Valid only on <code>MAP_PRIVATE</code> anonymous mappings.</td>
+<td>Moves PTEs (page table entries) to <code>new_address</code> without destroying the original VMA. An empty VMA remains at <code>old_address</code> (with no pages behind it). Valid only on <code>MAP_PRIVATE</code> anonymous mappings.</td>
 </tr>
 </tbody>
 </table>

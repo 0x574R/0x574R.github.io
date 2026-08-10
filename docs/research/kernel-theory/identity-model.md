@@ -97,9 +97,9 @@ rsi = euid          ; Puntero a uid_t donde escribir el effective UID
 rdx = suid          ; Puntero a uid_t donde escribir el saved set-user-ID
 ```
 
-- `ruid` (RDI) — Puntero a una región de memoria escribible de al menos 4 bytes (`uid_t` = 32 bits). El kernel escribe aquí el **real UID** actual.
-- `euid` (RSI) — Puntero a una región de memoria escribible de al menos 4 bytes (`uid_t` = 32 bits). El kernel escribe aquí el **effective UID** actual.
-- `suid` (RDX) — Puntero a una región de memoria escribible de al menos 4 bytes (`uid_t` = 32 bits). El kernel escribe aquí el **saved set-user-ID**.
+- `ruid` (RDI): puntero a una región de memoria escribible de al menos 4 bytes (`uid_t` = 32 bits). El kernel escribe aquí el **real UID** actual.
+- `euid` (RSI): puntero a una región de memoria escribible de al menos 4 bytes (`uid_t` = 32 bits). El kernel escribe aquí el **effective UID** actual.
+- `suid` (RDX): puntero a una región de memoria escribible de al menos 4 bytes (`uid_t` = 32 bits). El kernel escribe aquí el **saved set-user-ID**.
 
 **Valores de retorno**
 
@@ -166,9 +166,9 @@ rsi = egid  ; Puntero a gid_t donde escribir el effective GID (4 bytes)
 rdx = sgid  ; Puntero a gid_t donde escribir el saved set-group-ID (4 bytes)
 ```
 
-- `rgid` (RDI) — Dirección donde el kernel escribirá el **real GID** del proceso como un `gid_t` (4 bytes, entero sin signo). El real GID representa al grupo del usuario que lanzó el proceso en su origen.
-- `egid` (RSI) — Dirección donde el kernel escribirá el **effective GID**, que es el que el kernel usa de forma efectiva para los chequeos de permisos DAC sobre ficheros, IPC SysV, señales, etc.
-- `sgid` (RDX) — Dirección donde el kernel escribirá el **saved set-group-ID**. Su propósito es permitir al proceso recuperar un EGID anterior.
+- `rgid` (RDI): dirección donde el kernel escribirá el **real GID** del proceso como un `gid_t` (4 bytes, entero sin signo). El real GID representa al grupo del usuario que lanzó el proceso en su origen.
+- `egid` (RSI): dirección donde el kernel escribirá el **effective GID**, que es el que el kernel usa de forma efectiva para los chequeos de permisos DAC sobre ficheros, IPC SysV, señales, etc.
+- `sgid` (RDX): dirección donde el kernel escribirá el **saved set-group-ID**. Su propósito es permitir al proceso recuperar un EGID anterior.
 
 **Valores de retorno**
 
@@ -240,7 +240,7 @@ rdi = hdrp           ; Puntero a struct __user_cap_header_struct
 rsi = datap          ; Puntero a struct __user_cap_data_struct[2] (o NULL)
 ```
 
-- `hdrp` (RDI) — Puntero a la cabecera.
+- `hdrp` (RDI): puntero a la cabecera.
 
     Puntero a una estructura `__user_cap_header_struct` que indica la versión del protocolo de capabilities y el hilo objetivo. No puede ser NULL.
 
@@ -253,7 +253,7 @@ rsi = datap          ; Puntero a struct __user_cap_data_struct[2] (o NULL)
 
     - `version` debe ser `_LINUX_CAPABILITY_VERSION_3` (`0x20080522`). Esta es la única versión vigente y soporta hasta 64 capabilities (representadas en dos `u32`, uno por cada mitad de 32 bits).
 
-- `datap` (RSI) — Puntero al buffer de salida.
+- `datap` (RSI): puntero al buffer de salida.
 
     Puntero a un array de dos estructuras `__user_cap_data_struct` contiguas en memoria donde el kernel escribirá las capabilities del objetivo. `datap[0]` recibe los bits para las capabilities 0–31 y `datap[1]` para las capabilities 32–63.
 
@@ -307,9 +307,9 @@ rdi = hdrp           ; Puntero a struct __user_cap_header_struct
 rsi = datap          ; Puntero a struct __user_cap_data_struct[2]
 ```
 
-- `hdrp` (RDI) — Puntero a la cabecera (misma estructura que en `capget`). `version` debe ser `0x20080522`. `pid` solo permite `0` o el propio TID en kernels modernos.
+- `hdrp` (RDI): puntero a la cabecera (misma estructura que en `capget`). `version` debe ser `0x20080522`. `pid` solo permite `0` o el propio TID en kernels modernos.
 
-- `datap` (RSI) — Puntero a los datos de capabilities.
+- `datap` (RSI): puntero a los datos de capabilities.
 
     Puntero a un **array de dos** estructuras `__user_cap_data_struct` contiguas en memoria. `datap[0]` contiene los bits para las capabilities 0–31 y `datap[1]` para las capabilities 32–63.
 
@@ -477,7 +477,7 @@ mov rsi, flags          ; Bitmask de securebits
 syscall
 ```
 
-`flags` (RSI) — Bitmask combinable con OR:
+`flags` (RSI): bitmask combinable con OR:
 
 - `SECBIT_NOROOT` = `0x01` → Desactiva el tratamiento especial de UID 0 en `execve`. Normalmente, si un proceso con UID 0 hace `execve`, el kernel le otorga full capabilities. Con `NOROOT`, UID 0 ya no recibe capabilities automáticas, solo las obtiene si el binario tiene file capabilities explícitas.
 - `SECBIT_NOROOT_LOCKED` = `0x02` → Bloquea `SECBIT_NOROOT` para que no pueda ser desactivado.

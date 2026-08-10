@@ -242,20 +242,20 @@ rsi = datap          ; pointer to struct __user_cap_data_struct[2] (or NULL)
 
 - `hdrp` (RDI): pointer to the header.
 
- Pointer to a `__user_cap_header_struct` structure that specifies the capabilities protocol version and the target thread. Cannot be NULL.
+    Pointer to a `__user_cap_header_struct` structure that specifies the capabilities protocol version and the target thread. Cannot be NULL.
 
     ```c
     struct __user_cap_header_struct {
         __u32 version;    // Protocol version   (4 bytes)
         int   pid;        // TID/PID of target (0 = current)  (4 bytes)
     };
- ```
+    ```
 
- - `version` must be `_LINUX_CAPABILITY_VERSION_3` (`0x20080522`). This is the only current version and supports up to 64 capabilities (represented in two `u32`, one per 32-bit half).
+    - `version` must be `_LINUX_CAPABILITY_VERSION_3` (`0x20080522`). This is the only current version and supports up to 64 capabilities (represented in two `u32`, one per 32-bit half).
 
 - `datap` (RSI): pointer to the output buffer.
 
- Pointer to an array of two contiguous `__user_cap_data_struct` structures in memory where the kernel will write the target's capabilities. `datap[0]` receives bits for capabilities 0–31 and `datap[1]` for capabilities 32–63.
+    Pointer to an array of two contiguous `__user_cap_data_struct` structures in memory where the kernel will write the target's capabilities. `datap[0]` receives bits for capabilities 0–31 and `datap[1]` for capabilities 32–63.
 
     ```c
     struct __user_cap_data_struct {
@@ -263,9 +263,9 @@ rsi = datap          ; pointer to struct __user_cap_data_struct[2] (or NULL)
         __u32 permitted;     // Ceiling: superset of effective and inheritable
         __u32 inheritable;   // Capabilities propagable across execve
     };
- ```
+    ```
 
- **Memory layout after a successful `capget` (version 3):**
+    **Memory layout after a successful `capget` (version 3):**
 
     ```nasm
     datap (RSI) ──→ ┌──────────────────────────────────────┐
@@ -278,7 +278,7 @@ rsi = datap          ; pointer to struct __user_cap_data_struct[2] (or NULL)
                     │ datap[1].inheritable   (caps 32–63)  │ offset +20  ← kernel writes
                     └──────────────────────────────────────┘
                              Total: 24 bytes
- ```
+    ```
 
 **Return values**
 
@@ -311,9 +311,9 @@ rsi = datap          ; pointer to struct __user_cap_data_struct[2]
 
 - `datap` (RSI): pointer to the capabilities data.
 
- Pointer to an **array of two** contiguous `__user_cap_data_struct` structures in memory. `datap[0]` contains bits for capabilities 0–31 and `datap[1]` for capabilities 32–63.
+    Pointer to an **array of two** contiguous `__user_cap_data_struct` structures in memory. `datap[0]` contains bits for capabilities 0–31 and `datap[1]` for capabilities 32–63.
 
- **Memory layout (version 3):**
+    **Memory layout (version 3):**
 
     ```nasm
     datap (RSI) ──→ ┌──────────────────────────────────────┐
@@ -326,7 +326,7 @@ rsi = datap          ; pointer to struct __user_cap_data_struct[2]
                     │ datap[1].inheritable   (caps 32–63)  │ offset +20
                     └──────────────────────────────────────┘
                              Total: 24 bytes
- ```
+    ```
 
 **Return values**
 
@@ -377,7 +377,7 @@ Common errors:
 | 34 | `CAP_SYSLOG` | Read the kernel ring buffer (`dmesg`), may leak KASLR addresses |
 | 37 | `CAP_AUDIT_READ` | Read audit records via multicast netlink |
 | 38 | `CAP_PERFMON` | Performance monitoring, access to `perf_events`. Combined with `CAP_BPF` allows loading BPF tracing programs |
-| 39 | `CAP_BPF` | BPF operations, create maps, load programs, advanced verifier access; with `CAP_NET_ADMIN` allows network BPF programs |
+| 39 | `CAP_BPF` | BPF operations, create maps, load programs, advanced verifier access, and with `CAP_NET_ADMIN` allows network BPF programs |
 | 40 | `CAP_CHECKPOINT_RESTORE` | Checkpoint/restore operations (CRIU) |
 
 ## UID Transitions and Capabilities
@@ -460,8 +460,8 @@ syscall
 ```
 
 - `value` (RSI):
- - 0 → default behavior: when a process with UID 0 (root) transitions all its UIDs (real, effective, saved) to non-zero values (e.g. `setresuid(1000, 1000, 1000)`), the kernel clears the permitted, effective and ambient sets.
- - 1 → capabilities in the permitted set are preserved after the UID transition. The effective and ambient sets are still cleared (`PR_SET_KEEPCAPS` only protects the permitted set). Capabilities can be recovered afterward, from permitted to effective using the `capset` syscall and from permitted to ambient using `PR_CAP_AMBIENT_RAISE` (requires the capability to also be in inheritable).
+    - 0 → default behavior: when a process with UID 0 (root) transitions all its UIDs (real, effective, saved) to non-zero values (e.g. `setresuid(1000, 1000, 1000)`), the kernel clears the permitted, effective and ambient sets.
+    - 1 → capabilities in the permitted set are preserved after the UID transition. The effective and ambient sets are still cleared (`PR_SET_KEEPCAPS` only protects the permitted set). Capabilities can be recovered afterward, from permitted to effective using the `capset` syscall and from permitted to ambient using `PR_CAP_AMBIENT_RAISE` (requires the capability to also be in inheritable).
 
 !!! danger ""
     A process that starts as root can call `prctl(PR_SET_KEEPCAPS, 1)`, then `setuid(1000)` to appear as a normal user while retaining critical capabilities such as `CAP_NET_RAW`, `CAP_DAC_READ_SEARCH` or `CAP_SYS_PTRACE` in its permitted set. From there, it can elevate them to the effective set or propagate them via ambient capabilities. Tools that only alert on processes running as root will not detect a process with UID 1000 that retains privileged capabilities.

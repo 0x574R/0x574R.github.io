@@ -326,7 +326,7 @@ r8  = new_address ; target address (only if flags includes MREMAP_FIXED)
 |---|---|---|
 | `MREMAP_MAYMOVE` | `0x01` | Authorizes the kernel to move the mapping to a different virtual address if no contiguous space is available. Without this flag, any growth that requires relocation fails with `ENOMEM`. In practice, almost mandatory for expanding regions. |
 | `MREMAP_FIXED` | `0x02` | Forces placement of the mapping at the address specified by `r8` (`new_address`). Requires `MREMAP_MAYMOVE` or returns `EINVAL`. |
-| `MREMAP_DONTUNMAP` | `0x04` | Moves PTEs (page table entries) to `new_address` without destroying the original VMA; from `old_address` an empty VMA remains (with no pages behind it). Valid only on `MAP_PRIVATE` anonymous mappings. |
+| `MREMAP_DONTUNMAP` | `0x04` | Moves PTEs (page table entries) to `new_address` without destroying the original VMA. An empty VMA remains at `old_address` (with no pages behind it). Valid only on `MAP_PRIVATE` anonymous mappings. |
 
 #### **`MPROTECT`**
 

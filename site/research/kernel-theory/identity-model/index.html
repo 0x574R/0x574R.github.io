@@ -1604,9 +1604,9 @@
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nf">rdx</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">suid</span><span class="w">          </span><span class="c1">; Puntero a uid_t donde escribir el saved set-user-ID</span>
 </span></code></pre></div>
 <ul>
-<li><code>ruid</code> (RDI) — Puntero a una región de memoria escribible de al menos 4 bytes (<code>uid_t</code> = 32 bits). El kernel escribe aquí el <strong>real UID</strong> actual.</li>
-<li><code>euid</code> (RSI) — Puntero a una región de memoria escribible de al menos 4 bytes (<code>uid_t</code> = 32 bits). El kernel escribe aquí el <strong>effective UID</strong> actual.</li>
-<li><code>suid</code> (RDX) — Puntero a una región de memoria escribible de al menos 4 bytes (<code>uid_t</code> = 32 bits). El kernel escribe aquí el <strong>saved set-user-ID</strong>.</li>
+<li><code>ruid</code> (RDI): puntero a una región de memoria escribible de al menos 4 bytes (<code>uid_t</code> = 32 bits). El kernel escribe aquí el <strong>real UID</strong> actual.</li>
+<li><code>euid</code> (RSI): puntero a una región de memoria escribible de al menos 4 bytes (<code>uid_t</code> = 32 bits). El kernel escribe aquí el <strong>effective UID</strong> actual.</li>
+<li><code>suid</code> (RDX): puntero a una región de memoria escribible de al menos 4 bytes (<code>uid_t</code> = 32 bits). El kernel escribe aquí el <strong>saved set-user-ID</strong>.</li>
 </ul>
 <p><strong>Valores de retorno</strong></p>
 <div class="language-nasm highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">0</span><span class="w">              </span><span class="c1">; Éxito</span>
@@ -1652,9 +1652,9 @@
 </span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="nf">rdx</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="nv">sgid</span><span class="w">  </span><span class="c1">; Puntero a gid_t donde escribir el saved set-group-ID (4 bytes)</span>
 </span></code></pre></div>
 <ul>
-<li><code>rgid</code> (RDI) — Dirección donde el kernel escribirá el <strong>real GID</strong> del proceso como un <code>gid_t</code> (4 bytes, entero sin signo). El real GID representa al grupo del usuario que lanzó el proceso en su origen.</li>
-<li><code>egid</code> (RSI) — Dirección donde el kernel escribirá el <strong>effective GID</strong>, que es el que el kernel usa de forma efectiva para los chequeos de permisos DAC sobre ficheros, IPC SysV, señales, etc.</li>
-<li><code>sgid</code> (RDX) — Dirección donde el kernel escribirá el <strong>saved set-group-ID</strong>. Su propósito es permitir al proceso recuperar un EGID anterior.</li>
+<li><code>rgid</code> (RDI): dirección donde el kernel escribirá el <strong>real GID</strong> del proceso como un <code>gid_t</code> (4 bytes, entero sin signo). El real GID representa al grupo del usuario que lanzó el proceso en su origen.</li>
+<li><code>egid</code> (RSI): dirección donde el kernel escribirá el <strong>effective GID</strong>, que es el que el kernel usa de forma efectiva para los chequeos de permisos DAC sobre ficheros, IPC SysV, señales, etc.</li>
+<li><code>sgid</code> (RDX): dirección donde el kernel escribirá el <strong>saved set-group-ID</strong>. Su propósito es permitir al proceso recuperar un EGID anterior.</li>
 </ul>
 <p><strong>Valores de retorno</strong></p>
 <div class="language-nasm highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nf">rax</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">0</span><span class="w">              </span><span class="c1">; Éxito</span>
@@ -1707,7 +1707,7 @@
 </span></code></pre></div>
 <ul>
 <li>
-<p><code>hdrp</code> (RDI) — Puntero a la cabecera.</p>
+<p><code>hdrp</code> (RDI): puntero a la cabecera.</p>
 <p>Puntero a una estructura <code>__user_cap_header_struct</code> que indica la versión del protocolo de capabilities y el hilo objetivo. No puede ser NULL.</p>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">__user_cap_header_struct</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">    </span><span class="n">__u32</span><span class="w"> </span><span class="n">version</span><span class="p">;</span><span class="w">    </span><span class="c1">// Versión del protocolo   (4 bytes)</span>
@@ -1719,7 +1719,7 @@
 </ul>
 </li>
 <li>
-<p><code>datap</code> (RSI) — Puntero al buffer de salida.</p>
+<p><code>datap</code> (RSI): puntero al buffer de salida.</p>
 <p>Puntero a un array de dos estructuras <code>__user_cap_data_struct</code> contiguas en memoria donde el kernel escribirá las capabilities del objetivo. <code>datap[0]</code> recibe los bits para las capabilities 0–31 y <code>datap[1]</code> para las capabilities 32–63.</p>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">__user_cap_data_struct</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">    </span><span class="n">__u32</span><span class="w"> </span><span class="n">effective</span><span class="p">;</span><span class="w">     </span><span class="c1">// Capabilities activas (las que el kernel comprueba)</span>
@@ -1761,10 +1761,10 @@
 </span></code></pre></div>
 <ul>
 <li>
-<p><code>hdrp</code> (RDI) — Puntero a la cabecera (misma estructura que en <code>capget</code>). <code>version</code> debe ser <code>0x20080522</code>. <code>pid</code> solo permite <code>0</code> o el propio TID en kernels modernos.</p>
+<p><code>hdrp</code> (RDI): puntero a la cabecera (misma estructura que en <code>capget</code>). <code>version</code> debe ser <code>0x20080522</code>. <code>pid</code> solo permite <code>0</code> o el propio TID en kernels modernos.</p>
 </li>
 <li>
-<p><code>datap</code> (RSI) — Puntero a los datos de capabilities.</p>
+<p><code>datap</code> (RSI): puntero a los datos de capabilities.</p>
 <p>Puntero a un <strong>array de dos</strong> estructuras <code>__user_cap_data_struct</code> contiguas en memoria. <code>datap[0]</code> contiene los bits para las capabilities 0–31 y <code>datap[1]</code> para las capabilities 32–63.</p>
 <p><strong>Layout en memoria (con versión 3):</strong></p>
 <div class="language-nasm highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="nf">datap</span><span class="w"> </span><span class="p">(</span><span class="nb">RSI</span><span class="p">)</span><span class="w"> </span><span class="err">──→</span><span class="w"> </span><span class="err">┌──────────────────────────────────────┐</span>
@@ -2051,7 +2051,7 @@
 </span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="nf">mov</span><span class="w"> </span><span class="nb">rsi</span><span class="p">,</span><span class="w"> </span><span class="nv">flags</span><span class="w">          </span><span class="c1">; Bitmask de securebits</span>
 </span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="nf">syscall</span>
 </span></code></pre></div>
-<p><code>flags</code> (RSI) — Bitmask combinable con OR:</p>
+<p><code>flags</code> (RSI): bitmask combinable con OR:</p>
 <ul>
 <li><code>SECBIT_NOROOT</code> = <code>0x01</code> → Desactiva el tratamiento especial de UID 0 en <code>execve</code>. Normalmente, si un proceso con UID 0 hace <code>execve</code>, el kernel le otorga full capabilities. Con <code>NOROOT</code>, UID 0 ya no recibe capabilities automáticas, solo las obtiene si el binario tiene file capabilities explícitas.</li>
 <li><code>SECBIT_NOROOT_LOCKED</code> = <code>0x02</code> → Bloquea <code>SECBIT_NOROOT</code> para que no pueda ser desactivado.</li>
