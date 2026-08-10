@@ -255,7 +255,7 @@ rsi = datap          ; Puntero a struct __user_cap_data_struct[2] (o NULL)
 
 - `datap` (RSI): puntero al buffer de salida.
 
-    Puntero a un array de dos estructuras `__user_cap_data_struct` contiguas en memoria donde el kernel escribirá las capabilities del objetivo. `datap[0]` recibe los bits para las capabilities 0–31 y `datap[1]` para las capabilities 32–63.
+    Puntero a un array de dos estructuras `__user_cap_data_struct` contiguas en memoria donde el kernel escribirá las capabilities del objetivo. `datap[0]` recibe los bits para las capabilities 0-31 y `datap[1]` para las capabilities 32-63.
 
     ```c
     struct __user_cap_data_struct {
@@ -269,13 +269,13 @@ rsi = datap          ; Puntero a struct __user_cap_data_struct[2] (o NULL)
 
     ```nasm
     datap (RSI) ──→ ┌──────────────────────────────────────┐
-                    │ datap[0].effective     (caps 0–31)   │ offset +0   ← kernel escribe
-                    │ datap[0].permitted     (caps 0–31)   │ offset +4   ← kernel escribe
-                    │ datap[0].inheritable   (caps 0–31)   │ offset +8   ← kernel escribe
+                    │ datap[0].effective     (caps 0-31)   │ offset +0   ← kernel escribe
+                    │ datap[0].permitted     (caps 0-31)   │ offset +4   ← kernel escribe
+                    │ datap[0].inheritable   (caps 0-31)   │ offset +8   ← kernel escribe
                     ├──────────────────────────────────────┤
-                    │ datap[1].effective     (caps 32–63)  │ offset +12  ← kernel escribe
-                    │ datap[1].permitted     (caps 32–63)  │ offset +16  ← kernel escribe
-                    │ datap[1].inheritable   (caps 32–63)  │ offset +20  ← kernel escribe
+                    │ datap[1].effective     (caps 32-63)  │ offset +12  ← kernel escribe
+                    │ datap[1].permitted     (caps 32-63)  │ offset +16  ← kernel escribe
+                    │ datap[1].inheritable   (caps 32-63)  │ offset +20  ← kernel escribe
                     └──────────────────────────────────────┘
                              Total: 24 bytes
     ```
@@ -311,19 +311,19 @@ rsi = datap          ; Puntero a struct __user_cap_data_struct[2]
 
 - `datap` (RSI): puntero a los datos de capabilities.
 
-    Puntero a un **array de dos** estructuras `__user_cap_data_struct` contiguas en memoria. `datap[0]` contiene los bits para las capabilities 0–31 y `datap[1]` para las capabilities 32–63.
+    Puntero a un **array de dos** estructuras `__user_cap_data_struct` contiguas en memoria. `datap[0]` contiene los bits para las capabilities 0-31 y `datap[1]` para las capabilities 32-63.
 
     **Layout en memoria (con versión 3):**
 
     ```nasm
     datap (RSI) ──→ ┌──────────────────────────────────────┐
-                    │ datap[0].effective     (caps 0–31)   │ offset +0
-                    │ datap[0].permitted     (caps 0–31)   │ offset +4
-                    │ datap[0].inheritable   (caps 0–31)   │ offset +8
+                    │ datap[0].effective     (caps 0-31)   │ offset +0
+                    │ datap[0].permitted     (caps 0-31)   │ offset +4
+                    │ datap[0].inheritable   (caps 0-31)   │ offset +8
                     ├──────────────────────────────────────┤
-                    │ datap[1].effective     (caps 32–63)  │ offset +12
-                    │ datap[1].permitted     (caps 32–63)  │ offset +16
-                    │ datap[1].inheritable   (caps 32–63)  │ offset +20
+                    │ datap[1].effective     (caps 32-63)  │ offset +12
+                    │ datap[1].permitted     (caps 32-63)  │ offset +16
+                    │ datap[1].inheritable   (caps 32-63)  │ offset +20
                     └──────────────────────────────────────┘
                              Total: 24 bytes
     ```
@@ -344,7 +344,7 @@ Errores comunes:
 
 ### Capabilities Relevantes desde el Contexto Ofensivo
 
-**Capabilities 0–31:**
+**Capabilities 0-31:**
 
 | Índice | Constante | Uso ofensivo |
 |--------|-----------|-------------|
@@ -369,7 +369,7 @@ Errores comunes:
 | 27 | `CAP_MKNOD` | Crear device nodes (`mknod`) |
 | 31 | `CAP_SETFCAP` | Establecer file capabilities en ejecutables |
 
-**Capabilities 32–63:**
+**Capabilities 32-63:**
 
 | Índice | Constante | Uso ofensivo |
 |--------|-----------|-------------|

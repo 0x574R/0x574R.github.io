@@ -1458,8 +1458,9 @@
 <li>The <strong>execution view</strong> organizes content into <strong>segments</strong> (described by the Program Header Table). Segments represent how the kernel maps the binary into virtual memory when the program runs.</li>
 <li>
 <p>The <strong>linking view</strong> organizes content into <strong>sections</strong> (described by the Section Header Table). Sections are logical units with specific semantics used by the linker during the ELF binary build process and by static analysis tools.</p>
-<div class="admonition note"></div>
+<div class="admonition note">
 <p>The Section Header Table is dispensable at runtime.</p>
+</div>
 </li>
 </ul>
 <p>Both views are ways of interpreting the same ELF at different phases of the program's lifecycle (construction (linking) and execution (loading)).</p>
@@ -1566,12 +1567,13 @@
 <td>8</td>
 <td><code>EI_PAD</code></td>
 <td><code>0</code></td>
-<td>Padding (bytes 8–15 set to zero)</td>
+<td>Padding (bytes 8-15 set to zero)</td>
 </tr>
 </tbody>
 </table>
-<div class="admonition note"></div>
+<div class="admonition note">
 <p>The kernel performs the following validations with the ELF Header data: magic bytes = <code>\177ELF</code> (<code>0x7f 0x45 0x4c 0x46</code>), <code>e_type</code> ∈ {<code>ET_EXEC</code>, <code>ET_DYN</code>}, <code>e_machine</code> compatible with the architecture (<code>EM_X86_64</code> = 62 on x86-64), and <code>e_phentsize</code> = 56. If any check fails, it returns <code>-ENOEXEC</code>.</p>
+</div>
 </li>
 <li>
 <p><strong><code>e_type</code></strong></p>
@@ -1651,29 +1653,31 @@
 <li>
 <p><strong>Segment types (<code>p_type</code>)</strong></p>
 <ul>
-<li><strong><code>PT_LOAD</code></strong></li>
-</ul>
+<li>
+<p><strong><code>PT_LOAD</code></strong></p>
 <p>Loadable segment. Each <code>PT_LOAD</code> defines a region that the kernel maps into the process's virtual address space via <code>mmap</code>. A typical binary contains two or three <code>PT_LOAD</code> segments: one for code (RX), one for data (RW) and optionally one for read-only constants (R).</p>
-<ul>
-<li><strong><code>PT_DYNAMIC</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>PT_DYNAMIC</code></strong></p>
 <p>Points to the information needed for dynamic linking. It typically contains the <code>.dynamic</code> section, which consists of an array of <code>Elf64_Dyn</code> structures and serves as the main table used by the dynamic linker (usually <code>ld-linux.so</code>).</p>
-<ul>
-<li><strong><code>PT_INTERP</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>PT_INTERP</code></strong></p>
 <p>Path to the ELF interpreter (dynamic linker). The kernel reads this path and loads the interpreter as a second ELF binary before transferring control. A statically linked executable lacks this segment.</p>
-<ul>
-<li><strong><code>PT_PHDR</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>PT_PHDR</code></strong></p>
 <p>Indicates where the PHT itself is loaded in memory. This allows the ELF interpreter to directly locate the segment table during dynamic loading of the executable, without needing to re-read the ELF Header from disk.</p>
-<ul>
-<li><strong><code>PT_NOTE</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>PT_NOTE</code></strong></p>
 <p>Auxiliary information (notes).</p>
-<ul>
-<li><strong><code>PT_TLS</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>PT_TLS</code></strong></p>
 <p>Template for Thread-Local Storage. Defines the data block that each thread receives as a private copy.</p>
+</li>
+</ul>
 </li>
 <li>
 <p><strong>Permissions (<code>p_flags</code>)</strong></p>
@@ -1727,13 +1731,15 @@
 <ul>
 <li>
 <p><strong>Detection of <code>PT_INTERP</code></strong><br>If the PHT contains a <code>PT_INTERP</code> segment, the kernel reads the dynamic interpreter's path and maps it into the new address space alongside the main binary's segments. A statically linked binary has no <code>PT_INTERP</code>, so the kernel transfers control directly to its entry point.</p>
-<div class="admonition note"></div>
+<div class="admonition note">
 <p><code>execve</code> does not create a new process. It replaces the image of the process that invokes it. The PID remains the same. The kernel discards the invoking process's address space and builds a new one where it maps the segments of the binary to execute.</p>
+</div>
 </li>
 <li>
 <p><strong>Mapping <code>PT_LOAD</code> segments</strong><br>Each <code>PT_LOAD</code> segment in the PHT describes a byte range of the ELF file (<code>p_offset</code>, <code>p_filesz</code>), the address in virtual memory where those bytes should be placed (<code>p_vaddr</code>) and the permissions for that region (<code>p_flags</code>). If the segment requires more memory than it occupies in the file (<code>p_memsz &gt; p_filesz</code>), the kernel extends the region with zero-initialized memory. This difference corresponds to the <code>.bss</code> region, global variables with no initial value.</p>
-<div class="admonition note"></div>
+<div class="admonition note">
 <p>Each <code>PT_LOAD</code> generates one or more VMAs in the process's <code>mm_struct</code>.</p>
+</div>
 <p>The address calculation depends on the binary type:</p>
 <ul>
 <li>In <code>ET_EXEC</code> (non-PIE): <code>p_vaddr</code> is an absolute virtual address. The kernel maps the segment exactly at that address. Each execution produces the same memory layout.</li>

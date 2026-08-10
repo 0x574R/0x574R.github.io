@@ -98,7 +98,7 @@ readelf -h <program>
     | 5 | `EI_DATA` | `1 (ELFDATA2LSB)` | Endianness: little-endian |
     | 6 | `EI_VERSION` | `1 (EV_CURRENT)` | Versión del formato |
     | 7 | `EI_OSABI` | `0 (ELFOSABI_NONE)` | ABI del SO |
-    | 8 | `EI_PAD` | `0` | Padding (bytes 8–15 a cero) |
+    | 8 | `EI_PAD` | `0` | Padding (bytes 8-15 a cero) |
 
     !!! note ""
         El kernel realiza las siguientes validaciones con los datos del ELF Header: magic bytes = `\177ELF` (`0x7f 0x45 0x4c 0x46`), `e_type` ∈ {`ET_EXEC`, `ET_DYN`}, `e_machine` compatible con la arquitectura (`EM_X86_64` = 62 en x86-64) y `e_phentsize` = 56. Si cualquier comprobación falla, retorna `-ENOEXEC`.

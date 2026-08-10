@@ -104,7 +104,7 @@ The `comm` field in `task_struct` is a 16-byte array (15 usable characters + NUL
 ```
 
 !!! note ""
-    Names in brackets (`[kworker/0:1]`, `[migration/0]`) are by convention kernel threads, so a user-space process can adopt one of these to blend in with legitimate system processes.
+    Names in brackets (`[kworker/0:1]`, `[migration/0]`) are by convention kernel threads, so a userspace process can adopt one of these to blend in with legitimate system processes.
 
 ### `PR_SET_DUMPABLE`
 

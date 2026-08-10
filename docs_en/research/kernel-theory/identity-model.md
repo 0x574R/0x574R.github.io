@@ -86,7 +86,7 @@ Each running process maintains a set of UID-related identities. This is because 
 
 #### **GETRESUID (no. 118)**
 
-`getresuid` is a system call that **simultaneously returns the three UIDs associated with the process** and writes them into three user-space buffers.
+`getresuid` is a system call that **simultaneously returns the three UIDs associated with the process** and writes them into three userspace buffers.
 
 **Inputs (syscall arguments)**
 
@@ -155,7 +155,7 @@ There is a fourth pair, **FSUID** and **FSGID**, used exclusively for filesystem
 
 #### **GETRESGID (no. 120)**
 
-`getresgid` is a system call that **simultaneously returns the three GIDs associated with the process** and writes them into three user-space buffers. It is the exact counterpart of `getresuid` but operating on group identifiers.
+`getresgid` is a system call that **simultaneously returns the three GIDs associated with the process** and writes them into three userspace buffers. It is the exact counterpart of `getresuid` but operating on group identifiers.
 
 **Inputs (syscall arguments)**
 
@@ -255,7 +255,7 @@ rsi = datap          ; pointer to struct __user_cap_data_struct[2] (or NULL)
 
 - `datap` (RSI): pointer to the output buffer.
 
-    Pointer to an array of two contiguous `__user_cap_data_struct` structures in memory where the kernel will write the target's capabilities. `datap[0]` receives bits for capabilities 0–31 and `datap[1]` for capabilities 32–63.
+    Pointer to an array of two contiguous `__user_cap_data_struct` structures in memory where the kernel will write the target's capabilities. `datap[0]` receives bits for capabilities 0-31 and `datap[1]` for capabilities 32-63.
 
     ```c
     struct __user_cap_data_struct {
@@ -269,13 +269,13 @@ rsi = datap          ; pointer to struct __user_cap_data_struct[2] (or NULL)
 
     ```nasm
     datap (RSI) ──→ ┌──────────────────────────────────────┐
-                    │ datap[0].effective     (caps 0–31)   │ offset +0   ← kernel writes
-                    │ datap[0].permitted     (caps 0–31)   │ offset +4   ← kernel writes
-                    │ datap[0].inheritable   (caps 0–31)   │ offset +8   ← kernel writes
+                    │ datap[0].effective     (caps 0-31)   │ offset +0   ← kernel writes
+                    │ datap[0].permitted     (caps 0-31)   │ offset +4   ← kernel writes
+                    │ datap[0].inheritable   (caps 0-31)   │ offset +8   ← kernel writes
                     ├──────────────────────────────────────┤
-                    │ datap[1].effective     (caps 32–63)  │ offset +12  ← kernel writes
-                    │ datap[1].permitted     (caps 32–63)  │ offset +16  ← kernel writes
-                    │ datap[1].inheritable   (caps 32–63)  │ offset +20  ← kernel writes
+                    │ datap[1].effective     (caps 32-63)  │ offset +12  ← kernel writes
+                    │ datap[1].permitted     (caps 32-63)  │ offset +16  ← kernel writes
+                    │ datap[1].inheritable   (caps 32-63)  │ offset +20  ← kernel writes
                     └──────────────────────────────────────┘
                              Total: 24 bytes
     ```
@@ -311,19 +311,19 @@ rsi = datap          ; pointer to struct __user_cap_data_struct[2]
 
 - `datap` (RSI): pointer to the capabilities data.
 
-    Pointer to an **array of two** contiguous `__user_cap_data_struct` structures in memory. `datap[0]` contains bits for capabilities 0–31 and `datap[1]` for capabilities 32–63.
+    Pointer to an **array of two** contiguous `__user_cap_data_struct` structures in memory. `datap[0]` contains bits for capabilities 0-31 and `datap[1]` for capabilities 32-63.
 
     **Memory layout (version 3):**
 
     ```nasm
     datap (RSI) ──→ ┌──────────────────────────────────────┐
-                    │ datap[0].effective     (caps 0–31)   │ offset +0
-                    │ datap[0].permitted     (caps 0–31)   │ offset +4
-                    │ datap[0].inheritable   (caps 0–31)   │ offset +8
+                    │ datap[0].effective     (caps 0-31)   │ offset +0
+                    │ datap[0].permitted     (caps 0-31)   │ offset +4
+                    │ datap[0].inheritable   (caps 0-31)   │ offset +8
                     ├──────────────────────────────────────┤
-                    │ datap[1].effective     (caps 32–63)  │ offset +12
-                    │ datap[1].permitted     (caps 32–63)  │ offset +16
-                    │ datap[1].inheritable   (caps 32–63)  │ offset +20
+                    │ datap[1].effective     (caps 32-63)  │ offset +12
+                    │ datap[1].permitted     (caps 32-63)  │ offset +16
+                    │ datap[1].inheritable   (caps 32-63)  │ offset +20
                     └──────────────────────────────────────┘
                              Total: 24 bytes
     ```
@@ -344,7 +344,7 @@ Common errors:
 
 ### Capabilities Relevant from an Offensive Perspective
 
-**Capabilities 0–31:**
+**Capabilities 0-31:**
 
 | Index | Constant | Offensive use |
 |--------|-----------|----------------|
@@ -369,7 +369,7 @@ Common errors:
 | 27 | `CAP_MKNOD` | Create device nodes (`mknod`) |
 | 31 | `CAP_SETFCAP` | Set file capabilities on executables |
 
-**Capabilities 32–63:**
+**Capabilities 32-63:**
 
 | Index | Constant | Offensive use |
 |--------|-----------|----------------|

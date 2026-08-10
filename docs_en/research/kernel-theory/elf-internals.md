@@ -27,7 +27,7 @@ The ELF architecture presents a fundamental duality. The same file can be descri
 - The **linking view** organizes content into **sections** (described by the Section Header Table). Sections are logical units with specific semantics used by the linker during the ELF binary build process and by static analysis tools.
 
     !!! note ""
-    The Section Header Table is dispensable at runtime.
+        The Section Header Table is dispensable at runtime.
 
 Both views are ways of interpreting the same ELF at different phases of the program's lifecycle (construction (linking) and execution (loading)).
 
@@ -98,10 +98,10 @@ readelf -h <program>
     | 5 | `EI_DATA` | `1 (ELFDATA2LSB)` | Endianness: little-endian |
     | 6 | `EI_VERSION` | `1 (EV_CURRENT)` | Format version |
     | 7 | `EI_OSABI` | `0 (ELFOSABI_NONE)` | OS ABI |
-    | 8 | `EI_PAD` | `0` | Padding (bytes 8–15 set to zero) |
+    | 8 | `EI_PAD` | `0` | Padding (bytes 8-15 set to zero) |
 
     !!! note ""
-    The kernel performs the following validations with the ELF Header data: magic bytes = `\177ELF` (`0x7f 0x45 0x4c 0x46`), `e_type` ∈ {`ET_EXEC`, `ET_DYN`}, `e_machine` compatible with the architecture (`EM_X86_64` = 62 on x86-64), and `e_phentsize` = 56. If any check fails, it returns `-ENOEXEC`.
+        The kernel performs the following validations with the ELF Header data: magic bytes = `\177ELF` (`0x7f 0x45 0x4c 0x46`), `e_type` ∈ {`ET_EXEC`, `ET_DYN`}, `e_machine` compatible with the architecture (`EM_X86_64` = 62 on x86-64), and `e_phentsize` = 56. If any check fails, it returns `-ENOEXEC`.
 
 - **`e_type`**
 
@@ -195,27 +195,27 @@ readelf -l <program>
 
     - **`PT_LOAD`**
 
-    Loadable segment. Each `PT_LOAD` defines a region that the kernel maps into the process's virtual address space via `mmap`. A typical binary contains two or three `PT_LOAD` segments: one for code (RX), one for data (RW) and optionally one for read-only constants (R).
+        Loadable segment. Each `PT_LOAD` defines a region that the kernel maps into the process's virtual address space via `mmap`. A typical binary contains two or three `PT_LOAD` segments: one for code (RX), one for data (RW) and optionally one for read-only constants (R).
 
     - **`PT_DYNAMIC`**
 
-    Points to the information needed for dynamic linking. It typically contains the `.dynamic` section, which consists of an array of `Elf64_Dyn` structures and serves as the main table used by the dynamic linker (usually `ld-linux.so`).
+        Points to the information needed for dynamic linking. It typically contains the `.dynamic` section, which consists of an array of `Elf64_Dyn` structures and serves as the main table used by the dynamic linker (usually `ld-linux.so`).
 
     - **`PT_INTERP`**
 
-    Path to the ELF interpreter (dynamic linker). The kernel reads this path and loads the interpreter as a second ELF binary before transferring control. A statically linked executable lacks this segment.
+        Path to the ELF interpreter (dynamic linker). The kernel reads this path and loads the interpreter as a second ELF binary before transferring control. A statically linked executable lacks this segment.
 
     - **`PT_PHDR`**
 
-    Indicates where the PHT itself is loaded in memory. This allows the ELF interpreter to directly locate the segment table during dynamic loading of the executable, without needing to re-read the ELF Header from disk.
+        Indicates where the PHT itself is loaded in memory. This allows the ELF interpreter to directly locate the segment table during dynamic loading of the executable, without needing to re-read the ELF Header from disk.
 
     - **`PT_NOTE`**
 
-    Auxiliary information (notes).
+        Auxiliary information (notes).
 
     - **`PT_TLS`**
 
-    Template for Thread-Local Storage. Defines the data block that each thread receives as a private copy.
+        Template for Thread-Local Storage. Defines the data block that each thread receives as a private copy.
 
 - **Permissions (`p_flags`)**
 
@@ -256,12 +256,12 @@ Once validation passes, the kernel iterates the PHT looking for two segment type
 - **Detection of `PT_INTERP`**<br>If the PHT contains a `PT_INTERP` segment, the kernel reads the dynamic interpreter's path and maps it into the new address space alongside the main binary's segments. A statically linked binary has no `PT_INTERP`, so the kernel transfers control directly to its entry point.
 
     !!! note ""
-    `execve` does not create a new process. It replaces the image of the process that invokes it. The PID remains the same. The kernel discards the invoking process's address space and builds a new one where it maps the segments of the binary to execute.
+        `execve` does not create a new process. It replaces the image of the process that invokes it. The PID remains the same. The kernel discards the invoking process's address space and builds a new one where it maps the segments of the binary to execute.
 
 - **Mapping `PT_LOAD` segments**<br>Each `PT_LOAD` segment in the PHT describes a byte range of the ELF file (`p_offset`, `p_filesz`), the address in virtual memory where those bytes should be placed (`p_vaddr`) and the permissions for that region (`p_flags`). If the segment requires more memory than it occupies in the file (`p_memsz > p_filesz`), the kernel extends the region with zero-initialized memory. This difference corresponds to the `.bss` region, global variables with no initial value.
 
     !!! note ""
-    Each `PT_LOAD` generates one or more VMAs in the process's `mm_struct`.
+        Each `PT_LOAD` generates one or more VMAs in the process's `mm_struct`.
 
     The address calculation depends on the binary type:
 
