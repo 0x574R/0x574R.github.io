@@ -50,67 +50,19 @@ description: Blog de seguridad ofensiva. Técnicas de bajo nivel en ensamblador 
 
 ## Últimos posts
 
-<div class="razor-series-header">
-<span class="razor-series-header__dot"><span></span><span></span><span></span></span>
-<span class="razor-series-header__title">Serie DARKCLOAK</span>
-<span class="razor-series-header__count">4 artículos · Process Identity Cloaking</span>
-</div>
-
 <div class="razor-cards razor-cards--posts">
 
-<a href="research/kernel-theory/identity-model/" class="razor-card razor-card--series">
+<a href="research/malware-dev/icmp-exfiltration/" class="razor-card">
   <div class="razor-card__image">
-    <img src="assets/images/identity-model-hero.svg" alt="Identity Model">
+    <img src="assets/images/icmp-exfil-hero.svg" alt="ICMP Exfiltration">
   </div>
-  <span class="razor-card__title">Identity and Privileges of a Process (1)</span>
-  <span class="razor-card__desc">UIDs, GIDs, capabilities, transiciones y mecanismos de retención en struct cred</span>
-  <div class="razor-card__meta">
-    <span class="razor-card__tag">Kernel</span>
-    <span class="razor-card__time"><span class="razor-card__star">★</span> 45 min</span>
-  </div>
-</a>
-
-<a href="research/kernel-theory/elf-internals/" class="razor-card razor-card--series">
-  <div class="razor-card__image">
-    <img src="assets/images/elf-internals-hero.svg" alt="ELF Internals">
-  </div>
-  <span class="razor-card__title">ELF Internals (2)</span>
-  <span class="razor-card__desc">Qué contiene un binario ELF y cómo lo interpreta el kernel para convertirlo en un proceso</span>
-  <div class="razor-card__meta">
-    <span class="razor-card__tag">Kernel</span>
-    <span class="razor-card__time"><span class="razor-card__star">★</span> 60 min</span>
-  </div>
-</a>
-
-<a href="research/kernel-theory/process-identity/" class="razor-card razor-card--series">
-  <div class="razor-card__image">
-    <img src="assets/images/process-id-hero.svg" alt="Process Identity Spoofing">
-  </div>
-  <span class="razor-card__title">Process Identity Spoofing: What Linux Exposes and How to Fake It (3)</span>
-  <span class="razor-card__desc">Qué información expone Linux sobre sus procesos, dónde reside y cómo se manipula</span>
-  <div class="razor-card__meta">
-    <span class="razor-card__tag">Kernel</span>
-    <span class="razor-card__time"><span class="razor-card__star">★</span> 60 min</span>
-  </div>
-</a>
-
-<a href="research/malware-dev/darkcloak/" class="razor-card razor-card--series">
-  <div class="razor-card__image">
-    <img src="assets/images/darkcloak-hero.svg" alt="DARKCLOAK">
-  </div>
-  <span class="razor-card__title">DARKCLOAK: Novel Flow for Process Masquerading (4)</span>
-  <span class="razor-card__desc">Pipeline completo de suplantación de identidad de procesos en Linux</span>
+  <span class="razor-card__title">Data Exfiltration via ICMP Echo Request</span>
+  <span class="razor-card__desc">Exfiltración de datos a través de ICMP Echo Request en ensamblador x86-64</span>
   <div class="razor-card__meta">
     <span class="razor-card__tag">Assembly</span>
-    <span class="razor-card__time"><span class="razor-card__star">★</span> 90 min</span>
+    <span class="razor-card__time"><span class="razor-card__star">★</span> 60 min</span>
   </div>
 </a>
-
-</div>
-
----
-
-<div class="razor-cards razor-cards--posts">
 
 <a href="research/malware-dev/fileless-loader/" class="razor-card">
   <div class="razor-card__image">
@@ -120,7 +72,7 @@ description: Blog de seguridad ofensiva. Técnicas de bajo nivel en ensamblador 
   <span class="razor-card__desc">Ejecución de un binario sin la necesidad de crear un fichero en el sistema de archivos, sin dependencias</span>
   <div class="razor-card__meta">
     <span class="razor-card__tag">Assembly</span>
-    <span class="razor-card__time"><span class="razor-card__star">★</span> 60 min</span>
+    <span class="razor-card__time">60 min</span>
   </div>
 </a>
 
@@ -145,6 +97,66 @@ description: Blog de seguridad ofensiva. Técnicas de bajo nivel en ensamblador 
   <div class="razor-card__meta">
     <span class="razor-card__tag">Assembly</span>
     <span class="razor-card__time">5 min</span>
+  </div>
+</a>
+
+</div>
+
+---
+
+<div class="razor-series-header">
+<span class="razor-series-header__dot"><span></span><span></span><span></span></span>
+<span class="razor-series-header__title">Serie DARKCLOAK</span>
+<span class="razor-series-header__count">4 artículos · Process Identity Cloaking</span>
+</div>
+
+<div class="razor-cards razor-cards--posts">
+
+<a href="research/kernel-theory/identity-model/" class="razor-card razor-card--series">
+  <div class="razor-card__image">
+    <img src="assets/images/identity-model-hero.svg" alt="Identity Model">
+  </div>
+  <span class="razor-card__title">Identity and Privileges of a Process (1)</span>
+  <span class="razor-card__desc">UIDs, GIDs, capabilities, transiciones y mecanismos de retención en struct cred</span>
+  <div class="razor-card__meta">
+    <span class="razor-card__tag">Kernel</span>
+    <span class="razor-card__time">45 min</span>
+  </div>
+</a>
+
+<a href="research/kernel-theory/elf-internals/" class="razor-card razor-card--series">
+  <div class="razor-card__image">
+    <img src="assets/images/elf-internals-hero.svg" alt="ELF Internals">
+  </div>
+  <span class="razor-card__title">ELF Internals (2)</span>
+  <span class="razor-card__desc">Qué contiene un binario ELF y cómo lo interpreta el kernel para convertirlo en un proceso</span>
+  <div class="razor-card__meta">
+    <span class="razor-card__tag">Kernel</span>
+    <span class="razor-card__time">60 min</span>
+  </div>
+</a>
+
+<a href="research/kernel-theory/process-identity/" class="razor-card razor-card--series">
+  <div class="razor-card__image">
+    <img src="assets/images/process-id-hero.svg" alt="Process Identity Spoofing">
+  </div>
+  <span class="razor-card__title">Process Identity Spoofing: What Linux Exposes and How to Fake It (3)</span>
+  <span class="razor-card__desc">Qué información expone Linux sobre sus procesos, dónde reside y cómo se manipula</span>
+  <div class="razor-card__meta">
+    <span class="razor-card__tag">Kernel</span>
+    <span class="razor-card__time">60 min</span>
+  </div>
+</a>
+
+<a href="research/malware-dev/darkcloak/" class="razor-card razor-card--series">
+  <div class="razor-card__image">
+    <img src="assets/images/darkcloak-hero.svg" alt="DARKCLOAK">
+  </div>
+  <span class="razor-card__title">DARKCLOAK: Novel Flow for Process Masquerading (4)</span>
+  <span class="razor-card__desc">Pipeline completo de suplantación de identidad de procesos en Linux</span>
+  <div class="razor-card__meta">
+    <span class="razor-card__tag">Assembly</span>
+    <span class="razor-card__time">90 min</span>
   </div>
 </a>
 

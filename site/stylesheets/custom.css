@@ -5,6 +5,11 @@
    Sidebars en tema claro = idénticos al tema oscuro
    ============================================================ */
 
+/* === TEXTO JUSTIFICADO EN ARTÍCULOS === */
+.md-typeset p {
+  text-align: justify;
+}
+
 /* === VARIABLES Y LAYOUT === */
 :root {
   --razor-max-width: 74rem;
@@ -1613,6 +1618,47 @@ div.tables-centered td {
   margin-right: auto;
   margin-top: 2.4rem;
   margin-bottom: 2.4rem;
+}
+
+/* === BLOQUE DE CÓDIGO CENTRADO === */
+.code-centered {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+.code-centered pre {
+  display: flex;
+  justify-content: center;
+}
+.code-centered code {
+  text-align: left;
+  display: inline-block;
+}
+
+/* === IMAGEN AMPLIADA (tamaño intermedio) === */
+.md-typeset img.img-large {
+  display: block;
+  height: 550px;
+  width: auto;
+  max-width: none;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 6px;
+  cursor: grab;
+  margin-top: 2.4rem;
+  margin-bottom: 2.4rem;
+}
+
+.md-typeset p:has(img.img-large) {
+  overflow-x: auto;
+  max-width: 100%;
+  cursor: grab;
+}
+.md-typeset figure img.img-large {
+  margin-top: 0.8rem;
+  margin-bottom: 0.4rem;
+}
+.md-typeset img.no-border {
+  border: none !important;
+  border-radius: 0 !important;
 }
 
 /* === FLOWCHART CON SCROLL HORIZONTAL === */
